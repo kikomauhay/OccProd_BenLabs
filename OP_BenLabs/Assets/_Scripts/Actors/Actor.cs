@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Actor : MonoBehaviour 
+public abstract class Actor : MonoBehaviour
 {
     #region Properties
 
@@ -14,13 +14,14 @@ public class Actor : MonoBehaviour
 
     #region Unity
 
-    private void Start() 
-    {
-        
-    }
+    protected void OnEnable() { }
+    protected void OnDisable() { }
 
     #endregion
     #region Helpers
+
+    protected void InitComponents() { }
+    protected void InitVariables() { }
 
     #endregion
 }
