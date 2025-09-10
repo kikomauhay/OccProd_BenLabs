@@ -1,14 +1,21 @@
-using System.Collections;
 using UnityEngine;
 
-public class GameManager : Singleton<GameManager> 
+public class GameManager : Singleton<GameManager>
 {
+    #region Unity
 
-#region Unity
+    private void Start()
+    {
+        InitComponents();
+        InitVariables();
+    }
 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    protected override void Awake() => base.Awake();
-    
-#endregion
+    #endregion
+    #region Helpers
+
+    private void InitComponents() { }
+    private void InitVariables() { }
+        
+    #endregion
 
 }

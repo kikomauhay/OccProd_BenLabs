@@ -1,31 +1,72 @@
-using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class SceneHandler : Singleton<SceneHandler>
 {
-#region Members
-
-#region Readers
+    #region Properties
 
     public bool CanPause { get; private set; }
-    
-#endregion
-#endregion
 
-#region Unity
+    #endregion
+    #region SerializeField
 
-    protected override void OnApplicationQuit() => base.OnApplicationQuit();
-    protected override void Awake() => base.Awake();
+    [Space(10f), SerializeField] private string _startingSceneToLoad;
+
+    #endregion
+
+    #region Unity
+
     private void Start()
     {
-        CanPause = true;
+        InitVariables();
 
-        // loads the next scene after persistent
-        SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1, 
-                                    LoadSceneMode.Additive);
+        SceneManager.LoadSceneAsync(_startingSceneToLoad, LoadSceneMode.Additive);
     }
 
-#endregion
+    #endregion
+    #region Helpers
+
+    private void InitVariables()
+    {
+        CanPause = true;
+    }
+
+    #endregion
+    #region Enumerators
+
+    /*
+    public IEnumerator LoadScene(string sceneName)
+    {
+        _fadeScreen.gameObject.SetActive(true);
+        IsFading = true;
+        _fadeScreen.FadeOut();
+        yield return new WaitForSeconds(_fadeScreen.FadeDuration);
+        IsFading = false;
+
+        if (sceneName == "MainGameScene")
+        {
+            SceneManager.UnloadSceneAsync("TrainingScene");
+            SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
+        }
+        else if (sceneName == "TrainingScene")
+        {
+            SceneManager.UnloadSceneAsync("MainGameScene");
+            SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
+        }
+        else
+        {
+            SoundManager.Instance.PlaySound("wrong");
+            Debug.LogError("Wrong scene named!");
+        }
+
+        IsFading = true;
+        _fadeScreen.FadeIn();
+        yield return new WaitForSeconds(_fadeScreen.FadeDuration);
+        IsFading = false;
+    }
+    */
+        
+    #endregion
 
 }
