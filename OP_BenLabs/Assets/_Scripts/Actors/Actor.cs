@@ -2,26 +2,32 @@ using UnityEngine;
 
 public abstract class Actor : MonoBehaviour
 {
-    #region Properties
-
-    #endregion
     #region SerializeField
 
-    #endregion
-    #region Private
+    [Header("Debgging")]
+    [SerializeField] protected Logger _logger;
+    [SerializeField] protected bool _isDevMode;
 
     #endregion
 
     #region Unity
 
-    protected void OnEnable() { }
-    protected void OnDisable() { }
+    protected virtual void OnEnable() { }
+    protected virtual void OnDisable() { }
+    protected virtual void Start()
+    {
+        InitComponents();
+        InitVariables();
+
+        if (_isDevMode)
+            Debug.Log("<color=yellow>Debugging is enabled!</color>", this);
+    }
 
     #endregion
     #region Helpers
 
-    protected void InitComponents() { }
-    protected void InitVariables() { }
+    protected virtual void InitComponents() { }
+    protected virtual void InitVariables() { }
 
     #endregion
 }

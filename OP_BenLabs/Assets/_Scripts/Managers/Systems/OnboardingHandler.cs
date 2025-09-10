@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-public class OnboardingHandler : MonoBehaviour 
+public class OnboardingHandler : Singleton<OnboardingHandler> 
 {
     #region Properties
 
