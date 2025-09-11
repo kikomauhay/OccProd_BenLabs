@@ -6,7 +6,6 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     #region Members
 
     public static T Instance { get; private set; }
-    
 
     [Header("Debgging")]
     [SerializeField] protected Logger _logger;
@@ -18,10 +17,13 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void Awake()
     {
         Instance = this as T;
-        name = $"{this}";
+        name = $"{gameObject}";
 
+        if (!_logger)
+            Debug.LogWarning("Missing Logger component!", gameObject);
+        
         if (_isDevMode)
-            Debug.Log("<color=yellow>Debugging is enabled!</color>", this);
+            Debug.Log("<color=yellow>Debugging is enabled!</color>", gameObject);
     }
     protected virtual void OnApplicationQuit()
     {
