@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,17 +10,58 @@ public class SceneHandler : Singleton<SceneHandler>
     #endregion
     #region SerializeField
 
-    [Space(10f), SerializeField] private string _startingSceneToLoad;
+    [Space(10f), SerializeField] private string _startingScene; // must not be null
 
+    #endregion
+    #region Private
+
+    private string _currentScene;
+        
     #endregion
 
     #region Unity
 
     private void Start()
     {
-        InitVariables();
+        if (_startingScene == null)
+        {
+            Debug.LogWarning("<color=yellow>Missing scene to load!</color>"!, gameObject);
+            return;
+        }
 
-        SceneManager.LoadSceneAsync(_startingSceneToLoad, LoadSceneMode.Additive);
+        InitVariables();
+        LoadStartingScene();
+    }
+    private void Update() => Test();
+
+    #endregion
+    #region Public
+
+    public void BTN_LoadToScene(string sceneName)
+    {
+        if (sceneName == _currentScene)
+        {
+            if (_isDevMode)
+                _logger?.Log("You cannot load the same scene!", gameObject, ColorType.RED);
+
+            return;
+        }
+        if (!CanPause)
+        {
+            if (_isDevMode)
+                _logger?.Log("You cannot load any scene at this time!", gameObject, ColorType.YELLOW);
+
+            return;
+        }
+
+        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        SceneManager.UnloadSceneAsync(_currentScene);
+        _currentScene = sceneName;
+
+        GetComponent<SoundEmitter>()?.PlaySound();
+
+        if (_isDevMode)
+            _logger?.Log($"Loaded to {_currentScene}!", gameObject, ColorType.YELLOW);
     }
 
     #endregion
@@ -30,43 +70,26 @@ public class SceneHandler : Singleton<SceneHandler>
     private void InitVariables()
     {
         CanPause = true;
-    }
-
-    #endregion
-    #region Enumerators
-
-    /*
-    public IEnumerator LoadScene(string sceneName)
+        _currentScene = null;
+    } 
+    private void LoadStartingScene()
     {
-        _fadeScreen.gameObject.SetActive(true);
-        IsFading = true;
-        _fadeScreen.FadeOut();
-        yield return new WaitForSeconds(_fadeScreen.FadeDuration);
-        IsFading = false;
+        SceneManager.LoadSceneAsync(_startingScene, LoadSceneMode.Additive);
+        _currentScene = _startingScene;
 
-        if (sceneName == "MainGameScene")
-        {
-            SceneManager.UnloadSceneAsync("TrainingScene");
-            SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
-        }
-        else if (sceneName == "TrainingScene")
-        {
-            SceneManager.UnloadSceneAsync("MainGameScene");
-            SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
-        }
-        else
-        {
-            SoundManager.Instance.PlaySound("wrong");
-            Debug.LogError("Wrong scene named!");
-        }
-
-        IsFading = true;
-        _fadeScreen.FadeIn();
-        yield return new WaitForSeconds(_fadeScreen.FadeDuration);
-        IsFading = false;
+        if (_isDevMode)
+            _logger?.Log($"Loaded to {_currentScene}!", gameObject, ColorType.YELLOW);
     }
-    */
-        
-    #endregion
 
+    private void Test()
+    {
+        if (!_isDevMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_LoadToScene("SCN_Lobby");
+        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_LoadToScene("SCN_BarLab");
+        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_LoadToScene("SCN_GDDLab");
+    }
+    
+
+    #endregion
 }
