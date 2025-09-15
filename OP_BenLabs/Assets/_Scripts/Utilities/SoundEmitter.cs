@@ -1,59 +1,49 @@
 ﻿using UnityEngine;
+using System;
 
 [RequireComponent(typeof(AudioSource))]
 public class SoundEmitter : MonoBehaviour
 {
-    #region SerializeField
-
-    [SerializeField] private Sound _sound;
-    [SerializeField] private AudioSource _source;
+    #region Members
 
     [Header("Debugging")]
-    [SerializeField] private float _testRadius;
+    [SerializeField] private bool _enableGizmos;
+    [SerializeField] private float _maxDistance;
+    private AudioSource _source;
 
     #endregion
-
-    #region Unity
+    #region Methods
 
     private void Start()
     {
-        if (!_source)
-        {
-            Debug.LogError("Missing AudioSource component!");
-            return;
-        }
-        if (!_sound)
-        {
-            Debug.LogError("Missing Sound component!");
-            return;
-        }
-
-        InitVariables();
+        _source = GetComponent<AudioSource>();
+        _source.spatialBlend = 1f;
+        _source.maxDistance = _maxDistance;
     }
     private void OnDrawGizmosSelected()
     {
+        if (!_enableGizmos) return;
+
         Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, _testRadius);
+        Gizmos.DrawWireSphere(transform.position, _maxDistance);
     }
 
-    #endregion
-    #region Helpers
+    public void PlaySound(Sound s) // can play the default sound
+    {
+        if (s != null)
+        {
+            _source.clip = s.Clip;
+            _source.loop = s.Loop;
+            _source.pitch = s.Pitch;
+            _source.volume = s.Volume;
+        }
+        else throw new NullReferenceException("Missing Sound component!");
 
-    private void InitVariables()
-    {
-        _source.clip = _sound.Clip;
-        _source.loop = _sound.Loop;
-        _source.pitch = _sound.Pitch;
-        _source.volume = _sound.Volume;
-    }
-    public void PlaySound()
-    {
-        if (_sound.Loop)
+        if (s.Loop)
             _source.Play();
 
-        else 
-            _source.PlayOneShot(_sound.Clip);
+        else _source.PlayOneShot(_source.clip);
     }
-    
+
     #endregion
 }
