@@ -2,28 +2,28 @@ using UnityEngine;
 
 public abstract class Actor : MonoBehaviour
 {
-    #region SerializeField
+    #region Members
 
-    [Header("Debgging")]
+    [Header("Debugging")]
     [SerializeField] protected Logger _logger;
     [SerializeField] protected bool _isDevMode;
 
     #endregion
 
-    #region Unity
+    #region Methods
 
-    protected virtual void OnEnable() { }
-    protected virtual void OnDisable() { }
+    protected virtual void OnEnable() { } // subscribe to events
+    protected virtual void OnDisable() { } // unsubscribe to events
     protected virtual void Start()
     {
         InitComponents();
         InitVariables();
 
         if (!_logger)
-            Debug.LogWarning("Missing Logger component!", gameObject);
+            Debug.LogWarning($"{name} is missing a Logger component!");
 
         if (_isDevMode)
-            Debug.Log("<color=yellow>Debugging is enabled!</color>", gameObject);
+            Debug.Log($"<color=yellow>{name}'s debugging is enabled!</color>");
     }
 
     #endregion
