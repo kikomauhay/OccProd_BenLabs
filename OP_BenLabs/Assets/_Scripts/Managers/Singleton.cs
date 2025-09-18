@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 // Similar to singleton, but it OVERRIDES the new version INSTEAD OF DESTORYING it
 public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
@@ -20,10 +21,10 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
         name = ToString();
 
         if (!_logger)
-            Debug.LogWarning($"{name} is missing a Logger component!");
+            throw new NullReferenceException($"Missing _logger reference!");
         
         if (_isDevMode)
-            Debug.Log($"<color=yellow>{name}'s debugging is enabled!</color>");
+            _logger.Log("Developer mode enabled!", gameObject, ColorType.YELLOW);
     }
     protected virtual void OnApplicationQuit()
     {
