@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 
 public class VR_Hands : MonoBehaviour
 {
+    #region Members
+
     public InputActionProperty PinchAnimationAction;
     public InputActionProperty GripAnimationAction;
     public Animator HandAnimator;
@@ -12,10 +14,44 @@ public class VR_Hands : MonoBehaviour
     private float _selectValue;
     private Rigidbody _rb;
     private Quaternion _rotationDifference;
+    private Collider[] _handColliders;
+
+    #endregion
+
+    #region Unity
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
+        _handColliders = GetComponentsInChildren<Collider>();
+    }
+
+    #endregion
+
+    #region Public
+
+    public void DelayedEnableOnHandCollider(float delay)
+    {
+        Invoke("EnableHandCollider", delay);
+    }
+
+    public void DisableHandCollider()
+    {
+        foreach (var item in _handColliders)
+        {
+            item.enabled = false;
+        }    
+    }
+
+    #endregion
+
+    #region Private
+    private void EnableHandCollider()
+    {
+        foreach (var item in _handColliders)
+        {
+            item.enabled = true;
+        }
     }
 
     private void Update()
@@ -36,4 +72,6 @@ public class VR_Hands : MonoBehaviour
         Vector3 _rotationDifferenceInDegree = _angleInDegree * _rotationAxis;
         _rb.angularVelocity = (_rotationDifferenceInDegree * Mathf.Deg2Rad / Time.fixedDeltaTime);
     }
+
+    #endregion
 }
