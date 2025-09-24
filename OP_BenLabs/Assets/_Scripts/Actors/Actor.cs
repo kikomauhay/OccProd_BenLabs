@@ -19,8 +19,7 @@ public abstract class Actor : MonoBehaviour
         InitComponents();
         InitVariables();
 
-        if (!_logger)
-            Debug.LogWarning($"{name} is missing a Logger component!");
+        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
         if (_isDevMode)
             Debug.Log($"<color=yellow>{name}'s debugging is enabled!</color>");
