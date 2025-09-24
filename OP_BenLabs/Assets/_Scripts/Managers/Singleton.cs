@@ -15,14 +15,15 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     #endregion
     #region Methods
 
+    protected virtual void OnEnable() { } // subscribe to events
+    protected virtual void OnDisable() { } // unsubscribe to events
     protected virtual void Awake()
     {
         Instance = this as T;
         name = ToString();
 
-        if (!_logger)
-            throw new NullReferenceException($"Missing _logger reference!");
-        
+        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
+
         if (_isDevMode)
             _logger.Log("Developer mode enabled!", gameObject, ColorType.YELLOW);
     }
@@ -32,9 +33,6 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
         Destroy(gameObject);
     }
 
-    protected virtual void OnEnable() { } // subscribe to events
-    protected virtual void OnDisable() { } // unsubscribe to events
-    
     #endregion
 }
 
