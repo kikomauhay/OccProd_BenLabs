@@ -6,6 +6,8 @@ public class Enemy : Actor
 {
     #region Properties
 
+    public System.Action OnDeath { get; set; }
+
     #endregion
     #region SerializeField
 
@@ -28,6 +30,11 @@ public class Enemy : Actor
         base.Start(); // already contains both init methods
 
 
+    }
+    private void OnDestroy()
+    {
+        GDDManager.Instance.RemoveEnemy(gameObject);
+        OnDeath?.Invoke();
     }
 
     #endregion

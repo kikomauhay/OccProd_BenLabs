@@ -13,25 +13,24 @@ public class SceneHandler : Singleton<SceneHandler>
 
     [Header("Scene Switching")]
     [SerializeField] private string _startingScene; // must not be null
-    [SerializeField] private Sound _sceneSwitchSFX;
+    [SerializeField] private Sound _elevatorSFX;
+
+    [Header("Atrium Rooms"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
+    [SerializeField] private GameObject[] _rooms; // disable all the rooms but the first one 
 
     #endregion
     #region Private
 
-    private SoundEmitter _soundEmitter;
-    private string _currentScene;
-        
+    private SoundEmitter _soundEmitter; // no need for a null checker since it'll be referenced through code
+
     #endregion
 
     #region Unity
 
     private void Start()
     {
-        if (_startingScene == null)
-        {
-            Debug.LogWarning($"<color=yellow>{name}'s scene-to-load is missing!</color>");
-            return;
-        }
+        Debug.Assert(_startingScene != string.Empty, "Missing _startingScene reference!", gameObject);
+        Debug.Assert(_rooms.Length != 3, "Missing _rooms elements!", gameObject);
 
         InitComponents();
         InitVariables();
@@ -42,30 +41,21 @@ public class SceneHandler : Singleton<SceneHandler>
     #endregion
     #region Public
 
-    public void BTN_LoadToScene(string sceneName)
+    public void BTN_EnableRoom(uint idx)
     {
-        if (sceneName == _currentScene)
-        {
-            if (_isDevMode)
-                _logger.Log("You cannot load the same scene!", ColorType.RED);
-
-            return;
-        }
         if (!CanPause)
         {
             if (_isDevMode)
                 _logger.Log("You cannot load any scene at this time!", ColorType.YELLOW);
 
             return;
-        }
+        }            
 
-        SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
-        SceneManager.UnloadSceneAsync(_currentScene);
-        _soundEmitter.PlaySound(_sceneSwitchSFX);
-        _currentScene = sceneName;
+        // only enables the selected room
+        for (int i = 0; i < _rooms.Length; i++)
+            _rooms[i].SetActive(i == idx);
 
-        if (_isDevMode)
-            _logger.Log($"Loaded to {_currentScene}!", ColorType.YELLOW);
+        _soundEmitter.PlaySound(_elevatorSFX);
     }
 
     #endregion
@@ -78,25 +68,21 @@ public class SceneHandler : Singleton<SceneHandler>
     private void InitVariables()
     {
         CanPause = true;
-        _currentScene = null;
-    } 
+    }
     private void LoadStartingScene()
     {
-        SceneManager.LoadSceneAsync(_startingScene, LoadSceneMode.Additive);
-        _currentScene = _startingScene;
-
-        if (_isDevMode)
-            _logger.Log($"Loaded to {_currentScene}!", ColorType.YELLOW);
+        if (_startingScene != string.Empty)
+            SceneManager.LoadSceneAsync(_startingScene, LoadSceneMode.Additive);        
     }
 
     private void Test()
     {
         if (!_isDevMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_LoadToScene("SCN_Lobby");
-        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_LoadToScene("SCN_BarLab");
-        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_LoadToScene("SCN_GDDLab");
-    }    
+        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnableRoom(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnableRoom(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnableRoom(2);
+    }
 
     #endregion
 }
