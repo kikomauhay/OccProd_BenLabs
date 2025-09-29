@@ -26,11 +26,11 @@ public class BarManager : Singleton<BarManager>
 
     protected override void OnEnable()
     {
-        _gameMgr.OnBarGameStart += StartGame;
+        _gameMgr.OnBarGameStart += BTN_PlayGame;
     }
     protected override void OnDisable()
     {
-        _gameMgr.OnBarGameStart -= StartGame;
+        _gameMgr.OnBarGameStart -= BTN_PlayGame;
     }
     private void Start()
     {
@@ -42,10 +42,10 @@ public class BarManager : Singleton<BarManager>
 
     #region Game Loop
 
-    private void StartGame()
+    private void BTN_PlayGame()
     {
         if (_isDevMode)
-            _logger?.Log("Mini-game has started!");
+            _logger.Log("Mini-game has started!");
 
         // spawns the first customer
     }
@@ -59,7 +59,7 @@ public class BarManager : Singleton<BarManager>
             DoGameOver();
 
             if (_isDevMode)
-                _logger?.Log("Mini-game has ended!", gameObject, ColorType.YELLOW);
+                _logger.Log("Mini-game has ended!", gameObject, ColorType.YELLOW);
         }
     }
     private void DoGameOver()
