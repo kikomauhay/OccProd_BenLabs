@@ -1,19 +1,39 @@
 using UnityEngine;
+using System;
 
 // Similar to singleton, but it OVERRIDES the new version INSTEAD OF DESTORYING it
 public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
 {
-    public static T Instance { get; private set; }
-    protected virtual void Awake() => Instance = this as T;
+    #region Members
 
+    public static T Instance { get; private set; }
+
+    [Header("Debugging")]
+    [SerializeField] protected Logger _logger;
+    [SerializeField] protected bool _isDevMode;
+
+    #endregion
+    #region Methods
+
+    protected virtual void OnEnable() { } // subscribe to events
+    protected virtual void OnDisable() { } // unsubscribe to events
+    protected virtual void Awake()
+    {
+        Instance = this as T;
+        name = ToString();
+
+        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
+
+        if (_isDevMode)
+            _logger.Log("Developer mode enabled!", gameObject, ColorType.YELLOW);
+    }
     protected virtual void OnApplicationQuit()
     {
         Instance = null;
         Destroy(gameObject);
     }
 
-    protected virtual void OnEnable() {}
-    protected virtual void OnDisable() {}
+    #endregion
 }
 
 // This DESTROYS any new versions created, leaving the original alone
@@ -29,11 +49,11 @@ public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
 }
 
 // This makes the singleton SURVIVE SCENE LOADS without being destroyed
-public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour 
+public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
 {
-    protected override void Awake() 
+    protected override void Awake()
     {
-        base.Awake(); 
+        base.Awake();
         DontDestroyOnLoad(gameObject);
     }
 }

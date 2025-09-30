@@ -2,26 +2,34 @@ using UnityEngine;
 
 public abstract class Actor : MonoBehaviour
 {
-    #region Properties
+    #region Members
+
+    [Header("Debugging")]
+    [SerializeField] protected Logger _logger;
+    [SerializeField] protected bool _isDevMode;
 
     #endregion
-    #region SerializeField
 
-    #endregion
-    #region Private
+    #region Methods
 
-    #endregion
+    protected virtual void OnEnable() { } // subscribe to events
+    protected virtual void OnDisable() { } // unsubscribe to events
+    protected virtual void Start()
+    {
+        InitComponents();
+        InitVariables();
 
-    #region Unity
+        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
-    protected void OnEnable() { }
-    protected void OnDisable() { }
+        if (_isDevMode)
+            Debug.Log($"<color=yellow>{name}'s debugging is enabled!</color>");
+    }
 
     #endregion
     #region Helpers
 
-    protected void InitComponents() { }
-    protected void InitVariables() { }
+    protected virtual void InitComponents() { }
+    protected virtual void InitVariables() { }
 
     #endregion
 }
