@@ -1,26 +1,54 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
-public class SoundEmitter : MonoBehaviour 
+[RequireComponent(typeof(AudioSource))]
+public class SoundEmitter : MonoBehaviour
 {
-    #region Properties
+    #region Members
+
+    [Header("Debugging")]
+    [SerializeField] private bool _enableGizmos;
+    [SerializeField] private float _maxDistance;
+    private AudioSource _source;
 
     #endregion
-    #region SerializeField
+    #region Methods
 
-    #endregion
-    #region Private
-
-    #endregion
-
-    #region Unity
-
-    private void Start() 
-    {
+    private void OnEnable()
+{
         
     }
+    private void Start()
+    {
+        _source = GetComponent<AudioSource>();
+        _source.spatialBlend = 1f;
 
-    #endregion
-    #region Helpers
+        Debug.Assert(_source.maxDistance > 0f, "Max distance is less then 0!", gameObject);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        if (!_enableGizmos) return;
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, _maxDistance);
+    }
+
+    public void PlaySound(Sound s) // can play the default sound
+    {
+        if (s != null)
+        {
+            _source.clip = s.Clip;
+            _source.loop = s.Loop;
+            _source.pitch = s.Pitch;
+            _source.volume = s.Volume;
+        }
+        else throw new NullReferenceException("Missing Sound component!");
+
+        if (s.Loop)
+            _source.Play();
+
+        else _source.PlayOneShot(_source.clip);
+    }
 
     #endregion
 }

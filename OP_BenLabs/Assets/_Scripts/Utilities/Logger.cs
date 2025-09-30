@@ -13,14 +13,28 @@ using UnityEngine;
 
 public class Logger : MonoBehaviour
 {
-    [Header("Logging Settings")]
+    [Header("Logging Settings"), Tooltip("If ShowLogs is ticked off, the console will be clean.")]
     [SerializeField] private bool _showLogs;
-    [SerializeField] private ColorType _color;
 
+    public void Log(object message)
+    {
+        if (_showLogs)
+            Debug.Log(message);
+    }
     public void Log(object message, Object sender)
     {
         if (_showLogs)
             Debug.Log(message, sender);
+    }
+    public void Log(object message, ColorType col)
+    {
+        if (_showLogs)
+            Debug.Log($"<color={col}>{message}</color>");
+    }
+    public void Log(object message, Object sender, ColorType col)
+    {
+        if (_showLogs)
+            Debug.Log($"<color={col}>{message}</color>", sender);
     }
 }
 
