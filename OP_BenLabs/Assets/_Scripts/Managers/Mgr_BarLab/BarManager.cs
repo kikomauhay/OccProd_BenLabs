@@ -73,8 +73,8 @@ public class BarManager : Singleton<BarManager>
 
     private void InitComponents()
     {
-        Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
-        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
+        // Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
+        // Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
     }
     private void InitVariables()
     {
