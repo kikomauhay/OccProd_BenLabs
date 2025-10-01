@@ -1,10 +1,14 @@
 BenLabs Debug Keys
 
+-NOTE-
+    * Make sure that Dev Mode is ticked on to see the console logs.
+
 [SceneHandler.cs]
-- 1: Load Lobby Scene
-- 2: Load SHRIM Scene
-- 3: Load GDD Scene
+- 1: Load Lobby Floor
+- 2: Load SHRIM Floor
+- 3: Load GDD Floor
 
 [GDDManager.cs]
 - Space: Spawn Enemy
 - Backspace: Delete all enemies
+- Enter: StartCoroutine(CO_StartWave());
