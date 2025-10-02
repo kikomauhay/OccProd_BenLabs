@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class BarManager : Singleton<BarManager>
@@ -12,16 +13,16 @@ public class BarManager : Singleton<BarManager>
     [SerializeField] private Collider _colliders;
     [SerializeField] private int _currStrike;
     [SerializeField] private float _totalScore;
-        
+
     #endregion
     #region Private
 
     private GameManager _gameMgr = GameManager.Instance;
     private const int MAX_STRIKES = 3;
     private const float SERVING_SCORE = 100f;
-    
+
     #endregion
-    
+
     #region Unity
 
     protected override void OnEnable()
@@ -73,14 +74,22 @@ public class BarManager : Singleton<BarManager>
 
     private void InitComponents()
     {
-        Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
-        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
+        // Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
+        // Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
     }
     private void InitVariables()
     {
         _currStrike = 0;
         _totalScore = 0f;
     }
-    
+
+    #endregion
+    #region Enumerators
+
+    private IEnumerator CO_SpawnCustomer()
+    {
+        yield break;
+    }
+        
     #endregion
 }

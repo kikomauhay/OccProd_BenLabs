@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -7,14 +8,19 @@ public class GDDManager : Singleton<GDDManager>
 {
     #region Properties
 
+    public Transform TestGoal => _testGoal;
     public WaveState WaveState => _waveState;
+    public Logger Logger => _logger;
 
     #endregion
     #region SerializeField
 
+    [SerializeField] private Vector3 _testVec3;
+
     [Header("Spawn Bounds")]
     [SerializeField] private BoxCollider _collider;
     [SerializeField] private Transform _spawnArea; // to prevent clutters in the hierarchy
+    [SerializeField] private Transform _testGoal;
 
     [Header("Wave Components")]
     [SerializeField] private WaveData[] _waves;
@@ -25,7 +31,9 @@ public class GDDManager : Singleton<GDDManager>
     #endregion
     #region Private
 
-    private List<GameObject> _enemies;
+    private const float GRACE_PERIOD = 2.5f;
+
+    [SerializeField] private List<GameObject> _enemyList;
     private WaveState _waveState;
     private uint _killCount;
 
@@ -41,21 +49,15 @@ public class GDDManager : Singleton<GDDManager>
         InitVariables();
     }
     private void Update() => Test();
-    private void OnDrawGizmos()
-    {
-        if (!_isDevMode) return;
-
-        Gizmos.color = Color.white;
-        Gizmos.DrawCube(_collider.center, _collider.size);
-    }
 
     #endregion
     #region Public
 
-    public void RemoveEnemy(GameObject e)
+    public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
+    public void UnbindEvents(GameObject e)
     {
         e.GetComponent<Enemy>().OnDeath -= CountRemainingEnemies;
-        _enemies.Remove(e);
+        e.GetComponent<Enemy>().OnKilled -= IncrementKillCount;
     }
     public void BTN_PlayGame()
     {
@@ -66,21 +68,8 @@ public class GDDManager : Singleton<GDDManager>
     }
 
     #endregion
-    #region Private
-
-    private void CountRemainingEnemies()
-    {
-        _waveState = WaveState.COUNTING;
-        _killCount++;
-
-        if (_enemies.Count == 0)
-        {
-            // finish current wave
-
-            if (_currentWave < 3)
-                _currentWave++;
-        }
-    }
+    #region Private 
+    
     private void SpawnEnemy()
     {
         Vector3 RandomPositionInBox()
@@ -92,20 +81,55 @@ public class GDDManager : Singleton<GDDManager>
 
             return _collider.transform.TransformPoint(_collider.center + localPosition);
         }
+        void SetUpEnemy(Enemy e)
+        {
+            e.GetComponent<Enemy>().OnDeath += CountRemainingEnemies;
+            e.GetComponent<Enemy>().OnKilled += IncrementKillCount;
 
-        GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemies[Random.Range(0, _enemies.Count)];
-        GameObject newEnemy = Instantiate(enemyToSpawn,
-                                          RandomPositionInBox(),
-                                          Quaternion.identity,
-                                          _spawnArea);
+            _enemyList.Add(e.gameObject);
+        }
 
-        _enemies.Add(newEnemy);
-        newEnemy.GetComponent<Enemy>().OnDeath += CountRemainingEnemies;
+        GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
+        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
+
+        SetUpEnemy(newEnemy.GetComponent<Enemy>());
 
         if (_isDevMode)
             _logger.Log("Spawned new enemy!");
     }
-        
+
+    #endregion
+    #region Events
+
+    private void CountRemainingEnemies()
+    {
+        _waveState = WaveState.COUNTING;
+
+        if (_isDevMode)
+            _logger.Log($"Enemies left: {_enemyList.Count}", ColorType.LIME);
+
+        if (_enemyList.Count == 0)
+        {
+            _currentWave++;
+
+            if (_currentWave < _waves.Length)
+            {
+                StartCoroutine(CO_StartWave());
+
+                if (_isDevMode)
+                    _logger.Log($"Current Wave: {_currentWave}", ColorType.LIME);
+            }
+            // else AllWavesDone();
+        }
+    }
+    private void IncrementKillCount()
+    {
+        _killCount++;
+
+        if (_isDevMode)
+            _logger.Log($"Kill Count: {_killCount}", this, ColorType.YELLOW);
+    }
+
     #endregion
     #region Helpers
 
@@ -115,7 +139,7 @@ public class GDDManager : Singleton<GDDManager>
     }
     private void InitVariables()
     {
-        _enemies = new List<GameObject>();
+        _enemyList = new List<GameObject>();
         _waveState = WaveState.WAITING;
         _killCount = 0;
     }
@@ -125,29 +149,47 @@ public class GDDManager : Singleton<GDDManager>
 
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            foreach (GameObject e in _enemies)
-                Destroy(e);            
+            foreach (GameObject e in _enemyList)
+                Destroy(e);
 
-            _enemies.Clear();
-        }    
-        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
-    } 
+            _enemyList.Clear();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy(); // might break the continous wave spawning
+        if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_StartWave());
+    }
 
     #endregion
     #region Enumerators
 
     private IEnumerator CO_StartWave()
-    {
-        WaveData wave = _waves[_currentWave];
+    {       
+        if (_waveState == WaveState.SPAWNING) // prevents spawning overlaps
+        {
+            if (_isDevMode)
+                _logger.Log("Still spawning enemies!", this, ColorType.RED);
 
+            yield break;
+        }
+
+        if (_isDevMode)
+            _logger.Log("Starting spawning!", ColorType.YELLOW);
+
+        // wait time before spawning
+        yield return new WaitForSeconds(GRACE_PERIOD);
+        WaveData wave = _waves[_currentWave];
         _waveState = WaveState.SPAWNING;
 
+        // enemy spawning
         for (int i = 0; i < wave.UnitCount; i++)
         {
             SpawnEnemy();
             yield return new WaitForSeconds(1f / wave.SpawnInterval);
         }
-        _waveState = WaveState.WAITING;
+        _waveState = WaveState.FINISHED;
+
+        if (_isDevMode)
+            _logger.Log("Finished spawning!", ColorType.YELLOW);
     }
 
     #endregion

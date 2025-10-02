@@ -22,7 +22,7 @@ public abstract class Actor : MonoBehaviour
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
         if (_isDevMode)
-            Debug.Log($"<color=yellow>{name}'s debugging is enabled!</color>");
+            _logger.Log($"{name}'s developer mode is enabled!", gameObject, ColorType.YELLOW);
     }
 
     #endregion
@@ -30,6 +30,7 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void InitComponents() { }
     protected virtual void InitVariables() { }
+    protected virtual void Test() { }
 
     #endregion
 }
