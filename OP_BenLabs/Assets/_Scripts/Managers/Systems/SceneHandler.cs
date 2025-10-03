@@ -16,7 +16,7 @@ public class SceneHandler : Singleton<SceneHandler>
     [SerializeField] private Sound _elevatorSFX;
 
     [Header("Atrium Rooms"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
-    [SerializeField] private GameObject[] _rooms; // disable all the rooms but the first one 
+    [SerializeField] private GameObject[] _floors; // disable all the rooms but the first one 
 
     #endregion
     #region Private
@@ -30,7 +30,7 @@ public class SceneHandler : Singleton<SceneHandler>
     private void Start()
     {
         Debug.Assert(_startingScene != string.Empty, "Missing _startingScene reference!", gameObject);
-        Debug.Assert(_rooms.Length != 3, "Missing _rooms elements!", gameObject);
+        Debug.Assert(_floors.Length != 3, "Missing _rooms elements!", gameObject);
 
         InitComponents();
         InitVariables();
@@ -52,8 +52,8 @@ public class SceneHandler : Singleton<SceneHandler>
         }            
 
         // only enables the selected room
-        for (int i = 0; i < _rooms.Length; i++)
-            _rooms[i].SetActive(i == idx);
+        for (int i = 0; i < _floors.Length; i++)
+            _floors[i].SetActive(i == idx);
 
         _soundEmitter.PlaySound(_elevatorSFX);
     }
