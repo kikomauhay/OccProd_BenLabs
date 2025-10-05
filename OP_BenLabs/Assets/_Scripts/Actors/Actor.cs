@@ -30,6 +30,7 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void InitComponents() { }
     protected virtual void InitVariables() { }
+    protected virtual void Test() { }
 
     #endregion
 }
