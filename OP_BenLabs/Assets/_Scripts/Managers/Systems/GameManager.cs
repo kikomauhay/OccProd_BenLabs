@@ -5,6 +5,7 @@ public class GameManager : Singleton<GameManager>
     #region Properies
 
     public System.Action OnBarGameStart { get; set; }
+    public GameObject Player => _player;
     public float BarHighScore
     {
         get => _barHighScore;
@@ -16,10 +17,11 @@ public class GameManager : Singleton<GameManager>
             _barHighScore = value;
         }
     }
-        
+
     #endregion
     #region Private
 
+    private GameObject _player;
     private float _barHighScore;
         
     #endregion

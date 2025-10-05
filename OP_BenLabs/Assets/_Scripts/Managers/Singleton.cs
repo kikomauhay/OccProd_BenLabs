@@ -20,12 +20,11 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
     protected virtual void Awake()
     {
         Instance = this as T;
-        name = ToString();
 
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
         if (_isDevMode)
-            _logger.Log("Developer mode enabled!", gameObject, ColorType.YELLOW);
+            _logger.Log($"{name}'s developer mode enabled!", this, ColorType.YELLOW);
     }
     protected virtual void OnApplicationQuit()
     {
