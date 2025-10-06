@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class FadeScreen : MonoBehaviour
 {
-    #region Members
+    #region Properties
 
     public float FadeDuration => _fadeDuration;
+
+    #endregion
+    #region SerializeField 
 
     [Header("Debugging")]
     [SerializeField] private Logger _logger;
@@ -16,8 +19,11 @@ public class FadeScreen : MonoBehaviour
     [SerializeField] private float _fadeDuration;
     [SerializeField] private Color _fadeColor;
 
-    private Renderer _renderer;
+    #endregion
+    #region Private
 
+    private Renderer _renderer;
+    
     #endregion
 
     #region Unity
@@ -35,13 +41,17 @@ public class FadeScreen : MonoBehaviour
     }
 
     #endregion
-    #region Fade
+    #region Public
 
     public void FadeIn() => Fade(1f, 0f);
     public void FadeOut() => Fade(0f, 1f);
+
+    #endregion
+    #region Private
+
     private void Fade(float alphaIn, float alphaOut)
     {
-        IEnumerator CO_FadeRoutine(float alphaIn, float alphaOut)
+        IEnumerator CO_Fade(float alphaIn, float alphaOut)
         {
             float timer = 0f;
 
@@ -52,7 +62,7 @@ public class FadeScreen : MonoBehaviour
                 newColor.a = Mathf.Lerp(alphaIn, alphaOut, timer / _fadeDuration);
                 _renderer.material.SetColor("_Color", newColor);
 
-                // increases opacity per frame
+                // changes opacity per frame
                 timer += Time.deltaTime;
                 yield return null;
             }
@@ -63,7 +73,7 @@ public class FadeScreen : MonoBehaviour
             gameObject.SetActive(false);
         }
 
-        StartCoroutine(CO_FadeRoutine(alphaIn, alphaOut));
+        StartCoroutine(CO_Fade(alphaIn, alphaOut));
     }
 
     #endregion
