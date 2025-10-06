@@ -57,7 +57,7 @@ public class GameManager : Singleton<GameManager>
         IsFading = true;
         CanPause = true;
 
-        _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
+        // _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
     }
     private void LoadStartingScene()
     {
@@ -78,6 +78,8 @@ public class GameManager : Singleton<GameManager>
 
     public IEnumerator CO_EnterLobby()
     {
+        _fadeDuration = new WaitForSeconds(2f);
+
         _fadeScreen.gameObject.SetActive(true);
         IsFading = true;
         _fadeScreen.FadeOut();
@@ -86,7 +88,6 @@ public class GameManager : Singleton<GameManager>
         IsFading = false;
 
         // tp player to the lobby floor
-
         if (_isDevMode)
             _logger.Log("Teleported to Lobby!");
 
