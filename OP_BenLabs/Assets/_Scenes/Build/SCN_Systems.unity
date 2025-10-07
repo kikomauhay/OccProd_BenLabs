@@ -259,10 +259,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6a79c87b24877c4c9204c2367f366d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _logger: {fileID: 0}
+  _logger: {fileID: 1918827676}
   _isDevMode: 0
   _fadeOnStart: 1
-  _fadeDuration: 2
+  _fadeDuration: 5
   _fadeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!64 &429645030
 MeshCollider:
@@ -1383,7 +1383,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1049062989}
-  - component: {fileID: 1049062990}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -1408,14 +1407,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &1049062990
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1049062988}
-  m_Enabled: 1
 --- !u!1 &1153478053
 GameObject:
   m_ObjectHideFlags: 0
@@ -1873,8 +1864,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logger: {fileID: 1918827675}
   _isDevMode: 0
-  _player: {fileID: 0}
-  _startingScene: 
+  _player: {fileID: 1843927262}
+  _startingScene: SCN_Atrium
 --- !u!114 &1376616798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2627,6 +2618,18 @@ PrefabInstance:
 --- !u!114 &1918827675 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4757517930728290169, guid: 140223ea2570f0c498a5579156e4ed90,
+    type: 3}
+  m_PrefabInstance: {fileID: 1918827674}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7893c251da72e484fb221c3d8e5d0d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1918827676 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8395536514011967474, guid: 140223ea2570f0c498a5579156e4ed90,
     type: 3}
   m_PrefabInstance: {fileID: 1918827674}
   m_PrefabAsset: {fileID: 0}
@@ -3645,10 +3648,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2145731283}
+  - component: {fileID: 2145731286}
   - component: {fileID: 2145731289}
   - component: {fileID: 2145731288}
   - component: {fileID: 2145731287}
-  - component: {fileID: 2145731286}
   - component: {fileID: 2145731285}
   - component: {fileID: 2145731284}
   m_Layer: 0
