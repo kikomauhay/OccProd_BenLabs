@@ -212,6 +212,72 @@ Transform:
   m_Father: {fileID: 1843927263}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &368036127
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 368036128}
+  - component: {fileID: 368036130}
+  - component: {fileID: 368036129}
+  m_Layer: 0
+  m_Name: ~TeleportManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &368036128
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368036127}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.648551, y: -5.019379, z: 16.847517}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1049062989}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &368036129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368036127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7893c251da72e484fb221c3d8e5d0d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showLogs: 0
+--- !u!114 &368036130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368036127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77c8a6329fe51eb44aaf735d0a10819b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _logger: {fileID: 368036129}
+  _isDevMode: 0
+  _leftRay: {fileID: 1371741026}
+  _rightRay: {fileID: 1001439767}
+  RightTeleport: {fileID: -3133693787775318047, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  LeftTeleport: {fileID: -1773083502614620448, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
 --- !u!1 &429645027
 GameObject:
   m_ObjectHideFlags: 0
@@ -1404,6 +1470,7 @@ Transform:
   m_Children:
   - {fileID: 1376616796}
   - {fileID: 1798129080}
+  - {fileID: 368036128}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
