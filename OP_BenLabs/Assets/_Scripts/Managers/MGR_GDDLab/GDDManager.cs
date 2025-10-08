@@ -106,7 +106,7 @@ public class GDDManager : Singleton<GDDManager>
         _waveState = WaveState.COUNTING;
 
         if (_isDevMode)
-            _logger.Log($"Enemies left: {_enemyList.Count}", ColorType.LIME);
+            _logger.Log($"Enemies left: {_enemyList.Count}", ColorType.GREEN);
 
         if (_enemyList.Count == 0)
         {
@@ -117,7 +117,7 @@ public class GDDManager : Singleton<GDDManager>
                 StartCoroutine(CO_StartWave());
 
                 if (_isDevMode)
-                    _logger.Log($"Current Wave: {_currentWave}", ColorType.LIME);
+                    _logger.Log($"Current Wave: {_currentWave}", ColorType.GREEN);
             }
             // else AllWavesDone();
         }
