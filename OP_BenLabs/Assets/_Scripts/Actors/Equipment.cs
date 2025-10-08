@@ -5,7 +5,7 @@ public class Equipment : Actor
 {
     #region SerializeField
 
-    [Space(10f)]
+    [Header("SFX")]
     [SerializeField] protected Sound _pickUpSFX;
     [SerializeField] protected Sound _landOnFloorSFX;
  
