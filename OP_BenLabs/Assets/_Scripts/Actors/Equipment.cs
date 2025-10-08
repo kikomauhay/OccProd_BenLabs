@@ -19,6 +19,8 @@ public class Equipment : Actor
     protected GameManager _gameMgr = GameManager.Instance;
     protected SoundEmitter _soundEmitter;
 
+    Shaker shakr;
+
     #endregion
     
     #region Unity
@@ -30,12 +32,6 @@ public class Equipment : Actor
     protected override void OnDisable()
     {
         _gameMgr.OnBarGameStart -= ResetPosition;
-    }
-    protected override void Start()
-    {
-        base.Start(); // already contains both Init methods
-
-
     }
 
     #endregion

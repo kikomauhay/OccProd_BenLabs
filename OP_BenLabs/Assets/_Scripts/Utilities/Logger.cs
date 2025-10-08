@@ -43,7 +43,7 @@ public enum ColorType
     SILVER = 0, // default console color
     YELLOW = 1, // warnings
     RED = 2,    // errors
-    LIME = 3, 
-    AQUA = 4,
-    MAGENTA = 5       
+    GREEN = 3, 
+    CYAN = 4,
+    PINK = 5       
 }
