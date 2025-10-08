@@ -77,7 +77,7 @@ public class TraceRecognizer : MonoBehaviour
     private IEnumerator CO_LoadGesturesFromStreamingAssets()
     {
         // If you know the filenames, list them manually:
-        string[] gestureFileNames = { "O.xml" }; 
+        string[] gestureFileNames = { "Sword.xml", "Hammer.xml" }; 
 
         foreach (var fileName in gestureFileNames)
         {
