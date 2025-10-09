@@ -15,8 +15,6 @@ public class GDDManager : Singleton<GDDManager>
     #endregion
     #region SerializeField
 
-    [SerializeField] private Vector3 _testVec3;
-
     [Header("Spawn Bounds")]
     [SerializeField] private BoxCollider _collider;
     [SerializeField] private Transform _spawnArea; // to prevent clutters in the hierarchy
@@ -90,7 +88,7 @@ public class GDDManager : Singleton<GDDManager>
         }
 
         GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
+        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity);
 
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
 
@@ -176,8 +174,8 @@ public class GDDManager : Singleton<GDDManager>
             _logger.Log("Starting spawning!", ColorType.YELLOW);
 
         // wait time before spawning
-        yield return new WaitForSeconds(GRACE_PERIOD);
         WaveData wave = _waves[_currentWave];
+        yield return new WaitForSeconds(wave.GracePeriod);
         _waveState = WaveState.SPAWNING;
 
         // enemy spawning
