@@ -1,23 +1,11 @@
 using UnityEngine;
-using System;
 
 // Similar to singleton, but it OVERRIDES the new version INSTEAD OF DESTORYING it
-public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
+public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
 {
-    #region Members
-
     public static T Instance { get; private set; }
 
-    [Header("Debugging")]
-    [SerializeField] protected Logger _logger;
-    [SerializeField] protected bool _isDevMode;
-
-    #endregion
-    #region Methods
-
-    protected virtual void OnEnable() { } // subscribe to events
-    protected virtual void OnDisable() { } // unsubscribe to events
-    protected virtual void Awake()
+    protected override void Awake()
     {
         Instance = this as T;
 
@@ -25,14 +13,15 @@ public abstract class StaticInstance<T> : MonoBehaviour where T : MonoBehaviour
 
         if (_isDevMode)
             _logger.Log($"{name}'s developer mode enabled!", this, ColorType.YELLOW);
+
+        InitComponents();
     }
+    protected override void Start() => InitVariables();
     protected virtual void OnApplicationQuit()
     {
         Instance = null;
         Destroy(gameObject);
     }
-
-    #endregion
 }
 
 // This DESTROYS any new versions created, leaving the original alone

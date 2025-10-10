@@ -36,17 +36,20 @@ public class Customer : Actor
 
     protected override void Start()
     {
-        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
-        Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
+        // Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
+        // Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
 
-        base.Start(); // already contains both init methods
+        base.Start();
 
         if (!_isDevMode)
             StartCoroutine(CO_DecreaseRating());
     }
     private void OnDestroy()
     {
-
+        if (_isDevMode)
+            _logger.Log("Customer has left the bar!");
+        
+        StartCoroutine(CO_DelayedSpawnng());
     }
 
     #endregion
@@ -54,18 +57,20 @@ public class Customer : Actor
 
     protected override void InitComponents()
     {
+        _logger = BarManager.Instance.Logger;
         _actions = GetComponent<CustomerActions>();
     }
     protected override void InitVariables()
     {
-        Cocktail GetRandomCocktail() // only gets from the 3 possible drinks
+        Cocktail SetRandomCocktail() // only gets from the 3 possible drinks
         {
             
             int randomFromEnum = Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
             return (Cocktail)randomFromEnum;
         }
 
-        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : GetRandomCocktail();
+        name = "Customer";
+        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
 
         // _drinkOrdersUI[(int)_wantedCocktail].SetActive(true);
@@ -112,6 +117,10 @@ public class Customer : Actor
 
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
+    }
+    private IEnumerator CO_DelayedSpawnng()
+    {
+        yield break;
     }
 
     #endregion

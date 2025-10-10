@@ -41,7 +41,6 @@ public class Shaker : Equipment
 
     #region Unity
         
-    private void Update() => Test();
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Bottle>())
@@ -67,6 +66,8 @@ public class Shaker : Equipment
     protected override void Test()
     {
         if (!_isDevMode) return;
+
+        
     }
 
     #endregion

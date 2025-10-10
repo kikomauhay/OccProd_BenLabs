@@ -18,9 +18,13 @@ public class GDDManager : Singleton<GDDManager>
     [SerializeField] private Transform _spawnArea; // to prevent clutters in the hierarchy
     [SerializeField] private Transform _testGoal;
 
+    [Header("Trace Mechanic")]
+    [SerializeField] private GameObject _drawingCanvas;
+    [SerializeField] private WeaponSpawner _weaponSpawner;
+
     [Header("Wave Components")]
-    [SerializeField] private WaveData[] _waves;
     [SerializeField] private uint _currentWave;
+    [SerializeField] private WaveData[] _waves;
 
     [Space(10f), SerializeField] private GameObject _testEnemy;
 
@@ -38,14 +42,16 @@ public class GDDManager : Singleton<GDDManager>
 
     #region Unity
 
-    private void Start()
+    protected override void Start()
     {
         Debug.Assert(_waves.Length != 0, "Missing _waves elements!", gameObject);
+        Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
+        Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
+        
+        base.Start();
 
-        InitComponents();
-        InitVariables();
+        _drawingCanvas.SetActive(false);
     }
-    private void Update() => Test();
 
     #endregion
     #region Public
@@ -80,14 +86,18 @@ public class GDDManager : Singleton<GDDManager>
         }
         void SetUpEnemy(Enemy e)
         {
-            e.GetComponent<Enemy>().OnDeath += CountRemainingEnemies;
-            e.GetComponent<Enemy>().OnKilled += IncrementKillCount;
-
+            e.OnDeath += CountRemainingEnemies;
+            e.OnKilled += IncrementKillCount;
+            e.SetGoal(_testGoal);
+            
             _enemyList.Add(e.gameObject);
         }
 
-        GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
+        GameObject enemyToSpawn = _isDevMode ? _testEnemy :
+                                  _enemyList[Random.Range(0, _enemyList.Count)];
+
+        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(),
+                                          Quaternion.identity, _spawnArea);
 
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
 
@@ -130,17 +140,13 @@ public class GDDManager : Singleton<GDDManager>
     #endregion
     #region Helpers
 
-    private void InitComponents()
-    {
-        _collider = GetComponent<BoxCollider>();
-    }
-    private void InitVariables()
+    protected override void InitVariables()
     {
         _enemyList = new List<GameObject>();
         _waveState = WaveState.WAITING;
         _killCount = 0;
     }
-    private void Test()
+    protected override void Test()
     {
         if (!_isDevMode) return;
 
@@ -160,7 +166,36 @@ public class GDDManager : Singleton<GDDManager>
     #region Enumerators
 
     private IEnumerator CO_SpawnEnemyWave()
-    {       
+    {
+        WaveData wave = _waves[_currentWave];
+        float gracePeriod = _isDevMode ? GRACE_PERIOD : wave.GracePeriod;
+
+        void DoPrearation() // prep time for the player to "draw" a weapon
+        {
+            _drawingCanvas.SetActive(true);
+
+            if (_isDevMode)
+            {
+                _logger.Log($"{gracePeriod}s before enemy spawning!", ColorType.YELLOW);
+                _logger.Log($"{_gameMgr.Player} can start drawing!", ColorType.YELLOW);
+            }
+        }
+        IEnumerator CO_DoEnemySpawning() // spawning starts and drawing stops
+        {
+            _waveState = WaveState.SPAWNING;
+            _drawingCanvas.SetActive(false);
+
+            for (int i = 0; i < wave.UnitCount; i++)
+            {
+                SpawnEnemy();
+                yield return new WaitForSeconds(1f / wave.SpawnInterval);
+            }
+            _waveState = WaveState.FINISHED;
+
+            if (_isDevMode)
+                _logger.Log("Finished spawning!", ColorType.YELLOW);
+        }
+
         if (_waveState == WaveState.SPAWNING) // prevents wave spawning overlaps
         {
             if (_isDevMode)
@@ -169,22 +204,13 @@ public class GDDManager : Singleton<GDDManager>
             yield break;
         }
 
-        if (_isDevMode)
-            _logger.Log("Starting spawning!", ColorType.YELLOW);
-
-        WaveData wave = _waves[_currentWave];
-        yield return new WaitForSeconds(_isDevMode ? GRACE_PERIOD : wave.GracePeriod);
-        _waveState = WaveState.SPAWNING;
-
-        for (int i = 0; i < wave.UnitCount; i++)
-        {
-            SpawnEnemy();
-            yield return new WaitForSeconds(1f / wave.SpawnInterval);
-        }
-        _waveState = WaveState.FINISHED;
+        DoPrearation();
+        yield return new WaitForSeconds(gracePeriod);
 
         if (_isDevMode)
-            _logger.Log("Finished spawning!", ColorType.YELLOW);
+            _logger.Log($"{_gameMgr.Player} can no longer draw!", ColorType.YELLOW);
+        
+        StartCoroutine(CO_DoEnemySpawning());
     }
 
     #endregion

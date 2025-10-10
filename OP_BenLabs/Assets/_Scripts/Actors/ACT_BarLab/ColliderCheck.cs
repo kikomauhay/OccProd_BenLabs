@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider), typeof(SoundEmitter))]
@@ -6,10 +7,12 @@ public class ColliderCheck : Actor
     #region Properties
 
     public Customer CustomerOrder { get; set; }
+    public bool HasCustomer { get; private set; }
 
     #endregion
     #region Private
 
+    private BarManager _barMgr = BarManager.Instance;
     private Collider _collider;
     private SoundEmitter _soundEmitter;
 
@@ -19,40 +22,36 @@ public class ColliderCheck : Actor
 
     private void OnTriggerEnter(Collider other)
     {
+        void DoGlassCollision(Glass glass)
+        {
+            if (!glass.HasDrink)
+            {
+                if (_isDevMode)
+                    _logger.Log($"The glass has nothing in it!", ColorType.RED);
+
+                // play wrong.sfx
+                return;
+            }
+            
+            if (glass.Cocktail != CustomerOrder.WantedCocktail)
+            {
+                _barMgr.Wrong();
+                return;
+            }
+            _barMgr.Correct(glass.Score);
+        } 
+
         if (!CustomerOrder)
         {
             if (_isDevMode)
                 _logger.Log("Missing CustomerOrder reference!", ColorType.RED);
 
-            // SoundManager.Instance.PlaySound("wrong");
-            return;
-        }
-        /*
-        if (other.gameObject.GetComponent<Ingredient>() != null)
-        {
-            DoIngredientCollision(other.gameObject.GetComponent<Ingredient>());
+            // play wrong.sfx
             return;
         }
 
-        NEW_Plate plate = other.gameObject.GetComponent<NEW_Plate>();
-        NEW_Dish dish = other.gameObject.GetComponent<NEW_Dish>();
-
-        // makes sure that you have both a PLATE & DISH script
-        if (dish != null && plate != null)
-        {
-            if (!dish.HasFood) return;
-
-            DoDishCollision(dish, plate);
-            // Debug.LogWarning($"Collided with {other.gameObject.name}");
-            // Debug.LogWarning("Finished dish collision!");
-
-            if (GameManager.Instance.CurrentShift == GameShift.Training)
-            {
-                plate.Served();
-                dish.DisableDish();
-            }
-        }
-        */
+        if (other.gameObject.GetComponent<Glass>())
+            DoGlassCollision(other.gameObject.GetComponent<Glass>());
     }
 
     #endregion
@@ -67,6 +66,7 @@ public class ColliderCheck : Actor
     {
         _collider.isTrigger = true;
         _collider.enabled = true;
+        HasCustomer = false;
     }
 
     protected override void Test()
