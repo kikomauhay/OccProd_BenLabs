@@ -6,7 +6,9 @@ public class TeleportHandler : Singleton<TeleportHandler>
 {
     #region Members
 
-    [SerializeField] private GameObject _leftRay, _rightRay;
+    [Header("Teleportation Components")]
+    [SerializeField] private GameObject _leftRay;
+    [SerializeField] private GameObject _rightRay;
     public InputActionReference RightTeleport, LeftTeleport;
 
     #endregion

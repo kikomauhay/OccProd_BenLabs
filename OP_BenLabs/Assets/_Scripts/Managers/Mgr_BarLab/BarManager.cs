@@ -25,14 +25,6 @@ public class BarManager : Singleton<BarManager>
 
     #region Unity
 
-    protected override void OnEnable()
-    {
-        _gameMgr.OnBarGameStart += BTN_PlayGame;
-    }
-    protected override void OnDisable()
-    {
-        _gameMgr.OnBarGameStart -= BTN_PlayGame;
-    }
     private void Start()
     {
         InitComponents();

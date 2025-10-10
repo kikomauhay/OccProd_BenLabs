@@ -1,15 +1,16 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 public class FloorHandler : Singleton<FloorHandler>
 {
     #region Properties
 
-    public Floor[] Floors => _floors;
+    public ReadOnlyArray<Floor> Floors => _floors;
         
     #endregion
     #region SerializeField
 
-    [Header("Atrium Rooms"), Tooltip("0 = Tutorial, 1 = Lobby, 2 = 8F, 3 = 10F")]
+    [Header("Floors"), Tooltip("0 = Tutorial, 1 = Lobby, 2 = 8F, 3 = 10F")]
     [SerializeField] private Floor[] _floors; // disable all the rooms but the first one 
 
     #endregion
@@ -40,7 +41,6 @@ public class FloorHandler : Singleton<FloorHandler>
             return;
         }            
 
-        // only enables the selected room
         for (int i = 0; i < _floors.Length; i++)
             _floors[i].gameObject.SetActive(i == idx);
     }
