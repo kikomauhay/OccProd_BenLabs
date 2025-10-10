@@ -11,9 +11,6 @@ public class Enemy : Actor
     #endregion
     #region SerializeField
 
-    [Header("Movement Checks")]
-    [SerializeField] private Transform _testGoal;
-
     [Header("Enemy Stats")]
     [SerializeField] private float _maxHP;
     [SerializeField] private float _minDistance, _moveSpeed, _rotSpeed;
@@ -23,7 +20,8 @@ public class Enemy : Actor
 
     private Rigidbody _rb;
     private SoundEmitter _soundEmitter;
-    private Transform _goal;
+    private Transform _goal, _testGoal;
+
     private float _currHP;
 
     #endregion
@@ -32,7 +30,7 @@ public class Enemy : Actor
 
     private void LateUpdate()
     {
-        Vector3 lookAtGoal = new Vector3(_goal.position.x,
+    Vector3 lookAtGoal = new Vector3(_goal.position.x,
                                          transform.position.y,
                                          _goal.position.z);
         transform.LookAt(lookAtGoal);
@@ -49,12 +47,14 @@ public class Enemy : Actor
             Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
         }
-        else Destroy(gameObject); // test
+        else 
+        {
+            GDDManager.Instance.RemoveEnemy(gameObject);
+            Destroy(gameObject); // test
+        }
     }
     private void OnDestroy()
     {
-        GDDManager.Instance.RemoveEnemy(gameObject);
-
         OnDeath?.Invoke();
 
         if (_currHP <= 0f)
@@ -67,6 +67,11 @@ public class Enemy : Actor
     }
 
     #endregion
+    #region Public
+
+    public void SetGoal(Transform t) => _goal = t;
+        
+    #endregion
     #region Helpers
 
     protected override void InitComponents()
@@ -78,12 +83,9 @@ public class Enemy : Actor
     protected override void InitVariables()
     {
         name = "Enemy";
-
         _rb.mass = 10f;
         _rb.angularDrag = 0f;
         _rb.useGravity = true;
-
-        _goal = _isDevMode ? GDDManager.Instance.TestGoal : GameManager.Instance.Player.transform;
         _currHP = _maxHP;
     }
 

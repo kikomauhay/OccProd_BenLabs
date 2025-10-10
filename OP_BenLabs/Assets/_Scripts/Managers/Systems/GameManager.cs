@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class GameManager : Singleton<GameManager>
@@ -22,35 +23,35 @@ public class GameManager : Singleton<GameManager>
     private SoundEmitter _soundEmitter;
     private FadeScreen _fadeScreen;
     private WaitForSeconds _fadeDuration;
-        
+
     #endregion
 
     #region Unity
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         InitComponents();
-        InitVariables();
     }
-    private void Update() => Test();
 
     #endregion
     #region Helpers
 
-    private void InitComponents() 
+    protected override void InitComponents() 
     {
         _soundEmitter = GetComponent<SoundEmitter>();
-        _fadeScreen = GetComponent<FadeScreen>();
+        _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
     }
-    private void InitVariables() 
+    protected override void InitVariables() 
     {
         IsFading = true;
         CanPause = true;
         _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
     }
-    private void Test()
+    protected override void Test()
     {
         if (!_isDevMode) return;   
+        
     }
 
     #endregion
