@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Jobs;
 
 [RequireComponent(typeof(SoundEmitter), typeof(Rigidbody))]
 public class Enemy : Actor
@@ -86,6 +85,11 @@ public class Enemy : Actor
 
         _goal = _isDevMode ? GDDManager.Instance.TestGoal : GameManager.Instance.Player.transform;
         _currHP = _maxHP;
+    }
+
+    protected override void Test()
+    {
+        if (!_isDevMode) return;
     }
 
     #endregion

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class GDDManager : Singleton<GDDManager>
 {
     #region Properties
@@ -88,7 +87,7 @@ public class GDDManager : Singleton<GDDManager>
         }
 
         GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity);
+        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
 
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
 
@@ -174,7 +173,7 @@ public class GDDManager : Singleton<GDDManager>
             _logger.Log("Starting spawning!", ColorType.YELLOW);
 
         WaveData wave = _waves[_currentWave];
-        yield return new WaitForSeconds(wave.GracePeriod);
+        yield return new WaitForSeconds(_isDevMode ? GRACE_PERIOD : wave.GracePeriod);
         _waveState = WaveState.SPAWNING;
 
         for (int i = 0; i < wave.UnitCount; i++)
