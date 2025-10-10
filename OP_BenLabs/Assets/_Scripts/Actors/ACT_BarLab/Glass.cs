@@ -65,7 +65,6 @@ public class Glass : Equipment
 
         Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
     }
-    private void Update() => Test();
 
     #endregion
     #region Public 

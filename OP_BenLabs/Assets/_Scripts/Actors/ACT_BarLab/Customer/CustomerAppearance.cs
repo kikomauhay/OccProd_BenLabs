@@ -27,11 +27,11 @@ public class CustomerAppearance : MonoBehaviour
     {        
         int i = Random.Range(0, _skinVariants.Length);
 
-        _body.material = _skinVariants[i].BodyMaterial;
-        _ears.material = _skinVariants[i].EarVariants[Random.Range(0, _skinVariants[i].EarVariants.Length)];
-        _tail.material = _skinVariants[i].TailVariants[Random.Range(0, _skinVariants[i].TailVariants.Length)];
+        // _body.material = _skinVariants[i].BodyMaterial;
+        // _ears.material = _skinVariants[i].EarVariants[Random.Range(0, _skinVariants[i].EarVariants.Length)];
+        // _tail.material = _skinVariants[i].TailVariants[Random.Range(0, _skinVariants[i].TailVariants.Length)];
 
-        _face.sprite = _reactionFaces[0];
+        // _face.sprite = _reactionFaces[0];
     }
 
     #endregion

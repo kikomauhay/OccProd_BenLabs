@@ -14,9 +14,9 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void OnEnable() { } // subscribe to events
     protected virtual void OnDisable() { } // unsubscribe to events
+    protected virtual void Awake() => InitComponents();
     protected virtual void Start()
     {
-        InitComponents();
         InitVariables();
 
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
@@ -24,6 +24,7 @@ public abstract class Actor : MonoBehaviour
         if (_isDevMode)
             _logger.Log($"{name}'s developer mode is enabled!", gameObject, ColorType.YELLOW);
     }
+    protected virtual void Update() => Test();
 
     #endregion
     #region Helpers

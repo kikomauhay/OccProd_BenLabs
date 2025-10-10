@@ -17,7 +17,6 @@ public class ColliderCheck : Actor
 
     #region Unity
 
-    private void Update() => Test();
     private void OnTriggerEnter(Collider other)
     {
         if (!CustomerOrder)
@@ -73,6 +72,7 @@ public class ColliderCheck : Actor
     protected override void Test()
     {
         if (!_isDevMode) return;
+    
     }
 
     #endregion

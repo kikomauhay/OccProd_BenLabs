@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
+[RequireComponent(typeof(CustomerActions))]
 public class Customer : Actor
 {
     #region Properties
@@ -13,13 +13,13 @@ public class Customer : Actor
     #region Members
 
     [Header("Customer Stats")]
+    [SerializeField] private Cocktail _wantedCocktail;
     [SerializeField] private float _decreaseRate;
     [SerializeField] private float _reactionTimer;
 
     [Header("Drinks UI")]
     [SerializeField] private GameObject[] _drinkOrdersUI;   
     [SerializeField] private Transform _orderUITransform; 
-    [SerializeField] private Cocktail _wantedCocktail;
 
     #endregion
     #region Private
@@ -28,8 +28,6 @@ public class Customer : Actor
     private const float GRACE_PERIOD = 2f;
 
     private CustomerActions _actions;
-    private CustomerAppearance _appearance;
-
     private float _customerScore;
 
     #endregion
@@ -43,7 +41,8 @@ public class Customer : Actor
 
         base.Start(); // already contains both init methods
 
-        StartCoroutine(CO_DecreaseRating());
+        if (!_isDevMode)
+            StartCoroutine(CO_DecreaseRating());
     }
     private void OnDestroy()
     {
@@ -56,13 +55,28 @@ public class Customer : Actor
     protected override void InitComponents()
     {
         _actions = GetComponent<CustomerActions>();
-        _appearance = GetComponent<CustomerAppearance>();
     }
     protected override void InitVariables()
     {
+        Cocktail GetRandomCocktail() // only gets from the 3 possible drinks
+        {
+            
+            int randomFromEnum = Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+            return (Cocktail)randomFromEnum;
+        }
+
+        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : GetRandomCocktail();
         _customerScore = 100f;
-        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : 
-                          (Cocktail)Random.Range(0, System.Enum.GetValues(typeof(Cocktail)).Length);
+
+        // _drinkOrdersUI[(int)_wantedCocktail].SetActive(true);
+
+        if (_isDevMode)
+            _logger.Log($"{this} wants a {_wantedCocktail}");
+    }
+
+    protected override void Test()
+    {
+        if (!_isDevMode) return;
     }
 
     #endregion
