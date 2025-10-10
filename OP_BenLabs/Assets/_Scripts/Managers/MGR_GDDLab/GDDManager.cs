@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.XR.CoreUtils;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -30,6 +29,7 @@ public class GDDManager : Singleton<GDDManager>
     #region Private
 
     private const float GRACE_PERIOD = 2.5f;
+    private GameManager _gameMgr = GameManager.Instance;
 
     [SerializeField] private List<GameObject> _enemyList;
     private WaveState _waveState;
@@ -59,7 +59,7 @@ public class GDDManager : Singleton<GDDManager>
     }
     public void BTN_PlayGame()
     {
-        StartCoroutine(CO_StartWave());
+        StartCoroutine(CO_SpawnEnemyWave());
 
         if (_isDevMode)
             _logger.Log("Mini-game has started!");
@@ -112,7 +112,7 @@ public class GDDManager : Singleton<GDDManager>
 
             if (_currentWave < _waves.Length)
             {
-                StartCoroutine(CO_StartWave());
+                StartCoroutine(CO_SpawnEnemyWave());
 
                 if (_isDevMode)
                     _logger.Log($"Current Wave: {_currentWave}", ColorType.GREEN);
@@ -154,15 +154,15 @@ public class GDDManager : Singleton<GDDManager>
         }
 
         if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy(); // might break the continous wave spawning
-        if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_StartWave());
+        if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
     }
 
     #endregion
     #region Enumerators
 
-    private IEnumerator CO_StartWave()
+    private IEnumerator CO_SpawnEnemyWave()
     {       
-        if (_waveState == WaveState.SPAWNING) // prevents spawning overlaps
+        if (_waveState == WaveState.SPAWNING) // prevents wave spawning overlaps
         {
             if (_isDevMode)
                 _logger.Log("Still spawning enemies!", this, ColorType.RED);
@@ -173,12 +173,10 @@ public class GDDManager : Singleton<GDDManager>
         if (_isDevMode)
             _logger.Log("Starting spawning!", ColorType.YELLOW);
 
-        // wait time before spawning
         WaveData wave = _waves[_currentWave];
         yield return new WaitForSeconds(wave.GracePeriod);
         _waveState = WaveState.SPAWNING;
 
-        // enemy spawning
         for (int i = 0; i < wave.UnitCount; i++)
         {
             SpawnEnemy();

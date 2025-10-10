@@ -23,18 +23,6 @@ public class Equipment : Actor
 
     #endregion
     
-    #region Unity
-    
-    protected override void OnEnable()
-    {
-        _gameMgr.OnBarGameStart += ResetPosition;
-    }
-    protected override void OnDisable()
-    {
-        _gameMgr.OnBarGameStart -= ResetPosition;
-    }
-
-    #endregion
     #region Public
 
     public void PickUpSound() => _soundEmitter.PlaySound(_pickUpSFX);

@@ -6,7 +6,8 @@ public class Customer : Actor
 {
     #region Properties
 
-    public bool IsHappy => _customerScore != 0f;
+    public Cocktail WantedCocktail => _wantedCocktail;
+    public float CustomerScore => _customerScore;
 
     #endregion
     #region Members
@@ -18,6 +19,7 @@ public class Customer : Actor
     [Header("Drinks UI")]
     [SerializeField] private GameObject[] _drinkOrdersUI;   
     [SerializeField] private Transform _orderUITransform; 
+    [SerializeField] private Cocktail _wantedCocktail;
 
     #endregion
     #region Private
@@ -27,7 +29,6 @@ public class Customer : Actor
 
     private CustomerActions _actions;
     private CustomerAppearance _appearance;
-    private GameObject _customerOrderUI;
 
     private float _customerScore;
 
@@ -50,17 +51,6 @@ public class Customer : Actor
     }
 
     #endregion
-    #region Private
-
-    private void CreateCustomerUI() // aligns Order UI & Customer Order
-    {
-        _customerOrderUI = Instantiate(_drinkOrdersUI[0],
-                                       _orderUITransform.position,
-                                       _orderUITransform.rotation,
-                                       transform);
-    }
-
-    #endregion
     #region Helpers
 
     protected override void InitComponents()
@@ -71,6 +61,8 @@ public class Customer : Actor
     protected override void InitVariables()
     {
         _customerScore = 100f;
+        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : 
+                          (Cocktail)Random.Range(0, System.Enum.GetValues(typeof(Cocktail)).Length);
     }
 
     #endregion

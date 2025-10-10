@@ -3,7 +3,6 @@ using UnityEngine;
 public class Floor : MonoBehaviour 
 {
     public FloorType FloorType => _floorType;
-
     [SerializeField] private FloorType _floorType;
 }
 
