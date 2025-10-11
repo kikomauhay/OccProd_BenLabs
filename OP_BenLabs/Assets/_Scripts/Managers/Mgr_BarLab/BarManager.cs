@@ -40,6 +40,9 @@ public class BarManager : Singleton<BarManager>
         Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
 
         base.Start();
+
+        if (!_isDevMode)
+            StartCoroutine(CO_SpawnCustomer());
     }
 
     #endregion
@@ -95,7 +98,7 @@ public class BarManager : Singleton<BarManager>
     private IEnumerator CO_SpawnCustomer()
     {
         _colliderCheck.CustomerOrder = null;
-        
+
         if (_colliderCheck.HasCustomer) 
         {
             if (_isDevMode)
