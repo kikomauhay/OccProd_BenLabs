@@ -22,16 +22,16 @@ public class FloorHandler : Singleton<FloorHandler>
 
     #region Unity
 
-    private void Start()
+    protected override void Start()
     {
         Debug.Assert(_floors.Length != FLOOR_COUNT, "Missing _rooms elements!", gameObject);
+        base.Start();
     }
-    private void Update() => Test();
 
     #endregion
     #region Public
 
-    public void BTN_EnableRoom(uint idx)    
+    public void BTN_EnableRoom(int idx)    
     {
         if (!GameManager.Instance.CanPause)
         {
@@ -48,7 +48,7 @@ public class FloorHandler : Singleton<FloorHandler>
     #endregion
     #region Helpers
 
-    private void Test()
+    protected override void Test()
     {
         if (!_isDevMode) return;
 
