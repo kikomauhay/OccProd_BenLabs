@@ -15,6 +15,8 @@ public class Shaker : Equipment
     
     [SerializeField] private List<Ingredient> _mixedDrink;
     [SerializeField] private Cocktail _cocktail;
+    [SerializeField] private Transform _shakerTip;
+    [SerializeField] private float _pourThreshold;
 
     #endregion
     #region Private 
@@ -36,11 +38,16 @@ public class Shaker : Equipment
                                               Ingredient.COCONUT_WATER } }, 
     };
     private readonly WaitForSeconds _shakeTime = new WaitForSeconds(Random.Range(10f, 15f));
-        
+
     #endregion
 
     #region Unity
-        
+
+    private void FixedUpdate()
+    {
+        CheckPourAngle();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Bottle>())
@@ -68,6 +75,22 @@ public class Shaker : Equipment
         if (!_isDevMode) return;
 
         
+    }
+
+    private void CheckPourAngle()
+    {
+        float _angle = Vector3.Angle(_shakerTip.up, Vector3.up);
+
+        if(_angle > _pourThreshold)
+        {
+            Pour();
+        }
+    }
+
+    private void Pour()
+    {
+        //start instantiating vfx here
+        _mixedDrink.Clear();
     }
 
     #endregion
