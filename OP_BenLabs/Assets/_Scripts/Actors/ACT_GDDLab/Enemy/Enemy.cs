@@ -63,7 +63,7 @@ public class Enemy : Actor
         if (_isDevMode)
             _logger.Log($"{name} is destoryed!", ColorType.YELLOW);
 
-        GDDManager.Instance.UnbindEvents(gameObject);
+        GDDManager.Instance.UnbindEvents(this);
     }
 
     #endregion

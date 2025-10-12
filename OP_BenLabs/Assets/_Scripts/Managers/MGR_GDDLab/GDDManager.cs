@@ -25,7 +25,8 @@ public class GDDManager : Singleton<GDDManager>
     [Header("Wave Components")]
     [SerializeField] private uint _currentWave;
     [SerializeField] private WaveData[] _waves;
-
+    [SerializeField] private List<GameObject> _enemyList; // seen in inspector for debugging
+    
     [Space(10f), SerializeField] private GameObject _testEnemy;
 
     #endregion
@@ -33,8 +34,8 @@ public class GDDManager : Singleton<GDDManager>
 
     private const float GRACE_PERIOD = 2.5f;
     private GameManager _gameMgr = GameManager.Instance;
+    private OnboardingHandler _onbHandlr = OnboardingHandler.Instance;
 
-    [SerializeField] private List<GameObject> _enemyList;
     private WaveState _waveState;
     private uint _killCount;
 
@@ -57,17 +58,21 @@ public class GDDManager : Singleton<GDDManager>
     #region Public
 
     public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
-    public void UnbindEvents(GameObject e)
+    public void UnbindEvents(Enemy e)
     {
-        e.GetComponent<Enemy>().OnDeath -= CountRemainingEnemies;
-        e.GetComponent<Enemy>().OnKilled -= IncrementKillCount;
+        e.OnDeath -= CountRemainingEnemies;
+        e.OnKilled -= IncrementKillCount;
     }
     public void BTN_PlayGame()
     {
         StartCoroutine(CO_SpawnEnemyWave());
 
         if (_isDevMode)
-            _logger.Log("Mini-game has started!");
+            _logger.Log("GDD mini-game has started!");
+    }
+    public void BTN_PlayTutorial()
+    {
+        
     }
 
     #endregion

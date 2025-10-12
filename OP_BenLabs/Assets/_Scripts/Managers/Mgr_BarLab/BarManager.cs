@@ -25,6 +25,8 @@ public class BarManager : Singleton<BarManager>
     #region Private
 
     private GameManager _gameMgr = GameManager.Instance;
+    private OnboardingHandler _onbHandlr = OnboardingHandler.Instance;
+
     private const int MAX_STRIKES = 3;
     private const float SERVING_SCORE = 100f;
     private const float GRACE_PERIOD = 2.5f;
@@ -40,21 +42,23 @@ public class BarManager : Singleton<BarManager>
         Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
 
         base.Start();
-
-        if (!_isDevMode)
-            StartCoroutine(CO_SpawnCustomer());
-    }
+    }       
 
     #endregion
     #region Public
 
-    private void BTN_PlayGame()
+    public void BTN_PlayGame()
     {
+        StartCoroutine(CO_SpawnCustomer());
+    
         if (_isDevMode)
-            _logger.Log("Mini-game has started!");
-
-        // spawns the first customer
+            _logger.Log("Bar mini-game has started!");
     }
+    public void BTN_PlayTutorial()
+    {
+        
+    }
+
     public void Wrong()
     {
         _currStrike++;
@@ -77,12 +81,16 @@ public class BarManager : Singleton<BarManager>
         _totalScore += (drinkScore + SERVING_SCORE);
         StartCoroutine(CO_SpawnCustomer());
     }
+
+    #endregion
+    #region Private
+    
     private void DoGameOver()
     {
         // player gets exited from the mini-game
         // play game_over.sfx
     }
-
+        
     #endregion
     #region Helpers
 
@@ -97,8 +105,6 @@ public class BarManager : Singleton<BarManager>
 
     private IEnumerator CO_SpawnCustomer()
     {
-        _colliderCheck.CustomerOrder = null;
-
         if (_colliderCheck.HasCustomer) 
         {
             if (_isDevMode)
@@ -107,10 +113,11 @@ public class BarManager : Singleton<BarManager>
             yield break;
         }
 
+        _colliderCheck.CustomerOrder = null;
         yield return new WaitForSeconds(GRACE_PERIOD);
 
         GameObject customerToSpawn = _isDevMode ? _testCustomer : _customerPrefab;
-        GameObject newCustomer = Instantiate(customerToSpawn, _customerSpawnpoint.position, 
+        GameObject newCustomer = Instantiate(customerToSpawn, _customerSpawnpoint.position,
                                             _customerSpawnpoint.rotation, _customerSpawnpoint);
 
         _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
