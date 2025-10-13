@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Similar to singleton, but it OVERRIDES the new version INSTEAD OF DESTORYING it
-public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
+public abstract class StaticInstance<T> : Actor where T : Actor
 {
     public static T Instance { get; private set; }
 
@@ -25,7 +25,7 @@ public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
 }
 
 // This DESTROYS any new versions created, leaving the original alone
-public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour 
+public abstract class Singleton<T> : StaticInstance<T> where T : Actor
 {
     protected override void Awake() 
     {
@@ -37,7 +37,7 @@ public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
 }
 
 // This makes the singleton SURVIVE SCENE LOADS without being destroyed
-public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
+public abstract class PersistentSingleton<T> : Singleton<T> where T : Actor
 {
     protected override void Awake()
     {
