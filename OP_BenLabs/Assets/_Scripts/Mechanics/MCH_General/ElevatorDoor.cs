@@ -1,3 +1,4 @@
+
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
@@ -6,10 +7,10 @@ public class ElevatorDoor : MonoBehaviour
 {
     #region Properties
 
-    public WaitForSeconds DoorDelay { get; private set; } = new WaitForSeconds(5f);
-        
-    #endregion 
+    public WaitForSeconds Delay { get; private set; } = new WaitForSeconds(5f);
+    public bool IsClosed { get; private set; }
 
+    #endregion 
     #region SerializeField
 
     [Header("Debugging")]
@@ -30,7 +31,7 @@ public class ElevatorDoor : MonoBehaviour
 
     #endregion
 
-    #region Unty
+    #region Unity
 
     private void Start()
     {
@@ -38,7 +39,7 @@ public class ElevatorDoor : MonoBehaviour
         Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing Door references!</color>", gameObject);
 
         if (_isDevMode)
-            _logger.Log($"{name}'s developer mode is enabled!", gameObject, ColorType.YELLOW);
+            _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW);
         
         InitVariables();
     }
@@ -47,35 +48,42 @@ public class ElevatorDoor : MonoBehaviour
     #endregion
     #region Public
 
-    public void BTN_OpenElevator() // used when the player will enter the elevator
+    public void BTN_OpenFromOutside()
     {
-        IEnumerator CO_OpenElevator()
+        IEnumerator CO_RandomWaitTime()
         {
-            BTN_OpenDoor();
-            yield return DoorDelay;
-            BTN_CloseDoor();
+            yield return new WaitForSeconds(Random.Range(2f, 5f));
+            BTN_Open();
         }
 
-        StartCoroutine(CO_OpenElevator());
-
-        if (_isDevMode)
-            _logger.Log("Opened the elevator!", ColorType.YELLOW);
+        StartCoroutine(CO_RandomWaitTime());
     }
-    public void BTN_OpenDoor() // used when the player is inside the elevator
+    public void BTN_Open() // accessed from inside
     {
-        _leftDoor.DOLocalMove(_leftDoorEndpos, _cycleLength);
-        _rightDoor.DOLocalMove(_rightDoorEndPos, _cycleLength);
+        IEnumerator CO_OpenThenClose()
+        {
+            _leftDoor.DOLocalMove(_leftDoorEndpos, _cycleLength);
+            _rightDoor.DOLocalMove(_rightDoorEndPos, _cycleLength);
+            IsClosed = false;
+            yield return Delay;
+
+            BTN_Close();
+        }
+
+        StartCoroutine(CO_OpenThenClose());
 
         if (_isDevMode)
-            _logger.Log("Opened the doors!", ColorType.YELLOW);
+            _logger.Log($"Elevator: {IsClosed}", TextColor.GREEN);
     }
-    public void BTN_CloseDoor() // used when the player is inside the elevator
+    public void BTN_Close() // accessed from inside
     {     
         _leftDoor.DOLocalMove(_leftDoorStartPos, _cycleLength);
         _rightDoor.DOLocalMove(_rightDoorStartPos, _cycleLength);
 
+        IsClosed = true;
+
         if (_isDevMode)
-            _logger.Log("Closed the doors!", ColorType.YELLOW);
+            _logger.Log($"Elevator: {IsClosed}", TextColor.GREEN);
     }
         
     #endregion
@@ -85,16 +93,16 @@ public class ElevatorDoor : MonoBehaviour
     {
         _leftDoorStartPos = _leftDoor.localPosition;
         _rightDoorStartPos = _rightDoor.localPosition;
+
+        IsClosed = true;
     }
 
     private void Test()
     {
         if (!_isDevMode) return;
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) BTN_OpenDoor();
-        if (Input.GetKeyDown(KeyCode.RightArrow)) BTN_CloseDoor();
-
-        if (Input.GetKeyDown(KeyCode.UpArrow)) BTN_OpenElevator();
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) BTN_Open();
+        if (Input.GetKeyDown(KeyCode.RightArrow)) BTN_Close();
     }
         
     #endregion

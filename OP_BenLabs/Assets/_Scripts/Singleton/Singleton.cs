@@ -1,7 +1,7 @@
 using UnityEngine;
 
 // Similar to singleton, but it OVERRIDES the new version INSTEAD OF DESTORYING it
-public abstract class StaticInstance<T> : Actor where T : Actor
+public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
 {
     public static T Instance { get; private set; }
 
@@ -12,7 +12,7 @@ public abstract class StaticInstance<T> : Actor where T : Actor
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
         if (_isDevMode)
-            _logger.Log($"{name}'s developer mode enabled!", this, ColorType.YELLOW);
+            _logger.Log($"{name}'s developer mode enabled!", this, TextColor.YELLOW);
 
         InitComponents();
     }
@@ -25,7 +25,7 @@ public abstract class StaticInstance<T> : Actor where T : Actor
 }
 
 // This DESTROYS any new versions created, leaving the original alone
-public abstract class Singleton<T> : StaticInstance<T> where T : Actor
+public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
 {
     protected override void Awake() 
     {
@@ -37,7 +37,7 @@ public abstract class Singleton<T> : StaticInstance<T> where T : Actor
 }
 
 // This makes the singleton SURVIVE SCENE LOADS without being destroyed
-public abstract class PersistentSingleton<T> : Singleton<T> where T : Actor
+public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
 {
     protected override void Awake()
     {

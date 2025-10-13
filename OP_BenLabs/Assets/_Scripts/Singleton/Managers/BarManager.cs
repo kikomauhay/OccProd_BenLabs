@@ -69,7 +69,7 @@ public class BarManager : Singleton<BarManager>
             DoGameOver();
 
             if (_isDevMode)
-                _logger.Log("Mini-game has ended!", gameObject, ColorType.YELLOW);
+                _logger.Log("Mini-game has ended!", gameObject, TextColor.YELLOW);
 
             return;
         }
@@ -108,7 +108,7 @@ public class BarManager : Singleton<BarManager>
         if (_colliderCheck.HasCustomer) 
         {
             if (_isDevMode)
-                _logger.Log($"{_colliderCheck} already has a customer!", ColorType.RED);
+                _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED);
 
             yield break;
         }

@@ -113,7 +113,7 @@ public class Customer : Actor
     private IEnumerator CO_LostPatience()
     {
         if (_isDevMode)
-            _logger.Log("Customer waited too much!", ColorType.RED);
+            _logger.Log("Customer waited too much!", TextColor.RED);
 
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);

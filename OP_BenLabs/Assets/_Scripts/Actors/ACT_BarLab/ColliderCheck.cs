@@ -27,7 +27,7 @@ public class ColliderCheck : Actor
             if (!glass.HasDrink)
             {
                 if (_isDevMode)
-                    _logger.Log($"The glass has nothing in it!", ColorType.RED);
+                    _logger.Log($"The glass has nothing in it!", TextColor.RED);
 
                 // play wrong.sfx
                 return;
@@ -44,7 +44,7 @@ public class ColliderCheck : Actor
         if (!CustomerOrder)
         {
             if (_isDevMode)
-                _logger.Log("Missing CustomerOrder reference!", ColorType.RED);
+                _logger.Log("Missing CustomerOrder reference!", TextColor.RED);
 
             // play wrong.sfx
             return;

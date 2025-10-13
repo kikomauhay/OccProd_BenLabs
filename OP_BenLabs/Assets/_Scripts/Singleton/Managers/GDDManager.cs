@@ -118,7 +118,7 @@ public class GDDManager : Singleton<GDDManager>
         _waveState = WaveState.COUNTING;
 
         if (_isDevMode)
-            _logger.Log($"Enemies left: {_enemyList.Count}", ColorType.GREEN);
+            _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN);
 
         if (_enemyList.Count == 0)
         {
@@ -129,7 +129,7 @@ public class GDDManager : Singleton<GDDManager>
                 StartCoroutine(CO_SpawnEnemyWave());
 
                 if (_isDevMode)
-                    _logger.Log($"Current Wave: {_currentWave}", ColorType.GREEN);
+                    _logger.Log($"Current Wave: {_currentWave}", TextColor.GREEN);
             }
             // else AllWavesDone();
         }
@@ -139,7 +139,7 @@ public class GDDManager : Singleton<GDDManager>
         _killCount++;
 
         if (_isDevMode)
-            _logger.Log($"Kill Count: {_killCount}", this, ColorType.YELLOW);
+            _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW);
     }
 
     #endregion
@@ -181,8 +181,8 @@ public class GDDManager : Singleton<GDDManager>
 
             if (_isDevMode)
             {
-                _logger.Log($"{gracePeriod}s before enemy spawning!", ColorType.YELLOW);
-                _logger.Log($"{_gameMgr.Player} can start drawing!", ColorType.YELLOW);
+                _logger.Log($"{gracePeriod}s before enemy spawning!", TextColor.YELLOW);
+                _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW);
             }
         }
         IEnumerator CO_DoEnemySpawning() // spawning starts and drawing stops
@@ -198,13 +198,13 @@ public class GDDManager : Singleton<GDDManager>
             _waveState = WaveState.FINISHED;
 
             if (_isDevMode)
-                _logger.Log("Finished spawning!", ColorType.YELLOW);
+                _logger.Log("Finished spawning!", TextColor.YELLOW);
         }
 
         if (_waveState == WaveState.SPAWNING) // prevents wave spawning overlaps
         {
             if (_isDevMode)
-                _logger.Log("Still spawning enemies!", this, ColorType.RED);
+                _logger.Log("Still spawning enemies!", this, TextColor.RED);
 
             yield break;
         }
@@ -213,7 +213,7 @@ public class GDDManager : Singleton<GDDManager>
         yield return new WaitForSeconds(gracePeriod);
 
         if (_isDevMode)
-            _logger.Log($"{_gameMgr.Player} can no longer draw!", ColorType.YELLOW);
+            _logger.Log($"{_gameMgr.Player} can no longer draw!", TextColor.YELLOW);
         
         StartCoroutine(CO_DoEnemySpawning());
     }

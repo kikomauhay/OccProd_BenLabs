@@ -61,7 +61,7 @@ public class Enemy : Actor
             OnKilled?.Invoke();
 
         if (_isDevMode)
-            _logger.Log($"{name} is destoryed!", ColorType.YELLOW);
+            _logger.Log($"{name} is destoryed!", TextColor.YELLOW);
 
         GDDManager.Instance.UnbindEvents(this);
     }
