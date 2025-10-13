@@ -1,16 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSpawner : MonoBehaviour
+public class WeaponSpawner : Actor
 {
-    [SerializeField] private List<GameObject> weapons;
+	[Header("Weapons")]
+	[SerializeField] private List<GameObject> _weaponsList;
 
-    public void Spawn(string _weaponName)
-    {
-        foreach(var item in weapons) 
-        { 
-          item.SetActive(_weaponName == item.name);
-        }
-    }
+	public void Enable(string weaponName)
+	{
+		foreach (var item in _weaponsList)
+			item.SetActive(weaponName == item.name);
+
+        if (_isDevMode)
+            _logger.Log("Enabled a weapon!", gameObject, ColorType.YELLOW);	
+	}
 }

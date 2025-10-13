@@ -5,7 +5,7 @@ public class Equipment : Actor
 {
     #region SerializeField
 
-    [Space(10f)]
+    [Header("SFX")]
     [SerializeField] protected Sound _pickUpSFX;
     [SerializeField] protected Sound _landOnFloorSFX;
  
@@ -19,26 +19,10 @@ public class Equipment : Actor
     protected GameManager _gameMgr = GameManager.Instance;
     protected SoundEmitter _soundEmitter;
 
-    #endregion
-    
-    #region Unity
-    
-    protected override void OnEnable()
-    {
-        _gameMgr.OnBarGameStart += ResetPosition;
-    }
-    protected override void OnDisable()
-    {
-        _gameMgr.OnBarGameStart -= ResetPosition;
-    }
-    protected override void Start()
-    {
-        base.Start(); // already contains both Init methods
-
-
-    }
+    Shaker shakr;
 
     #endregion
+    
     #region Public
 
     public void PickUpSound() => _soundEmitter.PlaySound(_pickUpSFX);

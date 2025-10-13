@@ -1,11 +1,17 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 public class FloorHandler : Singleton<FloorHandler>
 {
+    #region Properties
+
+    public ReadOnlyArray<Floor> Floors => _floors;
+        
+    #endregion
     #region SerializeField
 
-    [Header("Atrium Rooms"), Tooltip("0 = Tutorial, 1 = Lobby, 2 = 8F, 3 = 10F")]
-    [SerializeField] private GameObject[] _floors; // disable all the rooms but the first one 
+    [Header("Floors"), Tooltip("0 = Tutorial, 1 = Lobby, 2 = 8F, 3 = 10F")]
+    [SerializeField] private Floor[] _floors; // disable all the rooms but the first one 
 
     #endregion
     #region Private
@@ -16,16 +22,16 @@ public class FloorHandler : Singleton<FloorHandler>
 
     #region Unity
 
-    private void Start()
+    protected override void Start()
     {
         Debug.Assert(_floors.Length != FLOOR_COUNT, "Missing _rooms elements!", gameObject);
+        base.Start();
     }
-    private void Update() => Test();
 
     #endregion
     #region Public
 
-    public void BTN_EnableRoom(uint idx)    
+    public void BTN_EnableRoom(int idx)    
     {
         if (!GameManager.Instance.CanPause)
         {
@@ -35,15 +41,14 @@ public class FloorHandler : Singleton<FloorHandler>
             return;
         }            
 
-        // only enables the selected room
         for (int i = 0; i < _floors.Length; i++)
-            _floors[i].SetActive(i == idx);
+            _floors[i].gameObject.SetActive(i == idx);
     }
 
     #endregion
     #region Helpers
 
-    private void Test()
+    protected override void Test()
     {
         if (!_isDevMode) return;
 

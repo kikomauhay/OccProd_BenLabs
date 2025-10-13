@@ -1,15 +1,12 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.Experimental.Rendering;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class GameManager : Singleton<GameManager>
 {
     #region Properies
 
-    public Action OnBarGameStart { get; set; }
-    public Action OnGDDGameStart { get; set; }
     public GameObject Player => _player;
     public bool IsFading { get; private set; }
     public bool CanPause { get; private set; }
@@ -17,10 +14,8 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region SerializeField
 
-    [SerializeField] private GameObject _player; // Kiko needs to have to setup this
-
-    [Header("Scene Switching")]
-    [SerializeField] private string _startingScene; // must not be null   
+    [Header("XR Player"), Tooltip("Needs the XR Origin Component")]
+    [SerializeField] private GameObject _player;  
 
     #endregion
     #region Private 
@@ -28,49 +23,35 @@ public class GameManager : Singleton<GameManager>
     private SoundEmitter _soundEmitter;
     private FadeScreen _fadeScreen;
     private WaitForSeconds _fadeDuration;
-        
+
     #endregion
 
     #region Unity
 
-    private void Start()
+    protected override void Awake()
     {
+        base.Awake();
         InitComponents();
-        InitVariables();
-
-        Debug.Assert(_startingScene != string.Empty, "Missing _startingScene reference!", gameObject);
-
-        LoadStartingScene();
     }
-    private void Update() => Test();
 
     #endregion
     #region Helpers
 
-    private void InitComponents() 
+    protected override void InitComponents() 
     {
         _soundEmitter = GetComponent<SoundEmitter>();
-        _fadeScreen = GetComponent<FadeScreen>();
+        _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
     }
-    private void InitVariables() 
+    protected override void InitVariables() 
     {
         IsFading = true;
         CanPause = true;
-
-        // _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
+        _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
     }
-    private void LoadStartingScene()
+    protected override void Test()
     {
-        if (_startingScene == string.Empty) return;
-
-        SceneManager.LoadSceneAsync(_startingScene, LoadSceneMode.Additive);
-    }
-
-    private void Test()
-    {
-        if (!_isDevMode) return;
-
-        if (Input.GetKeyDown(KeyCode.Space)) OnBarGameStart?.Invoke();        
+        if (!_isDevMode) return;   
+        
     }
 
     #endregion
@@ -90,24 +71,6 @@ public class GameManager : Singleton<GameManager>
         // tp player to the lobby floor
         if (_isDevMode)
             _logger.Log("Teleported to Lobby!");
-
-        /*
-        if (sceneName == "MainGameScene")
-        {
-            SceneManager.UnloadSceneAsync("TrainingScene");
-            SceneManager.LoadSceneAsync("MainGameScene", LoadSceneMode.Additive);
-        }
-        else if (sceneName == "TrainingScene")
-        {
-            SceneManager.UnloadSceneAsync("MainGameScene");
-            SceneManager.LoadSceneAsync("TrainingScene", LoadSceneMode.Additive);
-        }
-        else
-        {
-            // SoundManager.Instance.PlaySound("wrong");
-            Debug.LogError("Wrong scene named!");
-        }
-        */
 
         IsFading = true;
         _fadeScreen.FadeIn();

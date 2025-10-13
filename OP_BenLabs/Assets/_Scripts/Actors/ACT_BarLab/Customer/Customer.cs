@@ -1,17 +1,19 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
+[RequireComponent(typeof(CustomerActions))]
 public class Customer : Actor
 {
     #region Properties
 
-    public bool IsHappy => _customerScore != 0f;
+    public Cocktail WantedCocktail => _wantedCocktail;
+    public float CustomerScore => _customerScore;
 
     #endregion
     #region Members
 
     [Header("Customer Stats")]
+    [SerializeField] private Cocktail _wantedCocktail;
     [SerializeField] private float _decreaseRate;
     [SerializeField] private float _reactionTimer;
 
@@ -26,9 +28,6 @@ public class Customer : Actor
     private const float GRACE_PERIOD = 2f;
 
     private CustomerActions _actions;
-    private CustomerAppearance _appearance;
-    private GameObject _customerOrderUI;
-
     private float _customerScore;
 
     #endregion
@@ -37,27 +36,20 @@ public class Customer : Actor
 
     protected override void Start()
     {
-        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
-        Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
+        // Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
+        // Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
 
-        base.Start(); // already contains both init methods
+        base.Start();
 
-        StartCoroutine(CO_DecreaseRating());
+        if (!_isDevMode)
+            StartCoroutine(CO_DecreaseRating());
     }
     private void OnDestroy()
     {
-
-    }
-
-    #endregion
-    #region Private
-
-    private void CreateCustomerUI() // aligns Order UI & Customer Order
-    {
-        _customerOrderUI = Instantiate(_drinkOrdersUI[0],
-                                       _orderUITransform.position,
-                                       _orderUITransform.rotation,
-                                       transform);
+        if (_isDevMode)
+            _logger.Log("Customer has left the bar!");
+        
+        StartCoroutine(CO_DelayedSpawnng());
     }
 
     #endregion
@@ -65,12 +57,31 @@ public class Customer : Actor
 
     protected override void InitComponents()
     {
+        _logger = BarManager.Instance.Logger;
         _actions = GetComponent<CustomerActions>();
-        _appearance = GetComponent<CustomerAppearance>();
     }
     protected override void InitVariables()
     {
+        Cocktail SetRandomCocktail() // only gets from the 3 possible drinks
+        {
+            
+            int randomFromEnum = Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+            return (Cocktail)randomFromEnum;
+        }
+
+        name = "Customer";
+        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
+
+        // _drinkOrdersUI[(int)_wantedCocktail].SetActive(true);
+
+        if (_isDevMode)
+            _logger.Log($"{this} wants a {_wantedCocktail}");
+    }
+
+    protected override void Test()
+    {
+        if (!_isDevMode) return;
     }
 
     #endregion
@@ -106,6 +117,10 @@ public class Customer : Actor
 
         yield return new WaitForSeconds(2f);
         Destroy(gameObject);
+    }
+    private IEnumerator CO_DelayedSpawnng()
+    {
+        yield break;
     }
 
     #endregion
