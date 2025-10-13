@@ -34,7 +34,7 @@ public class FadeScreen : MonoBehaviour
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
         if (_isDevMode)
-            _logger.Log($"{name}'s developer mode is enabled!", gameObject, ColorType.YELLOW);
+            _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW);
         
         if (_fadeOnStart) 
             FadeIn();

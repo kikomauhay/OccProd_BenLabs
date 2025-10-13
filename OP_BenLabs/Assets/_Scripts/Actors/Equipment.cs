@@ -36,7 +36,7 @@ public class Equipment : Actor
         _soundEmitter.PlaySound(_landOnFloorSFX);
 
         if (_isDevMode)
-            _logger.Log($"{name}'s position has been reset!", ColorType.YELLOW);
+            _logger.Log($"{name}'s position has been reset!", TextColor.YELLOW);
     }
     
     #endregion

@@ -55,7 +55,7 @@ public class Shaker : Equipment
             _mixedDrink.Add(other.GetComponent<Bottle>().Ingredient);
 
             if (_isDevMode)
-                _logger.Log($"Added a drink to {this}!", ColorType.GREEN);
+                _logger.Log($"Added a drink to {this}!", TextColor.GREEN);
         }
     }
 
@@ -111,7 +111,7 @@ public class Shaker : Equipment
                     _cocktail = recipe.Key;
 
                     if (_isDevMode)
-                        _logger.Log($"Created {recipe.Key}!", ColorType.GREEN);
+                        _logger.Log($"Created {recipe.Key}!", TextColor.GREEN);
 
                     return;
                 }
@@ -120,7 +120,7 @@ public class Shaker : Equipment
             _cocktail = Cocktail.WRONG;
 
             if (_isDevMode)
-                _logger.Log("Created dubious drink!", ColorType.RED);
+                _logger.Log("Created dubious drink!", TextColor.RED);
         }
 
         yield return _shakeTime; // time for the player to earn bonus points

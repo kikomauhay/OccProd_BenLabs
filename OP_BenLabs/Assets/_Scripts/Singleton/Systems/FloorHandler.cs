@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
 
@@ -10,14 +11,14 @@ public class FloorHandler : Singleton<FloorHandler>
     #endregion
     #region SerializeField
 
-    [Header("Floors"), Tooltip("0 = Tutorial, 1 = Lobby, 2 = 8F, 3 = 10F")]
-    [SerializeField] private Floor[] _floors; // disable all the rooms but the first one 
-    [SerializeField] private ElevatorDoor _door;
+    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
+    [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
+    [SerializeField] private ElevatorDoor _elev;
 
     #endregion
     #region Private
 
-    private const int FLOOR_COUNT = 4;
+    private const int FLOOR_COUNT = 3;
 
     #endregion
 
@@ -26,7 +27,7 @@ public class FloorHandler : Singleton<FloorHandler>
     protected override void Start()
     {
         Debug.Assert(_floors.Length != FLOOR_COUNT, "Missing _rooms elements!", gameObject);
-        Debug.Assert(_door, "Missing _door reference!", gameObject);
+        Debug.Assert(_elev, "Missing _door reference!", gameObject);
         
         base.Start();
     }
@@ -34,22 +35,31 @@ public class FloorHandler : Singleton<FloorHandler>
     #endregion
     #region Public
 
-    public void BTN_EnableRoom(int idx)
+    public void BTN_EnterFloor(int idx) // accessed from inside
     {
+        IEnumerator CO_MoveToFloor()
+        {
+            if (!_elev.IsClosed) 
+                _elev.BTN_Close();
+            
+            yield return _elev.Delay;
+
+            for (int i = 0; i < _floors.Length; i++)
+                _floors[i].gameObject.SetActive(i == idx);
+
+            _elev.BTN_Open();
+            yield return _elev.Delay;
+            _elev.BTN_Close();
+        }
+
         if (!GameManager.Instance.CanPause)
         {
             if (_isDevMode)
-                _logger.Log("You cannot load any scene at this time!", ColorType.YELLOW);
+                _logger.Log("You cannot load any scene at this time!", TextColor.YELLOW);
 
             return;
         }
-
-        _door.BTN_OpenElevator();
-
-        for (int i = 0; i < _floors.Length; i++)
-            _floors[i].gameObject.SetActive(i == idx);
-            
-        _door.BTN_OpenElevator();
+        StartCoroutine(CO_MoveToFloor());
     }
 
     #endregion
@@ -59,9 +69,9 @@ public class FloorHandler : Singleton<FloorHandler>
     {
         if (!_isDevMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnableRoom(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnableRoom(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnableRoom(2);
+        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
     }
 
     #endregion

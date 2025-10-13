@@ -12,6 +12,6 @@ public class WeaponSpawner : Actor
 			item.SetActive(weaponName == item.name);
 
         if (_isDevMode)
-            _logger.Log("Enabled a weapon!", gameObject, ColorType.YELLOW);	
+            _logger.Log("Enabled a weapon!", gameObject, TextColor.YELLOW);	
 	}
 }

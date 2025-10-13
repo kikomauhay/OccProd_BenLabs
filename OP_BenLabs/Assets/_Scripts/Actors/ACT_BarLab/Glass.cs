@@ -101,7 +101,7 @@ public class Glass : Equipment
         _cocktail = (Cocktail)(i + 1); // + 1 because there's an empty element
 
         if (_isDevMode)
-            _logger.Log($"{this} has a {_cocktail} active!", ColorType.YELLOW);
+            _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW);
     }
         
     #endregion
@@ -138,7 +138,7 @@ public class Glass : Equipment
             drink.SetActive(false);
 
         if (_isDevMode)
-            _logger.Log($"{this} has no more drink!", ColorType.YELLOW);
+            _logger.Log($"{this} has no more drink!", TextColor.YELLOW);
     }
 
     #endregion

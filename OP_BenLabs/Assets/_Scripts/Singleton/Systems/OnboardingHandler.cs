@@ -22,20 +22,19 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
 
     #region Unity
 
-    private void Start() 
+    protected override void Start()
     {
-        InitComponents();
-        InitVariables();
+        base.Start();
     }
 
     #endregion
     #region Helpers
 
-    private void InitComponents()
+    protected override void InitComponents()
     {
         _soundEmitter = GetComponent<SoundEmitter>();
     }
-    private void InitVariables()
+    protected override void InitVariables()
     {
         _currentStep = 0;
     }
