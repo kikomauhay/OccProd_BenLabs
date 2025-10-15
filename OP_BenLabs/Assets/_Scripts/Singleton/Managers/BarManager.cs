@@ -42,55 +42,83 @@ public class BarManager : Singleton<BarManager>
         Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
 
         base.Start();
-    }       
+    }
 
     #endregion
     #region Public
 
     public void BTN_PlayGame()
     {
-        StartCoroutine(CO_SpawnCustomer());
-    
+        SpawnCustomer();
+
         if (_isDevMode)
             _logger.Log("Bar mini-game has started!");
     }
     public void BTN_PlayTutorial()
     {
-        
+        if (_isDevMode)
+            _logger.Log("No tutorial mode yet!", TextColor.RED);
     }
 
+    public void Correct(float drinkScore)
+    {
+        _totalScore += drinkScore + SERVING_SCORE;
+        SpawnCustomer();
+    }
     public void Wrong()
     {
         _currStrike++;
-        // play wrong.sfx
 
         if (_currStrike == MAX_STRIKES)
         {
             DoGameOver();
-
-            if (_isDevMode)
-                _logger.Log("Mini-game has ended!", gameObject, TextColor.YELLOW);
-
             return;
         }
 
-        StartCoroutine(CO_SpawnCustomer());
-    }
-    public void Correct(float drinkScore)
-    {
-        _totalScore += (drinkScore + SERVING_SCORE);
-        StartCoroutine(CO_SpawnCustomer());
+        SpawnCustomer();
     }
 
     #endregion
     #region Private
-    
+
     private void DoGameOver()
     {
         // player gets exited from the mini-game
         // play game_over.sfx
+
+        if (_isDevMode)
+            _logger.Log("No game over logic yet!", TextColor.RED);
     }
-        
+    private void SpawnCustomer()
+    {
+        IEnumerator CO_SpawnCustomer()
+        {
+            if (_colliderCheck.HasCustomer)
+            {
+                if (_isDevMode)
+                    _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED);
+
+                yield break;
+            }
+
+            if (_isDevMode)
+                _logger.Log($"{GRACE_PERIOD}s grace period before spawning!", TextColor.YELLOW);
+
+            yield return new WaitForSeconds(GRACE_PERIOD);
+
+            GameObject customerToSpawn = _isDevMode ? _testCustomer : _customerPrefab;
+            GameObject newCustomer = Instantiate(customerToSpawn, _customerSpawnpoint.position,
+                                                _customerSpawnpoint.rotation, _customerSpawnpoint);
+
+            _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
+
+            if (_isDevMode)
+                _logger.Log("Spawned new customer!");
+        }
+
+        StartCoroutine(CO_SpawnCustomer());
+    }
+
     #endregion
     #region Helpers
 
@@ -100,31 +128,12 @@ public class BarManager : Singleton<BarManager>
         _totalScore = 0f;
     }
 
-    #endregion
-    #region Enumerators
-
-    private IEnumerator CO_SpawnCustomer()
+    protected override void Test()
     {
-        if (_colliderCheck.HasCustomer) 
-        {
-            if (_isDevMode)
-                _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED);
+        if (!_isDevMode) return;
 
-            yield break;
-        }
-
-        _colliderCheck.CustomerOrder = null;
-        yield return new WaitForSeconds(GRACE_PERIOD);
-
-        GameObject customerToSpawn = _isDevMode ? _testCustomer : _customerPrefab;
-        GameObject newCustomer = Instantiate(customerToSpawn, _customerSpawnpoint.position,
-                                            _customerSpawnpoint.rotation, _customerSpawnpoint);
-
-        _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
-
-        if (_isDevMode)
-            _logger.Log("Spawned new customer!");
+        if (Input.GetKeyDown(KeyCode.Tab)) BTN_PlayGame();
     }
-        
+
     #endregion
 }
