@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Shaker : Equipment
 
     public IReadOnlyList<Ingredient> MixedDrink => _mixedDrink;
     public Cocktail Cocktail => _cocktail;
+    public static event Action EventPour;
+    public static event Action EventStopPour;
 
     #endregion
     #region SerializeField
@@ -17,6 +20,7 @@ public class Shaker : Equipment
     [SerializeField] private Cocktail _cocktail;
     [SerializeField] private Transform _shakerTip;
     [SerializeField] private float _pourThreshold;
+    [SerializeField] private GameObject _stream;
 
     #endregion
     #region Private 
@@ -37,7 +41,8 @@ public class Shaker : Equipment
                                               Ingredient.LIME_JUICE, 
                                               Ingredient.COCONUT_WATER } }, 
     };
-    private readonly WaitForSeconds _shakeTime = new WaitForSeconds(Random.Range(10f, 15f));
+    private readonly WaitForSeconds _shakeTime = new WaitForSeconds(UnityEngine.Random.Range(10f, 15f));
+    private bool _isPouring = false;
 
     #endregion
 
@@ -81,15 +86,24 @@ public class Shaker : Equipment
     {
         float _angle = Vector3.Angle(_shakerTip.up, Vector3.up);
 
-        if(_angle > _pourThreshold)
+        if (_angle > _pourThreshold)
         {
+            if (_isPouring) return;
+            
             Pour();
+            _isPouring = true;
+        }
+        else
+        {
+            _isPouring = false;
+            EventStopPour?.Invoke();
         }
     }
 
     private void Pour()
     {
-        //start instantiating vfx here
+        Instantiate(_stream,_shakerTip.position,Quaternion.identity,transform);
+        EventPour?.Invoke();
         _mixedDrink.Clear();
     }
 
