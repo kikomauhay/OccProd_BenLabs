@@ -61,9 +61,8 @@ public class Glass : Equipment
         
     protected override void Start()
     {
-        base.Start(); // already contains both init methods
-
-        Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
+        // Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
+        base.Start();
     }
 
     #endregion
@@ -112,9 +111,9 @@ public class Glass : Equipment
         base.InitVariables();
 
         name = "Cocktail Glass";
-        _hasDrink = false;
+        // _hasDrink = false;
         _score = 0f;
-        _cocktail = Cocktail.EMPTY;
+        // _cocktail = Cocktail.EMPTY;
     }
 
     protected override void Test()

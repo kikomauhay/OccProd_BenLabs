@@ -1,4 +1,4 @@
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider), typeof(SoundEmitter))]
@@ -10,10 +10,15 @@ public class ColliderCheck : Actor
     public bool HasCustomer { get; private set; }
 
     #endregion
+    #region SerializeField
+
+    [SerializeField] private Sound _correctSFX, _wrongSFX;
+        
+    #endregion
     #region Private
 
-    private BarManager _barMgr = BarManager.Instance;
-    private Collider _collider;
+    private BarManager _barMgr;
+    private BoxCollider _collider;
     private SoundEmitter _soundEmitter;
 
     #endregion
@@ -32,14 +37,21 @@ public class ColliderCheck : Actor
                 // play wrong.sfx
                 return;
             }
-            
-            if (glass.Cocktail != CustomerOrder.WantedCocktail)
+
+            if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
-                _barMgr.Wrong();
-                return;
+                // _soundEmitter.PlaySound(_correctSFX);
+                _barMgr.Correct(glass.Score); 
             }
-            _barMgr.Correct(glass.Score);
-        } 
+            else
+            {
+                // _soundEmitter.PlaySound(_wrongSFX);s
+                _barMgr.Wrong();
+            }
+
+            Destroy(glass.gameObject); // test
+            Destroy(CustomerOrder.gameObject);
+        }
 
         if (!CustomerOrder)
         {
@@ -64,6 +76,8 @@ public class ColliderCheck : Actor
     }
     protected override void InitVariables()
     {
+        _barMgr = BarManager.Instance;
+
         _collider.isTrigger = true;
         _collider.enabled = true;
         HasCustomer = false;
