@@ -13,17 +13,14 @@ public class SoundEmitter : MonoBehaviour
 
     #endregion
     #region Methods
-
-    private void OnEnable()
-{
-        
-    }
+    
+    private void Awake() => _source = GetComponent<AudioSource>();
     private void Start()
     {
-        _source = GetComponent<AudioSource>();
-        _source.spatialBlend = 1f;
-
         Debug.Assert(_source.maxDistance > 0f, "Max distance is less then 0!", gameObject);
+        
+        _source.spatialBlend = 1f;
+        _source.maxDistance = _maxDistance;
     }
     private void OnDrawGizmosSelected()
     {

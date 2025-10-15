@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
 
+[RequireComponent(typeof(SoundEmitter))]
 public class FloorHandler : Singleton<FloorHandler>
 {
     #region Properties
@@ -14,6 +15,9 @@ public class FloorHandler : Singleton<FloorHandler>
     [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
     [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
     [SerializeField] private ElevatorDoor _elev;
+
+    [Header("Sounds")]
+    [SerializeField] private SoundEmitter _soundEmitter;
 
     #endregion
     #region Private
@@ -28,7 +32,7 @@ public class FloorHandler : Singleton<FloorHandler>
     {
         Debug.Assert(_floors.Length != FLOOR_COUNT, "Missing _rooms elements!", gameObject);
         Debug.Assert(_elev, "Missing _door reference!", gameObject);
-        
+
         base.Start();
     }
 
@@ -39,9 +43,10 @@ public class FloorHandler : Singleton<FloorHandler>
     {
         IEnumerator CO_MoveToFloor()
         {
-            if (!_elev.IsClosed) 
+            if (!_elev.IsClosed)
                 _elev.BTN_Close();
-            
+
+            _soundEmitter.PlaySound(_elev.ButtonSFX);
             yield return _elev.Delay;
 
             for (int i = 0; i < _floors.Length; i++)

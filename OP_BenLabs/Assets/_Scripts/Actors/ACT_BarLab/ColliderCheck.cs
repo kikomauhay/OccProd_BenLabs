@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 [RequireComponent(typeof(BoxCollider), typeof(SoundEmitter))]
 public class ColliderCheck : Actor
@@ -12,7 +13,9 @@ public class ColliderCheck : Actor
     #endregion
     #region SerializeField
 
-    [SerializeField] private Sound _correctSFX, _wrongSFX;
+    [Header("Sounds")]
+    [SerializeField] private Sound _correctSFX;
+    [SerializeField] private Sound _wrongSFX, _unsureSFX;
         
     #endregion
     #region Private
@@ -34,18 +37,18 @@ public class ColliderCheck : Actor
                 if (_isDevMode)
                     _logger.Log($"The glass has nothing in it!", TextColor.RED);
 
-                // play wrong.sfx
+                _soundEmitter.PlaySound(_unsureSFX);
                 return;
             }
 
             if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
-                // _soundEmitter.PlaySound(_correctSFX);
+                _soundEmitter.PlaySound(_correctSFX);
                 _barMgr.Correct(glass.Score); 
             }
             else
             {
-                // _soundEmitter.PlaySound(_wrongSFX);s
+                _soundEmitter.PlaySound(_wrongSFX);
                 _barMgr.Wrong();
             }
 
@@ -58,7 +61,7 @@ public class ColliderCheck : Actor
             if (_isDevMode)
                 _logger.Log("Missing CustomerOrder reference!", TextColor.RED);
 
-            // play wrong.sfx
+            _soundEmitter.PlaySound(_unsureSFX);
             return;
         }
 
@@ -87,6 +90,9 @@ public class ColliderCheck : Actor
     {
         if (!_isDevMode) return;
     
+        if (Input.GetKeyDown(KeyCode.C)) _soundEmitter.PlaySound(_correctSFX);
+        if (Input.GetKeyDown(KeyCode.W)) _soundEmitter.PlaySound(_wrongSFX);
+        if (Input.GetKeyDown(KeyCode.U)) _soundEmitter.PlaySound(_unsureSFX);
     }
 
     #endregion
