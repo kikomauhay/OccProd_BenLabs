@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(SoundEmitter))]
 public class BarManager : Singleton<BarManager>
 {
     #region Properties
@@ -19,13 +20,17 @@ public class BarManager : Singleton<BarManager>
     [SerializeField] private int _currStrike;
     [SerializeField] private float _totalScore;
 
+    [Header("Sounds")]
+    [SerializeField] private Sound _startGameSFX;
+
     [Space(10f), SerializeField] private GameObject _testCustomer;
 
     #endregion
     #region Private
 
-    private GameManager _gameMgr = GameManager.Instance;
-    private OnboardingHandler _onbHandlr = OnboardingHandler.Instance;
+    private GameManager _gameMgr;
+    private OnboardingHandler _onbHandlr;
+    private SoundEmitter _soundEmitter;
 
     private const int MAX_STRIKES = 3;
     private const float SERVING_SCORE = 100f;
@@ -50,6 +55,7 @@ public class BarManager : Singleton<BarManager>
     public void BTN_PlayGame()
     {
         SpawnCustomer();
+        _soundEmitter.PlaySound(_startGameSFX);
 
         if (_isDevMode)
             _logger.Log("Bar mini-game has started!");
@@ -122,8 +128,15 @@ public class BarManager : Singleton<BarManager>
     #endregion
     #region Helpers
 
+    protected override void InitComponents()
+    {
+        _soundEmitter = GetComponent<SoundEmitter>();
+    }
     protected override void InitVariables()
     {
+        _gameMgr = GameManager.Instance;
+        _onbHandlr = OnboardingHandler.Instance;
+
         _currStrike = 0;
         _totalScore = 0f;
     }
