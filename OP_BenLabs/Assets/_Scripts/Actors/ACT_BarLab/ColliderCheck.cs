@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.Utilities;
 
 [RequireComponent(typeof(BoxCollider), typeof(SoundEmitter))]
 public class ColliderCheck : Actor
@@ -8,6 +6,7 @@ public class ColliderCheck : Actor
     #region Properties
 
     public Customer CustomerOrder { get; set; }
+    public Sound UnsureSFX => _unsureSFX;
     public bool HasCustomer { get; private set; }
 
     #endregion

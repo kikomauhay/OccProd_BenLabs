@@ -17,8 +17,9 @@ public class BarManager : Singleton<BarManager>
 
     [Header("Scoring System")]
     [SerializeField] private ColliderCheck _colliderCheck;
-    [SerializeField] private int _currStrike;
-    [SerializeField] private float _totalScore;
+
+    [Header("UI")]
+    [SerializeField] private GameObject _buttons;
 
     [Header("Sounds")]
     [SerializeField] private Sound _startGameSFX;
@@ -33,8 +34,12 @@ public class BarManager : Singleton<BarManager>
     private SoundEmitter _soundEmitter;
 
     private const int MAX_STRIKES = 3;
+    private const int MAX_CUSTOMERS_SERVED = 3;
     private const float SERVING_SCORE = 100f;
     private const float GRACE_PERIOD = 2.5f;
+
+    private int _currStrike, _customersServed;
+    private float _totalScore;
 
     #endregion
 
@@ -54,14 +59,18 @@ public class BarManager : Singleton<BarManager>
 
     public void BTN_PlayGame()
     {
-        SpawnCustomer();
         _soundEmitter.PlaySound(_startGameSFX);
+
+        SpawnCustomer();
+        TrapPlayer(true);
 
         if (_isDevMode)
             _logger.Log("Bar mini-game has started!");
     }
     public void BTN_PlayTutorial()
     {
+        _soundEmitter.PlaySound(_colliderCheck.UnsureSFX);
+
         if (_isDevMode)
             _logger.Log("No tutorial mode yet!", TextColor.RED);
     }
@@ -69,11 +78,14 @@ public class BarManager : Singleton<BarManager>
     public void Correct(float drinkScore)
     {
         _totalScore += drinkScore + SERVING_SCORE;
+        _customersServed++;
+
         SpawnCustomer();
     }
     public void Wrong()
     {
         _currStrike++;
+        _customersServed++;
 
         if (_currStrike == MAX_STRIKES)
         {
@@ -87,10 +99,23 @@ public class BarManager : Singleton<BarManager>
     #endregion
     #region Private
 
+    private void StopGame()
+    {
+        _buttons.SetActive(true);
+
+        StopAllCoroutines();
+        TrapPlayer(false);
+        
+        if (_isDevMode)
+            _logger.Log("Bar mini-game has finished!");
+    }
     private void DoGameOver()
     {
         // player gets exited from the mini-game
         // play game_over.sfx
+        // show highest score attained
+
+        // StopGame();
 
         if (_isDevMode)
             _logger.Log("No game over logic yet!", TextColor.RED);
@@ -104,6 +129,11 @@ public class BarManager : Singleton<BarManager>
                 if (_isDevMode)
                     _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED);
 
+                yield break;
+            }
+            if (_customersServed > MAX_CUSTOMERS_SERVED)
+            {
+                StopGame();
                 yield break;
             }
 
@@ -131,6 +161,8 @@ public class BarManager : Singleton<BarManager>
     protected override void InitComponents()
     {
         _soundEmitter = GetComponent<SoundEmitter>();
+
+        _buttons.SetActive(true);
     }
     protected override void InitVariables()
     {
@@ -138,6 +170,7 @@ public class BarManager : Singleton<BarManager>
         _onbHandlr = OnboardingHandler.Instance;
 
         _currStrike = 0;
+        _customersServed = 0;
         _totalScore = 0f;
     }
 
@@ -146,7 +179,15 @@ public class BarManager : Singleton<BarManager>
         if (!_isDevMode) return;
 
         if (Input.GetKeyDown(KeyCode.Tab)) BTN_PlayGame();
+        if (Input.GetKeyDown(KeyCode.CapsLock)) StopGame();
     }
+
+    private void TrapPlayer(bool isStarting) 
+    { 
+        // disables player TP 
+        // enables colliders so player can't move around that much
+    }
+
 
     #endregion
 }
