@@ -6,12 +6,19 @@ public class GDDManager : Singleton<GDDManager>
 {
     #region Properties
 
+    public System.Action<Vector3, bool> OnGameStarted { get; set; }
+    public System.Action<Vector3, bool> OnGameFinished { get; set; }
+
     public Transform TestGoal => _testGoal;
     public WaveState WaveState => _waveState;
     public Logger Logger => _logger;
 
     #endregion
     #region SerializeField
+
+    [Header("Player Waypoints")]
+    [SerializeField] private Transform _waypointGame;
+    [SerializeField] private Transform _waypointR803;
 
     [Header("Spawn Bounds")]
     [SerializeField] private BoxCollider _collider;
@@ -32,10 +39,11 @@ public class GDDManager : Singleton<GDDManager>
     #endregion
     #region Private
 
-    private const float GRACE_PERIOD = 2.5f;
-    private GameManager _gameMgr = GameManager.Instance;
-    private OnboardingHandler _onbHandlr = OnboardingHandler.Instance;
+    private GameManager _gameMgr;
+    private OnboardingHandler _onbHandlr;
 
+    private const float GRACE_PERIOD = 2.5f;
+    
     private WaveState _waveState;
     private uint _killCount;
 
@@ -50,8 +58,6 @@ public class GDDManager : Singleton<GDDManager>
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
         
         base.Start();
-
-        _drawingCanvas.SetActive(false);
     }
 
     #endregion
@@ -65,6 +71,7 @@ public class GDDManager : Singleton<GDDManager>
     }
     public void BTN_PlayGame()
     {
+        OnGameStarted?.Invoke(_waypointGame.position, true);
         StartCoroutine(CO_SpawnEnemyWave());
 
         if (_isDevMode)
@@ -72,7 +79,11 @@ public class GDDManager : Singleton<GDDManager>
     }
     public void BTN_PlayTutorial()
     {
-        
+        // TP player to the GDD area
+        // _soundEmitter.PlaySound(_colliderCheck.WrongSFX);
+
+        if (_isDevMode)
+            _logger.Log("No tutorial mode yet!", TextColor.RED);
     }
 
     #endregion
@@ -108,6 +119,10 @@ public class GDDManager : Singleton<GDDManager>
 
         if (_isDevMode)
             _logger.Log("Spawned new enemy!");
+    }
+    private void StopGame() // only be called once player gets 0 HP
+    {
+        OnGameStarted?.Invoke(_waypointGame.position, false);
     }
 
     #endregion
@@ -145,8 +160,15 @@ public class GDDManager : Singleton<GDDManager>
     #endregion
     #region Helpers
 
+    protected override void InitComponents()
+    {
+        _drawingCanvas.SetActive(false);
+    }
     protected override void InitVariables()
     {
+        _gameMgr = GameManager.Instance;
+        _onbHandlr = OnboardingHandler.Instance;
+
         _enemyList = new List<GameObject>();
         _waveState = WaveState.WAITING;
         _killCount = 0;
