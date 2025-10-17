@@ -16,7 +16,6 @@ public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
 
         InitComponents();
     }
-    protected override void Start() => InitVariables();
     protected virtual void OnApplicationQuit()
     {
         Instance = null;
