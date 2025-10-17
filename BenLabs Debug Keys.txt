@@ -11,9 +11,17 @@ BenLabs Debug Keys
 [GDDManager.cs]
 - Space: Spawn Enemy
 - Backspace: Delete all enemies
-- Enter: StartCoroutine(CO_StartWave());
+- Enter: StartCoroutine(CO_StartWave())
+
+[BarManager.cs]
+- Tab: StartGame()
+- Caps Lock: StopGame()
+
+[ColliderCheck.cs]
+- C: correct.sfx
+- W: wrong.sfx
+- U: unsure.sfx
 
 [ElevatorDoor.cs]
 - Left Arrow: Open Doors
 - Right Arrow: Close Doors
-- Up Arrow: Open from outside

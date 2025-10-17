@@ -1,4 +1,7 @@
+using System;
 using System.Collections;
+using Unity.VisualScripting;
+using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 
@@ -15,10 +18,12 @@ public class GameManager : Singleton<GameManager>
     #region SerializeField
 
     [Header("XR Player"), Tooltip("Needs the XR Origin Component")]
-    [SerializeField] private GameObject _player;  
+    [SerializeField] private GameObject _player;
 
     #endregion
     #region Private 
+
+    private GDDManager _gddMgr;
 
     private SoundEmitter _soundEmitter;
     private FadeScreen _fadeScreen;
@@ -28,55 +33,88 @@ public class GameManager : Singleton<GameManager>
 
     #region Unity
 
-    protected override void Awake()
+    protected override void OnEnable()
     {
-        base.Awake();
-        InitComponents();
+        IEnumerator CO_DelayedBinding()
+        {
+            yield return null;
+
+            GDDManager.Instance.OnGameStarted += TeleportPlayer;
+            GDDManager.Instance.OnGameFinished += TeleportPlayer;
+        }
+
+        StartCoroutine(CO_DelayedBinding());
+    }
+    protected override void OnDisable()
+    {
+        GDDManager.Instance.OnGameStarted -= TeleportPlayer;
+        GDDManager.Instance.OnGameFinished -= TeleportPlayer;
+    }
+
+    #endregion
+    #region Private
+
+    private void TeleportPlayer(Vector3 pos, bool isStarting)
+    {        
+        StartCoroutine(CO_FadeIn());
+        _player.transform.position = pos;
+        StartCoroutine(CO_FadeOut());
+
+        // isStarting will be used to enable/disable TP after/before the game
     }
 
     #endregion
     #region Helpers
 
-    protected override void InitComponents() 
+    protected override void InitComponents()
     {
         _soundEmitter = GetComponent<SoundEmitter>();
         _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
     }
-    protected override void InitVariables() 
+    protected override void InitVariables()
     {
         IsFading = true;
         CanPause = true;
+
         _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
     }
+
     protected override void Test()
     {
-        if (!_isDevMode) return;   
-        
+        if (!_isDevMode) return;
+
     }
 
     #endregion
     #region Enumerators
 
-    public IEnumerator CO_EnterLobby()
+    private IEnumerator CO_FadeIn()
     {
-        _fadeDuration = new WaitForSeconds(2f);
-
         _fadeScreen.gameObject.SetActive(true);
         IsFading = true;
         _fadeScreen.FadeOut();
-        yield return _fadeDuration;
+
+        yield return _fadeScreen.FadeDuration;
+        IsFading = false;
+    }
+    private IEnumerator CO_FadeOut()
+    {
+        IsFading = true;
+        _fadeScreen.FadeIn();
+        yield return _fadeScreen.FadeDuration;
 
         IsFading = false;
+    }
+
+    public IEnumerator CO_EnterLobby()
+    {
+        StartCoroutine(CO_FadeIn());
 
         // tp player to the lobby floor
         if (_isDevMode)
             _logger.Log("Teleported to Lobby!");
 
-        IsFading = true;
-        _fadeScreen.FadeIn();
-        yield return _fadeDuration;
-
-        IsFading = false;
+        yield return StartCoroutine(CO_FadeOut());
     }
     #endregion
 
