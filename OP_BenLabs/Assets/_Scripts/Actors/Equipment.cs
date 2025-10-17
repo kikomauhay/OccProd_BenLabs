@@ -16,7 +16,7 @@ public class Equipment : Actor
     protected Vector3 _startPosition;
     protected Quaternion _startRotation;
     
-    protected GameManager _gameMgr = GameManager.Instance;
+    protected GameManager _gameMgr;
     protected SoundEmitter _soundEmitter;
 
     Shaker shakr;
@@ -49,6 +49,8 @@ public class Equipment : Actor
     }
     protected override void InitVariables()
     {
+        _gameMgr = GameManager.Instance;
+        
         _startPosition = transform.position;
         _startRotation = transform.rotation;
     }

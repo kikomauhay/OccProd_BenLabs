@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +9,8 @@ public class Shaker : Equipment
 
     public IReadOnlyList<Ingredient> MixedDrink => _mixedDrink;
     public Cocktail Cocktail => _cocktail;
-    public static event Action EventPour;
-    public static event Action EventStopPour;
+    public static event System.Action OnBeginPour;
+    public static event System.Action OnStopPour;
 
     #endregion
     #region SerializeField
@@ -41,8 +40,7 @@ public class Shaker : Equipment
                                               Ingredient.LIME_JUICE, 
                                               Ingredient.COCONUT_WATER } }, 
     };
-    private readonly WaitForSeconds _shakeTime = new WaitForSeconds(UnityEngine.Random.Range(10f, 15f));
-    private bool _isPouring = false;
+    private bool _isPouring;
 
     #endregion
 
@@ -73,6 +71,7 @@ public class Shaker : Equipment
 
         _mixedDrink = new List<Ingredient>();
         _cocktail = Cocktail.EMPTY;
+        _isPouring = false;
     }
 
     protected override void Test()
@@ -84,9 +83,9 @@ public class Shaker : Equipment
 
     private void CheckPourAngle()
     {
-        float _angle = Vector3.Angle(_shakerTip.up, Vector3.up);
+        float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
 
-        if (_angle > _pourThreshold)
+        if (angle > _pourThreshold)
         {
             if (_isPouring) return;
             
@@ -96,14 +95,14 @@ public class Shaker : Equipment
         else
         {
             _isPouring = false;
-            EventStopPour?.Invoke();
+            OnStopPour?.Invoke();
         }
     }
 
     private void Pour()
     {
-        Instantiate(_stream,_shakerTip.position,Quaternion.identity,transform);
-        EventPour?.Invoke();
+        Instantiate(_stream, _shakerTip.position, Quaternion.identity, transform);
+        OnBeginPour?.Invoke();
         _mixedDrink.Clear();
     }
 
@@ -137,7 +136,8 @@ public class Shaker : Equipment
                 _logger.Log("Created dubious drink!", TextColor.RED);
         }
 
-        yield return _shakeTime; // time for the player to earn bonus points
+        // time for the player to earn bonus points
+        yield return new WaitForSeconds(Random.Range(10f, 15f)); 
         CompareIngredients();
     }
         

@@ -16,7 +16,6 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     #region Private
 
     private SoundEmitter _soundEmitter;
-    private int _currentStep;
 
     #endregion
 
@@ -24,6 +23,10 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
 
     protected override void Start()
     {
+        // Debug.Assert(_vrOnboardingLines, "Missing elements in _vrOnboardingLines!", gameObject);
+        // Debug.Assert(_barOnboardingLines, "Missing elements in _barOnboardingLines!", gameObject);
+        // Debug.Assert(_gddOnboardingLines, "Missing elements in _gddOnboardingLines!", gameObject);
+
         base.Start();
     }
 
@@ -36,9 +39,8 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     }
     protected override void InitVariables()
     {
-        _currentStep = 0;
-    }
 
+    }
 
     #endregion
 }
