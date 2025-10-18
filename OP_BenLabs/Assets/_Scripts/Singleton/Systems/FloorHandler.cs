@@ -72,8 +72,6 @@ public class FloorHandler : Singleton<FloorHandler>
 
     protected override void Test()
     {
-        if (!_isDevMode) return;
-
         if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);

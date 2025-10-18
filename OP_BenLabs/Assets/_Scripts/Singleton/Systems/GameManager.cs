@@ -1,11 +1,6 @@
-using System;
 using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.ShaderGraph.Drawing.Inspector.PropertyDrawers;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 
-[RequireComponent(typeof(SoundEmitter))]
 public class GameManager : Singleton<GameManager>
 {
     #region Properies
@@ -23,39 +18,15 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Private 
 
-    private GDDManager _gddMgr;
-
-    private SoundEmitter _soundEmitter;
     private FadeScreen _fadeScreen;
     private WaitForSeconds _fadeDuration;
 
     #endregion
 
-    #region Unity
+    #region Public
 
-    protected override void OnEnable()
+    public void TeleportPlayer(Vector3 pos, bool minigameStarting)
     {
-        IEnumerator CO_DelayedBinding()
-        {
-            yield return null;
-
-            GDDManager.Instance.OnGameStarted += TeleportPlayer;
-            GDDManager.Instance.OnGameFinished += TeleportPlayer;
-        }
-
-        StartCoroutine(CO_DelayedBinding());
-    }
-    protected override void OnDisable()
-    {
-        GDDManager.Instance.OnGameStarted -= TeleportPlayer;
-        GDDManager.Instance.OnGameFinished -= TeleportPlayer;
-    }
-
-    #endregion
-    #region Private
-
-    private void TeleportPlayer(Vector3 pos, bool isStarting)
-    {        
         StartCoroutine(CO_FadeIn());
         _player.transform.position = pos;
         StartCoroutine(CO_FadeOut());
@@ -68,7 +39,6 @@ public class GameManager : Singleton<GameManager>
 
     protected override void InitComponents()
     {
-        _soundEmitter = GetComponent<SoundEmitter>();
         _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
     }
     protected override void InitVariables()
@@ -77,12 +47,6 @@ public class GameManager : Singleton<GameManager>
         CanPause = true;
 
         _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
-    }
-
-    protected override void Test()
-    {
-        if (!_isDevMode) return;
-
     }
 
     #endregion
