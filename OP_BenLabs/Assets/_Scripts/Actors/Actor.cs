@@ -24,7 +24,11 @@ public abstract class Actor : MonoBehaviour
 
         InitVariables();
     }
-    protected virtual void Update() => Test();
+    protected virtual void Update()
+    {
+        if (_isDevMode)            
+            Test();
+    }
 
     #endregion
     #region Helpers

@@ -6,9 +6,6 @@ public class GDDManager : Singleton<GDDManager>
 {
     #region Properties
 
-    public System.Action<Vector3, bool> OnGameStarted { get; set; }
-    public System.Action<Vector3, bool> OnGameFinished { get; set; }
-
     public Transform TestGoal => _testGoal;
     public WaveState WaveState => _waveState;
     public Logger Logger => _logger;
@@ -22,7 +19,7 @@ public class GDDManager : Singleton<GDDManager>
 
     [Header("Spawn Bounds")]
     [SerializeField] private BoxCollider _collider;
-    [SerializeField] private Transform _spawnArea; // to prevent clutters in the hierarchy
+    [SerializeField] private Transform _spawnArea; // must be Vec3.zero so the children have normal scale
     [SerializeField] private Transform _testGoal;
 
     [Header("Trace Mechanic")]
@@ -71,7 +68,7 @@ public class GDDManager : Singleton<GDDManager>
     }
     public void BTN_PlayGame()
     {
-        OnGameStarted?.Invoke(_waypointGame.position, true);
+        _gameMgr.TeleportPlayer(_waypointGame.position, true);
         StartCoroutine(CO_SpawnEnemyWave());
 
         if (_isDevMode)
@@ -122,7 +119,7 @@ public class GDDManager : Singleton<GDDManager>
     }
     private void StopGame() // only be called once player gets 0 HP
     {
-        OnGameStarted?.Invoke(_waypointGame.position, false);
+        _gameMgr.TeleportPlayer(_waypointGame.position, false);
     }
 
     #endregion
@@ -175,8 +172,6 @@ public class GDDManager : Singleton<GDDManager>
     }
     protected override void Test()
     {
-        if (!_isDevMode) return;
-
         if (Input.GetKeyDown(KeyCode.Backspace))
         {
             foreach (GameObject e in _enemyList)
