@@ -6,6 +6,8 @@ public class GDDManager : Singleton<GDDManager>
 {
     #region Properties
 
+    public System.Action OnGameOver { get; set; }
+
     public Transform TestGoal => _testGoal;
     public WaveState WaveState => _waveState;
     public Logger Logger => _logger;
@@ -40,9 +42,11 @@ public class GDDManager : Singleton<GDDManager>
     private OnboardingHandler _onbHandlr;
 
     private const float GRACE_PERIOD = 2.5f;
+    private const float SPAWN_INTERVAL = 0.5f;
     
     private WaveState _waveState;
     private uint _killCount;
+    private float _currHP;
 
     #endregion
 
@@ -60,12 +64,6 @@ public class GDDManager : Singleton<GDDManager>
     #endregion
     #region Public
 
-    public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
-    public void UnbindEvents(Enemy e)
-    {
-        e.OnDeath -= CountRemainingEnemies;
-        e.OnKilled -= IncrementKillCount;
-    }
     public void BTN_PlayGame()
     {
         _gameMgr.TeleportPlayer(_waypointGame.position, true);
@@ -83,8 +81,61 @@ public class GDDManager : Singleton<GDDManager>
             _logger.Log("No tutorial mode yet!", TextColor.RED);
     }
 
+    public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
+    public void UnbindEvents(Enemy e)
+    {
+        e.OnDeath -= EVENT_CountRemainingEnemies;
+        e.OnKilled -= EVENT_IncrementKillCount;
+        e.OnKilled -= EVENT_GainLife;
+    }
+    public void TakeDamage()
+    {
+        _currHP--;
+
+        if (_currHP < 1f)
+        {
+            _currHP = 0f;
+            OnGameOver?.Invoke();
+        }
+    }  
+    
+
     #endregion
     #region Private 
+    
+    private void EVENT_CountRemainingEnemies()
+    {
+        _waveState = WaveState.COUNTING;
+
+        if (_isDevMode)
+            _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN);
+
+        if (_enemyList.Count == 0)
+        {
+            _currentWave++;
+
+            if (_currentWave < _waves.Length)
+            {
+                StartCoroutine(CO_SpawnEnemyWave());
+
+                if (_isDevMode)
+                    _logger.Log($"Current Wave: {_currentWave}", TextColor.GREEN);
+            }
+            // else AllWavesDone();
+        }
+    }
+    private void EVENT_IncrementKillCount()
+    {
+        _killCount++;
+
+        if (_isDevMode)
+            _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW);
+    }
+    private void EVENT_GainLife()
+    {
+        if (Random.value < 0.1f)
+            _currHP++;
+    }
     
     private void SpawnEnemy()
     {
@@ -99,8 +150,10 @@ public class GDDManager : Singleton<GDDManager>
         }
         void SetUpEnemy(Enemy e)
         {
-            e.OnDeath += CountRemainingEnemies;
-            e.OnKilled += IncrementKillCount;
+            e.OnDeath += EVENT_CountRemainingEnemies;
+            e.OnKilled += EVENT_IncrementKillCount;
+            e.OnKilled += EVENT_GainLife;
+
             e.SetGoal(_testGoal);
             
             _enemyList.Add(e.gameObject);
@@ -123,38 +176,6 @@ public class GDDManager : Singleton<GDDManager>
     }
 
     #endregion
-    #region Events
-
-    private void CountRemainingEnemies()
-    {
-        _waveState = WaveState.COUNTING;
-
-        if (_isDevMode)
-            _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN);
-
-        if (_enemyList.Count == 0)
-        {
-            _currentWave++;
-
-            if (_currentWave < _waves.Length)
-            {
-                StartCoroutine(CO_SpawnEnemyWave());
-
-                if (_isDevMode)
-                    _logger.Log($"Current Wave: {_currentWave}", TextColor.GREEN);
-            }
-            // else AllWavesDone();
-        }
-    }
-    private void IncrementKillCount()
-    {
-        _killCount++;
-
-        if (_isDevMode)
-            _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW);
-    }
-
-    #endregion
     #region Helpers
 
     protected override void InitComponents()
@@ -168,7 +189,9 @@ public class GDDManager : Singleton<GDDManager>
 
         _enemyList = new List<GameObject>();
         _waveState = WaveState.WAITING;
+
         _killCount = 0;
+        _currHP = 0f;
     }
     protected override void Test()
     {
@@ -210,7 +233,7 @@ public class GDDManager : Singleton<GDDManager>
             for (int i = 0; i < wave.UnitCount; i++)
             {
                 SpawnEnemy();
-                yield return new WaitForSeconds(1f / wave.SpawnInterval);
+                yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
             }
             _waveState = WaveState.FINISHED;
 

@@ -6,12 +6,12 @@ public class WeaponSpawner : Actor
 	[Header("Weapons")]
 	[SerializeField] private List<GameObject> _weaponsList;
 
-	public void Enable(string weaponName)
+	public void Enable(WeaponType weaponType)
 	{
-		foreach (var item in _weaponsList)
-			item.SetActive(weaponName == item.name);
+		foreach (GameObject weapon in _weaponsList)
+			weapon.SetActive(weapon.GetComponent<Weapon>().WeaponType == weaponType);
 
         if (_isDevMode)
-            _logger.Log("Enabled a weapon!", gameObject, TextColor.YELLOW);	
+            _logger.Log($"Enabled {weaponType}!", gameObject, TextColor.YELLOW);	
 	}
 }
