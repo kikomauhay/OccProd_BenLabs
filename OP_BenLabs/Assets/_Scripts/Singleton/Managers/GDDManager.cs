@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GDDManager : Singleton<GDDManager>
@@ -32,6 +33,10 @@ public class GDDManager : Singleton<GDDManager>
     [SerializeField] private List<GameObject> _enemyList; // seen in inspector for debugging
     
     [Space(10f), SerializeField] private GameObject _testEnemy;
+
+    [Header("UI Components")]
+    [SerializeField] private TextMeshProUGUI _waveCountTxt;
+    [SerializeField] private TextMeshProUGUI _playerLivesTxt;
 
     #endregion
     #region Private
@@ -122,6 +127,18 @@ public class GDDManager : Singleton<GDDManager>
         _gameMgr.TeleportPlayer(_waypointGame.position, false);
     }
 
+    private void UI_WaveCountUpdate(int currWave)
+    {
+        _waveCountTxt.text = $"Wave {currWave}";
+
+        StartCoroutine(CO_ClearWaveTxt());
+    }
+
+    private void UI_PlayerLivestUpdate(int currPlayerLive)
+    {
+        _waveCountTxt.text = $"Player Lives: {currPlayerLive}";
+    }
+
     #endregion
     #region Events
 
@@ -186,6 +203,13 @@ public class GDDManager : Singleton<GDDManager>
 
     #endregion
     #region Enumerators
+
+    //Clears the text after it appears with a timer of 15 seconds
+    private IEnumerator CO_ClearWaveTxt()
+    {
+        yield return new WaitForSeconds(15f);
+        _waveCountTxt.text = string.Empty;
+    }
 
     private IEnumerator CO_SpawnEnemyWave()
     {
