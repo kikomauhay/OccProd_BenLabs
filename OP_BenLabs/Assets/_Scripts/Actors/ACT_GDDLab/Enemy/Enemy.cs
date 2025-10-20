@@ -31,7 +31,7 @@ public class Enemy : Actor
 
     #region Unity
 
-    private void LateUpdate() => EnemyMovement();
+    private void LateUpdate() => TravelToPlayer();
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Weapon>())
@@ -128,7 +128,7 @@ public class Enemy : Actor
         _rotSpeed = Random.Range(2f, 4f);
     }
 
-    private void EnemyMovement()
+    private void TravelToPlayer()
     {
         Vector3 lookAtGoal = new Vector3(_goal.position.x,
                                              transform.position.y,
