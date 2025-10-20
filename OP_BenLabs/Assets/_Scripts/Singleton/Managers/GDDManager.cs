@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
@@ -31,6 +32,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private WeaponSpawner _weaponSpawner;
 
     [Space(10f), SerializeField] private GameObject _testEnemy;
+
+    [Header("UI Components")]
+    [SerializeField] private TextMeshProUGUI _waveCountTxt;
+    [SerializeField] private TextMeshProUGUI _playerLivesTxt;
 
     #endregion
     #region Private
@@ -133,6 +138,18 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
     }
 
+    private void UI_WaveCountUpdate(int currWave)
+    {
+        _waveCountTxt.text = $"Wave {currWave}";
+
+        StartCoroutine(CO_ClearWaveTxt());
+    }
+
+    private void UI_PlayerLivestUpdate(int currPlayerLive)
+    {
+        _waveCountTxt.text = $"Player Lives: {currPlayerLive}";
+    }
+
     #endregion
     #region Private 
 
@@ -207,6 +224,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     #endregion
     #region Enumerators
+
+    //Clears the text after it appears with a timer of 15 seconds
+    private IEnumerator CO_ClearWaveTxt()
+    {
+        yield return new WaitForSeconds(15f);
+        _waveCountTxt.text = string.Empty;
+    }
 
     private IEnumerator CO_SpawnEnemyWave()
     {
