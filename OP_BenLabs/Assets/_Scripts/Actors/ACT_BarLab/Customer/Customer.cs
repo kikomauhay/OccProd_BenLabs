@@ -19,7 +19,7 @@ public class Customer : Actor
 
     [Header("Drinks UI")]
     [SerializeField] private GameObject[] _drinkOrdersUI;   
-    [SerializeField] private Transform _orderUITransform; 
+    [SerializeField] private Transform _orderUITransform;   
 
     #endregion
     #region Private
