@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
-public class BarManager : Singleton<BarManager>
+public class BarManager : Singleton<BarManager>, IGameHandler
 {
     #region Properties
 
@@ -18,10 +18,8 @@ public class BarManager : Singleton<BarManager>
     [Header("Scoring System")]
     [SerializeField] private ColliderCheck _colliderCheck;
 
-    [Header("UI")]
-    [SerializeField] private GameObject _buttons;
-
-    [Header("Sounds")]
+    [Header("UI/UX")]
+    [SerializeField] private GameObject _startButton, _tutorialButton;
     [SerializeField] private Sound _startGameSFX;
 
     [Space(10f), SerializeField] private GameObject _testCustomer;
@@ -57,17 +55,17 @@ public class BarManager : Singleton<BarManager>
     #endregion
     #region Public
 
-    public void BTN_PlayGame()
+    public void INT_BTN_StartGame()
     {
         _soundEmitter.PlaySound(_startGameSFX);
 
-        SpawnCustomer();
+        INT_SpawnUnit();
         TrapPlayer(true);
 
         if (_isDevMode)
             _logger.Log("Bar mini-game has started!");
     }
-    public void BTN_PlayTutorial()
+    public void INT_BTN_StartTutorial()
     {
         _soundEmitter.PlaySound(_colliderCheck.UnsureSFX);
 
@@ -75,41 +73,7 @@ public class BarManager : Singleton<BarManager>
             _logger.Log("No tutorial mode yet!", TextColor.RED);
     }
 
-    public void Correct(float drinkScore)
-    {
-        _totalScore += drinkScore + SERVING_SCORE;
-        _customersServed++;
-
-        SpawnCustomer();
-    }
-    public void Wrong()
-    {
-        _currStrike++;
-        _customersServed++;
-
-        if (_currStrike == MAX_STRIKES)
-        {
-            DoGameOver();
-            return;
-        }
-
-        SpawnCustomer();
-    }
-
-    #endregion
-    #region Private
-
-    private void StopGame()
-    {
-        _buttons.SetActive(true);
-
-        StopAllCoroutines();
-        TrapPlayer(false);
-        
-        if (_isDevMode)
-            _logger.Log("Bar mini-game has finished!");
-    }
-    private void DoGameOver()
+    public void INT_DoGameOver()
     {
         // player gets exited from the mini-game
         // play game_over.sfx
@@ -120,7 +84,7 @@ public class BarManager : Singleton<BarManager>
         if (_isDevMode)
             _logger.Log("No game over logic yet!", TextColor.RED);
     }
-    private void SpawnCustomer()
+    public void INT_SpawnUnit()
     {
         IEnumerator CO_SpawnCustomer()
         {
@@ -155,6 +119,42 @@ public class BarManager : Singleton<BarManager>
         StartCoroutine(CO_SpawnCustomer());
     }
 
+    public void Correct(float drinkScore)
+    {
+        _totalScore += drinkScore + SERVING_SCORE;
+        _customersServed++;
+
+        INT_SpawnUnit();
+    }
+    public void Wrong()
+    {
+        _currStrike++;
+        _customersServed++;
+
+        if (_currStrike == MAX_STRIKES)
+        {
+            INT_DoGameOver();
+            return;
+        }
+
+        INT_SpawnUnit();
+    }
+
+    #endregion
+    #region Private
+
+    private void StopGame()
+    {
+        _startButton.SetActive(true);
+
+        StopAllCoroutines();
+        TrapPlayer(false);
+        
+        if (_isDevMode)
+            _logger.Log("Bar mini-game has finished!");
+    }
+    
+
     #endregion
     #region Helpers
 
@@ -162,7 +162,7 @@ public class BarManager : Singleton<BarManager>
     {
         _soundEmitter = GetComponent<SoundEmitter>();
 
-        _buttons.SetActive(true);
+        _startButton.SetActive(true);
     }
     protected override void InitVariables()
     {
@@ -178,12 +178,12 @@ public class BarManager : Singleton<BarManager>
     {
         if (!_isDevMode) return;
 
-        if (Input.GetKeyDown(KeyCode.Tab)) BTN_PlayGame();
+        if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
         if (Input.GetKeyDown(KeyCode.CapsLock)) StopGame();
     }
 
-    private void TrapPlayer(bool isStarting) 
-    { 
+    private void TrapPlayer(bool isStarting)
+    {
         // disables player TP 
         // enables colliders so player can't move around that much
     }
