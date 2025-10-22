@@ -1,3 +1,4 @@
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class RoomTeleporter : MonoBehaviour
@@ -27,12 +28,16 @@ public class RoomTeleporter : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == _gameMgr.Player)
+        if (other.gameObject.GetComponent<XROrigin>())
         {
             _gameMgr.TeleportPlayer(_lobbyWaypoint.position, false);
 
             if (_isDevMode)
                 _logger.Log("Teleported player to the Lobby!");
+        }
+        else
+        {
+            Debug.LogWarning("Player Not Detected!");
         }
     }
 
