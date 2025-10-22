@@ -1,6 +1,5 @@
 
 using System.Collections;
-using System.Globalization;
 using DG.Tweening;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ public class ElevatorDoor : MonoBehaviour
 {
     #region Properties
 
-    public WaitForSeconds Delay { get; private set; } = new WaitForSeconds(5f);
+    public WaitForSeconds Delay { get; private set; }
     public Sound ButtonSFX => _buttonSFX;
     public bool IsClosed { get; private set; }
 
@@ -23,6 +22,7 @@ public class ElevatorDoor : MonoBehaviour
     [Header("Tweening")]
     [SerializeField] private float _cycleLength;
     [SerializeField] private Transform _leftDoor, _rightDoor;
+    [SerializeField] private Vector3 _leftDoorEndpos, _rightDoorEndPos;
 
     [Header("Sounds")]
     [SerializeField] private Sound _buttonSFX;
@@ -30,9 +30,6 @@ public class ElevatorDoor : MonoBehaviour
 
     #endregion
     #region Private 
-
-    private readonly Vector3 _leftDoorEndpos = new Vector3(0f, -0.049999997f, -0.5f);
-    private readonly Vector3 _rightDoorEndPos = new Vector3(0f, -0.049999997f, 3.5f);
 
     private Vector3 _leftDoorStartPos, _rightDoorStartPos;
     private SoundEmitter _soundEmitter;
@@ -112,10 +109,11 @@ public class ElevatorDoor : MonoBehaviour
     }
     private void InitVariables()
     {
+        Delay = new WaitForSeconds(5f);
+        IsClosed = true;
+
         _leftDoorStartPos = _leftDoor.localPosition;
         _rightDoorStartPos = _rightDoor.localPosition;
-
-        IsClosed = true;
     }
 
     private void Test()

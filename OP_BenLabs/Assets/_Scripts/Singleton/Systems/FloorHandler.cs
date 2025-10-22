@@ -57,13 +57,21 @@ public class FloorHandler : Singleton<FloorHandler>
             _elevDoor.BTN_Close();
         }
 
-        if (!GameManager.Instance.CanPause)
+        if (idx < 0)
         {
             if (_isDevMode)
-                _logger.Log("You cannot load any scene at this time!", TextColor.YELLOW);
+                _logger.Log($"{this} cannot go there!", TextColor.RED);
 
             return;
         }
+        if (!GameManager.Instance.CanPause)
+        {
+            if (_isDevMode)
+                _logger.Log("You cannot go to that floor at this time!", TextColor.YELLOW);
+
+            return;
+        }
+
         StartCoroutine(CO_MoveToFloor());
     }
 

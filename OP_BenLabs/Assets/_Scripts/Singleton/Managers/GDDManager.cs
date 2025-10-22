@@ -126,6 +126,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public void TakeDamage()
     {
         _currHP--;
+        UI_UpdatePlayerLife();
 
         if (_currHP < 1f)
         {
@@ -147,6 +148,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_enemyList.Count == 0)
         {
             _waveIndex++;
+            UI_UpdateWaveIndex();
 
             if (_waveIndex < _waves.Length)
             {
@@ -167,7 +169,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void EVENT_GainLife()
     {
         if (Random.value < 0.1f)
+        {
             _currHP++;
+            UI_UpdatePlayerLife();
+        }
     }
 
     private void UI_UpdateWaveIndex()

@@ -6,8 +6,9 @@ public class Floor : MonoBehaviour
     [SerializeField] private FloorType _floorType;
 }
 
-public enum FloorType 
-{ 
+[System.Serializable]
+public enum FloorType
+{
     TUTORIAL = 0,
     LOBBY = 1,
     GDD = 2,
