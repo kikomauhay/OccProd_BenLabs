@@ -1,25 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class GDDManager : Singleton<GDDManager>, IGameHandler
 {
     #region Properties
 
-    public System.Action OnGameStart { get; set; }
-    public System.Action OnGameOver { get; set; }
-
-    public WaveState WaveState => _waveState;
     public Logger Logger => _logger;
 
     #endregion
     #region SerializeField
-
-    [Header("Player Waypoints")]
-    [SerializeField] private Transform _waypointGame;
-    [SerializeField] private Transform _waypointR803;
 
     [Header("Spawning & Waves")]
     [SerializeField] private BoxCollider _collider;
@@ -33,9 +25,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Space(10f), SerializeField] private GameObject _testEnemy;
 
-    [Header("UI Components")]
-    [SerializeField] private TextMeshProUGUI _waveCountTxt;
-    [SerializeField] private TextMeshProUGUI _playerLivesTxt;
+    [Header("UI/UX")]
+    [SerializeField] private TextMeshProUGUI _waveCountTXT;
+    [SerializeField] private TextMeshProUGUI _playerLivesTXT;
+    [SerializeField] private Sound _startGameSFX, _gameOverSFX;
 
     #endregion
     #region Private
@@ -66,15 +59,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
 
     #endregion
-    #region public
+    #region Public
 
     public void INT_BTN_StartGame()
     {
-        _gameMgr.TeleportPlayer(_waypointGame.position, true);
+        StartCoroutine(_gameMgr.CO_Enter(FloorType.GDD));
         StartCoroutine(CO_SpawnEnemyWave());
 
         if (_isDevMode)
-            _logger.Log("GDD mini-game has started!");
+            _logger.Log("Game start!", TextColor.YELLOW);
     }
     public void INT_BTN_StartTutorial()
     {
@@ -87,7 +80,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     public void INT_DoGameOver() // only be called once player gets 0 HP
     {
+        StartCoroutine(_gameMgr.CO_Exit(FloorType.GDD));
 
+        if (_isDevMode)
+            _logger.Log("Game over!", TextColor.YELLOW);
     }
     public void INT_SpawnUnit()
     {
@@ -134,20 +130,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_currHP < 1f)
         {
             _currHP = 0f;
-            OnGameOver?.Invoke();
+            INT_DoGameOver();
         }
-    }
-
-    private void UI_WaveCountUpdate(int currWave)
-    {
-        _waveCountTxt.text = $"Wave {currWave}";
-
-        StartCoroutine(CO_ClearWaveTxt());
-    }
-
-    private void UI_PlayerLivestUpdate(int currPlayerLive)
-    {
-        _waveCountTxt.text = $"Player Lives: {currPlayerLive}";
     }
 
     #endregion
@@ -171,7 +155,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 if (_isDevMode)
                     _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN);
             }
-            // else AllWavesDone();
         }
     }
     private void EVENT_IncrementKillCount()
@@ -186,6 +169,21 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Random.value < 0.1f)
             _currHP++;
     }
+
+    private void UI_UpdateWaveIndex()
+    {
+        IEnumerator CO_ClearWaveTxt()
+        {
+            _waveCountTXT.gameObject.SetActive(true);
+            _waveCountTXT.text = $"Wave {_waveIndex + 1}";
+
+            yield return new WaitForSeconds(15f);
+            _waveCountTXT.gameObject.SetActive(false);
+        }
+
+        StartCoroutine(CO_ClearWaveTxt());
+    }
+    private void UI_UpdatePlayerLife() => _waveCountTXT.text = $"Life: {_currHP}";
 
     #endregion
     #region Helpers
@@ -223,14 +221,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
 
     #endregion
-    #region Enumerators
-
-    //Clears the text after it appears with a timer of 15 seconds
-    private IEnumerator CO_ClearWaveTxt()
-    {
-        yield return new WaitForSeconds(15f);
-        _waveCountTxt.text = string.Empty;
-    }
+    #region Enumerators    
 
     private IEnumerator CO_SpawnEnemyWave()
     {

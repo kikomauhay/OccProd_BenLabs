@@ -9,7 +9,6 @@ public class RoomTeleporter : MonoBehaviour
     [SerializeField] protected Logger _logger;
     [SerializeField] protected bool _isDevMode;
 
-    [Space(10f), SerializeField] private Transform _lobbyWaypoint;
     private GameManager _gameMgr;
 
     #endregion
@@ -18,7 +17,6 @@ public class RoomTeleporter : MonoBehaviour
 
     private void Start()
     {
-        Debug.Assert(_lobbyWaypoint, "Missing _lobbyWaypoint reference!", gameObject);
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
 
         if (_isDevMode)
@@ -30,14 +28,15 @@ public class RoomTeleporter : MonoBehaviour
     {
         if (other.gameObject.GetComponent<XROrigin>())
         {
-            _gameMgr.TeleportPlayer(_lobbyWaypoint.position, false);
+            StartCoroutine(_gameMgr.CO_Enter(FloorType.LOBBY));
 
             if (_isDevMode)
                 _logger.Log("Teleported player to the Lobby!");
         }
         else
         {
-            Debug.LogWarning("Player Not Detected!");
+            if (_isDevMode)
+                _logger.Log("Player Not Detected!");
         }
     }
 
