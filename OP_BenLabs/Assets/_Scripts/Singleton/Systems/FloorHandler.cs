@@ -14,7 +14,7 @@ public class FloorHandler : Singleton<FloorHandler>
 
     [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
     [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
-    [SerializeField] private ElevatorDoor _elev;
+    [SerializeField] private ElevatorDoor _elevDoor;
 
     [Header("Sounds")]
     [SerializeField] private SoundEmitter _soundEmitter;
@@ -30,8 +30,8 @@ public class FloorHandler : Singleton<FloorHandler>
 
     protected override void Start()
     {
-        Debug.Assert(_floors.Length != FLOOR_COUNT, "Missing _rooms elements!", gameObject);
-        Debug.Assert(_elev, "Missing _door reference!", gameObject);
+        Debug.Assert(_floors.Length == FLOOR_COUNT, "Missing _rooms elements!", gameObject);
+        Debug.Assert(_elevDoor, "Missing _door reference!", gameObject);
 
         base.Start();
     }
@@ -43,18 +43,18 @@ public class FloorHandler : Singleton<FloorHandler>
     {
         IEnumerator CO_MoveToFloor()
         {
-            if (!_elev.IsClosed)
-                _elev.BTN_Close();
+            if (!_elevDoor.IsClosed)
+                _elevDoor.BTN_Close();
 
-            _soundEmitter.PlaySound(_elev.ButtonSFX);
-            yield return _elev.Delay;
+            _soundEmitter.PlaySound(_elevDoor.ButtonSFX);
+            yield return _elevDoor.Delay;
 
             for (int i = 0; i < _floors.Length; i++)
                 _floors[i].gameObject.SetActive(i == idx);
 
-            _elev.BTN_Open();
-            yield return _elev.Delay;
-            _elev.BTN_Close();
+            _elevDoor.BTN_Open();
+            yield return _elevDoor.Delay;
+            _elevDoor.BTN_Close();
         }
 
         if (!GameManager.Instance.CanPause)
