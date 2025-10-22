@@ -50,7 +50,11 @@ public class FloorHandler : Singleton<FloorHandler>
             yield return _elevDoor.Delay;
 
             for (int i = 0; i < _floors.Length; i++)
+            {
                 _floors[i].gameObject.SetActive(i == idx);
+                Debug.Log($"Opening: {idx}");
+            }
+               
 
             _elevDoor.BTN_Open();
             yield return _elevDoor.Delay;
