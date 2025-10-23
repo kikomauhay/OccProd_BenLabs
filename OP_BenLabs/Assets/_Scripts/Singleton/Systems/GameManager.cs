@@ -66,8 +66,12 @@ public class GameManager : Singleton<GameManager>
             default: break;
         }
 
+        Debug.Log($"Teleported Player to {pos}"); 
+
         StartCoroutine(CO_FadeIn());
         _player.transform.position = pos;
+
+        Debug.Log($"Player POS: {_player.transform.position}");
 
         if (_isDevMode)
             _logger.Log($"Teleported Player to {type}!");
