@@ -63,6 +63,21 @@ public class Shaker : Equipment
     }
 
     #endregion
+    #region Public
+    
+    public void Washed()
+    {
+        StopAllCoroutines();
+    
+        _isPouring = false;
+        _mixedDrink.Clear();
+        _cocktail = Cocktail.EMPTY;
+
+        if (_isDevMode)
+            _logger.Log($"{this} has no more drink!", TextColor.YELLOW);
+    }
+        
+    #endregion
     #region Helpers
 
     protected override void InitVariables()
@@ -76,8 +91,6 @@ public class Shaker : Equipment
 
     protected override void Test()
     {
-        if (!_isDevMode) return;
-
         
     }
 
