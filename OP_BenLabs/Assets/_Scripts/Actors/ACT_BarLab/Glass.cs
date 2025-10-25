@@ -85,6 +85,13 @@ public class Glass : Equipment
         if (_isDevMode)
             _logger.Log("Drink has been served!", gameObject);
     }
+    public void Washed()
+    {
+        ResetDrink();
+
+        if (_isDevMode)
+            _logger.Log($"{this} has been washed!", TextColor.GREEN);
+    }
     public void EnableDrink(int i)
     {
         if (_hasDrink)
@@ -97,7 +104,7 @@ public class Glass : Equipment
 
         _hasDrink = true;
         _drinks[i].SetActive(true);
-        _cocktail = (Cocktail)(i + 1); // + 1 because there's an empty element
+        _cocktail = (Cocktail)(i + 1); // + 1 because there's an "EMPTY" element at index 0
 
         if (_isDevMode)
             _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW);
@@ -118,8 +125,6 @@ public class Glass : Equipment
 
     protected override void Test()
     {
-        if (!_isDevMode) return;
-
         if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
         if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
         if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
