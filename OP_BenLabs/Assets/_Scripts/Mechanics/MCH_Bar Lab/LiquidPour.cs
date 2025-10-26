@@ -3,9 +3,16 @@ using UnityEngine;
 
 public class LiquidPour : MonoBehaviour
 {
+    #region Properties
+
+    public static event System.Action<Cocktail> OnGlassHit;
+    public static event System.Action ShakerEmptied;
+
+    #endregion
     #region SerializeField
 
     [SerializeField] private ParticleSystem _splashParticle;
+    [SerializeField] private LayerMask _layerMask;
 
     #endregion
     #region Private
@@ -39,7 +46,7 @@ public class LiquidPour : MonoBehaviour
     #endregion
     #region Helpers
 
-    private void BeginPour()
+    private void BeginPour(Cocktail cocktail)
     {
         Vector3 FindEndPoint()
         {
@@ -48,6 +55,12 @@ public class LiquidPour : MonoBehaviour
 
             Physics.Raycast(ray, out hit, 2.0F);
             Vector3 endPoint = hit.collider ? hit.point : ray.GetPoint(2.0F);
+
+            if(Physics.Raycast(hit.point, endPoint, _layerMask))
+            {
+                Debug.LogWarning("Glass has been hit, invoke event");
+                OnGlassHit?.Invoke(cocktail);
+            }
 
             return endPoint;
         }
@@ -59,7 +72,9 @@ public class LiquidPour : MonoBehaviour
                 MoveToPosition(0, transform.position);
                 AnimateToPosition(1, _targetPosition);
 
-                yield return null;
+                yield return new WaitForSeconds(3F);
+
+                ShakerEmptied?.Invoke();
             }
         }
         IEnumerator CO_UpdateParticle()
