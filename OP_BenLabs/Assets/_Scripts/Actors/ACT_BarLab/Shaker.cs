@@ -9,7 +9,7 @@ public class Shaker : Equipment
 
     public IReadOnlyList<Ingredient> MixedDrink => _mixedDrink;
     public Cocktail Cocktail => _cocktail;
-    public static event System.Action OnBeginPour;
+    public static event System.Action<Cocktail> OnBeginPour;
     public static event System.Action OnStopPour;
 
     #endregion
@@ -45,6 +45,18 @@ public class Shaker : Equipment
     #endregion
 
     #region Unity
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        LiquidPour.ShakerEmptied += ResetShaker;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        LiquidPour.ShakerEmptied -= ResetShaker;
+    }
 
     private void FixedUpdate()
     {
@@ -98,6 +110,8 @@ public class Shaker : Equipment
     {
         float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
 
+        if (_cocktail == Cocktail.EMPTY) return;
+
         if (angle > _pourThreshold)
         {
             if (_isPouring) return;
@@ -112,10 +126,15 @@ public class Shaker : Equipment
         }
     }
 
+    private void ResetShaker()
+    {
+        _cocktail = Cocktail.EMPTY;
+    }
+
     private void Pour()
     {
         Instantiate(_stream, _shakerTip.position, Quaternion.identity, transform);
-        OnBeginPour?.Invoke();
+        OnBeginPour?.Invoke(_cocktail);
         _mixedDrink.Clear();
     }
 

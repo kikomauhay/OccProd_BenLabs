@@ -41,6 +41,9 @@ public class Glass : Equipment
     #endregion
     #region SerializeField
 
+    [Header("For Testing")]
+    [SerializeField] private Renderer _renderer;
+
     [Header("Drinks"), Tooltip("0 = Tequila, 1 = Vodka, 2 = Coconut")]
     [SerializeField] private GameObject[] _drinks;
 
@@ -63,6 +66,12 @@ public class Glass : Equipment
     {
         // Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
         base.Start();
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        LiquidPour.OnGlassHit += TestPour;
     }
 
     #endregion
@@ -120,7 +129,7 @@ public class Glass : Equipment
         name = "Cocktail Glass";
         // _hasDrink = false;
         _score = 0f;
-        // _cocktail = Cocktail.EMPTY;
+        _cocktail = Cocktail.EMPTY;
     }
 
     protected override void Test()
@@ -130,6 +139,35 @@ public class Glass : Equipment
         if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
 
         if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
+    }
+
+    private void TestPour(Cocktail cocktail)
+    {
+        Glass _glass = this.gameObject.GetComponent<Glass>();
+
+        if(_glass == this)
+        {
+            _cocktail = cocktail;
+
+            switch (_cocktail)
+            {
+                case Cocktail.TEQUILA_SUNRISE:
+                    _renderer.material.color = Color.yellow;
+                    break;
+
+                case Cocktail.VODKA_CITRUS:
+                    _renderer.material.color = Color.red;
+                    break;
+
+                case Cocktail.COCONUT_MARGARITA:
+                    _renderer.material.color = Color.green;
+                    break;
+            }
+
+
+            if (_isDevMode)
+                _logger.Log($"{name} is being poured into");
+        }
     }
 
     private void ResetDrink()
