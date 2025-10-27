@@ -3,7 +3,6 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 
-[RequireComponent(typeof(SoundEmitter))]
 public class ElevatorDoor : MonoBehaviour
 {
     #region Properties
@@ -27,20 +26,20 @@ public class ElevatorDoor : MonoBehaviour
     [Header("Sounds")]
     [SerializeField] private Sound _buttonSFX;
     [SerializeField] private Sound _bellSFX;
+    [SerializeField] private SoundEmitter _soundEmitter;
 
     #endregion
     #region Private 
 
     private Vector3 _leftDoorStartPos, _rightDoorStartPos;
-    private SoundEmitter _soundEmitter;
 
     #endregion
 
     #region Unity
 
-    private void Awake() => InitComponents();
     private void Start()
     {
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
         Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing Door references!</color>", gameObject);
 
@@ -103,10 +102,6 @@ public class ElevatorDoor : MonoBehaviour
     #endregion
     #region Helpers
 
-    private void InitComponents()
-    {
-        _soundEmitter = GetComponent<SoundEmitter>();
-    }
     private void InitVariables()
     {
         Delay = new WaitForSeconds(5f);

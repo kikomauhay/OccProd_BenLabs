@@ -8,18 +8,20 @@ public class Equipment : Actor
     [Header("SFX")]
     [SerializeField] protected Sound _pickUpSFX;
     [SerializeField] protected Sound _landOnFloorSFX;
- 
+
     #endregion
     #region Protected
 
+    protected GameManager _gameMgr;
+    
     protected Renderer _rend;
+    protected SoundEmitter _soundEmitter;
+    protected Rigidbody _rb;
+
     protected Vector3 _startPosition;
     protected Quaternion _startRotation;
     
-    protected GameManager _gameMgr;
-    protected SoundEmitter _soundEmitter;
-
-    Shaker shakr;
+    protected Shaker shakr;
 
     #endregion
     
@@ -46,11 +48,15 @@ public class Equipment : Actor
     {
         _rend = GetComponent<MeshRenderer>();
         _soundEmitter = GetComponent<SoundEmitter>();
+        _rb = GetComponent<Rigidbody>();
     }
     protected override void InitVariables()
     {
         _gameMgr = GameManager.Instance;
         
+        _rb.angularDrag = 0f;
+        _rb.useGravity = false;
+
         _startPosition = transform.position;
         _startRotation = transform.rotation;
     }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider), typeof(SoundEmitter))]
+[RequireComponent(typeof(BoxCollider))]
 public class ColliderCheck : Actor
 {
     #region Properties
@@ -12,20 +12,28 @@ public class ColliderCheck : Actor
     #endregion
     #region SerializeField
 
+    [Header("Components")]
+    [SerializeField] private SoundEmitter _soundEmitter;
+
     [Header("Sounds")]
-    [SerializeField] private Sound _correctSFX;
+    [SerializeField] private Sound _correctSFX; 
     [SerializeField] private Sound _wrongSFX, _unsureSFX;
-        
+    
     #endregion
     #region Private
 
     private BarManager _barMgr;
     private BoxCollider _collider;
-    private SoundEmitter _soundEmitter;
 
     #endregion
 
     #region Unity
+
+    protected override void Start()
+    {
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
+        base.Start();
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -74,7 +82,6 @@ public class ColliderCheck : Actor
     protected override void InitComponents()
     {
         _collider = GetComponent<BoxCollider>();
-        _soundEmitter = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
     {

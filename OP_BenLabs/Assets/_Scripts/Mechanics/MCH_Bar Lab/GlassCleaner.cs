@@ -1,24 +1,23 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
-public class GlassCleaaner : MonoBehaviour
+public class GlassCleaner : MonoBehaviour
 {
     #region Members
-        
+
     [Header("Debugging")]
     [SerializeField] protected Logger _logger;
     [SerializeField] protected bool _isDevMode;
 
     [Header("Sounds")]
     [SerializeField] private Sound _waterSplashSFX;
-    
     private SoundEmitter _soundEmitter;
 
     #endregion
 
     #region Methods
-    
-    private void Awake() => InitComponents();
+
+    private void Awake() => _soundEmitter = GetComponent<SoundEmitter>();
     private void Start()
     {
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
@@ -39,11 +38,6 @@ public class GlassCleaaner : MonoBehaviour
             other.GetComponent<Shaker>().Washed();
             _soundEmitter.PlaySound(_waterSplashSFX);
         }
-    }
-
-    private void InitComponents()
-    {
-        _soundEmitter = GetComponent<SoundEmitter>();
     }
 
     #endregion
