@@ -1,45 +1,31 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.Utilities;
 
-[RequireComponent(typeof(SoundEmitter))]
 public class FloorHandler : Singleton<FloorHandler>
 {
-    #region Properties
-
-    public ReadOnlyArray<Floor> Floors => _floors;
-
-    #endregion
-    #region SerializeField
+    #region Members
 
     [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
     [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
+    
+    [Header("Components")]
     [SerializeField] private ElevatorDoor _elevDoor;
-
-    [Header("Sounds")]
-    [SerializeField] private SoundEmitter _soundEmitter;
-
-    #endregion
-    #region Private
-
-    private const int FLOOR_COUNT = 3;
+    [SerializeField] private SoundEmitter _soundEmitter; // no Sound here since it'll come from _elevDoor
 
     #endregion
 
-    #region Unity
+    #region Methods
 
     protected override void Start()
     {
-        Debug.Assert(_floors.Length == FLOOR_COUNT, "Missing _rooms elements!", gameObject);
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
         Debug.Assert(_elevDoor, "Missing _door reference!", gameObject);
+        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", gameObject);
 
         base.Start();
     }
 
-    #endregion
-    #region Public
-
-    public void BTN_EnterFloor(int idx) // accessed from inside
+    public void BTN_EnterFloor(int idx) // only accessed from inside
     {
         IEnumerator CO_MoveToFloor()
         {
@@ -52,10 +38,11 @@ public class FloorHandler : Singleton<FloorHandler>
             for (int i = 0; i < _floors.Length; i++)
             {
                 _floors[i].gameObject.SetActive(i == idx);
-                Debug.Log($"Opening: {idx}");
+                
+                if (_isDevMode)
+                    _logger.Log($"Entering: {(FloorType)idx}");
             }
                
-
             _elevDoor.BTN_Open();
             yield return _elevDoor.Delay;
             _elevDoor.BTN_Close();
@@ -78,9 +65,6 @@ public class FloorHandler : Singleton<FloorHandler>
 
         StartCoroutine(CO_MoveToFloor());
     }
-
-    #endregion
-    #region Helpers
 
     protected override void Test()
     {
