@@ -19,7 +19,7 @@ public class Customer : Actor
 
     [Header("Drinks UI")]
     [SerializeField] private GameObject[] _drinkOrdersUI;   
-    [SerializeField] private Transform _orderUITransform; 
+    [SerializeField] private Transform _orderUITransform;   
 
     #endregion
     #region Private
@@ -44,13 +44,6 @@ public class Customer : Actor
         if (!_isDevMode)
             StartCoroutine(CO_DecreaseRating());
     }
-    private void OnDestroy()
-    {
-        if (_isDevMode)
-            _logger.Log("Customer has left the bar!");
-        
-        StartCoroutine(CO_DelayedSpawnng());
-    }
 
     #endregion
     #region Helpers
@@ -63,8 +56,7 @@ public class Customer : Actor
     protected override void InitVariables()
     {
         Cocktail SetRandomCocktail() // only gets from the 3 possible drinks
-        {
-            
+        {            
             int randomFromEnum = Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
             return (Cocktail)randomFromEnum;
         }
@@ -89,6 +81,16 @@ public class Customer : Actor
 
     private IEnumerator CO_DecreaseRating()
     {
+        IEnumerator CO_LostPatience()
+        {
+            if (_isDevMode)
+                _logger.Log("Customer lost patience!", TextColor.RED);
+
+            yield return new WaitForSeconds(2f);
+            Destroy(gameObject);
+            BarManager.Instance.Wrong();
+        }
+
         yield return new WaitForSeconds(GRACE_PERIOD);
 
         while (_customerScore > 0f)
@@ -109,18 +111,6 @@ public class Customer : Actor
 
             yield return StartCoroutine(CO_LostPatience());
         }
-    }
-    private IEnumerator CO_LostPatience()
-    {
-        if (_isDevMode)
-            _logger.Log("Customer waited too much!", ColorType.RED);
-
-        yield return new WaitForSeconds(2f);
-        Destroy(gameObject);
-    }
-    private IEnumerator CO_DelayedSpawnng()
-    {
-        yield break;
     }
 
     #endregion

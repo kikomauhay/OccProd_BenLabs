@@ -12,27 +12,127 @@ public class Enemy : Actor
     #region SerializeField
 
     [Header("Enemy Stats")]
-    [SerializeField] private float _maxHP;
-    [SerializeField] private float _minDistance, _moveSpeed, _rotSpeed;
+    [SerializeField] private EnemyType _enemyType;
+    [SerializeField] private float _minDistance; // testing
 
     #endregion
     #region Private
+
+    private GameManager _gameMgr;
+    private GDDManager _gddMgr;
 
     private Rigidbody _rb;
     private SoundEmitter _soundEmitter;
     private Transform _goal, _testGoal;
 
-    private float _currHP;
+    private float _maxHP, _currHP, _moveSpeed, _rotSpeed;
 
     #endregion
 
     #region Unity
 
-    private void LateUpdate()
+    private void LateUpdate() => TravelToPlayer();
+    private void OnTriggerEnter(Collider other)
     {
-    Vector3 lookAtGoal = new Vector3(_goal.position.x,
-                                         transform.position.y,
-                                         _goal.position.z);
+        if (other.GetComponent<Weapon>())
+        {
+            TakeDamage(other.GetComponent<Weapon>().Damage);
+            return;
+        }
+
+        if (other.gameObject == _gameMgr.Player)
+        {
+            _gddMgr.TakeDamage();
+            Destroy(gameObject);
+        }
+    }
+    private void OnDestroy()
+    {
+        OnDeath?.Invoke();
+
+        if (_currHP == 0f)
+            OnKilled?.Invoke();
+
+        if (_isDevMode)
+            _logger.Log($"{name} is destoryed!", TextColor.YELLOW);
+
+        _gddMgr.UnbindEvents(this);
+    }
+
+    #endregion
+    #region Public
+
+    public void SetGoal(Transform t) => _goal = t;
+        
+    #endregion
+    #region Private
+    
+    private void TakeDamage(float amt)
+    {
+        if (amt < 0f)
+        {
+            if (_isDevMode)
+                _logger.Log("Cannot deal negative daamge!", TextColor.RED);
+
+            return;
+        }
+
+        _currHP -= amt;
+
+        if (_currHP < 1f)
+        {
+            _currHP = 0f;
+            Destroy(gameObject);
+        }
+    }
+        
+    #endregion
+    #region Helpers
+
+    protected override void InitComponents()
+    {
+        _logger = GDDManager.Instance.Logger;
+        _rb = GetComponent<Rigidbody>();
+        _soundEmitter = GetComponent<SoundEmitter>();
+    }
+    protected override void InitVariables()
+    {
+        name = "Enemy";
+
+        _gameMgr = GameManager.Instance;
+        _gddMgr = GDDManager.Instance;
+
+        _rb.mass = 10f;
+        _rb.angularDrag = 0f;
+        _rb.useGravity = true;
+
+        switch (_enemyType)
+        {
+            case EnemyType.CRASHES:
+                _maxHP = 10f;
+                break;
+
+            case EnemyType.SAVE_ERROR:
+                _maxHP = 8f;
+                break;
+
+            case EnemyType.MISSING_TEXTURE:
+                _maxHP = 2f;
+                break;
+
+            default: break;
+        }
+
+        _currHP = _maxHP;
+        _moveSpeed = Random.Range(2f, 4f);
+        _rotSpeed = Random.Range(2f, 4f);
+    }
+
+    private void TravelToPlayer()
+    {
+        Vector3 lookAtGoal = new Vector3(_goal.position.x,
+                                             transform.position.y,
+                                             _goal.position.z);
         transform.LookAt(lookAtGoal);
 
         // smooth rotation
@@ -47,52 +147,19 @@ public class Enemy : Actor
             Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
         }
-        else 
+        else
         {
             GDDManager.Instance.RemoveEnemy(gameObject);
             Destroy(gameObject); // test
         }
     }
-    private void OnDestroy()
-    {
-        OnDeath?.Invoke();
-
-        if (_currHP <= 0f)
-            OnKilled?.Invoke();
-
-        if (_isDevMode)
-            _logger.Log($"{name} is destoryed!", ColorType.YELLOW);
-
-        GDDManager.Instance.UnbindEvents(this);
-    }
 
     #endregion
-    #region Public
+}
 
-    public void SetGoal(Transform t) => _goal = t;
-        
-    #endregion
-    #region Helpers
-
-    protected override void InitComponents()
-    {
-        _logger = GDDManager.Instance.Logger;
-        _rb = GetComponent<Rigidbody>();
-        _soundEmitter = GetComponent<SoundEmitter>();
-    }
-    protected override void InitVariables()
-    {
-        name = "Enemy";
-        _rb.mass = 10f;
-        _rb.angularDrag = 0f;
-        _rb.useGravity = true;
-        _currHP = _maxHP;
-    }
-
-    protected override void Test()
-    {
-        if (!_isDevMode) return;
-    }
-
-    #endregion
+public enum EnemyType
+{
+    CRASHES = 0,
+    SAVE_ERROR = 1,
+    MISSING_TEXTURE = 2
 }

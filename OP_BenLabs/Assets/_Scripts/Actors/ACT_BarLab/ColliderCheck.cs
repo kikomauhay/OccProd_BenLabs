@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider), typeof(SoundEmitter))]
@@ -7,13 +6,21 @@ public class ColliderCheck : Actor
     #region Properties
 
     public Customer CustomerOrder { get; set; }
+    public Sound UnsureSFX => _unsureSFX;
     public bool HasCustomer { get; private set; }
 
     #endregion
+    #region SerializeField
+
+    [Header("Sounds")]
+    [SerializeField] private Sound _correctSFX;
+    [SerializeField] private Sound _wrongSFX, _unsureSFX;
+        
+    #endregion
     #region Private
 
-    private BarManager _barMgr = BarManager.Instance;
-    private Collider _collider;
+    private BarManager _barMgr;
+    private BoxCollider _collider;
     private SoundEmitter _soundEmitter;
 
     #endregion
@@ -27,26 +34,33 @@ public class ColliderCheck : Actor
             if (!glass.HasDrink)
             {
                 if (_isDevMode)
-                    _logger.Log($"The glass has nothing in it!", ColorType.RED);
+                    _logger.Log($"The glass has nothing in it!", TextColor.RED);
 
-                // play wrong.sfx
+                _soundEmitter.PlaySound(_unsureSFX);
                 return;
             }
-            
-            if (glass.Cocktail != CustomerOrder.WantedCocktail)
+
+            if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
-                _barMgr.Wrong();
-                return;
+                _soundEmitter.PlaySound(_correctSFX);
+                _barMgr.Correct(glass.Score); 
             }
-            _barMgr.Correct(glass.Score);
-        } 
+            else
+            {
+                _soundEmitter.PlaySound(_wrongSFX);
+                _barMgr.Wrong();
+            }
+
+            Destroy(glass.gameObject); // test
+            Destroy(CustomerOrder.gameObject);
+        }
 
         if (!CustomerOrder)
         {
             if (_isDevMode)
-                _logger.Log("Missing CustomerOrder reference!", ColorType.RED);
+                _logger.Log("Missing CustomerOrder reference!", TextColor.RED);
 
-            // play wrong.sfx
+            _soundEmitter.PlaySound(_unsureSFX);
             return;
         }
 
@@ -64,6 +78,8 @@ public class ColliderCheck : Actor
     }
     protected override void InitVariables()
     {
+        _barMgr = BarManager.Instance;
+
         _collider.isTrigger = true;
         _collider.enabled = true;
         HasCustomer = false;
@@ -73,6 +89,9 @@ public class ColliderCheck : Actor
     {
         if (!_isDevMode) return;
     
+        if (Input.GetKeyDown(KeyCode.C)) _soundEmitter.PlaySound(_correctSFX);
+        if (Input.GetKeyDown(KeyCode.W)) _soundEmitter.PlaySound(_wrongSFX);
+        if (Input.GetKeyDown(KeyCode.U)) _soundEmitter.PlaySound(_unsureSFX);
     }
 
     #endregion

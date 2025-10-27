@@ -9,6 +9,8 @@ public class Shaker : Equipment
 
     public IReadOnlyList<Ingredient> MixedDrink => _mixedDrink;
     public Cocktail Cocktail => _cocktail;
+    public static event System.Action<Cocktail> OnBeginPour;
+    public static event System.Action OnStopPour;
 
     #endregion
     #region SerializeField
@@ -17,6 +19,7 @@ public class Shaker : Equipment
     [SerializeField] private Cocktail _cocktail;
     [SerializeField] private Transform _shakerTip;
     [SerializeField] private float _pourThreshold;
+    [SerializeField] private GameObject _stream;
 
     #endregion
     #region Private 
@@ -37,11 +40,23 @@ public class Shaker : Equipment
                                               Ingredient.LIME_JUICE, 
                                               Ingredient.COCONUT_WATER } }, 
     };
-    private readonly WaitForSeconds _shakeTime = new WaitForSeconds(Random.Range(10f, 15f));
+    private bool _isPouring;
 
     #endregion
 
     #region Unity
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        LiquidPour.ShakerEmptied += ResetShaker;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        LiquidPour.ShakerEmptied -= ResetShaker;
+    }
 
     private void FixedUpdate()
     {
@@ -55,10 +70,25 @@ public class Shaker : Equipment
             _mixedDrink.Add(other.GetComponent<Bottle>().Ingredient);
 
             if (_isDevMode)
-                _logger.Log($"Added a drink to {this}!", ColorType.GREEN);
+                _logger.Log($"Added a drink to {this}!", TextColor.GREEN);
         }
     }
 
+    #endregion
+    #region Public
+    
+    public void Washed()
+    {
+        StopAllCoroutines();
+    
+        _isPouring = false;
+        _mixedDrink.Clear();
+        _cocktail = Cocktail.EMPTY;
+
+        if (_isDevMode)
+            _logger.Log($"{this} has no more drink!", TextColor.YELLOW);
+    }
+        
     #endregion
     #region Helpers
 
@@ -68,28 +98,43 @@ public class Shaker : Equipment
 
         _mixedDrink = new List<Ingredient>();
         _cocktail = Cocktail.EMPTY;
+        _isPouring = false;
     }
 
     protected override void Test()
     {
-        if (!_isDevMode) return;
-
         
     }
 
     private void CheckPourAngle()
     {
-        float _angle = Vector3.Angle(_shakerTip.up, Vector3.up);
+        float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
 
-        if(_angle > _pourThreshold)
+        if (_cocktail == Cocktail.EMPTY) return;
+
+        if (angle > _pourThreshold)
         {
+            if (_isPouring) return;
+            
             Pour();
+            _isPouring = true;
         }
+        else
+        {
+            _isPouring = false;
+            OnStopPour?.Invoke();
+        }
+    }
+
+    private void ResetShaker()
+    {
+        _cocktail = Cocktail.EMPTY;
     }
 
     private void Pour()
     {
-        //start instantiating vfx here
+        Instantiate(_stream, _shakerTip.position, Quaternion.identity, transform);
+        OnBeginPour?.Invoke(_cocktail);
         _mixedDrink.Clear();
     }
 
@@ -111,7 +156,7 @@ public class Shaker : Equipment
                     _cocktail = recipe.Key;
 
                     if (_isDevMode)
-                        _logger.Log($"Created {recipe.Key}!", ColorType.GREEN);
+                        _logger.Log($"Created {recipe.Key}!", TextColor.GREEN);
 
                     return;
                 }
@@ -120,10 +165,11 @@ public class Shaker : Equipment
             _cocktail = Cocktail.WRONG;
 
             if (_isDevMode)
-                _logger.Log("Created dubious drink!", ColorType.RED);
+                _logger.Log("Created dubious drink!", TextColor.RED);
         }
 
-        yield return _shakeTime; // time for the player to earn bonus points
+        // time for the player to earn bonus points
+        yield return new WaitForSeconds(Random.Range(10f, 15f)); 
         CompareIngredients();
     }
         

@@ -16,7 +16,7 @@ public class Equipment : Actor
     protected Vector3 _startPosition;
     protected Quaternion _startRotation;
     
-    protected GameManager _gameMgr = GameManager.Instance;
+    protected GameManager _gameMgr;
     protected SoundEmitter _soundEmitter;
 
     Shaker shakr;
@@ -36,7 +36,7 @@ public class Equipment : Actor
         _soundEmitter.PlaySound(_landOnFloorSFX);
 
         if (_isDevMode)
-            _logger.Log($"{name}'s position has been reset!", ColorType.YELLOW);
+            _logger.Log($"{name}'s position has been reset!", TextColor.YELLOW);
     }
     
     #endregion
@@ -49,6 +49,8 @@ public class Equipment : Actor
     }
     protected override void InitVariables()
     {
+        _gameMgr = GameManager.Instance;
+        
         _startPosition = transform.position;
         _startRotation = transform.rotation;
     }

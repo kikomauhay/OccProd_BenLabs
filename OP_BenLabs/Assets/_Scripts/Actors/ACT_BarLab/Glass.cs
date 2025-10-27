@@ -41,6 +41,9 @@ public class Glass : Equipment
     #endregion
     #region SerializeField
 
+    [Header("For Testing")]
+    [SerializeField] private Renderer _renderer;
+
     [Header("Drinks"), Tooltip("0 = Tequila, 1 = Vodka, 2 = Coconut")]
     [SerializeField] private GameObject[] _drinks;
 
@@ -61,9 +64,14 @@ public class Glass : Equipment
         
     protected override void Start()
     {
-        base.Start(); // already contains both init methods
+        // Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
+        base.Start();
+    }
 
-        Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        LiquidPour.OnGlassHit += TestPour;
     }
 
     #endregion
@@ -86,6 +94,13 @@ public class Glass : Equipment
         if (_isDevMode)
             _logger.Log("Drink has been served!", gameObject);
     }
+    public void Washed()
+    {
+        ResetDrink();
+
+        if (_isDevMode)
+            _logger.Log($"{this} has been washed!", TextColor.GREEN);
+    }
     public void EnableDrink(int i)
     {
         if (_hasDrink)
@@ -98,10 +113,10 @@ public class Glass : Equipment
 
         _hasDrink = true;
         _drinks[i].SetActive(true);
-        _cocktail = (Cocktail)(i + 1); // + 1 because there's an empty element
+        _cocktail = (Cocktail)(i + 1); // + 1 because there's an "EMPTY" element at index 0
 
         if (_isDevMode)
-            _logger.Log($"{this} has a {_cocktail} active!", ColorType.YELLOW);
+            _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW);
     }
         
     #endregion
@@ -112,20 +127,47 @@ public class Glass : Equipment
         base.InitVariables();
 
         name = "Cocktail Glass";
-        _hasDrink = false;
+        // _hasDrink = false;
         _score = 0f;
         _cocktail = Cocktail.EMPTY;
     }
 
     protected override void Test()
     {
-        if (!_isDevMode) return;
-
         if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
         if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
         if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
 
         if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
+    }
+
+    private void TestPour(Cocktail cocktail)
+    {
+        Glass _glass = this.gameObject.GetComponent<Glass>();
+
+        if(_glass == this)
+        {
+            _cocktail = cocktail;
+
+            switch (_cocktail)
+            {
+                case Cocktail.TEQUILA_SUNRISE:
+                    _renderer.material.color = Color.yellow;
+                    break;
+
+                case Cocktail.VODKA_CITRUS:
+                    _renderer.material.color = Color.red;
+                    break;
+
+                case Cocktail.COCONUT_MARGARITA:
+                    _renderer.material.color = Color.green;
+                    break;
+            }
+
+
+            if (_isDevMode)
+                _logger.Log($"{name} is being poured into");
+        }
     }
 
     private void ResetDrink()
@@ -138,7 +180,7 @@ public class Glass : Equipment
             drink.SetActive(false);
 
         if (_isDevMode)
-            _logger.Log($"{this} has no more drink!", ColorType.YELLOW);
+            _logger.Log($"{this} has no more drink!", TextColor.YELLOW);
     }
 
     #endregion
