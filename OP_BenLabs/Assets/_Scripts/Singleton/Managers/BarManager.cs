@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[RequireComponent(typeof(SoundEmitter))]
 public class BarManager : Singleton<BarManager>, IGameHandler
 {
     #region Properties
@@ -12,24 +11,22 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     #region SerializeField
 
     [Header("Customer Spawning")]
-    [SerializeField] private GameObject _customerPrefab;
-    [SerializeField] private Transform _customerSpawnpoint;
+    [SerializeField] private Transform _customerSpawnpoint; // add a y-offset before instantiating the prefab
+    [SerializeField] private GameObject _customerPrefab, _testCustomer;
 
-    [Header("Scoring System")]
+    [Header("Components")]
     [SerializeField] private ColliderCheck _colliderCheck;
+    [SerializeField] private SoundEmitter _soundEmitter;
 
     [Header("UI/UX")]
-    [SerializeField] private GameObject _startButton, _tutorialButton;
     [SerializeField] private Sound _startGameSFX;
-
-    [Space(10f), SerializeField] private GameObject _testCustomer;
+    [SerializeField] private GameObject _startButton, _tutorialButton;
 
     #endregion
     #region Private
 
     private GameManager _gameMgr;
     private OnboardingHandler _onbHandlr;
-    private SoundEmitter _soundEmitter;
 
     private const int MAX_STRIKES = 3;
     private const int MAX_CUSTOMERS_SERVED = 3;
@@ -46,8 +43,9 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     protected override void Start()
     {
         // Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
-        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
         Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
+        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
 
         base.Start();
     }
@@ -160,8 +158,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     protected override void InitComponents()
     {
-        _soundEmitter = GetComponent<SoundEmitter>();
-
         _startButton.SetActive(true);
     }
     protected override void InitVariables()
