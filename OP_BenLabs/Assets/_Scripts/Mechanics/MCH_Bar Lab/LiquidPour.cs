@@ -28,11 +28,17 @@ public class LiquidPour : MonoBehaviour
     {
         Shaker.OnBeginPour += BeginPour;
         Shaker.OnStopPour += EndPour;
+
+        // need to add another BringPour method w/o the param
+        Bottle.OnStopPour += EndPour;
     }
     private void OnDisable()
     {
         Shaker.OnBeginPour -= BeginPour;
         Shaker.OnStopPour -= EndPour;
+
+        // need to add another BringPour method w/o the param
+        Bottle.OnStopPour -= EndPour;
     }
     private void Awake() => _lineRenderer = GetComponent<LineRenderer>();
     private void Start()
@@ -56,7 +62,7 @@ public class LiquidPour : MonoBehaviour
             Physics.Raycast(ray, out hit, 2.0F);
             Vector3 endPoint = hit.collider ? hit.point : ray.GetPoint(2.0F);
 
-            if(Physics.Raycast(hit.point, endPoint, _layerMask))
+            if (Physics.Raycast(hit.point, endPoint, _layerMask))
             {
                 Debug.LogWarning("Glass has been hit, invoke event");
                 OnGlassHit?.Invoke(cocktail);

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class Shaker : Equipment
+public class Shaker : Equipment, IPourable
 {
     #region Properties
 
@@ -15,30 +15,32 @@ public class Shaker : Equipment
     #endregion
     #region SerializeField
     
+    [Header("Ingredient Mixing")]
     [SerializeField] private List<Ingredient> _mixedDrink;
     [SerializeField] private Cocktail _cocktail;
+    
+    [Header("Pouring Logic")]
+    [SerializeField] private GameObject _stream;
     [SerializeField] private Transform _shakerTip;
     [SerializeField] private float _pourThreshold;
-    [SerializeField] private GameObject _stream;
 
     #endregion
     #region Private 
 
-    // dictionary syntax = <key, value>
-    private readonly Dictionary<Cocktail, Ingredient[]> _recipes = new()
+    private readonly Dictionary<Cocktail, Ingredient[]> _recipes = new() // dictionary syntax = <key, value>
     {
-        { Cocktail.TEQUILA_SUNRISE, new[] { Ingredient.TEQUILA, 
-                                            Ingredient.ORANGE_JUICE, 
+        { Cocktail.TEQUILA_SUNRISE, new[] { Ingredient.TEQUILA,
+                                            Ingredient.ORANGE_JUICE,
                                             Ingredient.LIME_JUICE } },
-        
-        { Cocktail.VODKA_CITRUS, new[] { Ingredient.VODKA, 
-                                         Ingredient.ORANGE_JUICE, 
-                                         Ingredient.LIME_JUICE, 
-                                         Ingredient.COCONUT_WATER } },       
 
-        { Cocktail.COCONUT_MARGARITA, new[] { Ingredient.TEQUILA, 
-                                              Ingredient.LIME_JUICE, 
-                                              Ingredient.COCONUT_WATER } }, 
+        { Cocktail.VODKA_CITRUS, new[] { Ingredient.VODKA,
+                                         Ingredient.ORANGE_JUICE,
+                                         Ingredient.LIME_JUICE,
+                                         Ingredient.COCONUT_WATER } },
+
+        { Cocktail.COCONUT_MARGARITA, new[] { Ingredient.TEQUILA,
+                                              Ingredient.LIME_JUICE,
+                                              Ingredient.COCONUT_WATER } },
     };
     private bool _isPouring;
 
@@ -51,18 +53,12 @@ public class Shaker : Equipment
         base.OnEnable();
         LiquidPour.ShakerEmptied += ResetShaker;
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
         LiquidPour.ShakerEmptied -= ResetShaker;
     }
-
-    private void FixedUpdate()
-    {
-        CheckPourAngle();
-    }
-
+    private void FixedUpdate() => INT_CheckPourAngle();
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Bottle>())
@@ -76,6 +72,32 @@ public class Shaker : Equipment
 
     #endregion
     #region Public
+
+    public void INT_CheckPourAngle()
+    {
+        float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
+
+        if (_cocktail == Cocktail.EMPTY) return;
+
+        if (angle > _pourThreshold)
+        {
+            if (_isPouring) return;
+
+            INT_Pour();
+            _isPouring = true;
+        }
+        else
+        {
+            _isPouring = false;
+            OnStopPour?.Invoke();
+        }
+    }
+    public void INT_Pour()
+    {
+        Instantiate(_stream, _shakerTip.position, Quaternion.identity, transform);
+        OnBeginPour?.Invoke(_cocktail);
+        _mixedDrink.Clear();
+    }
     
     public void Washed()
     {
@@ -103,40 +125,10 @@ public class Shaker : Equipment
 
     protected override void Test()
     {
-        
+
     }
 
-    private void CheckPourAngle()
-    {
-        float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
-
-        if (_cocktail == Cocktail.EMPTY) return;
-
-        if (angle > _pourThreshold)
-        {
-            if (_isPouring) return;
-            
-            Pour();
-            _isPouring = true;
-        }
-        else
-        {
-            _isPouring = false;
-            OnStopPour?.Invoke();
-        }
-    }
-
-    private void ResetShaker()
-    {
-        _cocktail = Cocktail.EMPTY;
-    }
-
-    private void Pour()
-    {
-        Instantiate(_stream, _shakerTip.position, Quaternion.identity, transform);
-        OnBeginPour?.Invoke(_cocktail);
-        _mixedDrink.Clear();
-    }
+    private void ResetShaker() => _cocktail = Cocktail.EMPTY;
 
     #endregion
     #region Enumerators

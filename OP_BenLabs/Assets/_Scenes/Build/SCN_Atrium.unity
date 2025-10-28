@@ -1840,6 +1840,7 @@ MonoBehaviour:
   _isDevMode: 0
   _pickUpSFX: {fileID: 0}
   _landOnFloorSFX: {fileID: 0}
+  _useGravity: 0
   _renderer: {fileID: 627850774}
   _drinks: []
   _hasDrink: 1
@@ -2589,6 +2590,7 @@ MonoBehaviour:
   _isDevMode: 0
   _pickUpSFX: {fileID: 0}
   _landOnFloorSFX: {fileID: 0}
+  _useGravity: 0
   _renderer: {fileID: 782215963}
   _drinks: []
   _hasDrink: 1
@@ -2805,10 +2807,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 335782402}
     m_Modifications:
+    - target: {fileID: 270214528249865924, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 370891455487149221, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 974137342281933247, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 998723012067244345, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 998723012067244345, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1903917988661763394, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1988744929269535237, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 2026419893099881138, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_Name
       value: ~BeverageCounter (BarManager)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026419893099881138, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2026419893099881139, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
@@ -2875,26 +2917,76 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 535359269}
+    - target: {fileID: 2059353032074727428, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3009658178263680417, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3687126508972407758, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3687126508972407758, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4128599037695371743, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 4128599037695371743, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
-      propertyPath: _logger
-      value: 
-      objectReference: {fileID: 4757517932154350423}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4383557112883656671, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 4383557112883656671, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5538453653135295299, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 5725601931086367704, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 6216683715757946479, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6738135690619978312, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6949769949897760519, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 7788214895617710667, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _useGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8488686610929992811, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_IsTrigger
@@ -4839,7 +4931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _logger: {fileID: 1459625007}
-  _isDevMode: 1
+  _isDevMode: 0
   _player: {fileID: 818115586}
   _lobbyWaypoint: {fileID: 1083082127}
   _gddWaypoint: {fileID: 307515440}
@@ -7935,6 +8027,7 @@ MonoBehaviour:
   _isDevMode: 0
   _pickUpSFX: {fileID: 0}
   _landOnFloorSFX: {fileID: 0}
+  _useGravity: 0
   _renderer: {fileID: 2072156167}
   _drinks: []
   _hasDrink: 1
