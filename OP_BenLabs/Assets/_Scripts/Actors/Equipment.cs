@@ -9,6 +9,9 @@ public class Equipment : Actor
     [SerializeField] protected Sound _pickUpSFX;
     [SerializeField] protected Sound _landOnFloorSFX;
 
+    [Header("Testing")]
+    [SerializeField] protected bool _useGravity;
+
     #endregion
     #region Protected
 
@@ -55,7 +58,7 @@ public class Equipment : Actor
         _gameMgr = GameManager.Instance;
         
         _rb.angularDrag = 0f;
-        _rb.useGravity = false;
+        _rb.useGravity = _useGravity;
 
         _startPosition = transform.position;
         _startRotation = transform.rotation;
