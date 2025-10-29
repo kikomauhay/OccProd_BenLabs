@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEngine;
-
 public interface IGameHandler
 {
     void INT_BTN_StartGame();

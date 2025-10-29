@@ -17,9 +17,9 @@ public class Equipment : Actor
 
     protected GameManager _gameMgr;
     
-    protected Renderer _rend;
-    protected SoundEmitter _soundEmitter;
+    protected MeshRenderer _rend;
     protected Rigidbody _rb;
+    protected SoundEmitter _soundEmitter;
 
     protected Vector3 _startPosition;
     protected Quaternion _startRotation;
@@ -50,12 +50,14 @@ public class Equipment : Actor
     protected override void InitComponents()
     {
         _rend = GetComponent<MeshRenderer>();
-        _soundEmitter = GetComponent<SoundEmitter>();
         _rb = GetComponent<Rigidbody>();
+        _soundEmitter = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
     {
         _gameMgr = GameManager.Instance;
+
+        _rend.enabled = true;
         
         _rb.angularDrag = 0f;
         _rb.useGravity = _useGravity;
