@@ -11,7 +11,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     [Header("Voice Lines")]
     [SerializeField] private Sound[] _vrOnboardingLines;
     [SerializeField] private Sound[] _barOnboardingLines, _gddOnboardingLines;
-
+    
     #endregion
     #region Private
 
