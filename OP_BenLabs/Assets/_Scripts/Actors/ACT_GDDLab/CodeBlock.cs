@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(tyepof(RigidBody))]
+[RequireComponent(typeof(Rigidbody))]
 public class CodeBlock : Actor
 {
     #region Properties
@@ -21,7 +22,7 @@ public class CodeBlock : Actor
     #endregion
     #region Private
 
-    private RigidBody _rb;
+    private Rigidbody _rb;
 
     private bool _isEmpty;
 
@@ -62,14 +63,14 @@ public class CodeBlock : Actor
 
     protected override void InitComponents()
     {
-        _rb = GetComponent<RigidBody>();
+        _rb = GetComponent<Rigidbody>();
     }
     protected override void InitVariables()
     {
         name = $"{this}";
 
         _rb.useGravity = false;
-        _rb.enabled = !_isGhostBlock;
+        //_rb.enabled = !_isGhostBlock;
 
         _blockType = BlockType.EMPTY;
         _isEmpty = false;
