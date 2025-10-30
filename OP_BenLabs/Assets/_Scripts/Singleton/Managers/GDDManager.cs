@@ -10,6 +10,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     public Logger Logger => _logger;
 
+    public int WaveIndex => (int)_waveIndex;
+
     #endregion
     #region SerializeField
 
@@ -92,7 +94,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_isDevMode)
             _logger.Log("Game over!", TextColor.YELLOW);
     }
-    public void INT_SpawnUnit()
+
+    public void SpawnEnemy()
     {
         Vector3 RandomPositionInBox()
         {
@@ -228,7 +231,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _enemyList.Clear();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) INT_SpawnUnit(); // might break the continous wave spawning
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy(); // might break the continous wave spawning
         if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
     }
 
@@ -268,7 +271,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             for (int i = 0; i < wave.UnitCount; i++)
             {
-                INT_SpawnUnit();
+                SpawnEnemy();
                 yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
             }
             _waveState = WaveState.FINISHED;

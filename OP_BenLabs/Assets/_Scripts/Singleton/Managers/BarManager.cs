@@ -57,8 +57,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     {
         _soundEmitter.PlaySound(_startGameSFX);
 
-        INT_SpawnUnit();
-        TrapPlayer(true);
+        SpawnCustomer();
 
         if (_isDevMode)
             _logger.Log("Bar mini-game has started!");
@@ -82,7 +81,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         if (_isDevMode)
             _logger.Log("No game over logic yet!", TextColor.RED);
     }
-    public void INT_SpawnUnit()
+    public void SpawnCustomer()
     {
         IEnumerator CO_SpawnCustomer()
         {
@@ -122,7 +121,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _totalScore += drinkScore + SERVING_SCORE;
         _customersServed++;
 
-        INT_SpawnUnit();
+        SpawnCustomer();
     }
     public void Wrong()
     {
@@ -135,7 +134,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             return;
         }
 
-        INT_SpawnUnit();
+        SpawnCustomer();
     }
 
     #endregion
@@ -146,7 +145,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _startButton.SetActive(true);
 
         StopAllCoroutines();
-        TrapPlayer(false);
         
         if (_isDevMode)
             _logger.Log("Bar mini-game has finished!");
@@ -177,13 +175,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
         if (Input.GetKeyDown(KeyCode.CapsLock)) StopGame();
     }
-
-    private void TrapPlayer(bool isStarting)
-    {
-        // disables player TP 
-        // enables colliders so player can't move around that much
-    }
-
 
     #endregion
 }
