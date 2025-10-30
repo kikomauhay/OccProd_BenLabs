@@ -21,7 +21,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Header("Trace Mechanic")]
     [SerializeField] private GameObject _drawingCanvas;
+    [SerializeField] private GameObject[] _weaponImage;     //[0]-Sword, [1]-Hammer
     [SerializeField] private WeaponSpawner _weaponSpawner;
+    [SerializeField] private string _preferredWeapon;
 
     [Space(10f), SerializeField] private GameObject _testEnemy;
 
@@ -60,6 +62,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     #endregion
     #region Public
+
+    public string GetPreferredWeapon()
+    {
+        return _preferredWeapon;
+    }
 
     public void INT_BTN_StartGame()
     {
@@ -236,6 +243,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         void DoPrearation() // prep time for the player to "draw" a weapon
         {
             _drawingCanvas.SetActive(true);
+
+            /* To spawn the image
+             * if(_preferredWeapon == "Sword")
+             *  {
+             *     _weaponImg[0].SetActive(True)
+             *  }
+             *  else
+             *  {
+             *     _weaponImg[1].SetActive(True)
+             *  }
+             */
 
             if (_isDevMode)
             {
