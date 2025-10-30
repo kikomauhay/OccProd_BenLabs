@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(SoundEmitter))]
+[RequireComponent(typeof(Rigidbody), typeof(SoundEmitter), typeof(MeshRenderer))]
 public class Equipment : Actor
 {
     #region SerializeField

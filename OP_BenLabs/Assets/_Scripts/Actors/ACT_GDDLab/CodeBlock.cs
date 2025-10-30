@@ -1,5 +1,5 @@
-using TMPro;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(MeshRenderer))]
 public class CodeBlock : Actor
@@ -93,7 +93,7 @@ public class CodeBlock : Actor
     {
         switch (_currBlockType)
         {
-            case BlockType.EMPTY:
+            case BlockType.NOTHING:
                 _rend.material.color = Color.gray;
                 break;
 
@@ -118,22 +118,24 @@ public class CodeBlock : Actor
 
     public void DoAction()
     {
-        if (!_isGhostBlock) return;
+        if (_isGhostBlock) return;
 
         switch (_currBlockType)
         {
-            case BlockType.EMPTY: break;
-
-            case BlockType.WEAPON: 
+            case BlockType.WEAPON:
+                // invokes an action based on the weapon prefab
                 break;
 
-            case BlockType.ENEMY: 
+            case BlockType.ENEMY:
+                // invokes an action based on the enemy prefab
                 break;
-            
+
             case BlockType.MODIFIER: 
+                // invokes an action based on the weapon prefab
                 break;
             
-            default: break;
+            case BlockType.NOTHING: break;
+            default:              break;
         }
     }
 
@@ -159,8 +161,28 @@ public class CodeBlock : Actor
 
         _isEmpty = false;
 
-        if (_allowedBlockType != BlockType.MODIFIER) 
-            _modifier = Modifier.DEFAULT;
+        if (_isGhostBlock) return;
+    
+        switch (_currBlockType) // prevents overlaps of diffent block types
+        {
+            case BlockType.WEAPON:
+                _enemyPrefab = null;
+                _modifier = Modifier.DEFAULT;
+                break;
+
+            case BlockType.ENEMY:
+                _weaponPrefab = null;
+                _modifier = Modifier.DEFAULT;
+                break;
+
+            case BlockType.MODIFIER:
+                _enemyPrefab = null;
+                _weaponPrefab = null;
+                break;
+
+            case BlockType.NOTHING: break;
+            default:              break;
+        }
     }
 
     protected override void Test()
@@ -168,7 +190,7 @@ public class CodeBlock : Actor
         if (Input.GetKeyDown(KeyCode.Space))
         {
             _isEmpty = true;
-            _currBlockType = BlockType.EMPTY;
+            _currBlockType = BlockType.NOTHING;
             UpdateBlockColor();
         }
     }
@@ -178,7 +200,7 @@ public class CodeBlock : Actor
 
 public enum BlockType
 {
-    EMPTY = 0,
+    NOTHING = 0,
     WEAPON = 1,
     ENEMY = 2,
     MODIFIER = 3
@@ -186,8 +208,8 @@ public enum BlockType
 
 public enum Modifier
 {
-    DEFAULT,
-    DAMAGE,
-    SPEED,
-    HEALTH  
+    DEFAULT = 0,
+    DAMAGE = 1,
+    SPEED = 2,
+    HEALTH = 3
 }
