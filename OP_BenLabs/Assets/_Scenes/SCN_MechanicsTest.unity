@@ -377,7 +377,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logger: {fileID: 0}
   _isDevMode: 0
-  _weaponsList: []
+  _weapons: []
 --- !u!1 &213964387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1199,6 +1199,7 @@ MonoBehaviour:
   _isDevMode: 0
   _pickUpSFX: {fileID: 0}
   _landOnFloorSFX: {fileID: 0}
+  _useGravity: 0
 --- !u!114 &741833407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1665,6 +1666,130 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1091858190 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4354186663210541505, guid: e3917859247616f4c882f8b11d959fc2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4354186663232833918}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1091858191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1091858190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f995a066d77e8543af6a7967e9ea318, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
+  _isShaking: 0
+  _trackingPoint: {fileID: 1150114998}
+  _threshold: 0.5
+  OnRecognized:
+    m_PersistentCalls:
+      m_Calls: []
+  debugCubePrefab: {fileID: 382873277949752906, guid: 0f21f97bd78119e4cacff2cfb018de67,
+    type: 3}
+  isCreationMode: 1
+  newGestureName: 
+--- !u!4 &1150114998 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4354186661895327271, guid: e3917859247616f4c882f8b11d959fc2,
+    type: 3}
+  m_PrefabInstance: {fileID: 4354186663232833918}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1297973949 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8940334870676840786, guid: 226b673fc6517e24db8eb932dccacc5e,
@@ -2663,7 +2788,7 @@ PrefabInstance:
     - target: {fileID: 4354186663210541497, guid: e3917859247616f4c882f8b11d959fc2,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.352
+      value: 0.918
       objectReference: {fileID: 0}
     - target: {fileID: 4354186663210541497, guid: e3917859247616f4c882f8b11d959fc2,
         type: 3}
