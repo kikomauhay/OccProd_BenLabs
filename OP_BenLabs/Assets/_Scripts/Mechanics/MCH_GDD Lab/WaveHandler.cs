@@ -1,11 +1,18 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.Utilities;
 
 public class WaveHandler : StaticInstance<WaveHandler>
 {
+    #region Propeties
+
+    public System.Action OnBlocksFilled { get; set; }
+    public ReadOnlyArray<CodeBlock> GhostBlocks => _ghostBlocks;
+
+    #endregion
     #region SerializeField
 
-    [SerializeField] private CodeBlock[] _codeBlocks;
+    [SerializeField] private CodeBlock[] _ghostBlocks;
 
     #endregion
     #region Private
@@ -16,45 +23,26 @@ public class WaveHandler : StaticInstance<WaveHandler>
 
     #region Unity
 
-
-    protected override void OnEnable()
-    {
-        IEnumerator CO_DelayedBinding()
-        {
-            yield return null;
-
-
-        }
-        
-        StartCoroutine(CO_DelayedBinding());
-    }
-    protected override void OnDisable()
-    {
-        
-    }
-    
     protected override void Start()
     {
-        Debug.Assert(_codeBlocks.Length != 9, "Missing elements in _codeBlocks!", gameObject);
+        Debug.Assert(_ghostBlocks.Length != 9, "Missing elements in _ghostBlocks!", gameObject);
         base.Start();
     }
 
     #endregion
-    #region Private
+    #region Public
 
-    private void StartWave()
+    public bool AllBlocksOccupied()
     {
-        IEnumerator CO_StartWave()
+        foreach (CodeBlock gb in _ghostBlocks)
         {
+            if (gb.IsEmpty) break;
 
-
-
-            yield break;
+            return true;
         }
-
-        StartCoroutine(CO_StartWave());
+        
+        return false;
     }
-
 
     #endregion
     #region Helpers
