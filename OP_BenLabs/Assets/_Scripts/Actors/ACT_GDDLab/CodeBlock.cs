@@ -26,6 +26,7 @@ public class CodeBlock : Actor
     #endregion
     #region Private
 
+    private System.Action _onBlockFilled; 
     private GDDManager _gddMgr;
 
     private MeshRenderer _rend;
@@ -38,6 +39,16 @@ public class CodeBlock : Actor
 
     #region Unity
 
+    protected override void OnEnable()
+    {
+        if (_isGhostBlock)
+            _onBlockFilled += WaveHandler.Instance.EVENT_CheckRemainingBlocks;
+    }
+    protected override void OnDisable()
+    {
+        if (_isGhostBlock)
+            _onBlockFilled -= WaveHandler.Instance.EVENT_CheckRemainingBlocks;
+    }
     protected override void Start()
     {
         base.Start();
@@ -82,6 +93,8 @@ public class CodeBlock : Actor
 
         _currBlockType = cb.BlockType;
         _isEmpty = false;
+        _gddMgr.RemoveBlock(cb);
+        _onBlockFilled?.Invoke();
 
         // add poof sfx
         UpdateBlockColor();
@@ -141,7 +154,7 @@ public class CodeBlock : Actor
                 break;
 
             case BlockType.MODIFIER: 
-                // invokes an action based on the weapon prefab
+                // invokes an action based on the given modifier
                 break;
             
             case BlockType.NOTHING: break;
@@ -212,16 +225,16 @@ public class CodeBlock : Actor
 
 public enum BlockType
 {
-    NOTHING = 0,
-    WEAPON = 1,
-    ENEMY = 2,
-    MODIFIER = 3
+    NOTHING = -1,
+    WEAPON = 0,
+    MODIFIER = 2,
+    ENEMY = 3
 }
 
 public enum Modifier
 {
     DEFAULT = 0,
-    DAMAGE = 1,
-    SPEED = 2,
-    HEALTH = 3
+    HEALTH = 1,
+    DAMAGE = 2,
+    REDUCED_ENEMIES = 3
 }

@@ -1,27 +1,18 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem.Utilities;
 
 public class WaveHandler : StaticInstance<WaveHandler>
 {
-    #region Propeties
+    #region Members
 
     public System.Action OnBlocksFilled { get; set; }
-    public ReadOnlyArray<CodeBlock> GhostBlocks => _ghostBlocks;
-
-    #endregion
-    #region SerializeField
+    public CodeBlock[] GhostBlocks => _ghostBlocks;
 
     [SerializeField] private CodeBlock[] _ghostBlocks;
 
     #endregion
-    #region Private
 
-    private GDDManager _gddMgr;
-
-    #endregion
-
-    #region Unity
+    #region Methods
 
     protected override void Start()
     {
@@ -29,28 +20,21 @@ public class WaveHandler : StaticInstance<WaveHandler>
         base.Start();
     }
 
-    #endregion
-    #region Public
-
-    public bool AllBlocksOccupied()
+    public void EVENT_CheckRemainingBlocks()
     {
         foreach (CodeBlock gb in _ghostBlocks)
         {
-            if (gb.IsEmpty) break;
+            if (gb.IsEmpty) 
+            {
+                if (_isDevMode)
+                    _logger.Log("Not every block is filled!");
 
-            return true;
+                return;
+            }
         }
-        
-        return false;
+
+        OnBlocksFilled?.Invoke();
     }
 
-    #endregion
-    #region Helpers
-
-    protected override void InitVariables()
-    {
-        _gddMgr = GDDManager.Instance;
-    }
-        
     #endregion
 }

@@ -9,7 +9,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #region Properties
 
     public Logger Logger => _logger;
-    public int WaveIndex => (int)_waveIndex;
+    public int WaveIndex => _waveIndex;
 
     #endregion
     #region SerializeField
@@ -18,16 +18,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private BoxCollider _collider;
     [SerializeField] private Transform _spawnArea; // must be Vec3.zero so the child GOs will have normal scale
     [SerializeField] private Transform _testGoal; // will remove one the GDD game is more structured
-    [SerializeField] private WaveData[] _waves;
 
     [Header("Wave Panel")]
     [SerializeField] private WaveHandler _waveHandler;
-    [SerializeField] private List<CodeBlock> _codeBlockList;
+    [SerializeField] private List<CodeBlock> _availableBlocksList;
 
     [Header("Trace Mechanic")]
     [SerializeField] private GameObject _drawingCanvas;
-    [SerializeField] private GameObject[] _weaponImage;     //[0]-Sword, [1]-Hammer
-    [SerializeField] private WeaponSpawner _weaponSpawner;
+    [SerializeField] private GameObject _swordImage, _hammerImage;
+    [SerializeField, Space(10f)] private WeaponSpawner _weaponSpawner;
     [SerializeField] private string _preferredWeapon;
 
     [Space(10f), SerializeField] private GameObject _testEnemy;
@@ -44,7 +43,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private OnboardingHandler _onbHandlr;
     private SoundEmitter _soundEmitter;
 
-    private const float GRACE_PERIOD = 2.5f;
+    private const float GRACE_PERIOD = 5f;
     private const float SPAWN_INTERVAL = 0.5f;
 
     private readonly float[] _prepTimes = new float[3] { 15f, 10f, 7f };
@@ -53,7 +52,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private List<GameObject> _enemyList;
     private WaveState _waveState;
-    private uint _killCount, _waveIndex;
+    private int _killCount, _waveIndex;
     private float _currHP;
 
     #endregion
@@ -66,8 +65,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     protected override void Start()
     {
-        Debug.Assert(_codeBlockList.Count != 11, "Missing elements in _codeBlockList!", gameObject);
-        Debug.Assert(_waves.Length != 0, "Missing _waves elements!", gameObject);
+        Debug.Assert(_availableBlocksList.Count != 11, "Missing elements in _codeBlockList!", gameObject);
         Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
 
@@ -130,16 +128,19 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _enemyList.Add(e.gameObject);
         }
 
-        GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
+        GameObject enemy = _blockGridList[_waveIndex][(int)BlockType.ENEMY].EnemyPrefab;
 
-        SetUpEnemy(newEnemy.GetComponent<Enemy>());
+        // GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
+        // GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
+
+        // SetUpEnemy(newEnemy.GetComponent<Enemy>());
+        SetUpEnemy(enemy.GetComponent<Enemy>());
 
         if (_isDevMode)
             _logger.Log("Spawned new enemy!");
     }
 
-    public void RemoveBlock(CodeBlock b) => _codeBlockList.Remove(b);
+    public void RemoveBlock(CodeBlock cb) => _availableBlocksList.Remove(cb);
     public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
     public void UnbindEvents(Enemy e)
     {
@@ -174,7 +175,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveIndex++;
             UI_UpdateWaveIndex();
 
-            if (_waveIndex < _waves.Length)
+            if (_waveIndex < 2)
             {
                 StartCoroutine(CO_SpawnEnemyWave());
 
@@ -198,7 +199,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             UI_UpdatePlayerLife();
         }
     }
-
     private void EVENT_StartWave() => StartCoroutine(CO_SpawnEnemyWave());
 
     private void UI_UpdateWaveIndex()
@@ -270,24 +270,49 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #region Enumerators    
 
     private IEnumerator CO_SpawnEnemyWave()
-    {
-        // WaveData wave = _waves[_waveIndex];
-        
-        void DoPrearation() // prep time for the player to "draw" a weapon
+    {        
+        Modifier modifier = Modifier.DEFAULT;
+
+        void DoPreparation() // prep time for the player to "draw" a weapon
         {
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
 
-            /* To spawn the image
-             * if(_preferredWeapon == "Sword")
-             *  {
-             *     _weaponImg[0].SetActive(True)
-             *  }
-             *  else
-             *  {
-             *     _weaponImg[1].SetActive(True)
-             *  }
-             */
+            // assigns the string variable and enables the correct weapon panel
+            if (_blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent == "Sword")
+            {
+                _swordImage.SetActive(true);
+            }
+            else if (_blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent == "Hammer")
+            {
+                _hammerImage.SetActive(true);
+            }
+            _preferredWeapon = _blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
+
+            switch (_blockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier)
+            {
+                case Modifier.HEALTH: 
+                    if (_isDevMode) 
+                        _logger.Log("Increased HP!", TextColor.GREEN);
+                    
+                    break;                
+                
+                case Modifier.DAMAGE:
+                    if (_isDevMode) 
+                        _logger.Log("Increased damage!", TextColor.GREEN);
+                    
+                    break;                
+                
+                case Modifier.REDUCED_ENEMIES: 
+                    if (_isDevMode) 
+                        _logger.Log("reduced enemies!", TextColor.GREEN);
+                    
+                    break;                
+                
+                case Modifier.DEFAULT: break;                
+                default:               break;
+            }
+            modifier = _blockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
 
             if (_isDevMode)
             {
@@ -319,7 +344,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             yield break;
         }
 
-        DoPrearation();
+        DoPreparation();
         yield return new WaitForSeconds(GRACE_PERIOD);
 
         if (_isDevMode)
