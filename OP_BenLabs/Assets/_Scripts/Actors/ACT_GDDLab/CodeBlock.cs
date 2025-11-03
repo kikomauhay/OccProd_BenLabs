@@ -12,6 +12,8 @@ public class CodeBlock : Actor
     public Modifier Modifier => _modifier;
     public string WeaponContent => _weaponContent;
 
+    public static int FilledBlocks { get; private set; }
+
     #endregion
     #region SerializeField
 
@@ -94,14 +96,17 @@ public class CodeBlock : Actor
         _currBlockType = cb.BlockType;
         _isEmpty = false;
         _gddMgr.RemoveBlock(cb);
-        _onBlockFilled?.Invoke();
+        FilledBlocks++;
 
         // add poof sfx
         UpdateBlockColor();
         Destroy(cb.gameObject);
 
         if (_isDevMode)
+        {
             _logger.Log($"{this} is now occupied with type: {_currBlockType}!", TextColor.YELLOW);
+            _logger.Log($"{this} has {FilledBlocks} filled blocks!", TextColor.GREEN);
+        }
     }
     private void OnDestroy()
     {
@@ -137,32 +142,6 @@ public class CodeBlock : Actor
     }
 
     #endregion
-    #region Public
-
-    public void DoAction()
-    {
-        if (_isGhostBlock) return;
-
-        switch (_currBlockType)
-        {
-            case BlockType.WEAPON:
-                // invokes an action based on the weapon prefab
-                break;
-
-            case BlockType.ENEMY:
-                // invokes an action based on the enemy prefab
-                break;
-
-            case BlockType.MODIFIER: 
-                // invokes an action based on the given modifier
-                break;
-            
-            case BlockType.NOTHING: break;
-            default:              break;
-        }
-    }
-
-    #endregion
     #region Helpers
 
     protected override void InitComponents()
@@ -174,6 +153,7 @@ public class CodeBlock : Actor
     protected override void InitVariables()
     {
         _gddMgr = GDDManager.Instance;
+        FilledBlocks = 0;
 
         _rend.enabled = true;
         
@@ -186,8 +166,12 @@ public class CodeBlock : Actor
 
         _isEmpty = false;
 
-        if (_isGhostBlock) return;
-    
+        if (_isGhostBlock)
+        {
+            _currBlockType = BlockType.NOTHING;
+            return;
+        }
+
         switch (_currBlockType) // prevents overlaps of diffent block types
         {
             case BlockType.WEAPON:
@@ -206,7 +190,7 @@ public class CodeBlock : Actor
                 break;
 
             case BlockType.NOTHING: break;
-            default:                break;
+            default: break;
         }
     }
 
@@ -227,8 +211,8 @@ public enum BlockType
 {
     NOTHING = -1,
     WEAPON = 0,
-    MODIFIER = 2,
-    ENEMY = 3
+    MODIFIER = 1,
+    ENEMY = 2
 }
 
 public enum Modifier
