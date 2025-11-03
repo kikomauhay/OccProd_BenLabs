@@ -1,5 +1,4 @@
 using UnityEngine;
-using System;
 
 [RequireComponent(typeof(Rigidbody), typeof(BoxCollider), typeof(MeshRenderer))]
 public class CodeBlock : Actor
@@ -8,6 +7,10 @@ public class CodeBlock : Actor
 
     public bool IsEmpty => _isEmpty;
     public BlockType BlockType => _currBlockType;
+
+    public GameObject EnemyPrefab => _enemyPrefab;
+    public Modifier Modifier => _modifier;
+    public string WeaponContent => _weaponContent;
 
     #endregion
     #region SerializeField
@@ -18,10 +21,12 @@ public class CodeBlock : Actor
 
     [Header("Block Content")]
     [SerializeField] private Modifier _modifier;
-    [SerializeField] private GameObject _enemyPrefab, _weaponPrefab;
-
+    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private string _weaponContent;
     #endregion
     #region Private
+
+    private GDDManager _gddMgr;
 
     private MeshRenderer _rend;
     private BoxCollider _boxCol;
@@ -40,50 +45,55 @@ public class CodeBlock : Actor
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<CodeBlock>()) // normal block -> ghost block
+        // normal block -> ghost block
+        if (!other.GetComponent<CodeBlock>()) return;
+
+        if (!_isGhostBlock)
         {
-            if (!_isGhostBlock)
-            {
-                if (_isDevMode)
-                    _logger.Log($"{this} isn't a ghost block!", gameObject, TextColor.RED);
-
-                return;
-            }
-            if (_isEmpty)
-            {
-                if (_isDevMode)
-                    _logger.Log($"{this} is alraedy occupied!", gameObject, TextColor.RED);
-
-                return;
-            }
-
-            CodeBlock cb = other.GetComponent<CodeBlock>();
-
-            if (cb.IsEmpty)
-            {
-                if (_isDevMode)
-                    _logger.Log($"{cb.name} is empty!", TextColor.RED);
-
-                return;
-            }
-            if (cb.BlockType != _allowedBlockType)
-            {
-                if (_isDevMode)
-                    _logger.Log($"{cb.name} isn't the same type!", TextColor.RED);
-
-                return;
-            }
-
-            _currBlockType = cb.BlockType;
-            _isEmpty = false;
-
-            // add poof sfx
-            UpdateBlockColor();
-            Destroy(cb.gameObject);
-
             if (_isDevMode)
-                _logger.Log($"{this} is now occupied with type: {_currBlockType}!", TextColor.YELLOW);
+                _logger.Log($"{this} isn't a ghost block!", gameObject, TextColor.RED);
+
+            return;
         }
+        if (_isEmpty)
+        {
+            if (_isDevMode)
+                _logger.Log($"{this} is alraedy occupied!", gameObject, TextColor.RED);
+
+            return;
+        }
+
+        CodeBlock cb = other.GetComponent<CodeBlock>();
+
+        if (cb.IsEmpty)
+        {
+            if (_isDevMode)
+                _logger.Log($"{cb.name} is empty!", TextColor.RED);
+
+            return;
+        }
+        if (cb.BlockType != _allowedBlockType)
+        {
+            if (_isDevMode)
+                _logger.Log($"{cb.name} isn't the same type!", TextColor.RED);
+
+            return;
+        }
+
+        _currBlockType = cb.BlockType;
+        _isEmpty = false;
+
+        // add poof sfx
+        UpdateBlockColor();
+        Destroy(cb.gameObject);
+
+        if (_isDevMode)
+            _logger.Log($"{this} is now occupied with type: {_currBlockType}!", TextColor.YELLOW);
+    }
+    private void OnDestroy()
+    {
+        if (!_isGhostBlock)
+            _gddMgr.RemoveBlock(this);
     }
 
     #endregion
@@ -150,6 +160,8 @@ public class CodeBlock : Actor
     }
     protected override void InitVariables()
     {
+        _gddMgr = GDDManager.Instance;
+
         _rend.enabled = true;
         
         _boxCol.enabled = true;
@@ -171,17 +183,17 @@ public class CodeBlock : Actor
                 break;
 
             case BlockType.ENEMY:
-                _weaponPrefab = null;
+                _weaponContent = string.Empty;
                 _modifier = Modifier.DEFAULT;
                 break;
 
             case BlockType.MODIFIER:
                 _enemyPrefab = null;
-                _weaponPrefab = null;
+                _weaponContent = string.Empty;
                 break;
 
             case BlockType.NOTHING: break;
-            default:              break;
+            default:                break;
         }
     }
 

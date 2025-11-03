@@ -9,7 +9,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #region Properties
 
     public Logger Logger => _logger;
-
     public int WaveIndex => (int)_waveIndex;
 
     #endregion
@@ -20,6 +19,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private Transform _spawnArea; // must be Vec3.zero so the child GOs will have normal scale
     [SerializeField] private Transform _testGoal; // will remove one the GDD game is more structured
     [SerializeField] private WaveData[] _waves;
+
+    [Header("Wave Panel")]
+    [SerializeField] private WaveHandler _waveHandler;
+    [SerializeField] private List<CodeBlock> _codeBlockList;
 
     [Header("Trace Mechanic")]
     [SerializeField] private GameObject _drawingCanvas;
@@ -44,6 +47,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private const float GRACE_PERIOD = 2.5f;
     private const float SPAWN_INTERVAL = 0.5f;
 
+    private readonly float[] _prepTimes = new float[3] { 15f, 10f, 7f };
+    private readonly int[] _enemiesToSpawn = new int[3] { 8, 16, 20 };
+    private List<List<CodeBlock>> _blockGridList;
+
     private List<GameObject> _enemyList;
     private WaveState _waveState;
     private uint _killCount, _waveIndex;
@@ -53,13 +60,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     #region Unity
 
+    protected override void OnDisable()
+    {
+        _waveHandler.OnBlocksFilled -= EVENT_StartWave;
+    }
     protected override void Start()
     {
+        Debug.Assert(_codeBlockList.Count != 11, "Missing elements in _codeBlockList!", gameObject);
         Debug.Assert(_waves.Length != 0, "Missing _waves elements!", gameObject);
         Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
 
         base.Start();
+
+        _waveHandler.OnBlocksFilled += EVENT_StartWave;
     }
 
     #endregion
@@ -73,7 +87,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public void INT_BTN_StartGame()
     {
         StartCoroutine(_gameMgr.CO_Enter(FloorType.GDD));
-        StartCoroutine(CO_SpawnEnemyWave());
 
         if (_isDevMode)
             _logger.Log("Game start!", TextColor.YELLOW);
@@ -126,6 +139,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _logger.Log("Spawned new enemy!");
     }
 
+    public void RemoveBlock(CodeBlock b) => _codeBlockList.Remove(b);
     public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
     public void UnbindEvents(Enemy e)
     {
@@ -185,6 +199,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
     }
 
+    private void EVENT_StartWave() => StartCoroutine(CO_SpawnEnemyWave());
+
     private void UI_UpdateWaveIndex()
     {
         IEnumerator CO_ClearWaveTxt()
@@ -219,6 +235,21 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _killCount = 0;
         _waveIndex = 0;
         _currHP = 0f;
+
+        _blockGridList = new List<List<CodeBlock>>()
+        {
+            new List<CodeBlock> { _waveHandler.GhostBlocks[0], 
+                                  _waveHandler.GhostBlocks[1], 
+                                  _waveHandler.GhostBlocks[2] },
+            
+            new List<CodeBlock> { _waveHandler.GhostBlocks[3], 
+                                  _waveHandler.GhostBlocks[4], 
+                                  _waveHandler.GhostBlocks[5] },
+            
+            new List<CodeBlock> { _waveHandler.GhostBlocks[6], 
+                                  _waveHandler.GhostBlocks[7], 
+                                  _waveHandler.GhostBlocks[8] }
+        };
     }
 
     protected override void Test()
@@ -240,11 +271,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private IEnumerator CO_SpawnEnemyWave()
     {
-        WaveData wave = _waves[_waveIndex];
-        float gracePeriod = _isDevMode ? GRACE_PERIOD : wave.GracePeriod;
-
+        // WaveData wave = _waves[_waveIndex];
+        
         void DoPrearation() // prep time for the player to "draw" a weapon
         {
+            _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
 
             /* To spawn the image
@@ -260,7 +291,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             if (_isDevMode)
             {
-                _logger.Log($"{gracePeriod}s before enemy spawning!", TextColor.YELLOW);
+                _logger.Log($"{GRACE_PERIOD}s before enemy spawning!", TextColor.YELLOW);
                 _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW);
             }
         }
@@ -269,7 +300,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
 
-            for (int i = 0; i < wave.UnitCount; i++)
+            for (int i = 0; i < _enemiesToSpawn[_waveIndex]; i++)
             {
                 SpawnEnemy();
                 yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
@@ -289,7 +320,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         DoPrearation();
-        yield return new WaitForSeconds(gracePeriod);
+        yield return new WaitForSeconds(GRACE_PERIOD);
 
         if (_isDevMode)
             _logger.Log($"{_gameMgr.Player} can no longer draw!", TextColor.YELLOW);
