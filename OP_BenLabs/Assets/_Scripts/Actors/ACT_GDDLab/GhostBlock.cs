@@ -9,76 +9,109 @@ public class GhostBlock : Actor
 
     public static int FilledBlocks { get; private set; }
 
-    public GameObject EnemyPrefab { get; set; }
-    public Modifier Modifier { get; set; }
-    public string WeaponContent { get; set; }
-
+    public Modifier Modifier => _modifier;
+    public GameObject EnemyPrefab => _enemyPrefab;
+    public string WeaponContent => _weaponContent;
 
     #endregion
-    #region Members
+    #region SerializeField
+
+    [Header("Block Stats")]
+    [SerializeField] private BlockType _allowedBlockType;
+
+    [Header("Block Content"), Tooltip("Serialized for testing")]
+    [SerializeField] private Modifier _modifier;
+    [SerializeField] private GameObject _enemyPrefab;
+    [SerializeField] private string _weaponContent;
+
+    #endregion
+    #region Private
+
+    private MeshRenderer _rend;
+    private BoxCollider _boxCol;
+
+    private bool _isEmpty;
+        
+    #endregion
+
+    #region Unity
 
     private void OnTriggerEnter(Collider other)
     {
-        void PassBlockInfo(GhostBlock cb)
+        void LogError(string message)
+        {
+            if (_isDevMode)
+                _logger.Log(message, TextColor.RED);
+        }
+        void PassBlockInfo(CodeBlock cb)
         {
             switch (cb.CurrentBlockType)
             {
                 case BlockType.WEAPON:
                     _weaponContent = cb.WeaponContent;
+                    _rend.material.color = Color.blue;
+
                     break;
 
                 case BlockType.MODIFIER:
                     _modifier = cb.Modifier;
+                    _rend.material.color = Color.yellow;
+
                     break;
 
                 case BlockType.ENEMY:
                     _enemyPrefab = cb.EnemyPrefab;
+                    _rend.material.color = Color.red;
                     break;
 
                 case BlockType.NOTHING: break;
                 default:                break;
             }
 
-            IsEmpty = false;
-            _currBlockType = cb.CurrentBlockType;
-            _gddMgr.RemoveBlock(cb);
-
+            _isEmpty = false;
             FilledBlocks++;
+            
+            GDDManager.Instance.RemoveBlock(cb);
             WaveHandler.Instance.CheckRemainingBlocks();
-            UpdateBlockColor();
         }
 
-        if (other.GetComponent<GhostBlock>())
+        if (other.GetComponent<CodeBlock>())
         {
-            GhostBlock codeBlock = other.GetComponent<GhostBlock>();
+            CodeBlock codeBlock = other.GetComponent<CodeBlock>();
 
             if (_allowedBlockType != codeBlock.CurrentBlockType)
             {
-                if (_isDevMode)
-                    _logger.Log("BlockType mismatch!", TextColor.RED);
-
+                LogError("BlockType mismatch!");
                 return;
             }
-            if (!IsEmpty)
+            if (!_isEmpty)
             {
-                if (_isDevMode)
-                    _logger.Log($"{this} is alrady occupied!", TextColor.RED);
-
+                LogError($"{this} is already occupied!");
                 return;
             }
 
-            if (!codeBlock.IsGhostBlock && IsEmpty)
-            {
-                PassBlockInfo(codeBlock);
-                Destroy(codeBlock.gameObject); // add poof sfx before destorying 
+            PassBlockInfo(codeBlock);
+            Destroy(codeBlock.gameObject); // add poof sfx before destorying 
 
-                if (_isDevMode)
-                {
-                    _logger.Log($"{name} is now occupied with type: {_currBlockType}!", TextColor.YELLOW);
-                    _logger.Log($"{name} has {FilledBlocks} filled blocks!", TextColor.GREEN);
-                }           
+            if (_isDevMode)
+            {
+                _logger.Log($"{name} is now occupied with type: {codeBlock.CurrentBlockType}!", TextColor.YELLOW);
+                _logger.Log($"Filled blocks: {FilledBlocks}");
             }
         }          
+    }
+
+    #endregion
+    #region Helpers
+    
+    protected override void InitComponents()
+    {
+        _boxCol = GetComponent<BoxCollider>();
+        _rend = GetComponent<MeshRenderer>();
+    }
+    protected override void InitVariables()
+    {
+        _isEmpty = true;
     }
         
     #endregion 

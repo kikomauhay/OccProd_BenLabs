@@ -48,7 +48,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private readonly float[] _prepTimes = new float[3] { 15f, 10f, 7f };
     private readonly int[] _enemiesToSpawn = new int[3] { 8, 16, 20 };
-    private List<List<CodeBlock>> _blockGridList;
+    private List<List<GhostBlock>> _ghostBlockGridList;
 
     private List<GameObject> _enemyList;
     private WaveState _waveState;
@@ -130,7 +130,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         // GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        GameObject enemy = _blockGridList[_waveIndex][(int)BlockType.ENEMY].EnemyPrefab;
+        GameObject enemy = _ghostBlockGridList[_waveIndex][(int)BlockType.ENEMY].EnemyPrefab;
         GameObject newEnemy = Instantiate(enemy, RandomPositionInBox(), Quaternion.identity, _spawnArea);
 
         // SetUpEnemy(newEnemy.GetComponent<Enemy>());
@@ -236,17 +236,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _waveIndex = 0;
         _currHP = 0f;
 
-        _blockGridList = new List<List<CodeBlock>>()
+        _ghostBlockGridList = new List<List<GhostBlock>>()
         {
-            new List<CodeBlock> { _waveHandler.GhostBlocks[0], 
+            new List<GhostBlock> { _waveHandler.GhostBlocks[0], 
                                   _waveHandler.GhostBlocks[1], 
                                   _waveHandler.GhostBlocks[2] },
             
-            new List<CodeBlock> { _waveHandler.GhostBlocks[3], 
+            new List<GhostBlock> { _waveHandler.GhostBlocks[3], 
                                   _waveHandler.GhostBlocks[4], 
                                   _waveHandler.GhostBlocks[5] },
             
-            new List<CodeBlock> { _waveHandler.GhostBlocks[6], 
+            new List<GhostBlock> { _waveHandler.GhostBlocks[6], 
                                   _waveHandler.GhostBlocks[7], 
                                   _waveHandler.GhostBlocks[8] }
         };
@@ -281,8 +281,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _drawingCanvas.SetActive(true);
 
             // variable assignment
-            _preferredWeapon = _blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
-            modifier =         _blockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
+            _preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
+            modifier =         _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
 
             if      (_preferredWeapon == "Sword")  _swordImage.SetActive(true);
             else if (_preferredWeapon == "Hammer") _hammerImage.SetActive(true);

@@ -1,18 +1,14 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider), typeof(MeshRenderer))]
+[RequireComponent(typeof(BoxCollider), typeof(MeshRenderer), typeof(Rigidbody))]
 public class CodeBlock : Actor
 {
     #region Properties
 
-    public System.Action OnBlockFilled { get; set; }
-    public bool IsEmpty => _isEmpty;
-    public BlockType CurrentBlockType { get; set; }
-
-    public GameObject EnemyPrefab { get; set; }
-    public Modifier Modifier { get; set; }
-    public string WeaponContent { get; set; }
-
+    public BlockType CurrentBlockType => _currBlockType;
+    public Modifier Modifier => _modifier;
+    public GameObject EnemyPrefab => _enemyPrefab;
+    public string WeaponContent => _weaponContent;
 
     #endregion
     #region SerializeField
@@ -28,8 +24,6 @@ public class CodeBlock : Actor
     #endregion
     #region Private
 
-    private GDDManager _gddMgr;
-
     private MeshRenderer _rend;
     private BoxCollider _boxCol;
     private Rigidbody _rb;
@@ -41,82 +35,7 @@ public class CodeBlock : Actor
     protected override void Start()
     {
         base.Start();
-        UpdateBlockColor();
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        void PassBlockInfo(GhostBlock cb)
-        {
-            switch (cb.CurrentBlockType)
-            {
-                case BlockType.WEAPON:
-                    _weaponContent = cb.WeaponContent;
-                    break;
-
-                case BlockType.MODIFIER:
-                    _modifier = cb.Modifier;
-                    break;
-
-                case BlockType.ENEMY:
-                    _enemyPrefab = cb.EnemyPrefab;
-                    break;
-
-                case BlockType.NOTHING: break;
-                default:                break;
-            }
-
-            IsEmpty = false;
-            _currBlockType = cb.CurrentBlockType;
-            _gddMgr.RemoveBlock(cb);
-
-            FilledBlocks++;
-            WaveHandler.Instance.CheckRemainingBlocks();
-            UpdateBlockColor();
-        }
-
-        if (other.GetComponent<GhostBlock>())
-        {
-            GhostBlock codeBlock = other.GetComponent<GhostBlock>();
-
-            if (_allowedBlockType != codeBlock.CurrentBlockType)
-            {
-                if (_isDevMode)
-                    _logger.Log("BlockType mismatch!", TextColor.RED);
-
-                return;
-            }
-            if (!IsEmpty)
-            {
-                if (_isDevMode)
-                    _logger.Log($"{this} is alrady occupied!", TextColor.RED);
-
-                return;
-            }
-
-            if (!codeBlock.IsGhostBlock && IsEmpty)
-            {
-                PassBlockInfo(codeBlock);
-                Destroy(codeBlock.gameObject); // add poof sfx before destorying 
-
-                if (_isDevMode)
-                {
-                    _logger.Log($"{name} is now occupied with type: {_currBlockType}!", TextColor.YELLOW);
-                    _logger.Log($"{name} has {FilledBlocks} filled blocks!", TextColor.GREEN);
-                }           
-            }
-        }          
-    }
-    private void OnDestroy()
-    {
-        if (!_isGhostBlock)
-            _gddMgr.RemoveBlock(this);
-    }
-
-    #endregion
-    #region Public
-
-    public void UpdateBlockColor()
-    {
+        
         switch (_currBlockType)
         {
             case BlockType.WEAPON:
@@ -141,33 +60,19 @@ public class CodeBlock : Actor
 
     protected override void InitComponents()
     {
-        _rend = GetComponent<MeshRenderer>();
         _boxCol = GetComponent<BoxCollider>();
-
-        _rb = _isGhostBlock ? null : GetComponent<Rigidbody>();
+        _rend = GetComponent<MeshRenderer>();
+        _rb = GetComponent<Rigidbody>();
     }
     protected override void InitVariables()
-    {
-        _gddMgr = GDDManager.Instance;
-        
+    {        
         _rend.enabled = true;
         _boxCol.enabled = true;
         _boxCol.isTrigger = true;
-        
-        FilledBlocks = 0;
-        IsEmpty = true;
 
-        if (_isGhostBlock)
-        {
-            _currBlockType = BlockType.NOTHING;
-            return;
-        }
-        else
-        {
-            _rb.angularDrag = 0f;
-            _rb.useGravity = false;
-            _rb.isKinematic = true;
-        }
+        _rb.angularDrag = 0f;
+        _rb.useGravity = false;
+        _rb.isKinematic = true;
 
         switch (_currBlockType) // prevents overlaps of diffent block types
         {
@@ -195,9 +100,27 @@ public class CodeBlock : Actor
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            IsEmpty = true;
             _currBlockType = BlockType.NOTHING;
-            UpdateBlockColor();
+            
+            switch (_currBlockType)
+            {
+                case BlockType.WEAPON:
+                    _rend.material.color = Color.blue;
+                    break;
+
+                case BlockType.ENEMY:
+                    _rend.material.color = Color.red;
+                    break;
+
+                case BlockType.MODIFIER:
+                    _rend.material.color = Color.yellow;
+                    break;
+
+                case BlockType.NOTHING: break;
+                default:                break;
+            }
+
+            _logger.Log($"{this} has been reset!", TextColor.YELLOW);
         }
     }
 
