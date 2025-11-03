@@ -43,7 +43,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private OnboardingHandler _onbHandlr;
     private SoundEmitter _soundEmitter;
 
-    private const float GRACE_PERIOD = 5f;
+    private const float GRACE_PERIOD = 15f;
     private const float SPAWN_INTERVAL = 0.5f;
 
     private readonly float[] _prepTimes = new float[3] { 15f, 10f, 7f };
@@ -65,7 +65,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     protected override void Start()
     {
-        Debug.Assert(_availableBlocksList.Count != 11, "Missing elements in _codeBlockList!", gameObject);
+        Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", gameObject);
         Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
 
