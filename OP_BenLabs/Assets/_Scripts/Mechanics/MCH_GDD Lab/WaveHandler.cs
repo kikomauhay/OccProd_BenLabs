@@ -6,8 +6,8 @@ public class WaveHandler : StaticInstance<WaveHandler>
     #region Members
 
     public System.Action OnAllBlocksFilled { get; set; }
-    public CodeBlock[] GhostBlocks => _ghostBlocks;
-    [SerializeField] private CodeBlock[] _ghostBlocks;
+    public GhostBlock[] GhostBlocks => _ghostBlocks;
+    [SerializeField] private GhostBlock[] _ghostBlocks;
 
     #endregion
 
@@ -21,7 +21,7 @@ public class WaveHandler : StaticInstance<WaveHandler>
 
     public void CheckRemainingBlocks()
     {
-        if (CodeBlock.FilledBlocks == 9)
+        if (GhostBlock.FilledBlocks == 9)
             OnAllBlocksFilled?.Invoke();
     }
 

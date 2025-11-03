@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1777638588818714785}
   - component: {fileID: 2327457806360795067}
   - component: {fileID: 6930636439716882430}
-  - component: {fileID: 1777638588818714788}
+  - component: {fileID: 8209770387907007306}
   m_Layer: 0
   m_Name: PRF_GhostBlock
   m_TagString: Untagged
@@ -210,7 +210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enableGizmos: 0
   _maxDistance: 2
---- !u!114 &1777638588818714788
+--- !u!114 &8209770387907007306
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,13 +219,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1777638588818714815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4db720bb5b728c740844998f9d6c0d22, type: 3}
+  m_Script: {fileID: 11500000, guid: d61c726db1b65404e889ee1c106f176b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _logger: {fileID: 0}
   _isDevMode: 0
-  _isGhostBlock: 1
-  _currBlockType: -1
   _allowedBlockType: 0
   _modifier: 0
   _enemyPrefab: {fileID: 0}
