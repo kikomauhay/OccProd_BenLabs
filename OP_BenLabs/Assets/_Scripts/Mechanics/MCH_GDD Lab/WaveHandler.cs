@@ -5,9 +5,8 @@ public class WaveHandler : StaticInstance<WaveHandler>
 {
     #region Members
 
-    public System.Action OnBlocksFilled { get; set; }
+    public System.Action OnAllBlocksFilled { get; set; }
     public CodeBlock[] GhostBlocks => _ghostBlocks;
-
     [SerializeField] private CodeBlock[] _ghostBlocks;
 
     #endregion
@@ -16,14 +15,14 @@ public class WaveHandler : StaticInstance<WaveHandler>
 
     protected override void Start()
     {
-        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", gameObject);
+        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", gameObject);    
         base.Start();
     }
 
-    public void EVENT_CheckRemainingBlocks()
+    public void CheckRemainingBlocks()
     {
-        if (CodeBlocks.FilledBlocks == 9)
-            OnBlocksFilled?.Invoke();
+        if (CodeBlock.FilledBlocks == 9)
+            OnAllBlocksFilled?.Invoke();
     }
 
     #endregion

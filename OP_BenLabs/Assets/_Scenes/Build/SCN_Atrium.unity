@@ -4907,6 +4907,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3951194651914781736, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651914781740, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194651914781741, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
@@ -4914,8 +4924,28 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194651914781741, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651914781741, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651914781750, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651942049007, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651942049009, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3951194651942049012, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -4924,14 +4954,34 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194651942049012, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651942049012, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194651942049013, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652022337153, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652022337178, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194652022337178, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194652022337178, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _currBlockType
@@ -4942,6 +4992,21 @@ PrefabInstance:
       propertyPath: _allowedBlockType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3951194652022337179, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652022337183, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652061865481, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194652061865484, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
@@ -4949,7 +5014,22 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194652061865484, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652061865484, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652061865485, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652061865495, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652282099914, guid: a8a2fe0535ced9b438f25626b6a0defd,
@@ -4969,6 +5049,16 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194652282099918, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652282099918, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652282099918, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
       objectReference: {fileID: 0}
@@ -4984,8 +5074,33 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194652346862839, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652346862839, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652346862839, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _weaponContent
+      value: Hammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652346862839, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652454891493, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652454891515, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652454891518, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -4994,7 +5109,17 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194652454891518, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652454891518, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652454891519, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652720736600, guid: a8a2fe0535ced9b438f25626b6a0defd,
@@ -5014,14 +5139,39 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194652720736604, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652720736604, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652720736604, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _weaponContent
+      value: Hammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652720736604, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652823215337, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652823215346, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194652823215346, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194652823215346, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _currBlockType
@@ -5032,6 +5182,16 @@ PrefabInstance:
       propertyPath: _allowedBlockType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3951194652823215347, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652823215351, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194652842559058, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
@@ -5039,14 +5199,39 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194652842559058, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652842559058, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652927542374, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652927542392, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194652927542396, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652927542397, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194652927542397, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194652927542397, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _allowedBlockType
@@ -5057,6 +5242,21 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194653021392898, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653021392898, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653021392898, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _weaponContent
+      value: Sword
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194653021392898, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _allowedBlockType
@@ -5077,6 +5277,16 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194653273123537, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653273123537, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194653273123537, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _allowedBlockType
@@ -5099,6 +5309,16 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194653305703827, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653305703827, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653305703827, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
       objectReference: {fileID: 0}
@@ -5119,6 +5339,11 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194653362538828, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653362538828, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
       objectReference: {fileID: 0}
@@ -5129,24 +5354,59 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194653413896632, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653413896632, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653509326661, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653509326683, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3951194653509326686, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194653509326686, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194653509326686, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _allowedBlockType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653509326687, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194653574519712, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3951194653574519712, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653574519712, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951194653574519712, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _allowedBlockType
@@ -5169,6 +5429,11 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 3951194653974450690, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653974450690, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _currBlockType
       value: -1
       objectReference: {fileID: 0}
@@ -5176,6 +5441,21 @@ PrefabInstance:
         type: 3}
       propertyPath: _allowedBlockType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653974450691, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653974450695, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951194653974450713, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4940886719878669978, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -5204,6 +5484,21 @@ PrefabInstance:
       objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 7835597591989406981, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7835597591989406981, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _currBlockType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7835597591989406981, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _weaponContent
+      value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 7835597591989406981, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _allowedBlockType
       value: -1
       objectReference: {fileID: 0}
@@ -5217,7 +5512,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3951194653509326687, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194652823215347, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194651914781740, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194651942049013, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194653974450691, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194652061865485, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194652927542396, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194652022337179, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
+    - {fileID: 3951194652454891519, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
 --- !u!4 &1495682832 stripped
 Transform:
