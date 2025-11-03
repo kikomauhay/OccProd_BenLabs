@@ -58,10 +58,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #endregion
 
     #region Unity
-
+    protected override void OnEnable()
+    {        
+        _waveHandler.OnAllBlocksFilled += EVENT_StartWave;
+    }
     protected override void OnDisable()
     {
-        _waveHandler.OnBlocksFilled -= EVENT_StartWave;
+        _waveHandler.OnAllBlocksFilled -= EVENT_StartWave;
     }
     protected override void Start()
     {
@@ -70,8 +73,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
 
         base.Start();
-
-        _waveHandler.OnBlocksFilled += EVENT_StartWave;
     }
 
     #endregion
@@ -128,10 +129,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _enemyList.Add(e.gameObject);
         }
 
-        GameObject enemy = _blockGridList[_waveIndex][(int)BlockType.ENEMY].EnemyPrefab;
-
         // GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        // GameObject newEnemy = Instantiate(enemyToSpawn, RandomPositionInBox(), Quaternion.identity, _spawnArea);
+        GameObject enemy = _blockGridList[_waveIndex][(int)BlockType.ENEMY].EnemyPrefab;
+        GameObject newEnemy = Instantiate(enemy, RandomPositionInBox(), Quaternion.identity, _spawnArea);
 
         // SetUpEnemy(newEnemy.GetComponent<Enemy>());
         SetUpEnemy(enemy.GetComponent<Enemy>());
@@ -208,7 +208,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveCountTXT.gameObject.SetActive(true);
             _waveCountTXT.text = $"Wave {_waveIndex + 1}";
 
-            yield return new WaitForSeconds(15f);
+            yield return new WaitForSeconds(GRACE_PERIOD);
             _waveCountTXT.gameObject.SetActive(false);
         }
 
@@ -262,7 +262,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _enemyList.Clear();
         }
 
-        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy(); // might break the continous wave spawning
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
         if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
     }
 
@@ -273,23 +273,21 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {        
         Modifier modifier = Modifier.DEFAULT;
 
-        void DoPreparation() // prep time for the player to "draw" a weapon
+        void PrepareWave() // prep time for the player to "draw" a weapon
         {
+            // play StartTimer.sfx
+
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
 
-            // assigns the string variable and enables the correct weapon panel
-            if (_blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent == "Sword")
-            {
-                _swordImage.SetActive(true);
-            }
-            else if (_blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent == "Hammer")
-            {
-                _hammerImage.SetActive(true);
-            }
+            // variable assignment
             _preferredWeapon = _blockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
+            modifier =         _blockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
 
-            switch (_blockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier)
+            if      (_preferredWeapon == "Sword")  _swordImage.SetActive(true);
+            else if (_preferredWeapon == "Hammer") _hammerImage.SetActive(true);
+      
+            switch (modifier)
             {
                 case Modifier.HEALTH: 
                     if (_isDevMode) 
@@ -312,7 +310,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 case Modifier.DEFAULT: break;                
                 default:               break;
             }
-            modifier = _blockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
 
             if (_isDevMode)
             {
@@ -320,8 +317,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW);
             }
         }
-        IEnumerator CO_DoEnemySpawning() // spawning starts and drawing stops
+        IEnumerator CO_DoEnemySpawning()
         {
+            // play StopTimer.sfx
+
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
 
@@ -344,12 +343,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             yield break;
         }
 
-        DoPreparation();
+        PrepareWave();
         yield return new WaitForSeconds(GRACE_PERIOD);
-
-        if (_isDevMode)
-            _logger.Log($"{_gameMgr.Player} can no longer draw!", TextColor.YELLOW);
-
+        
         StartCoroutine(CO_DoEnemySpawning());
     }
 
