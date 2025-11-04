@@ -122,6 +122,26 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         StartCoroutine(CO_SpawnCustomer());
     }
 
+    public void TrickPointAllocation(string trickName)
+    {
+        switch (trickName)
+        {
+            case "Pass.xml":
+                _totalScore += 5F;
+                return;
+
+            case "Toss.xml":
+                _totalScore += 10F;
+                return;
+
+            case "Spin.xml":
+                _totalScore += 15F;
+                return;
+        }
+
+    }
+
+
     public void Correct(float drinkScore)
     {
         _totalScore += drinkScore + SERVING_SCORE;

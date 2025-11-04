@@ -6,7 +6,7 @@ using System.Collections;
 using UnityEngine;
 using System.IO;
 
-public class XRTrickRecognizer : XRBaseInteractable
+public class XRTrickRecognizer : MonoBehaviour
 {
     #region Members
 
@@ -34,7 +34,7 @@ public class XRTrickRecognizer : XRBaseInteractable
     {
         IEnumerator CO_LoadStreamingAssets()
         {
-            string[] trickGestures = { "Sword.xml", "Hammer.xml" };
+            string[] trickGestures = { "Pass.xml", "Toss.xml", "Spin.xml" };
 
             foreach (var fileName in trickGestures)
             {
@@ -46,7 +46,8 @@ public class XRTrickRecognizer : XRBaseInteractable
 
                     if (www.result == UnityEngine.Networking.UnityWebRequest.Result.Success)
                     {
-
+                        string xmlContent = www.downloadHandler.text;
+                        trainingSet.Add(GestureIO.ReadGestureFromXML(xmlContent));
                     }
                     else
                     {
@@ -132,6 +133,7 @@ public class XRTrickRecognizer : XRBaseInteractable
 
             string fileName = Application.persistentDataPath + "/" + newGestureName + ".xml";
             GestureIO.WriteGesture(pointArray,newGestureName,fileName);
+            Debug.Log($"Gesture saved at: {fileName}");
         }
         else
         {
