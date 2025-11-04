@@ -15,6 +15,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
 
 
     [Header("VROnboarding Variables")]
+    [SerializeField] private GameObject _vrLeftHand;
     [SerializeField] private GameObject _leftQuestController;
     [SerializeField] private GameObject[] _vrOnbCanvas; //0-TpOnb, 1-GrabOnb
     
@@ -66,9 +67,11 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     {
         _leftQuestController.SetActive(true);
         canvas.SetActive(true);
+        _vrLeftHand.SetActive(false);
         yield return new WaitForSeconds(timer);
         canvas.SetActive(false);
         _leftQuestController.SetActive(false);
+        _vrLeftHand.SetActive(true);
     }
 
     #endregion
