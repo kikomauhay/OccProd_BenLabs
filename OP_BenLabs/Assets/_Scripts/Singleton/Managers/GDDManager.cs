@@ -128,13 +128,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _enemyList.Add(e.gameObject);
         }
+        
+        GameObject newEnemy = Instantiate(_ghostBlockGridList[_waveIndex][(int)BlockType.ENEMY].
+                                          EnemyPrefab, RandomPositionInBox(), Quaternion.identity);
 
-        // GameObject enemyToSpawn = _isDevMode ? _testEnemy : _enemyList[Random.Range(0, _enemyList.Count)];
-        GameObject enemy = _ghostBlockGridList[_waveIndex][(int)BlockType.ENEMY].EnemyPrefab;
-        GameObject newEnemy = Instantiate(enemy, RandomPositionInBox(), Quaternion.identity, _spawnArea);
-
-        // SetUpEnemy(newEnemy.GetComponent<Enemy>());
-        SetUpEnemy(enemy.GetComponent<Enemy>());
+        SetUpEnemy(newEnemy.GetComponent<Enemy>());
 
         if (_isDevMode)
             _logger.Log("Spawned new enemy!");

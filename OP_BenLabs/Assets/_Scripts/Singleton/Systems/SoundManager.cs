@@ -3,12 +3,16 @@ using System;
 
 public class SoundManager : Singleton<SoundManager> 
 {
-    #region Members
+    
+    #region SerializeField
 
-    [SerializeField] private AudioSource _soundSource, _musicSource, _onboardingSource;
-    [SerializeField] private Sound[] _sfx, _bgm, _onb;
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource _onboardingSource;
+    [SerializeField] private AudioSource _soundSource, _musicSource;
 
-    private int _soundIndex = 0;
+    [Header("Audio Sources")]
+    [SerializeField] private Sound[] _onb;
+    [SerializeField] private Sound[] _sfx, _bgm;
 
     #endregion
 
@@ -42,14 +46,8 @@ public class SoundManager : Singleton<SoundManager>
             Debug.LogError($"{title} not found!");
             return;
         }
-
-        // pitch variation for the customers
-        if (title == "cat enter 01" || title == "cat enter 02")
-            _soundSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
-
         else _soundSource.pitch = s.Pitch;
 
-        // adds the properties of the Sound to the AudioSource
         _soundSource.volume = s.Volume;
         _soundSource.loop = s.Loop;
         _soundSource.clip = s.Clip;
