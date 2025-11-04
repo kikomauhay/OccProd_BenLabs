@@ -50,12 +50,18 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         base.Start();
     }
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
+
     #endregion
     #region Public
 
     public void INT_BTN_StartGame()
     {
         _soundEmitter.PlaySound(_startGameSFX);
+        _totalScore = 0;
 
         SpawnCustomer();
 
@@ -116,6 +122,26 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         StartCoroutine(CO_SpawnCustomer());
     }
 
+    public void TrickPointAllocation(string trickName)
+    {
+        switch (trickName)
+        {
+            case "Pass.xml":
+                _totalScore += 5F;
+                return;
+
+            case "Toss.xml":
+                _totalScore += 10F;
+                return;
+
+            case "Spin.xml":
+                _totalScore += 15F;
+                return;
+        }
+
+    }
+
+
     public void Correct(float drinkScore)
     {
         _totalScore += drinkScore + SERVING_SCORE;
@@ -139,6 +165,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     #endregion
     #region Private
+
+    private void TrickScore(float trickScore)
+    {
+        _totalScore += trickScore;
+    }
 
     private void StopGame()
     {
