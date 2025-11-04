@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     private GameManager _gameMgr;
     private OnboardingHandler _onbHandlr;
+    private SoundManager _sndMgr;
 
     private const int MAX_STRIKES = 3;
     private const int MAX_CUSTOMERS_SERVED = 3;
@@ -121,12 +123,19 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _totalScore += drinkScore + SERVING_SCORE;
         _customersServed++;
 
+        _sndMgr.PlaySound("SND_Correct");
+
+        if (_isDevMode)
+            _logger.Log($"Total score: {_totalScore}");
+
         SpawnCustomer();
     }
     public void Wrong()
     {
         _currStrike++;
         _customersServed++;
+
+        _sndMgr.PlaySound("SND_Wrong");
 
         if (_currStrike == MAX_STRIKES)
         {
@@ -162,6 +171,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     {
         _gameMgr = GameManager.Instance;
         _onbHandlr = OnboardingHandler.Instance;
+        _sndMgr = SoundManager.Instance;
 
         _currStrike = 0;
         _customersServed = 0;
