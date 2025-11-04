@@ -9,8 +9,7 @@ public class Floor : MonoBehaviour
 [System.Serializable]
 public enum FloorType
 {
-    TUTORIAL = 0,
-    LOBBY = 1,
-    GDD = 2,
-    BAR = 3
+    LOBBY = 0,
+    GDD = 1,
+    BAR = 2
 };
