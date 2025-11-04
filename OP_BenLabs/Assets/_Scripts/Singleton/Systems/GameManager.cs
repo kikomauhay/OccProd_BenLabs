@@ -52,7 +52,6 @@ public class GameManager : Singleton<GameManager>
         Vector3 pos = Vector3.zero;
         switch (type)
         {
-            case FloorType.TUTORIAL: break;
             case FloorType.BAR:      break;
 
             case FloorType.LOBBY:
@@ -84,7 +83,6 @@ public class GameManager : Singleton<GameManager>
 
         switch (type)
         {
-            case FloorType.TUTORIAL: break;
             case FloorType.BAR:      break;
 
             case FloorType.LOBBY: // final part of the game
