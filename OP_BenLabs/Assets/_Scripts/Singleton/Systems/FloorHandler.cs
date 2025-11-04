@@ -22,11 +22,16 @@ public class FloorHandler : Singleton<FloorHandler>
         Debug.Assert(_elevDoor, "Missing _door reference!", gameObject);
         Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", gameObject);
 
-        base.Start();
+        base.Start();        
     }
 
     public void BTN_EnterFloor(int idx) // only accessed from inside
-    {
+    {  
+        void LogError(string message)
+        {
+            if (_isDevMode)
+                _logger.Log(message, TextColor.RED);
+        }
         IEnumerator CO_MoveToFloor()
         {
             if (!_elevDoor.IsClosed)
@@ -50,16 +55,12 @@ public class FloorHandler : Singleton<FloorHandler>
 
         if (idx < 0)
         {
-            if (_isDevMode)
-                _logger.Log($"{this} cannot go there!", TextColor.RED);
-
+            LogError($"{this} cannot go there!");
             return;
         }
         if (!GameManager.Instance.CanPause)
         {
-            if (_isDevMode)
-                _logger.Log("You cannot go to that floor at this time!", TextColor.YELLOW);
-
+            LogError("You cannot go to that floor at this time!");
             return;
         }
 
