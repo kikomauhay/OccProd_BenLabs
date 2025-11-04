@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>

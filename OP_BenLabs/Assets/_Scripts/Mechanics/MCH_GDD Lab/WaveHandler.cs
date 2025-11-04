@@ -3,66 +3,27 @@ using UnityEngine;
 
 public class WaveHandler : StaticInstance<WaveHandler>
 {
-    #region SerializeField
+    #region Members
 
-    [SerializeField] private CodeBlock[] _codeBlocks;
-
-    #endregion
-    #region Private
-
-    private GDDManager _gddMgr;
+    public System.Action OnAllBlocksFilled { get; set; }
+    public GhostBlock[] GhostBlocks => _ghostBlocks;
+    [SerializeField] private GhostBlock[] _ghostBlocks;
 
     #endregion
 
-    #region Unity
+    #region Methods
 
-
-    protected override void OnEnable()
-    {
-        IEnumerator CO_DelayedBinding()
-        {
-            yield return null;
-
-
-        }
-        
-        StartCoroutine(CO_DelayedBinding());
-    }
-    protected override void OnDisable()
-    {
-        
-    }
-    
     protected override void Start()
     {
-        Debug.Assert(_codeBlocks.Length != 9, "Missing elements in _codeBlocks!", gameObject);
+        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", gameObject);    
         base.Start();
     }
 
-    #endregion
-    #region Private
-
-    private void StartWave()
+    public void CheckRemainingBlocks()
     {
-        IEnumerator CO_StartWave()
-        {
-
-
-
-            yield break;
-        }
-
-        StartCoroutine(CO_StartWave());
+        if (GhostBlock.FilledBlocks == 9)
+            OnAllBlocksFilled?.Invoke();
     }
 
-
-    #endregion
-    #region Helpers
-
-    protected override void InitVariables()
-    {
-        _gddMgr = GDDManager.Instance;
-    }
-        
     #endregion
 }
