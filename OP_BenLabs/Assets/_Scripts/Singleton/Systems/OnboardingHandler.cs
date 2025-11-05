@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
@@ -38,6 +39,17 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
         base.Start();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        //To do when player approaches the ID on the table
+        XROrigin player = other.gameObject.GetComponent<XROrigin>();
+
+        if(player != null)
+        {
+            StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 15f));
+        }
+    }
+
     #endregion
     #region Helpers
 
@@ -54,12 +66,11 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
 
     #region IEnumerators
 
-    //To Start the VR Onb for both teleporation and grabbing all in one timer
+    //To Start the VR Onb for teleporation 
     private IEnumerator StartVROnb(float timer)
     {
-        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 15f));
         yield return new WaitForSeconds(timer);
-        StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 15f));
+        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 15f));
     }
 
     //To turn off the canvas for the VR Onboarding, but can be used for other stuff
