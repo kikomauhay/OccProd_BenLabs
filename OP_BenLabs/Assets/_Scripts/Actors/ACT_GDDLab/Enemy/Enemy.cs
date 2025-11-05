@@ -36,7 +36,13 @@ public class Enemy : Actor
     {
         if (other.GetComponent<Weapon>())
         {
-            TakeDamage(other.GetComponent<Weapon>().Damage);
+            Weapon w = other.GetComponent<Weapon>();
+
+            TakeDamage(w.Damage + w.DamageModifier);
+
+            if (_isDevMode)
+                _logger.Log($"{this} took damage!");
+            
             return;
         }
 
