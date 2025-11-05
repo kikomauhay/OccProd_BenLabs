@@ -150,8 +150,8 @@ GameObject:
   - component: {fileID: 3350122296206776566}
   - component: {fileID: 3350122296206776561}
   - component: {fileID: 3350122296206776560}
-  - component: {fileID: 3350122296206776563}
   - component: {fileID: 3350122296206776562}
+  - component: {fileID: 7066255592121820648}
   m_Layer: 8
   m_Name: Pink Marker
   m_TagString: Untagged
@@ -167,8 +167,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3350122296206776572}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.600001, z: 0}
-  m_LocalScale: {x: 0.21344994, y: 1, z: 0.44818997}
+  m_LocalPosition: {x: -0.00000476837, y: 2.6000593, z: 0}
+  m_LocalScale: {x: 0.21344995, y: 1, z: 0.44819}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3350122297619000279}
@@ -254,7 +254,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3350122296206776563
+--- !u!114 &3350122296206776562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3350122296206776572}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2f652d362d6ad4cb856a0b7925e741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7066255592121820648
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -406,18 +418,6 @@ MonoBehaviour:
   m_StartingSingleGrabTransformers: []
   m_StartingMultipleGrabTransformers: []
   m_AddDefaultGrabTransformers: 1
---- !u!114 &3350122296206776562
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3350122296206776572}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c2f652d362d6ad4cb856a0b7925e741, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3350122296225640547
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,6 +1126,7 @@ MonoBehaviour:
   _spawnArea: {fileID: 3350122297243809221}
   _testGoal: {fileID: 0}
   _waveHandler: {fileID: 0}
+  _blockLabelsUI: {fileID: 0}
   _availableBlocksList: []
   _drawingCanvas: {fileID: 3350122297619000278}
   _swordImage: {fileID: 0}

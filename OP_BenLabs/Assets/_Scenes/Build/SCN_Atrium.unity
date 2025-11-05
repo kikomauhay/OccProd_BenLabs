@@ -1206,6 +1206,29 @@ PrefabInstance:
       propertyPath: _floorType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 349649264, guid: f49b2bbbb1b95bf4285a544326a73b31, type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 2147483648
+      objectReference: {fileID: 0}
+    - target: {fileID: 2100872507, guid: f49b2bbbb1b95bf4285a544326a73b31, type: 3}
+      propertyPath: m_InteractionLayers.m_Bits
+      value: 2147483648
+      objectReference: {fileID: 0}
+    - target: {fileID: 481173883037340714, guid: f49b2bbbb1b95bf4285a544326a73b31,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 481173883037340714, guid: f49b2bbbb1b95bf4285a544326a73b31,
+        type: 3}
+      propertyPath: _renderer
+      value: 
+      objectReference: {fileID: 414523158}
+    - target: {fileID: 608852577721879772, guid: f49b2bbbb1b95bf4285a544326a73b31,
+        type: 3}
+      propertyPath: _logger
+      value: 
+      objectReference: {fileID: 4757517932154350423}
     - target: {fileID: 6988299952763738425, guid: f49b2bbbb1b95bf4285a544326a73b31,
         type: 3}
       propertyPath: m_RootOrder
@@ -1291,6 +1314,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d8b253079bed12479a671264bdf5f73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &349649261 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7104152622617291952, guid: f49b2bbbb1b95bf4285a544326a73b31,
+    type: 3}
+  m_PrefabInstance: {fileID: 349649258}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &368036127
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,6 +1406,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &414523158 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6291153974819381558, guid: f49b2bbbb1b95bf4285a544326a73b31,
+    type: 3}
+  m_PrefabInstance: {fileID: 349649258}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &433660610
 GameObject:
   m_ObjectHideFlags: 0
@@ -3108,7 +3143,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 818115586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.92, y: 0, z: 0.05}
+  m_LocalPosition: {x: -3.616, y: -2.952, z: -8.162}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5177,6 +5212,11 @@ PrefabInstance:
       objectReference: {fileID: 1495682834}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _blockLabelsUI
+      value: 
+      objectReference: {fileID: 1691517116}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _playerLivesTXT
       value: 
       objectReference: {fileID: 1495682833}
@@ -5333,7 +5373,7 @@ PrefabInstance:
     - target: {fileID: 3350122297605630163, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3350122297619000278, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -7792,6 +7832,7 @@ GameObject:
   - component: {fileID: 1798129083}
   - component: {fileID: 1798129081}
   - component: {fileID: 1798129082}
+  - component: {fileID: 1798129084}
   m_Layer: 0
   m_Name: ~OnboardingHandler
   m_TagString: Untagged
@@ -7807,7 +7848,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1798129079}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -18.1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7833,6 +7874,7 @@ MonoBehaviour:
   _gddOnboardingLines: []
   _vrLeftHand: {fileID: 193978591}
   _leftQuestController: {fileID: 1987124929}
+  _canvasPickUpID: {fileID: 349649261}
   _vrOnbCanvas:
   - {fileID: 1987124931}
   - {fileID: 1987124930}
@@ -7946,6 +7988,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!65 &1798129084
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798129079}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.33034897, y: 1.3872509, z: 1.3599546}
+  m_Center: {x: -1.5804691, y: 0.8422077, z: -0.17997742}
 --- !u!114 &1810634151 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6886268612618866036, guid: a8a2fe0535ced9b438f25626b6a0defd,

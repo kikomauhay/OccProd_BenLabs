@@ -42,7 +42,7 @@ public class VR_Hands : MonoBehaviour
 
         foreach (var item in _handColliders)
         {
-            item.enabled = false;
+            item.enabled = false; // timing issue => gets called when it's already deleted
         }    
     }
 
