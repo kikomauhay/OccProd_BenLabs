@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class GDDManager : Singleton<GDDManager>, IGameHandler
@@ -318,6 +319,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         IEnumerator CO_DoEnemySpawning()
         {
             // play StopTimer.sfx
+            
+            if (_availableBlocksList.Count > 0)
+            {
+                foreach (CodeBlock cb in _availableBlocksList)
+                    Destroy(cb.gameObject);
+
+                _availableBlocksList.Clear();
+
+                if (_isDevMode)
+                    _logger.Log("Removed remaining blocks!");
+            }
 
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
