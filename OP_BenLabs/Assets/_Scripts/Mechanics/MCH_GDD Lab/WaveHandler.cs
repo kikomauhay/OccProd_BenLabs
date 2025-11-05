@@ -10,7 +10,6 @@ public class WaveHandler : StaticInstance<WaveHandler>
     #endregion
     #region SerializeField
 
-    [SerializeField] private GameObject _blockLabelsUI;
     [SerializeField] private GhostBlock[] _ghostBlocks;
 
     #endregion
@@ -20,10 +19,6 @@ public class WaveHandler : StaticInstance<WaveHandler>
     protected override void Start()
     {
         Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", gameObject);    
-        Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
-
-        _blockLabelsUI.SetActive(true);
-
         base.Start();
     }
 

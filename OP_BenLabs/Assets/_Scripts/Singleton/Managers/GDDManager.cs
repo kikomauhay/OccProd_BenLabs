@@ -22,6 +22,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Header("Wave Panel")]
     [SerializeField] private WaveHandler _waveHandler;
+    [SerializeField] private GameObject _blockLabelsUI;
     [SerializeField] private List<CodeBlock> _availableBlocksList;
 
     [Header("Trace Mechanic")]
@@ -72,6 +73,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", gameObject);
         Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
+        Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
 
         base.Start();
     }
@@ -249,6 +251,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                                   _waveHandler.GhostBlocks[7], 
                                   _waveHandler.GhostBlocks[8] }
         };
+
+        _blockLabelsUI.SetActive(true);
     }
 
     protected override void Test()
@@ -333,6 +337,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
+            _blockLabelsUI.SetActive(false);
 
             for (int i = 0; i < _enemiesToSpawn[_waveIndex]; i++)
             {
