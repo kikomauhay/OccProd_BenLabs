@@ -18,6 +18,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     [Header("VROnboarding Variables")]
     [SerializeField] private GameObject _vrLeftHand;
     [SerializeField] private GameObject _leftQuestController;
+    [SerializeField] private GameObject _canvasPickUpID;
     [SerializeField] private GameObject[] _vrOnbCanvas; //0-TpOnb, 1-GrabOnb
     
     #endregion
@@ -35,7 +36,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
         // Debug.Assert(_barOnboardingLines, "Missing elements in _barOnboardingLines!", gameObject);
         // Debug.Assert(_gddOnboardingLines, "Missing elements in _gddOnboardingLines!", gameObject);
         //To turn on VR Onb
-        StartCoroutine(StartVROnb(20f));
+        StartCoroutine(StartVROnb(5f));
         base.Start();
     }
 
@@ -47,6 +48,8 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
         if(player != null)
         {
             StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 15f));
+            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            _canvasPickUpID.SetActive(false);
         }
     }
 
@@ -70,7 +73,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     private IEnumerator StartVROnb(float timer)
     {
         yield return new WaitForSeconds(timer);
-        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 15f));
+        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 10f));
     }
 
     //To turn off the canvas for the VR Onboarding, but can be used for other stuff
