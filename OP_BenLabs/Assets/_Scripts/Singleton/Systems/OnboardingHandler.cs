@@ -47,7 +47,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
 
         if(player != null)
         {
-            StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 15f));
+            StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 10f));
             this.gameObject.GetComponent<BoxCollider>().enabled = false;
             _canvasPickUpID.SetActive(false);
         }

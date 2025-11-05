@@ -339,6 +339,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _drawingCanvas.SetActive(false);
             _blockLabelsUI.SetActive(false);
 
+            // int count = modifer == reduced 
+
             for (int i = 0; i < _enemiesToSpawn[_waveIndex]; i++)
             {
                 SpawnEnemy();
