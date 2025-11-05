@@ -1,12 +1,16 @@
-using System.Collections;
 using UnityEngine;
 
 public class WaveHandler : StaticInstance<WaveHandler>
 {
-    #region Members
+    #region Properties
 
     public System.Action OnAllBlocksFilled { get; set; }
     public GhostBlock[] GhostBlocks => _ghostBlocks;
+
+    #endregion
+    #region SerializeField
+
+    [SerializeField] private GameObject _blockLabelsUI;
     [SerializeField] private GhostBlock[] _ghostBlocks;
 
     #endregion
@@ -16,6 +20,10 @@ public class WaveHandler : StaticInstance<WaveHandler>
     protected override void Start()
     {
         Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", gameObject);    
+        Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
+
+        _blockLabelsUI.SetActive(true);
+
         base.Start();
     }
 
