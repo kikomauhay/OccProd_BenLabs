@@ -9,6 +9,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 {
     #region Properties
 
+    public System.Action OnBuffWeapon { get; set; }
+
     public Logger Logger => _logger;
     public int WaveIndex => _waveIndex;
 
@@ -275,10 +277,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private IEnumerator CO_SpawnEnemyWave()
     {        
         Modifier modifier = Modifier.DEFAULT;
+        int unitCount = _enemiesToSpawn[_waveIndex];
 
         void PrepareWave() // prep time for the player to "draw" a weapon
         {
             // play StartTimer.sfx
+
+            void Log(string message) 
+            {
+                if (_isDevMode)
+                    _logger.Log(message, TextColor.GREEN);
+            }
 
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
@@ -293,21 +302,18 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             switch (modifier)
             {
                 case Modifier.HEALTH: 
-                    if (_isDevMode) 
-                        _logger.Log("Increased HP!", TextColor.GREEN);
-                    
+                    _currHP += 5f;
+                    Log("Increased HP!");
                     break;                
                 
                 case Modifier.DAMAGE:
-                    if (_isDevMode) 
-                        _logger.Log("Increased damage!", TextColor.GREEN);
-                    
+                    OnBuffWeapon?.Invoke();
+                    Log("Increased damage!");
                     break;                
                 
                 case Modifier.REDUCED_ENEMIES: 
-                    if (_isDevMode) 
-                        _logger.Log("reduced enemies!", TextColor.GREEN);
-                    
+                    unitCount = _enemiesToSpawn[_waveIndex] - 1;
+                    Log("Reduced enemies!");
                     break;                
                 
                 case Modifier.DEFAULT: break;                
@@ -339,9 +345,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _drawingCanvas.SetActive(false);
             _blockLabelsUI.SetActive(false);
 
-            // int count = modifer == reduced 
-
-            for (int i = 0; i < _enemiesToSpawn[_waveIndex]; i++)
+            for (int i = 0; i < unitCount; i++)
             {
                 SpawnEnemy();
                 yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
