@@ -1,16 +1,22 @@
 using DG.Tweening;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshRenderer), typeof(SoundEmitter))]
 public class LOB_IDScanner : Actor
 {
     #region SerializeField
 
+    [SerializeField] private GameObject _invisibleWall;
+
+    [Header("Tweening")]
+    [SerializeField] private float _cycleLength;
+    [SerializeField] private float _gateDelay;
     [SerializeField] private Transform _leftGate, _rightGate;
     [SerializeField] private Vector3 _leftGateEndPos, _rightGateEndPos;
-    [SerializeField] private float _cycleLength, _gateDelay;
+
+    [Header("Sounds")]
+    [SerializeField] private Sound _idScanSFX;
 
     #endregion
     #region Private
@@ -18,6 +24,7 @@ public class LOB_IDScanner : Actor
     private SoundManager _sndMgr;
 
     private Renderer _rend;
+    private SoundEmitter _soundEmitter;
 
     private Vector3 _leftGateStartPos, _rightGateStartPos;
 
@@ -34,17 +41,41 @@ public class LOB_IDScanner : Actor
         base.OnDisable();
         //remove ID grab event
     }
+    protected override void Start()
+    {
+        Debug.Assert(_invisibleWall, "Missing _invisibleWall reference!", gameObject);
+
+        _invisibleWall.SetActive(true);
+
+        base.Start();
+    }
     private void OnCollisionEnter(Collision other)
     {
+        IEnumerator CO_ToggleInvisibleWall() // prevents the player from skipping exit stage
+        {
+            _invisibleWall.SetActive(false);
+            _logger.Log("Wall disabled!", _isDevMode);
+            yield return new WaitForSeconds(10f);
+
+            _invisibleWall.SetActive(true);
+            _logger.Log("Wall enabled!", _isDevMode);
+        }
+
         if (other.gameObject.GetComponent<ID>())
         { 
             _rend.material.color = Color.green;
-            _sndMgr.PlaySound("SND_Correct");
+            _soundEmitter.PlaySound(_idScanSFX);
+            StartCoroutine(CO_ToggleInvisibleWall());
+            OpenGates();
+
+            _logger.Log("Openned the gates!", TextColor.GREEN, _isDevMode);
         }
         else
         {
             _rend.material.color = Color.red;
             _sndMgr.PlaySound("SND_Wrong");
+
+            _logger.Log("Wrong ID!", TextColor.RED, _isDevMode);
         }
     }
 
@@ -73,6 +104,7 @@ public class LOB_IDScanner : Actor
     protected override void InitComponents()
     {
         _rend = GetComponent<MeshRenderer>();
+        _soundEmitter = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
     {

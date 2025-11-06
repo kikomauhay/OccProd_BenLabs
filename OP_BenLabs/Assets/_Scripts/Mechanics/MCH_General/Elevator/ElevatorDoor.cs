@@ -41,7 +41,7 @@ public class ElevatorDoor : MonoBehaviour
     {
         Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-        Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing Door references!</color>", gameObject);
+        Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing door references!</color>", gameObject);
 
         _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
 
@@ -92,6 +92,7 @@ public class ElevatorDoor : MonoBehaviour
             _soundEmitter.PlaySound(_bellSFX);
 
         IsClosed = true;
+
         _logger.Log($"Elevator closed: {IsClosed}", TextColor.GREEN, _isDevMode);
     }
 
