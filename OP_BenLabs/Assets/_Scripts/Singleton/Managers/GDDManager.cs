@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class GDDManager : Singleton<GDDManager>, IGameHandler
@@ -40,6 +41,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private TextMeshProUGUI _playerLivesTXT;
     [SerializeField] private Sound _startGameSFX, _gameOverSFX;
 
+    [Header("VR Variables")]
+    [SerializeField] private InputActionReference _xrAButton, _xrXButton;
+    [SerializeField] private bool _isLeftHandActive;
+    [SerializeField] private GameObject[] _marker; //[0] - Left hand, [1] - Right hand
+    [SerializeField] private GameObject[] _sword;
+    [SerializeField] private GameObject[] _hammer;
+
     #endregion
     #region Private
 
@@ -65,10 +73,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     protected override void OnEnable()
     {        
         _waveHandler.OnAllBlocksFilled += EVENT_StartWave;
+        _xrAButton.action.performed += ToggleMainHand;
+        _xrXButton.action.performed += ToggleMainHand;
     }
     protected override void OnDisable()
     {
         _waveHandler.OnAllBlocksFilled -= EVENT_StartWave;
+        _xrXButton.action.performed -= ToggleMainHand;
+        _xrXButton.action.performed -= ToggleMainHand;
     }
     protected override void Start()
     {
@@ -76,6 +88,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
         Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
+
+        _xrAButton.action.Enable();
+        _xrXButton.action.Enable();
 
         base.Start();
     }
@@ -86,6 +101,16 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public string GetPreferredWeapon()
     {
         return _preferredWeapon;
+    }
+
+    public void ActivateSword()
+    {
+        _sword[0].SetActive(true);
+    }
+
+    public void ActivateHammer()
+    {
+        _hammer[0].SetActive(true);
     }
 
     public void INT_BTN_StartGame()
@@ -259,6 +284,23 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
     }
 
+    private void ToggleMainHand(InputAction.CallbackContext context)
+    {
+        _isLeftHandActive = !_isLeftHandActive;
+        SetActiveHand(_isLeftHandActive);
+    }
+
+    private void SetActiveHand(bool isLeft)
+    {
+        _marker[0].SetActive(isLeft);
+        _sword[0].SetActive(isLeft);
+        _hammer[0].SetActive(isLeft);
+
+        _marker[1].SetActive(!isLeft);
+        _sword[1].SetActive(!isLeft);
+        _hammer[1].SetActive(!isLeft);
+    }
+
     #endregion
     #region Enumerators    
 
@@ -273,6 +315,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
+            _marker[0].SetActive(true);
 
             // variable assignment
             _preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
@@ -321,6 +364,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
+            _marker[0].SetActive(false);
             _blockLabelsUI.SetActive(false);
 
             for (int i = 0; i < unitCount; i++)
