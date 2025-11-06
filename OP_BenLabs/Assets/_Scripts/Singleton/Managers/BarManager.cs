@@ -51,11 +51,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         base.Start();
     }
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-    }
-
     #endregion
     #region Public
 

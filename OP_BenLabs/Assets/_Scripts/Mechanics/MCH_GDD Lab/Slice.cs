@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using EzySlice;
 using UnityEngine;
 
@@ -16,37 +14,37 @@ public class Slice : MonoBehaviour
     private void FixedUpdate()
     {
         bool hasHit = Physics.Linecast(_startSlicePoint.position, _endSlicePoint.position, out RaycastHit hit, _sliceableLayer);
-        if(hasHit)
+        if (hasHit)
         {
-            GameObject _targetObject = hit.transform.gameObject;
-            SliceTarget(_targetObject);
+            GameObject targetObject = hit.transform.gameObject;
+            SliceTarget(targetObject);
         }
     }
 
-    private void SliceTarget(GameObject _target)
+    private void SliceTarget(GameObject target)
     {
-        Vector3 _velocity = _velocityEstimator.GetVelocityEstimate();
-        Vector3 _planeNormal = Vector3.Cross(_endSlicePoint.position -_startSlicePoint.position, _velocity);
-        _planeNormal.Normalize();
-        SlicedHull hull = _target.Slice(_endSlicePoint.position, _planeNormal);
+        Vector3 velocity = _velocityEstimator.GetVelocityEstimate();
+        Vector3 planeNormal = Vector3.Cross(_endSlicePoint.position -_startSlicePoint.position, velocity);
+        planeNormal.Normalize();
+        SlicedHull hull = target.Slice(_endSlicePoint.position, planeNormal);
 
         if (hull != null)
         {
-            GameObject _upperHull = hull.CreateUpperHull(_target, _crossSectionMaterial);
-            SetupSlicedComponent(_upperHull);
+            GameObject upperHull = hull.CreateUpperHull(target, _crossSectionMaterial);
+            SetupSlicedComponent(upperHull);
 
-            GameObject _lowerHull = hull.CreateLowerHull(_target, _crossSectionMaterial);
-            SetupSlicedComponent(_lowerHull);
+            GameObject lowerHull = hull.CreateLowerHull(target, _crossSectionMaterial);
+            SetupSlicedComponent(lowerHull);
 
-            Destroy(_target);
+            Destroy(target);
         }
     }
 
-    private void SetupSlicedComponent(GameObject _slicedObject)
+    private void SetupSlicedComponent(GameObject slicedObject)
     {
-        Rigidbody rb = _slicedObject.AddComponent<Rigidbody>();
-        MeshCollider collider = _slicedObject.AddComponent<MeshCollider>();
+        Rigidbody rb = slicedObject.AddComponent<Rigidbody>();
+        MeshCollider collider = slicedObject.AddComponent<MeshCollider>();
         collider.convex = true;
-        rb.AddExplosionForce(_cutForce, _slicedObject.transform.position, 1);
+        rb.AddExplosionForce(_cutForce, slicedObject.transform.position, 1);
     }
 }

@@ -54,12 +54,9 @@ public class Customer : Actor
     }
     protected override void InitVariables()
     {
-        Cocktail SetRandomCocktail() // only gets from the 3 possible drinks
-        {            
-            int randomFromEnum = Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
-            return (Cocktail)randomFromEnum;
-        }
-
+        // only gets from the 3 possible drinks
+        Cocktail SetRandomCocktail() => (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+        
         name = "Customer";
         _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
@@ -86,12 +83,13 @@ public class Customer : Actor
         _logger.Log($"{GRACE_PERIOD}s before losing patience!", _isDevMode);
         yield return new WaitForSeconds(GRACE_PERIOD);
         
-        _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
+        _logger.Log($"Initial customer Score: {_customerScore}", _isDevMode);
 
         while (_customerScore > 0f)
         {
             yield return new WaitForSeconds(PATIENCE_INTERVAL);
             _customerScore--;
+
             _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
         }
 
@@ -99,6 +97,7 @@ public class Customer : Actor
         {
             _customerScore = 0f;
             _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
+
             StartCoroutine(CO_LostPatience());
         }
     }

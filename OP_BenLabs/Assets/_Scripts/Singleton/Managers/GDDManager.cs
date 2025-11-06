@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -38,15 +37,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Header("UI/UX")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
-    [SerializeField] private TextMeshProUGUI _playerLivesTXT;
+    [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT;
     [SerializeField] private Sound _startGameSFX, _gameOverSFX;
 
     [Header("VR Variables")]
-    [SerializeField] private InputActionReference _xrAButton, _xrXButton;
     [SerializeField] private bool _isLeftHandActive;
-    [SerializeField] private GameObject[] _marker; //[0] - Left hand, [1] - Right hand
-    [SerializeField] private GameObject[] _sword;
-    [SerializeField] private GameObject[] _hammer;
+    [SerializeField] private InputActionReference _xrAButton, _xrXButton;
+    [SerializeField] private GameObject[] _marker; // [0] - Left hand, [1] - Right hand
+    [SerializeField] private GameObject[] _sword, _hammer;
 
     #endregion
     #region Private
@@ -70,8 +68,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #endregion
 
     #region Unity
+
     protected override void OnEnable()
-    {        
+    {
         _waveHandler.OnAllBlocksFilled += EVENT_StartWave;
         _xrAButton.action.performed += ToggleMainHand;
         _xrXButton.action.performed += ToggleMainHand;
@@ -205,6 +204,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void EVENT_IncrementKillCount()
     {
         _killCount++;
+        UI_UpdateKllCount();
         _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW, _isDevMode);
     }
     private void EVENT_GainLife()
@@ -231,6 +231,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         StartCoroutine(CO_ClearWaveTxt());
     }
     private void UI_UpdatePlayerLife() => _waveCountTXT.text = $"Life: {_currHP}";
+    private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
 
     #endregion
     #region Helpers
