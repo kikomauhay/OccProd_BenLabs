@@ -6,7 +6,7 @@ public class Bottle : Equipment, IPourable
     #region Properties
 
     public Ingredient Ingredient => _ingredient;
-    // has no OnBeginPour event since it has a param idk how to work around
+    public static event System.Action<Ingredient> OnBeginPourIngredient;
     public static Action OnStopPour { get; set; }
 
     #endregion
@@ -55,6 +55,7 @@ public class Bottle : Equipment, IPourable
     {
         Instantiate(_stream, _shakerTip.position,
                     Quaternion.identity, transform);
+        OnBeginPourIngredient?.Invoke(_ingredient);
     }
         
     #endregion

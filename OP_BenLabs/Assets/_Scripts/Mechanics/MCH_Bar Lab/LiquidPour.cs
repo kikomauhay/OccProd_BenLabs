@@ -6,6 +6,7 @@ public class LiquidPour : MonoBehaviour
     #region Properties
 
     public static event System.Action<Cocktail> OnGlassHit;
+    public static event System.Action<Ingredient> OnShakerHit;
     public static event System.Action ShakerEmptied;
 
     #endregion
@@ -26,18 +27,18 @@ public class LiquidPour : MonoBehaviour
 
     private void OnEnable()
     {
-        Shaker.OnBeginPour += BeginPour;
+        Shaker.OnBeginPourCocktail += BeginPourCocktail;
         Shaker.OnStopPour += EndPour;
 
-        // need to add another BringPour method w/o the param
+        Bottle.OnBeginPourIngredient += BeginPourIngredient;
         Bottle.OnStopPour += EndPour;
     }
     private void OnDisable()
     {
-        Shaker.OnBeginPour -= BeginPour;
+        Shaker.OnBeginPourCocktail -= BeginPourCocktail;
         Shaker.OnStopPour -= EndPour;
 
-        // need to add another BringPour method w/o the param
+        Bottle.OnBeginPourIngredient -= BeginPourIngredient;
         Bottle.OnStopPour -= EndPour;
     }
     private void Awake() => _lineRenderer = GetComponent<LineRenderer>();
@@ -52,7 +53,7 @@ public class LiquidPour : MonoBehaviour
     #endregion
     #region Helpers
 
-    private void BeginPour(Cocktail cocktail)
+    private void BeginPourCocktail(Cocktail cocktail)
     {
         Vector3 FindEndPoint()
         {
@@ -99,6 +100,52 @@ public class LiquidPour : MonoBehaviour
         StartCoroutine(CO_UpdateParticle());
         StartCoroutine(CO_BeginPour());
     }
+    private void BeginPourIngredient(Ingredient ingredient)
+    {
+        Vector3 FindEndPoint()
+        {
+            RaycastHit hit;
+            Ray ray = new Ray(transform.position, Vector3.down);
+
+            Physics.Raycast(ray, out hit, 2.0F);
+            Vector3 endPoint = hit.collider ? hit.point : ray.GetPoint(2.0F);
+
+            if (Physics.Raycast(hit.point, endPoint, _layerMask))
+            {
+                OnShakerHit?.Invoke(ingredient);
+            }
+
+            return endPoint;
+        }
+        IEnumerator CO_BeginPour()
+        {
+            while (gameObject.activeSelf)
+            {
+                _targetPosition = FindEndPoint();
+                MoveToPosition(0, transform.position);
+                AnimateToPosition(1, _targetPosition);
+
+                yield return new WaitForSeconds(3F);
+
+                ShakerEmptied?.Invoke();
+            }
+        }
+        IEnumerator CO_UpdateParticle()
+        {
+            while (gameObject.activeSelf)
+            {
+                _splashParticle.gameObject.transform.position = _targetPosition;
+
+                bool isHitting = HasReachedPosition(1, _targetPosition);
+                _splashParticle.gameObject.SetActive(isHitting);
+
+                yield return null;
+            }
+        }
+
+        StartCoroutine(CO_UpdateParticle());
+        StartCoroutine(CO_BeginPour());
+}
     private void EndPour()
     {
         IEnumerator CO_EndPour()

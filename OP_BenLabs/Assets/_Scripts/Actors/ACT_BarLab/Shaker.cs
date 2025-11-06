@@ -9,7 +9,8 @@ public class Shaker : Equipment, IPourable
 
     public IReadOnlyList<Ingredient> MixedDrink => _mixedDrink;
     public Cocktail Cocktail => _cocktail;
-    public static event System.Action<Cocktail> OnBeginPour;
+    public static event System.Action ShakerLocked;
+    public static event System.Action<Cocktail> OnBeginPourCocktail;
     public static event System.Action OnStopPour;
 
     #endregion
@@ -59,14 +60,14 @@ public class Shaker : Equipment, IPourable
         LiquidPour.ShakerEmptied -= ResetShaker;
     }
     private void FixedUpdate() => INT_CheckPourAngle();
-    private void OnTriggerEnter(Collider other)
+
+/*    private void OnCollisionEnter(Collision collision)
     {
-        if (other.GetComponent<Bottle>())
+        if(collision.gameObject.GetComponent<ShakerCap>)
         {
-            _mixedDrink.Add(other.GetComponent<Bottle>().Ingredient);
-            _logger.Log($"Added a drink to {this}!", TextColor.GREEN, _isDevMode);
+            ShakerLocked?.Invoke();
         }
-    }
+    }*/
 
     #endregion
     #region Public
@@ -92,8 +93,9 @@ public class Shaker : Equipment, IPourable
     }
     public void INT_Pour()
     {
-        Instantiate(_stream, _shakerTip.position, Quaternion.identity, transform);
-        OnBeginPour?.Invoke(_cocktail);
+        Instantiate(_stream, _shakerTip.position, 
+                    Quaternion.identity, transform);
+        OnBeginPourCocktail?.Invoke(_cocktail);
         _mixedDrink.Clear();
     }
     
