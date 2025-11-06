@@ -70,7 +70,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     }
     public void INT_BTN_StartTutorial()
     {
-        _soundEmitter.PlaySound(_colliderCheck.UnsureSFX);
+        _sndMgr.PlaySound("SND_Unsure");
         _logger.Log("No tutorial mode yet!", TextColor.RED, _isDevMode);
     }
 
@@ -200,6 +200,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
         if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
         if (Input.GetKeyDown(KeyCode.CapsLock)) StopGame();
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
     }
 
     #endregion
