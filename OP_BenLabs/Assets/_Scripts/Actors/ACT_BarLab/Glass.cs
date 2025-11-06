@@ -82,32 +82,25 @@ public class Glass : Equipment
         ResetDrink();
         ResetPosition();
 
-        if (_isDevMode)
-            _logger.Log("Hit the floor!", gameObject);
+        _logger.Log("Hit the floor!", gameObject, _isDevMode);
     }
     public void Served()
     {
         // give the score to GameMgr + STARTING_SCORE before resetting the drink
 
         ResetDrink();
-
-        if (_isDevMode)
-            _logger.Log("Drink has been served!", gameObject);
+        _logger.Log("Drink has been served!", gameObject, _isDevMode);
     }
     public void Washed()
     {
         ResetDrink();
-
-        if (_isDevMode)
-            _logger.Log($"{this} has been washed!", TextColor.GREEN);
+        _logger.Log($"{this} has been washed!", TextColor.GREEN, _isDevMode);
     }
     public void EnableDrink(int i)
     {
         if (_hasDrink)
         {
-            if (_isDevMode)
-                _logger.Log($"{this} alreaady has an active drink!");
-
+            _logger.Log($"{this} alreaady has an active drink!", _isDevMode);
             return;
         }
 
@@ -115,8 +108,7 @@ public class Glass : Equipment
         _drinks[i].SetActive(true);
         _cocktail = (Cocktail)(i + 1); // + 1 because there's an "EMPTY" element at index 0
 
-        if (_isDevMode)
-            _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW);
+        _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW, _isDevMode);
     }
         
     #endregion
@@ -164,9 +156,7 @@ public class Glass : Equipment
                     break;
             }
 
-
-            if (_isDevMode)
-                _logger.Log($"{name} is being poured into");
+            _logger.Log($"{name} is being poured into", _isDevMode);
         }
     }
 
@@ -179,8 +169,7 @@ public class Glass : Equipment
         foreach (GameObject drink in _drinks)
             drink.SetActive(false);
 
-        if (_isDevMode)
-            _logger.Log($"{this} has no more drink!", TextColor.YELLOW);
+        _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
 
     #endregion

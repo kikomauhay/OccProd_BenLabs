@@ -40,8 +40,7 @@ public class Equipment : Actor
         transform.SetPositionAndRotation(_startPosition, _startRotation);
         _soundEmitter.PlaySound(_landOnFloorSFX);
 
-        if (_isDevMode)
-            _logger.Log($"{name}'s position has been reset!", TextColor.YELLOW);
+        _logger.Log($"{name}'s position has been reset!", TextColor.YELLOW, _isDevMode);
     }
     
     #endregion

@@ -38,11 +38,6 @@ public class GhostBlock : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        void LogError(string message)
-        {
-            if (_isDevMode)
-                _logger.Log(message, TextColor.RED);
-        }
         void PassBlockInfo(CodeBlock cb)
         {
             switch (cb.CurrentBlockType)
@@ -81,23 +76,20 @@ public class GhostBlock : Actor
 
             if (_allowedBlockType != codeBlock.CurrentBlockType)
             {
-                LogError("BlockType mismatch!");
+                _logger.Log("BlockType mismatch!", _isDevMode);
                 return;
             }
             if (!_isEmpty)
             {
-                LogError($"{this} is already occupied!");
+                _logger.Log($"{this} is already occupied!", _isDevMode);
                 return;
             }
 
             PassBlockInfo(codeBlock);
             Destroy(codeBlock.gameObject); // add poof sfx before destorying 
 
-            if (_isDevMode)
-            {
-                _logger.Log($"{name} is now occupied with type: {codeBlock.CurrentBlockType}!", TextColor.YELLOW);
-                _logger.Log($"Filled blocks: {FilledBlocks}");
-            }
+            _logger.Log($"{name} is now occupied with type: {codeBlock.CurrentBlockType}!", TextColor.YELLOW, _isDevMode);
+            _logger.Log($"Filled blocks: {FilledBlocks}", _isDevMode);
         }          
     }
 

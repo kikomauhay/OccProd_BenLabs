@@ -43,8 +43,7 @@ public class ElevatorDoor : MonoBehaviour
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
         Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing Door references!</color>", gameObject);
 
-        if (_isDevMode)
-            _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW);
+        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
 
         InitVariables();
     }
@@ -79,8 +78,7 @@ public class ElevatorDoor : MonoBehaviour
         _soundEmitter.PlaySound(_buttonSFX);
         StartCoroutine(CO_OpenThenClose());
 
-        if (_isDevMode)
-            _logger.Log($"Elevator closed: {IsClosed}", TextColor.GREEN);
+        _logger.Log($"Elevator closed: {IsClosed}", TextColor.GREEN, _isDevMode);
     }
     public void BTN_Close(bool calledFromInside = false) // accessed from inside
     {
@@ -94,9 +92,7 @@ public class ElevatorDoor : MonoBehaviour
             _soundEmitter.PlaySound(_bellSFX);
 
         IsClosed = true;
-
-        if (_isDevMode)
-            _logger.Log($"Elevator closed: {IsClosed}", TextColor.GREEN);
+        _logger.Log($"Elevator closed: {IsClosed}", TextColor.GREEN, _isDevMode);
     }
 
     #endregion

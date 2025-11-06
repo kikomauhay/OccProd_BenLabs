@@ -10,9 +10,7 @@ public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
         Instance = this as T;
 
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-
-        if (_isDevMode)
-            _logger.Log($"{name}'s developer mode enabled!", this, TextColor.YELLOW);
+        _logger.Log($"{name}'s developer mode enabled!", this, TextColor.YELLOW, _isDevMode);
 
         InitComponents();
     }

@@ -36,6 +36,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
         // Debug.Assert(_barOnboardingLines, "Missing elements in _barOnboardingLines!", gameObject);
         // Debug.Assert(_gddOnboardingLines, "Missing elements in _gddOnboardingLines!", gameObject);
         //To turn on VR Onb
+
         StartCoroutine(StartVROnb(5f));
         base.Start();
     }

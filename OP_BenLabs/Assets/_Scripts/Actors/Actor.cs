@@ -18,9 +18,7 @@ public abstract class Actor : MonoBehaviour
     protected virtual void Start()
     {
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-
-        if (_isDevMode)
-            _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW);
+        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
 
         InitVariables();
     }

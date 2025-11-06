@@ -65,15 +65,13 @@ public class GameManager : Singleton<GameManager>
             default: break;
         }
 
-        Debug.Log($"Teleported Player to {pos}"); 
+        _logger.Log($"Teleported Player to {pos}", _isDevMode); 
 
         StartCoroutine(CO_FadeIn());
         _player.transform.position = pos;
 
-        Debug.Log($"Player POS: {_player.transform.position}");
-
-        if (_isDevMode)
-            _logger.Log($"Teleported Player to {type}!");
+        _logger.Log($"Player Position: {_player.transform.position}", _isDevMode);
+        _logger.Log($"Teleported Player to {type}!", _isDevMode);
 
         yield return CO_FadeOut();
     }
@@ -83,7 +81,6 @@ public class GameManager : Singleton<GameManager>
 
         switch (type)
         {
-            case FloorType.BAR:      break;
 
             case FloorType.LOBBY: // final part of the game
                 // show the different logos
@@ -94,7 +91,8 @@ public class GameManager : Singleton<GameManager>
                 StartCoroutine(CO_FadeOut());
                 break;
 
-            default: break;
+            case FloorType.BAR: break;
+            default:            break;
         }
 
         yield break;

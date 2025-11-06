@@ -39,9 +39,7 @@ public class Enemy : Actor
             Weapon w = other.GetComponent<Weapon>();
 
             TakeDamage(w.Damage + w.DamageModifier);
-
-            if (_isDevMode)
-                _logger.Log($"{this} took damage!");
+            _logger.Log($"{this} took damage!", _isDevMode);
             
             return;
         }
@@ -59,10 +57,8 @@ public class Enemy : Actor
         if (_currHP == 0f)
             OnKilled?.Invoke();
 
-        if (_isDevMode)
-            _logger.Log($"{name} is destoryed!", TextColor.YELLOW);
-
         _gddMgr.UnbindEvents(this);
+        _logger.Log($"{name} is destoryed!", TextColor.YELLOW, _isDevMode);
     }
 
     #endregion
@@ -77,13 +73,12 @@ public class Enemy : Actor
     {
         if (amt < 0f)
         {
-            if (_isDevMode)
-                _logger.Log("Cannot deal negative daamge!", TextColor.RED);
-
+            _logger.Log("Cannot deal negative daamge!", TextColor.RED, _isDevMode);
             return;
         }
 
         _currHP -= amt;
+        _logger.Log($"Enemy's HP: {_currHP}", _isDevMode);
 
         if (_currHP < 1f)
         {

@@ -66,15 +66,12 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
         SpawnCustomer();
 
-        if (_isDevMode)
-            _logger.Log("Bar mini-game has started!");
+        _logger.Log("Bar mini-game has started!", _isDevMode);
     }
     public void INT_BTN_StartTutorial()
     {
         _soundEmitter.PlaySound(_colliderCheck.UnsureSFX);
-
-        if (_isDevMode)
-            _logger.Log("No tutorial mode yet!", TextColor.RED);
+        _logger.Log("No tutorial mode yet!", TextColor.RED, _isDevMode);
     }
 
     public void INT_DoGameOver()
@@ -85,8 +82,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
         // StopGame();
 
-        if (_isDevMode)
-            _logger.Log("No game over logic yet!", TextColor.RED);
+        _logger.Log("No game over logic yet!", TextColor.RED, _isDevMode);
     }
     public void SpawnCustomer()
     {
@@ -94,9 +90,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         {
             if (_colliderCheck.HasCustomer)
             {
-                if (_isDevMode)
-                    _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED);
-
+                _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED, _isDevMode);
                 yield break;
             }
             if (_customersServed > MAX_CUSTOMERS_SERVED)
@@ -104,10 +98,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
                 StopGame();
                 yield break;
             }
-
-            if (_isDevMode)
-                _logger.Log($"{GRACE_PERIOD}s grace period before spawning!", TextColor.YELLOW);
-
+            _logger.Log($"{GRACE_PERIOD}s grace period before spawning!", TextColor.YELLOW, _isDevMode);
             yield return new WaitForSeconds(GRACE_PERIOD);
 
             GameObject customerToSpawn = _isDevMode ? _testCustomer : _customerPrefab;
@@ -115,9 +106,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
                                                 _customerSpawnpoint.rotation, _customerSpawnpoint);
 
             _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
-
-            if (_isDevMode)
-                _logger.Log("Spawned new customer!");
+            _logger.Log("Spawned new customer!", _isDevMode);
         }
 
         StartCoroutine(CO_SpawnCustomer());
@@ -149,9 +138,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _customersServed++;
 
         _sndMgr.PlaySound("SND_Correct");
-
-        if (_isDevMode)
-            _logger.Log($"Total score: {_totalScore}");
+        _logger.Log($"Total score: {_totalScore}", _isDevMode);
 
         SpawnCustomer();
     }
@@ -184,9 +171,8 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _startButton.SetActive(true);
 
         StopAllCoroutines();
-        
-        if (_isDevMode)
-            _logger.Log("Bar mini-game has finished!");
+
+        _logger.Log("Bar mini-game has finished!", _isDevMode);
     }
     
 

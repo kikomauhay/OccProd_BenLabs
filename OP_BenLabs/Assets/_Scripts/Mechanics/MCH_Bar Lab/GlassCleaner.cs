@@ -21,9 +21,7 @@ public class GlassCleaner : MonoBehaviour
     private void Start()
     {
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-
-        if (_isDevMode)
-            _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW);
+        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
     }
     private void OnTriggerEnter(Collider other)
     {
