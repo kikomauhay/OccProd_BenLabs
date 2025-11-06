@@ -7,7 +7,6 @@ public class ColliderCheck : Actor
     #region Properties
 
     public Customer CustomerOrder { get; set; }
-    public Sound UnsureSFX => _unsureSFX;
     public bool HasCustomer { get; private set; }
 
     #endregion
