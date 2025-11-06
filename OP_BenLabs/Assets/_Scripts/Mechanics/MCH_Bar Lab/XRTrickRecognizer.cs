@@ -10,6 +10,7 @@ public class XRTrickRecognizer : MonoBehaviour
 {
     #region Members
 
+    [SerializeField] private bool _shakerCapped = false;
     [SerializeField] private bool _isShaking = false;
     [SerializeField] private Transform _trackingPoint;
     [SerializeField] private float _threshold;
@@ -29,6 +30,16 @@ public class XRTrickRecognizer : MonoBehaviour
     #endregion
 
     #region Unity
+
+    private void OnEnable()
+    {
+        Shaker.ShakerLocked += IsCapped;
+    }
+
+    private void OnDisable()
+    {
+        Shaker.ShakerLocked -= IsCapped;
+    }
 
     private void Start()
     {
@@ -95,7 +106,7 @@ public class XRTrickRecognizer : MonoBehaviour
 
     public void StartTrace()
     {
-        if (_isShaking) return;
+        if (_isShaking && !_shakerCapped) return;
 
         _isShaking = true;
         positionList.Clear();
@@ -146,6 +157,9 @@ public class XRTrickRecognizer : MonoBehaviour
             }
         }
     }
+
+    private void IsCapped() => _isShaking = true;
+    private void ResetShaker() => _isShaking = false;//call this once sink trigger has been setup
 
     #endregion
 }
