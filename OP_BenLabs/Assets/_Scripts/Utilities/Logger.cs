@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -14,24 +15,24 @@ public class Logger : MonoBehaviour
     [Header("Logging Settings"), Tooltip("If ShowLogs is ticked off, the console will be clean.")]
     [SerializeField] private bool _showLogs;
 
-    public void Log(object message)
+    public void Log(object message, bool isDevMode)
     {
-        if (_showLogs)
+        if (_showLogs && isDevMode)
             Debug.Log(message);
     }
-    public void Log(object message, Object sender)
+    public void Log(object message, Object sender, bool isDevMode)
     {
-        if (_showLogs)
+        if (_showLogs && isDevMode)
             Debug.Log(message, sender);
     }
-    public void Log(object message, TextColor col)
+    public void Log(object message, TextColor col, bool isDevMode)
     {
         if (_showLogs)
             Debug.Log($"<color={col}>{message}</color>");
     }
-    public void Log(object message, Object sender, TextColor col)
+    public void Log(object message, Object sender, TextColor col, bool isDevMode)
     {
-        if (_showLogs)
+        if (_showLogs && isDevMode)
             Debug.Log($"<color={col}>{message}</color>", sender);
     }
 }

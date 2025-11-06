@@ -35,8 +35,7 @@ public class ElevatorButtonInteraction : Actor
             _button.onClick.Invoke();
             StartCoroutine(DisableButton());
         }
-        else if (_isDevMode)
-            _logger.Log("NO INTERACTION", TextColor.RED);
+        else _logger.Log("NO INTERACTION", TextColor.RED, _isDevMode);
     }
 
     #endregion

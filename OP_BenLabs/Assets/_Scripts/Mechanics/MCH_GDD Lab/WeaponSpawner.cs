@@ -14,12 +14,10 @@ public class WeaponSpawner : Actor
 		}
 		else
 		{
-			Debug.LogWarning($"{weaponName} has spawned. Wrong Weapon");
+            _logger.Log($"{weaponName} has spawned. Wrong Weapon", _isDevMode);
             //GDDManager.Instance.Retry()? Or whatever fucking function to reset the canvas
         }
 
-
-        if (_isDevMode)
-			_logger.Log("Enabled a weapon!", gameObject, TextColor.YELLOW);
+        _logger.Log("Enabled a weapon!", gameObject, TextColor.YELLOW, _isDevMode);
 	}
 }

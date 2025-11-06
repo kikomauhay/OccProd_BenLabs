@@ -27,11 +27,6 @@ public class FloorHandler : Singleton<FloorHandler>
 
     public void BTN_EnterFloor(int idx) // only accessed from inside
     {  
-        void LogError(string message)
-        {
-            if (_isDevMode)
-                _logger.Log(message, TextColor.RED);
-        }
         IEnumerator CO_MoveToFloor()
         {
             if (!_elevDoor.IsClosed)
@@ -43,9 +38,7 @@ public class FloorHandler : Singleton<FloorHandler>
             for (int i = 0; i < _floors.Length; i++)
             {
                 _floors[i].gameObject.SetActive(i == idx);
-                
-                if (_isDevMode)
-                    _logger.Log($"Entering: {(FloorType)idx}");
+                _logger.Log($"Entering: {(FloorType)idx}", _isDevMode);
             }
                
             _elevDoor.BTN_Open();
@@ -55,12 +48,12 @@ public class FloorHandler : Singleton<FloorHandler>
 
         if (idx < 0)
         {
-            LogError($"{this} cannot go there!");
+            _logger.Log($"{this} cannot go there!", _isDevMode);
             return;
         }
         if (!GameManager.Instance.CanPause)
         {
-            LogError("You cannot go to that floor at this time!");
+            _logger.Log("You cannot go to that floor at this time!", _isDevMode);
             return;
         }
 

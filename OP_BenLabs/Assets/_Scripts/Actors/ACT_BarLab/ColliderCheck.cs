@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -18,11 +19,13 @@ public class ColliderCheck : Actor
     [Header("Sounds")]
     [SerializeField] private Sound _correctSFX; 
     [SerializeField] private Sound _wrongSFX, _unsureSFX;
-    
+
     #endregion
     #region Private
 
+    private SoundManager _sndMgr;
     private BarManager _barMgr;
+
     private BoxCollider _collider;
 
     #endregion
@@ -41,10 +44,8 @@ public class ColliderCheck : Actor
         {
             if (!glass.HasDrink)
             {
-                if (_isDevMode)
-                    _logger.Log($"The glass has nothing in it!", TextColor.RED);
-
-                _soundEmitter.PlaySound(_unsureSFX);
+                _logger.Log($"The glass has nothing in it!", TextColor.RED, _isDevMode);
+                _sndMgr.PlaySound("SND_Unsure");
                 return;
             }
 
@@ -65,10 +66,8 @@ public class ColliderCheck : Actor
 
         if (!CustomerOrder)
         {
-            if (_isDevMode)
-                _logger.Log("Missing CustomerOrder reference!", TextColor.RED);
-
-            _soundEmitter.PlaySound(_unsureSFX);
+            _logger.Log("Missing CustomerOrder reference!", TextColor.RED, _isDevMode);
+            _sndMgr.PlaySound("SND_Unsure");
             return;
         }
 
@@ -85,6 +84,7 @@ public class ColliderCheck : Actor
     }
     protected override void InitVariables()
     {
+        _sndMgr = SoundManager.Instance;
         _barMgr = BarManager.Instance;
 
         _collider.isTrigger = true;

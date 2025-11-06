@@ -18,9 +18,7 @@ public class RoomTeleporter : MonoBehaviour
     private void Start()
     {
         Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-
-        if (_isDevMode)
-            _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW);
+        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
 
         _gameMgr = GameManager.Instance;
     }
@@ -29,15 +27,9 @@ public class RoomTeleporter : MonoBehaviour
         if (other.gameObject.GetComponent<XROrigin>())
         {
             StartCoroutine(_gameMgr.CO_Enter(FloorType.LOBBY));
-
-            if (_isDevMode)
-                _logger.Log("Teleported player to the Lobby!");
+            _logger.Log("Teleported player to the Lobby!", _isDevMode);
         }
-        else
-        {
-            if (_isDevMode)
-                _logger.Log("Player Not Detected!");
-        }
+        else _logger.Log("Player Not Detected!", _isDevMode);
     }
 
     #endregion

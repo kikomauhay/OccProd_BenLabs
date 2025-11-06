@@ -120,7 +120,7 @@ public class CodeBlock : Actor
                 default:                break;
             }
 
-            _logger.Log($"{this} has been reset!", TextColor.YELLOW);
+            _logger.Log($"{this} has been reset!", TextColor.YELLOW, _isDevMode);
         }
     }
 

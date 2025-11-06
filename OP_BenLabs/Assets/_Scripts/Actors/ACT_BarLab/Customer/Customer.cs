@@ -67,8 +67,7 @@ public class Customer : Actor
 
         // _drinkOrdersUI[(int)_wantedCocktail].SetActive(true);
 
-        if (_isDevMode)
-            _logger.Log($"{this} wants a {_wantedCocktail}");
+        _logger.Log($"{this} wants a {_wantedCocktail}", _isDevMode);
     }
 
     protected override void Test()
@@ -83,10 +82,9 @@ public class Customer : Actor
     {
         IEnumerator CO_LostPatience()
         {
-            if (_isDevMode)
-                _logger.Log("Customer lost patience!", TextColor.RED);
-
+            _logger.Log("Customer lost patience!", TextColor.RED, _isDevMode);
             yield return new WaitForSeconds(2f);
+
             Destroy(gameObject);
             BarManager.Instance.Wrong();
         }
@@ -98,16 +96,13 @@ public class Customer : Actor
             yield return new WaitForSeconds(PATIENCE_INTERVAL);
             _customerScore--;
 
-            if (_isDevMode)
-                _logger.Log($"Customer Score: {_customerScore}");
+            _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
         }
 
         if (_customerScore < 1f)
         {
             _customerScore = 0f;
-
-            if (_isDevMode)
-                _logger.Log($"Customer Score: {_customerScore}");
+            _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
 
             yield return StartCoroutine(CO_LostPatience());
         }

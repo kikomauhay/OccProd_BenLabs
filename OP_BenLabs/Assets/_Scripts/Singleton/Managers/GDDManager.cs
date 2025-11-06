@@ -91,25 +91,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public void INT_BTN_StartGame()
     {
         StartCoroutine(_gameMgr.CO_Enter(FloorType.GDD));
-
-        if (_isDevMode)
-            _logger.Log("Game start!", TextColor.YELLOW);
+        _logger.Log("Game start!", TextColor.YELLOW, _isDevMode);
     }
     public void INT_BTN_StartTutorial()
     {
         // TP player to the GDD area
         // _soundEmitter.PlaySound(_colliderCheck.WrongSFX);
 
-        if (_isDevMode)
-            _logger.Log("No tutorial mode yet!", TextColor.RED);
+        _logger.Log("No tutorial mode yet!", TextColor.RED, _isDevMode);
     }
 
     public void INT_DoGameOver() // only be called once player gets 0 HP
     {
         StartCoroutine(_gameMgr.CO_Exit(FloorType.GDD));
-
-        if (_isDevMode)
-            _logger.Log("Game over!", TextColor.YELLOW);
+        _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
     }
 
     public void SpawnEnemy()
@@ -129,7 +124,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             e.OnKilled += EVENT_IncrementKillCount;
             e.OnKilled += EVENT_GainLife;
 
-            e.SetGoal(_testGoal);
+            e.SetGoal(_isDevMode ? _gameMgr.Player.transform : _testGoal);
 
             _enemyList.Add(e.gameObject);
         }
@@ -138,9 +133,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                                           EnemyPrefab, RandomPositionInBox(), Quaternion.identity);
 
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
-
-        if (_isDevMode)
-            _logger.Log("Spawned new enemy!");
+        _logger.Log("Spawned new enemy!", _isDevMode);
     }
 
     public void RemoveBlock(CodeBlock cb) => _availableBlocksList.Remove(cb);
@@ -170,8 +163,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         _waveState = WaveState.COUNTING;
 
-        if (_isDevMode)
-            _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN);
+        _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN, _isDevMode);
 
         if (_enemyList.Count == 0)
         {
@@ -181,18 +173,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             if (_waveIndex < 2)
             {
                 StartCoroutine(CO_SpawnEnemyWave());
-
-                if (_isDevMode)
-                    _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN);
+                _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
             }
         }
     }
     private void EVENT_IncrementKillCount()
     {
         _killCount++;
-
-        if (_isDevMode)
-            _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW);
+        _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW, _isDevMode);
     }
     private void EVENT_GainLife()
     {
@@ -283,12 +271,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         {
             // play StartTimer.sfx
 
-            void Log(string message) 
-            {
-                if (_isDevMode)
-                    _logger.Log(message, TextColor.GREEN);
-            }
-
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
 
@@ -303,28 +285,26 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             {
                 case Modifier.HEALTH: 
                     _currHP += 5f;
-                    Log("Increased HP!");
+                    _logger.Log("Increased HP!", _isDevMode);
                     break;                
                 
                 case Modifier.DAMAGE:
                     OnBuffWeapon?.Invoke();
-                    Log("Increased damage!");
+                    _logger.Log("Increased damage!", _isDevMode);
                     break;                
                 
                 case Modifier.REDUCED_ENEMIES: 
                     unitCount = _enemiesToSpawn[_waveIndex] - 1;
-                    Log("Reduced enemies!");
+                    _logger.Log("Reduced enemies!", _isDevMode);
                     break;                
                 
                 case Modifier.DEFAULT: break;                
                 default:               break;
             }
 
-            if (_isDevMode)
-            {
-                _logger.Log($"{GRACE_PERIOD}s before enemy spawning!", TextColor.YELLOW);
-                _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW);
-            }
+            _logger.Log($"{GRACE_PERIOD}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
+            _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);
+            
         }
         IEnumerator CO_DoEnemySpawning()
         {
@@ -336,9 +316,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                     Destroy(cb.gameObject);
 
                 _availableBlocksList.Clear();
-
-                if (_isDevMode)
-                    _logger.Log("Removed remaining blocks!");
+                _logger.Log("Removed remaining blocks!", _isDevMode);
             }
 
             _waveState = WaveState.SPAWNING;
@@ -351,16 +329,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
             }
             _waveState = WaveState.FINISHED;
-
-            if (_isDevMode)
-                _logger.Log("Finished spawning!", TextColor.YELLOW);
+            _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
         }
 
         if (_waveState == WaveState.SPAWNING) // prevents wave spawning overlaps
         {
-            if (_isDevMode)
-                _logger.Log("Still spawning enemies!", this, TextColor.RED);
-
+            _logger.Log("Still spawning enemies!", this, TextColor.RED, _isDevMode);
             yield break;
         }
 

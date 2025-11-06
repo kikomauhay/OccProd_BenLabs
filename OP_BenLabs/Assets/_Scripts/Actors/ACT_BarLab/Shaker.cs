@@ -64,9 +64,7 @@ public class Shaker : Equipment, IPourable
         if (other.GetComponent<Bottle>())
         {
             _mixedDrink.Add(other.GetComponent<Bottle>().Ingredient);
-
-            if (_isDevMode)
-                _logger.Log($"Added a drink to {this}!", TextColor.GREEN);
+            _logger.Log($"Added a drink to {this}!", TextColor.GREEN, _isDevMode);
         }
     }
 
@@ -107,8 +105,7 @@ public class Shaker : Equipment, IPourable
         _mixedDrink.Clear();
         _cocktail = Cocktail.EMPTY;
 
-        if (_isDevMode)
-            _logger.Log($"{this} has no more drink!", TextColor.YELLOW);
+        _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
         
     #endregion
@@ -146,18 +143,13 @@ public class Shaker : Equipment, IPourable
                 if (isMatching)
                 {
                     _cocktail = recipe.Key;
-
-                    if (_isDevMode)
-                        _logger.Log($"Created {recipe.Key}!", TextColor.GREEN);
-
+                    _logger.Log($"Created {recipe.Key}!", TextColor.GREEN, _isDevMode);
                     return;
                 }
             }
 
             _cocktail = Cocktail.WRONG;
-
-            if (_isDevMode)
-                _logger.Log("Created dubious drink!", TextColor.RED);
+            _logger.Log("Created dubious drink!", TextColor.RED, _isDevMode);
         }
 
         // time for the player to earn bonus points
