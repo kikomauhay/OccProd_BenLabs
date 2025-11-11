@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Scriptable Objects/Weapon")]
-public class Weapon : ScriptableObject
+//[CreateAssetMenu(menuName = "Scriptable Objects/Weapon")]
+public class Weapon : Actor
 {
     #region Properties
 

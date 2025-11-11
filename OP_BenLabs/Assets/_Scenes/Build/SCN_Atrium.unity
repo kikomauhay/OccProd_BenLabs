@@ -243,12 +243,6 @@ MonoBehaviour:
   m_Teleporting:
     m_PersistentCalls:
       m_Calls: []
---- !u!1 &4802143 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1060294164400546055, guid: 56d8cc241502f404aa8bc693a3954571,
-    type: 3}
-  m_PrefabInstance: {fileID: 1060294164405217112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &74483883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1164,12 +1158,6 @@ MeshRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 349649258}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &457155933 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1060294164793868805, guid: 56d8cc241502f404aa8bc693a3954571,
-    type: 3}
-  m_PrefabInstance: {fileID: 1060294164405217112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &502377370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,12 +1431,6 @@ MonoBehaviour:
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
   m_CancelButton: Cancel
---- !u!1 &606800041 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1060294165010706417, guid: 56d8cc241502f404aa8bc693a3954571,
-    type: 3}
-  m_PrefabInstance: {fileID: 1060294164405217112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &627850768
 GameObject:
   m_ObjectHideFlags: 0
@@ -3781,22 +3763,22 @@ PrefabInstance:
         type: 3}
       propertyPath: _sword.Array.data[0]
       value: 
-      objectReference: {fileID: 4802143}
+      objectReference: {fileID: 1060294164405217116}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _sword.Array.data[1]
       value: 
-      objectReference: {fileID: 1637205275}
+      objectReference: {fileID: 1060294164405217114}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _hammer.Array.data[0]
       value: 
-      objectReference: {fileID: 457155933}
+      objectReference: {fileID: 1060294164405217115}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _hammer.Array.data[1]
       value: 
-      objectReference: {fileID: 606800041}
+      objectReference: {fileID: 1060294164405217113}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _marker.Array.data[0]
@@ -4223,12 +4205,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622989913}
   m_CullTransparentMesh: 1
---- !u!1 &1637205275 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1060294163878060611, guid: 56d8cc241502f404aa8bc693a3954571,
-    type: 3}
-  m_PrefabInstance: {fileID: 1060294164405217112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1660283482
 GameObject:
   m_ObjectHideFlags: 0
@@ -6280,12 +6256,41 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7903083597760404115, guid: 56d8cc241502f404aa8bc693a3954571,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1060294163365964040, guid: 56d8cc241502f404aa8bc693a3954571, type: 3}
     - {fileID: 1060294163365964042, guid: 56d8cc241502f404aa8bc693a3954571, type: 3}
     - {fileID: 1060294165241105458, guid: 56d8cc241502f404aa8bc693a3954571, type: 3}
     - {fileID: 1060294165241105460, guid: 56d8cc241502f404aa8bc693a3954571, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 56d8cc241502f404aa8bc693a3954571, type: 3}
+--- !u!1 &1060294164405217113 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2285814191116725120, guid: 56d8cc241502f404aa8bc693a3954571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1060294164405217112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1060294164405217114 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7903083597760404115, guid: 56d8cc241502f404aa8bc693a3954571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1060294164405217112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1060294164405217115 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5790905697889943745, guid: 56d8cc241502f404aa8bc693a3954571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1060294164405217112}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1060294164405217116 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 398247054368771092, guid: 56d8cc241502f404aa8bc693a3954571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1060294164405217112}
+  m_PrefabAsset: {fileID: 0}
 --- !u!33 &1082195115082676119
 MeshFilter:
   m_ObjectHideFlags: 0
