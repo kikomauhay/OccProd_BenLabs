@@ -11,7 +11,7 @@ public class EmptyWeapon : Actor
     {
         if(other.gameObject.GetComponent<XROrigin>() != null)
         {
-            if(_weaponType.Equals(0))
+            if(_weaponType == WeaponType.SWORD)
             {
                 GDDManager.Instance.ActivateSword();
             }
