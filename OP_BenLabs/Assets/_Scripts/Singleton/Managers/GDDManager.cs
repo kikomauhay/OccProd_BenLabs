@@ -104,12 +104,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     public void ActivateSword()
     {
-        _sword[0].SetActive(true);
+        _sword[1].SetActive(true);
     }
 
     public void ActivateHammer()
     {
-        _hammer[0].SetActive(true);
+        _hammer[1].SetActive(true);
     }
 
     public void INT_BTN_StartGame()
@@ -316,7 +316,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
-            _marker[0].SetActive(true);
+            _marker[1].SetActive(true);
 
             // variable assignment
             _preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
