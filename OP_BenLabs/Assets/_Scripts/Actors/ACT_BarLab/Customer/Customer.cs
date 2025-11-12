@@ -60,6 +60,7 @@ public class Customer : Actor
         name = "Customer";
         _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
+        _actions.IsMale = Random.value > 0.5f;
 
         // _drinkOrdersUI[(int)_wantedCocktail].SetActive(true);
 
@@ -74,6 +75,7 @@ public class Customer : Actor
         IEnumerator CO_LostPatience()
         {
             _logger.Log("Customer lost patience!", TextColor.RED, _isDevMode);
+            _actions.Wrong();
             yield return new WaitForSeconds(2f);
 
             Destroy(gameObject);

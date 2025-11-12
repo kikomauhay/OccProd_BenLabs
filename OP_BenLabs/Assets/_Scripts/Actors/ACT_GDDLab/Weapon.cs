@@ -23,7 +23,7 @@ public class Weapon : Actor
     {
         GDDManager.Instance.OnBuffWeapon += EVENT_IncreaseDamage;
     }
-    protected override void OnDisable()
+    protected override void OnDisable() 
     {
         GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
     }

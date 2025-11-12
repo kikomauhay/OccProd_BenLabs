@@ -15,10 +15,6 @@ public class ColliderCheck : Actor
     [Header("Components")]
     [SerializeField] private SoundEmitter _soundEmitter;
 
-    [Header("Sounds")]
-    [SerializeField] private Sound _correctSFX; 
-    [SerializeField] private Sound _wrongSFX, _unsureSFX;
-
     #endregion
     #region Private
 
@@ -50,12 +46,12 @@ public class ColliderCheck : Actor
 
             if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
-                _soundEmitter.PlaySound(_correctSFX);
+                _sndMgr.PlaySound("SND_Correct");
                 _barMgr.Correct(glass.Score); 
             }
             else
             {
-                _soundEmitter.PlaySound(_wrongSFX);
+                _sndMgr.PlaySound("SND_Wrong");
                 _barMgr.Wrong();
             }
 
@@ -95,9 +91,9 @@ public class ColliderCheck : Actor
     {
         if (!_isDevMode) return;
     
-        if (Input.GetKeyDown(KeyCode.C)) _soundEmitter.PlaySound(_correctSFX);
-        if (Input.GetKeyDown(KeyCode.W)) _soundEmitter.PlaySound(_wrongSFX);
-        if (Input.GetKeyDown(KeyCode.U)) _soundEmitter.PlaySound(_unsureSFX);
+        if (Input.GetKeyDown(KeyCode.C)) _sndMgr.PlaySound("SND_Correct");
+        if (Input.GetKeyDown(KeyCode.W)) _sndMgr.PlaySound("SND_Wrong");
+        if (Input.GetKeyDown(KeyCode.U)) _sndMgr.PlaySound("SND_Unsure");
     }
 
     #endregion
