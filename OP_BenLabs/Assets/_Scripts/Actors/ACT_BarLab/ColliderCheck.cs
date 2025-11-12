@@ -27,16 +27,12 @@ public class ColliderCheck : Actor
 
     #region Unity
 
-    protected override void Start()
-    {
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-        base.Start();
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         void DoGlassCollision(Glass glass)
         {
+            CustomerActions actions = CustomerOrder.GetComponent<CustomerActions>();
+
             if (!glass.HasDrink)
             {
                 _logger.Log($"The glass has nothing in it!", TextColor.RED, _isDevMode);
@@ -46,11 +42,13 @@ public class ColliderCheck : Actor
 
             if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
+                actions.CorrectReaction();
                 _sndMgr.PlaySound("SND_Correct");
                 _barMgr.Correct(glass.Score); 
             }
             else
             {
+                actions.WrongReaction();
                 _sndMgr.PlaySound("SND_Wrong");
                 _barMgr.Wrong();
             }
@@ -73,6 +71,10 @@ public class ColliderCheck : Actor
     #endregion
     #region Helpers
 
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
+    }
     protected override void InitComponents()
     {
         _collider = GetComponent<BoxCollider>();
@@ -88,9 +90,7 @@ public class ColliderCheck : Actor
     }
 
     protected override void Test()
-    {
-        if (!_isDevMode) return;
-    
+    {    
         if (Input.GetKeyDown(KeyCode.C)) _sndMgr.PlaySound("SND_Correct");
         if (Input.GetKeyDown(KeyCode.W)) _sndMgr.PlaySound("SND_Wrong");
         if (Input.GetKeyDown(KeyCode.U)) _sndMgr.PlaySound("SND_Unsure");
