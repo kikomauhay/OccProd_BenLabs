@@ -20,6 +20,7 @@ public class Weapon : Actor
 
     #region Unity
 
+    /*
     private void OnEnable()
     {
         GDDManager.Instance.OnBuffWeapon += EVENT_IncreaseDamage;
@@ -28,6 +29,7 @@ public class Weapon : Actor
     {
         GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
     }
+    */
         
     #endregion
     #region Private

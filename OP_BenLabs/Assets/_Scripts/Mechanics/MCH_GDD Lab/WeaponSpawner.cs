@@ -11,6 +11,7 @@ public class WeaponSpawner : Actor
 		{
 			foreach (var item in _weapons)
 				item.SetActive(weaponName == item.name);
+			Debug.Log($"Spawned {weaponName}");
 		}
 		else
 		{
