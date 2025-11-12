@@ -4,12 +4,21 @@ using UnityEngine;
 [RequireComponent(typeof(CustomerAppearance), typeof(SoundEmitter))]
 public class CustomerActions : MonoBehaviour
 {
+    #region Properties
+
+    public bool IsMale { get; set; }
+
+    #endregion
     #region SerializeField
 
-    [Header("Sounds")]
-    [SerializeField] private Sound _tipSFX;
-    [SerializeField] private Sound _cheerSFX, _happySFX, _angrySFX;
-        
+    [Header("Male Reactions")]
+    [SerializeField] private Sound[] _happMaleSFXs;
+    [SerializeField] private Sound[] _angryMaleSFXs;
+    
+    [Header("Female Reactions")]
+    [SerializeField] private Sound[] _happyFemaleSFXs;
+    [SerializeField] private Sound[] _angryFemaleSFXs;
+
     #endregion
     #region Private 
 
@@ -37,13 +46,25 @@ public class CustomerActions : MonoBehaviour
     {
         // play money.sfx
     }
-    
+
+    public void Correct()
+    {
+        _soundEmitter.PlaySound(IsMale ? 
+                                _happMaleSFXs[Random.Range(0, _happMaleSFXs.Length)] :
+                                _happyFemaleSFXs[Random.Range(0, _happyFemaleSFXs.Length)]);
+    }
+    public void Wrong()
+    {
+        _soundEmitter.PlaySound(IsMale ?
+                               _angryMaleSFXs[Random.Range(0, _angryMaleSFXs.Length)] :
+                               _angryFemaleSFXs[Random.Range(0, _angryFemaleSFXs.Length)]);
+    }
+
     #endregion
     #region Enumerators
 
     public IEnumerator CO_Correct()
     {
-        // play happy.sfx
         yield break;
     }
     public IEnumerator CO_Wrong()

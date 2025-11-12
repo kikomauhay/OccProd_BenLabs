@@ -39,12 +39,7 @@ public class ElevatorDoor : MonoBehaviour
 
     private void Start()
     {
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-        Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing door references!</color>", gameObject);
-
-        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
-
+        AssertComponents();
         InitVariables();
     }
     private void Update() => Test();
@@ -99,6 +94,22 @@ public class ElevatorDoor : MonoBehaviour
     #endregion
     #region Helpers
 
+    private void Test()
+    {
+        if (!_isDevMode) return;
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) BTN_Open();
+        if (Input.GetKeyDown(KeyCode.RightArrow)) BTN_Close();
+    }
+
+    private void AssertComponents()
+    {
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
+        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
+        Debug.Assert(_leftDoor || _rightDoor, "<color=red>Missing door references!</color>", gameObject);
+
+        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
+    }
     private void InitVariables()
     {
         Delay = new WaitForSeconds(5f);
@@ -106,14 +117,6 @@ public class ElevatorDoor : MonoBehaviour
 
         _leftDoorStartPos = _leftDoor.localPosition;
         _rightDoorStartPos = _rightDoor.localPosition;
-    }
-
-    private void Test()
-    {
-        if (!_isDevMode) return;
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) BTN_Open();
-        if (Input.GetKeyDown(KeyCode.RightArrow)) BTN_Close();
     }
 
     #endregion
