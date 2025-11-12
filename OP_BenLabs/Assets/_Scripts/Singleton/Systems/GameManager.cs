@@ -29,6 +29,20 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    #region Unity
+
+    protected override void Start()
+    {
+        Debug.Assert(_player, "Missing _player reference!", gameObject);
+        Debug.Assert(_lobbyWaypoint, "Missing _lobbyWaypoint reference!", gameObject);
+        Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", gameObject);
+        Debug.Assert(_player, "Missing _player reference!", gameObject);
+
+        base.Start();
+    }
+    
+    #endregion
+
     #region Helpers
 
     protected override void InitComponents()
