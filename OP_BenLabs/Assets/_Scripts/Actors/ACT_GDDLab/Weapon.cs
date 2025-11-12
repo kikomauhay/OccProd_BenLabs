@@ -1,6 +1,5 @@
 using UnityEngine;
 
-//[CreateAssetMenu(menuName = "Scriptable Objects/Weapon")]
 public class Weapon : Actor
 {
     #region Properties
@@ -20,11 +19,11 @@ public class Weapon : Actor
 
     #region Unity
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         GDDManager.Instance.OnBuffWeapon += EVENT_IncreaseDamage;
     }
-    private void OnDisable()
+    protected override void OnDisable()
     {
         GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
     }
