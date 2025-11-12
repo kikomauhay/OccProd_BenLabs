@@ -9,16 +9,20 @@ public class EmptyWeapon : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.GetComponent<XROrigin>() != null)
+        
+        if(other.gameObject.GetComponent<XROrigin>())
         {
-            if(_weaponType == WeaponType.SWORD)
+            if (_weaponType == WeaponType.SWORD)
             {
                 GDDManager.Instance.ActivateSword();
+                Debug.Log("Activated sword");  
             }
             else
             {
+                Debug.Log("Activated hammer");
                 GDDManager.Instance.ActivateHammer();
             }
+            
         }
 
         this.gameObject.SetActive(false);

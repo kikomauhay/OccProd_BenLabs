@@ -365,7 +365,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
-            _marker[0].SetActive(false);
+            _marker[1].SetActive(false);
             _blockLabelsUI.SetActive(false);
 
             for (int i = 0; i < unitCount; i++)
