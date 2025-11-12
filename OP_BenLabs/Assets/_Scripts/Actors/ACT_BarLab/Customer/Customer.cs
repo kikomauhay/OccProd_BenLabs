@@ -28,6 +28,7 @@ public class Customer : Actor
     private const float GRACE_PERIOD = 2f;
 
     private CustomerActions _actions;
+    private CustomerAppearance _appearance;
     private float _customerScore;
 
     #endregion
@@ -36,21 +37,23 @@ public class Customer : Actor
 
     protected override void Start()
     {
-        // Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
-        // Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
-
         base.Start();
-                
         StartCoroutine(CO_DecreaseRating());
     }
 
     #endregion
     #region Helpers
 
+    protected override void AssertComponents()
+    {
+        // Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
+        // Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
+    }
     protected override void InitComponents()
     {
         _logger = BarManager.Instance.Logger;
         _actions = GetComponent<CustomerActions>();
+        _appearance = GetComponent<CustomerAppearance>();
     }
     protected override void InitVariables()
     {
@@ -75,7 +78,7 @@ public class Customer : Actor
         IEnumerator CO_LostPatience()
         {
             _logger.Log("Customer lost patience!", TextColor.RED, _isDevMode);
-            _actions.Wrong();
+            _actions.WrongReaction();
             yield return new WaitForSeconds(2f);
 
             Destroy(gameObject);

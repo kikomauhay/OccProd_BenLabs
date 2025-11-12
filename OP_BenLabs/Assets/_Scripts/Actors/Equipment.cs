@@ -30,7 +30,7 @@ public class Equipment : Actor
     
     #region Public
 
-    public void PickUpSound() => _soundEmitter.PlaySound(_pickUpSFX);
+    public void EVENT_PickUpSound() => _soundEmitter.PlaySound(_pickUpSFX);
         
     #endregion
     #region Protected

@@ -12,7 +12,7 @@ public class CustomerActions : MonoBehaviour
     #region SerializeField
 
     [Header("Male Reactions")]
-    [SerializeField] private Sound[] _happMaleSFXs;
+    [SerializeField] private Sound[] _happyMaleSFXs;
     [SerializeField] private Sound[] _angryMaleSFXs;
     
     [Header("Female Reactions")]
@@ -22,22 +22,27 @@ public class CustomerActions : MonoBehaviour
     #endregion
     #region Private 
 
-    private CustomerAppearance _appearance;
     private SoundEmitter _soundEmitter;
-        
+
     #endregion
-    
+
     #region Unity
 
-    private void Awake() 
+    private void Awake()
     {
-        _appearance = GetComponent<CustomerAppearance>();
-        _soundEmitter = GetComponent<SoundEmitter>();    
-    } 
-        
+        _soundEmitter = GetComponent<SoundEmitter>();
+    }
+    private void Start()
+    {
+        Debug.Assert(_happyMaleSFXs.Length != 0, "Missing elements in _happyMaleSFXs!", gameObject);
+        Debug.Assert(_angryMaleSFXs.Length != 0, "Missing elements in _angryMaleSFXs!", gameObject);
+        Debug.Assert(_happyFemaleSFXs.Length != 0, "Missing elements in _happyFemaleSFXs!", gameObject);
+        Debug.Assert(_angryFemaleSFXs.Length != 0, "Missing elements in _angryFemaleSFXs!", gameObject);
+    }
+
     #endregion
     #region Public
-        
+
     public void Cheer()
     {
         // play cheer.sfx
@@ -47,33 +52,19 @@ public class CustomerActions : MonoBehaviour
         // play money.sfx
     }
 
-    public void Correct()
+    public void CorrectReaction()
     {
         _soundEmitter.PlaySound(IsMale ? 
-                                _happMaleSFXs[Random.Range(0, _happMaleSFXs.Length)] :
+                                _happyMaleSFXs[Random.Range(0, _happyMaleSFXs.Length)] :
                                 _happyFemaleSFXs[Random.Range(0, _happyFemaleSFXs.Length)]);
     }
-    public void Wrong()
+    public void WrongReaction()
     {
         _soundEmitter.PlaySound(IsMale ?
                                _angryMaleSFXs[Random.Range(0, _angryMaleSFXs.Length)] :
                                _angryFemaleSFXs[Random.Range(0, _angryFemaleSFXs.Length)]);
     }
 
-    #endregion
-    #region Enumerators
-
-    public IEnumerator CO_Correct()
-    {
-        yield break;
-    }
-    public IEnumerator CO_Wrong()
-    {
-        // play angry.sfx
-        yield break;
-    }
-
-        
-    #endregion
+    #endregion\
 }
 

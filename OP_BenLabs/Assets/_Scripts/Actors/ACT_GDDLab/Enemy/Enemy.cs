@@ -15,6 +15,10 @@ public class Enemy : Actor
     [SerializeField] private EnemyType _enemyType;
     [SerializeField] private float _minDistance; // testing
 
+    [Header("UI/UX")]
+    [SerializeField] private Sound[] _etbSFXs;
+    [SerializeField] private Sound _ltbSFX;
+
     #endregion
     #region Private
 
@@ -58,6 +62,7 @@ public class Enemy : Actor
             OnKilled?.Invoke();
 
         _gddMgr.UnbindEvents(this);
+        _soundEmitter.PlaySound(_ltbSFX);
         _logger.Log($"{name} is destoryed!", TextColor.YELLOW, _isDevMode);
     }
 
@@ -86,10 +91,15 @@ public class Enemy : Actor
             Destroy(gameObject);
         }
     }
-        
+
     #endregion
     #region Helpers
 
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_etbSFXs.Length != 3, "Missing elements in _etbSFXs!", gameObject);
+        Debug.Assert(_ltbSFX, "Missing _ltbSFX reference!", gameObject);
+    }
     protected override void InitComponents()
     {
         _logger = GDDManager.Instance.Logger;
@@ -127,6 +137,8 @@ public class Enemy : Actor
         _currHP = _maxHP;
         _moveSpeed = Random.Range(2f, 4f);
         _rotSpeed = Random.Range(2f, 4f);
+
+        _soundEmitter.PlaySound(_etbSFXs[(int)_enemyType]);
     }
 
     private void TravelToPlayer()
