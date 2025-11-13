@@ -123,9 +123,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
                 _totalScore += 15F;
                 return;
         }
-
     }
-
 
     public void Correct(float drinkScore)
     {

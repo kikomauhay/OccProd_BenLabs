@@ -46,7 +46,7 @@ public class Shaker : Equipment, IPourable
                                               Ingredient.LIME_JUICE,
                                               Ingredient.COCONUT_WATER } },
     };
-    private bool _isPouring, _isLocked;
+    private bool _isPouring, _isLocked, _isShaking, _isGrabbed;
 
     #endregion
 
@@ -83,7 +83,7 @@ public class Shaker : Equipment, IPourable
     {
         float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
 
-        if (_cocktail == Cocktail.EMPTY) return;
+        if (_cocktail == Cocktail.EMPTY && !_isGrabbed) return;
 
         if (angle > _pourThreshold)
         {
@@ -100,6 +100,8 @@ public class Shaker : Equipment, IPourable
     }
     public void INT_Pour()
     {
+        if (_cocktail == Cocktail.EMPTY) return;
+
         Instantiate(_stream, _shakerTip.position, 
                     Quaternion.identity, transform);
         OnBeginPourCocktail?.Invoke(_cocktail);
@@ -108,14 +110,19 @@ public class Shaker : Equipment, IPourable
 
     public void MixingCocktail()
     {
-        if (!_isLocked) return;
+        _isGrabbed = true;
+
+        if (!_isLocked && _isShaking) return;
+
         StartCoroutine(CO_ShakeDrink());
+        _isShaking = true;
     }
     
     public void Washed()
     {
         StopAllCoroutines();
     
+        _isShaking = false;
         _isPouring = false;
         _isLocked = false;
         _mixedDrink.Clear();
@@ -123,6 +130,8 @@ public class Shaker : Equipment, IPourable
 
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
+
+    public void IsReleased() => _isGrabbed = false;
         
     #endregion
     #region Helpers
@@ -157,10 +166,16 @@ public class Shaker : Equipment, IPourable
         }
     }
 
-    private void ResetShaker() => _cocktail = Cocktail.EMPTY;
+    private void ResetShaker() => StartCoroutine(CO_DrainDrink());
 
     #endregion
     #region Enumerators
+
+    private IEnumerator CO_DrainDrink()
+    {
+        yield return new WaitForSeconds(5F);
+        _cocktail = Cocktail.EMPTY;
+    }
 
     private IEnumerator CO_ShakeDrink() // gets called when the GO is picked up
     {
