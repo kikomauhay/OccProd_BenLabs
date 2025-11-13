@@ -38,7 +38,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [Header("UI/UX")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
     [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT;
-    [SerializeField] private Sound _startGameSFX, _gameOverSFX;
+    [SerializeField] private Sound _startGameSFX, _gameOverSFX, _healSFX, _dmgSFX;
 
     [Header("VR Variables")]
     [SerializeField] private bool _isLeftHandActive;
@@ -83,11 +83,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     protected override void Start()
     {
-        Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", gameObject);
-        Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
-        Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
-        Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
-
         _xrAButton.action.Enable();
         _xrXButton.action.Enable();
 
@@ -97,11 +92,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #endregion
     #region Public
 
-    public string GetPreferredWeapon()
-    {
-        return _preferredWeapon;
-    }
-
+    public string GetPreferredWeapon() => _preferredWeapon;
     public void ActivateSword()
     {
         _sword[1].SetActive(true);
@@ -233,9 +224,47 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void UI_UpdatePlayerLife() => _waveCountTXT.text = $"Life: {_currHP}";
     private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
 
+    private void ToggleMainHand(InputAction.CallbackContext context)
+    {
+        void SetActiveHand(bool isLeft)
+        {
+            _marker[0].SetActive(isLeft);
+            _sword[0].SetActive(isLeft);
+            _hammer[0].SetActive(isLeft);
+
+            _marker[1].SetActive(!isLeft);
+            _sword[1].SetActive(!isLeft);
+            _hammer[1].SetActive(!isLeft);
+        }
+
+        _isLeftHandActive = !_isLeftHandActive;
+        SetActiveHand(_isLeftHandActive);
+    }
+
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            foreach (GameObject e in _enemyList)
+                Destroy(e);
+
+            _enemyList.Clear();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
+        if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
+    }
+
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", gameObject);
+        Debug.Assert(_drawingCanvas, "Missing _drawingCanvas reference!", gameObject);
+        Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
+        Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
+    }
     protected override void InitComponents()
     {
         _drawingCanvas.SetActive(false);
@@ -269,37 +298,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         };
 
         _blockLabelsUI.SetActive(true);
-    }
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            foreach (GameObject e in _enemyList)
-                Destroy(e);
-
-            _enemyList.Clear();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
-        if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
-    }
-
-    private void ToggleMainHand(InputAction.CallbackContext context)
-    {
-        _isLeftHandActive = !_isLeftHandActive;
-        SetActiveHand(_isLeftHandActive);
-    }
-
-    private void SetActiveHand(bool isLeft)
-    {
-        _marker[0].SetActive(isLeft);
-        _sword[0].SetActive(isLeft);
-        _hammer[0].SetActive(isLeft);
-
-        _marker[1].SetActive(!isLeft);
-        _sword[1].SetActive(!isLeft);
-        _hammer[1].SetActive(!isLeft);
     }
 
     #endregion

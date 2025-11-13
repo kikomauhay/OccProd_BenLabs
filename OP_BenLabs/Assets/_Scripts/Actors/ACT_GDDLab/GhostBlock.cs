@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
-[RequireComponent(typeof(BoxCollider), typeof(MeshRenderer))]
-public class GhostBlock : Actor
+[RequireComponent(typeof(BoxCollider), typeof(MeshRenderer), typeof(SoundEmitter))]
+public class GhostBlock : Actor, IInteractable
 {
     #region Properites
 
@@ -24,11 +25,15 @@ public class GhostBlock : Actor
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private string _weaponContent;
 
+    [Header("UI/UX")]
+    [SerializeField] private Sound _snapSFX;
+
     #endregion
     #region Private
 
     private MeshRenderer _rend;
     private BoxCollider _boxCol;
+    private SoundEmitter _soundEmitter;
 
     private bool _isEmpty;
         
@@ -85,6 +90,7 @@ public class GhostBlock : Actor
                 return;
             }
 
+            _soundEmitter.PlaySound(_snapSFX);
             PassBlockInfo(codeBlock);
             Destroy(codeBlock.gameObject); // add poof sfx before destorying 
 
@@ -94,12 +100,19 @@ public class GhostBlock : Actor
     }
 
     #endregion
+
+    #region Public
+
+    public void INT_Interact() => _soundEmitter.PlaySound(_snapSFX);
+
+    #endregion
     #region Helpers
-    
+
     protected override void InitComponents()
     {
         _boxCol = GetComponent<BoxCollider>();
         _rend = GetComponent<MeshRenderer>();
+        _soundEmitter = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
     {

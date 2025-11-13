@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(SoundEmitter), typeof(MeshRenderer))]
-public class Equipment : Actor
+public class Equipment : Actor, IInteractable
 {
     #region SerializeField
 
@@ -30,7 +30,7 @@ public class Equipment : Actor
     
     #region Public
 
-    public void EVENT_PickUpSound() => _soundEmitter.PlaySound(_pickUpSFX);
+    public virtual void INT_Interact() => _soundEmitter.PlaySound(_pickUpSFX);
         
     #endregion
     #region Protected
