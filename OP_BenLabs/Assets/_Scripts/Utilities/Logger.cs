@@ -27,7 +27,7 @@ public class Logger : MonoBehaviour
     }
     public void Log(object message, TextColor col, bool isDevMode)
     {
-        if (_showLogs)
+        if (_showLogs && isDevMode)
             Debug.Log($"<color={col}>{message}</color>");
     }
     public void Log(object message, Object sender, TextColor col, bool isDevMode)
