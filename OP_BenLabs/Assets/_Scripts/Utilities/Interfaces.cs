@@ -11,3 +11,8 @@ public interface IPourable
     void INT_CheckPourAngle();
     void INT_Pour();
 }
+
+public interface IInteractable
+{
+    void INT_Interact();
+}

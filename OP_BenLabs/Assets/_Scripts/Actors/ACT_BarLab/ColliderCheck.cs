@@ -35,7 +35,7 @@ public class ColliderCheck : Actor
 
             if (!glass.HasDrink)
             {
-                _logger.Log($"The glass has nothing in it!", TextColor.RED, _isDevMode);
+                _logger.Log("The glass has nothing in it!", TextColor.RED, _isDevMode);
                 _sndMgr.PlaySound("SND_Unsure");
                 return;
             }
@@ -71,6 +71,13 @@ public class ColliderCheck : Actor
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.C)) _sndMgr.PlaySound("SND_Correct");
+        if (Input.GetKeyDown(KeyCode.W)) _sndMgr.PlaySound("SND_Wrong");
+        if (Input.GetKeyDown(KeyCode.U)) _sndMgr.PlaySound("SND_Unsure");
+    }
+
     protected override void AssertComponents()
     {
         Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
@@ -87,13 +94,6 @@ public class ColliderCheck : Actor
         _collider.isTrigger = true;
         _collider.enabled = true;
         HasCustomer = false;
-    }
-
-    protected override void Test()
-    {    
-        if (Input.GetKeyDown(KeyCode.C)) _sndMgr.PlaySound("SND_Correct");
-        if (Input.GetKeyDown(KeyCode.W)) _sndMgr.PlaySound("SND_Wrong");
-        if (Input.GetKeyDown(KeyCode.U)) _sndMgr.PlaySound("SND_Unsure");
     }
 
     #endregion

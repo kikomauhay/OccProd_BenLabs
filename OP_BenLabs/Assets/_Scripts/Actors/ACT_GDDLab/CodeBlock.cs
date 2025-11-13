@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider), typeof(MeshRenderer), typeof(Rigidbody))]
-public class CodeBlock : Actor
+[RequireComponent(typeof(BoxCollider), typeof(SoundEmitter), typeof(Rigidbody))]
+public class CodeBlock : Actor, IInteractable
 {
     #region Properties
 
@@ -21,13 +21,17 @@ public class CodeBlock : Actor
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private string _weaponContent;
 
+    [Header("UI/UX")]
+    [SerializeField] private Sound _grabSFX;
+
     #endregion
     #region Private
 
     private MeshRenderer _rend;
     private BoxCollider _boxCol;
     private Rigidbody _rb;
-
+    private SoundEmitter _soundEmitter;
+    
     #endregion
 
     #region Unity
@@ -56,13 +60,47 @@ public class CodeBlock : Actor
     }
 
     #endregion
+    #region Public
+
+    public void INT_Interact() => _soundEmitter.PlaySound(_grabSFX);
+
+    #endregion
     #region Helpers
+
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            _currBlockType = BlockType.NOTHING;
+
+            switch (_currBlockType)
+            {
+                case BlockType.WEAPON:
+                    _rend.material.color = Color.blue;
+                    break;
+
+                case BlockType.ENEMY:
+                    _rend.material.color = Color.red;
+                    break;
+
+                case BlockType.MODIFIER:
+                    _rend.material.color = Color.yellow;
+                    break;
+
+                case BlockType.NOTHING: break;
+                default: break;
+            }
+
+            _logger.Log($"{this} has been reset!", TextColor.YELLOW, _isDevMode);
+        }
+    }
 
     protected override void InitComponents()
     {
         _boxCol = GetComponent<BoxCollider>();
         _rend = GetComponent<MeshRenderer>();
         _rb = GetComponent<Rigidbody>();
+        _soundEmitter = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
     {        
@@ -94,35 +132,7 @@ public class CodeBlock : Actor
             case BlockType.NOTHING: break;
             default:                break;
         }
-    }
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            _currBlockType = BlockType.NOTHING;
-            
-            switch (_currBlockType)
-            {
-                case BlockType.WEAPON:
-                    _rend.material.color = Color.blue;
-                    break;
-
-                case BlockType.ENEMY:
-                    _rend.material.color = Color.red;
-                    break;
-
-                case BlockType.MODIFIER:
-                    _rend.material.color = Color.yellow;
-                    break;
-
-                case BlockType.NOTHING: break;
-                default:                break;
-            }
-
-            _logger.Log($"{this} has been reset!", TextColor.YELLOW, _isDevMode);
-        }
-    }
+    }    
 
     #endregion
 }
