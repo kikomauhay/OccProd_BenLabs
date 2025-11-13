@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -19,8 +18,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject _player;
 
     [Header("Waypoints")]
-    [SerializeField] private Transform _lobbyWaypoint;
-    [SerializeField] private Transform _gddWaypoint, _r803Waypoint;
+    [SerializeField] private Transform _gddWaypoint;
+    [SerializeField] private Transform _r803Waypoint;
 
     #endregion
     #region Private 
@@ -38,7 +37,7 @@ public class GameManager : Singleton<GameManager>
     {
         Debug.Assert(_player, "Missing _player reference!", gameObject);
      
-        Debug.Assert(_lobbyWaypoint, "Missing _lobbyWaypoint reference!", gameObject);
+        Debug.Assert(_r803Waypoint, "Missing _r803Waypoint reference!", gameObject);
         Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", gameObject);
 
         Debug.Assert(_fadeScreen, "Missing _fadeScreen reference!", gameObject);
@@ -67,17 +66,14 @@ public class GameManager : Singleton<GameManager>
 
         switch (type)
         {
-            case FloorType.LOBBY:
-                pos = _lobbyWaypoint.localPosition;
-                break;
-
             case FloorType.GDD:
                 pos = _gddWaypoint.localPosition;
                 _sndMgr.PlaySound("SND_EnterVR");
                 break;
 
-            case FloorType.BAR: break;
-            default:            break;
+            case FloorType.LOBBY: break;
+            case FloorType.BAR:   break;
+            default:              break;
         }
 
         _logger.Log($"Teleported Player to {pos}", _isDevMode); 

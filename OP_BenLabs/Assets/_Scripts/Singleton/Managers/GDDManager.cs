@@ -277,8 +277,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
         Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
 
-        Debug.Assert(_leftHandTools.Length != 3, "Missing elements in _leftHandTools!", gameObject);
-        Debug.Assert(_rightHandTools.Length != 3, "Missing elements in _rightHandTools!", gameObject);
+        Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", gameObject);
+        Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", gameObject);
     }
     protected override void InitComponents()
     {
