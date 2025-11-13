@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary> - COCKTAIL COMBINATIONS -
@@ -34,6 +35,8 @@ public class Glass : Equipment
 {
     #region Properties
 
+    public event System.Action<float> CocktailServed;
+
     public bool HasDrink => _hasDrink;
     public float Score => _score;
     public Cocktail Cocktail => _cocktail;
@@ -55,9 +58,6 @@ public class Glass : Equipment
     #endregion
     #region Private
 
-    private const int DRINK_COUNT = 3;
-    private const float STARTING_SCORE = 100f;
-
     #endregion
 
     #region Unity
@@ -71,7 +71,13 @@ public class Glass : Equipment
     protected override void OnEnable()
     {
         base.OnEnable();
-        LiquidPour.OnGlassHit += TestPour;
+        LiquidPour.OnGlassHit += EnableDrink;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        LiquidPour.OnGlassHit -= EnableDrink;
     }
 
     #endregion
@@ -96,7 +102,7 @@ public class Glass : Equipment
         ResetDrink();
         _logger.Log($"{this} has been washed!", TextColor.GREEN, _isDevMode);
     }
-    public void EnableDrink(int i)
+    public void EnableDrink(Cocktail cocktail)
     {
         if (_hasDrink)
         {
@@ -105,8 +111,8 @@ public class Glass : Equipment
         }
 
         _hasDrink = true;
-        _drinks[i].SetActive(true);
-        _cocktail = (Cocktail)(i + 1); // + 1 because there's an "EMPTY" element at index 0
+        _cocktail = cocktail;
+        _drinks[(int)cocktail].SetActive(true);
 
         _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW, _isDevMode);
     }
@@ -119,45 +125,18 @@ public class Glass : Equipment
         base.InitVariables();
 
         name = "Cocktail Glass";
-        // _hasDrink = false;
+        _hasDrink = false;
         _score = 0f;
         _cocktail = Cocktail.EMPTY;
     }
 
     protected override void Test()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
+/*        if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
         if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
         if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
 
-        if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
-    }
-
-    private void TestPour(Cocktail cocktail)
-    {
-        Glass _glass = this.gameObject.GetComponent<Glass>();
-
-        if(_glass == this)
-        {
-            _cocktail = cocktail;
-
-            switch (_cocktail)
-            {
-                case Cocktail.TEQUILA_SUNRISE:
-                    _renderer.material.color = Color.yellow;
-                    break;
-
-                case Cocktail.VODKA_CITRUS:
-                    _renderer.material.color = Color.red;
-                    break;
-
-                case Cocktail.COCONUT_MARGARITA:
-                    _renderer.material.color = Color.green;
-                    break;
-            }
-
-            _logger.Log($"{name} is being poured into", _isDevMode);
-        }
+        if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();*/
     }
 
     private void ResetDrink()
