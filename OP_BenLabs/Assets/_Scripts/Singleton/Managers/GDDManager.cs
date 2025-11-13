@@ -333,7 +333,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             // variable assignment
             PreferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
-            modifier =         _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
+            modifier =        _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
 
             if      (PreferredWeapon == "Sword")  _swordImage.SetActive(true);
             else if (PreferredWeapon == "Hammer") _hammerImage.SetActive(true);

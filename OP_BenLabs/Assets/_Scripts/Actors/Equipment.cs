@@ -9,9 +9,6 @@ public class Equipment : Actor, IInteractable
     [SerializeField] protected Sound _pickUpSFX;
     [SerializeField] protected Sound _landOnFloorSFX;
 
-    [Header("Testing")]
-    [SerializeField] protected bool _useGravity;
-
     #endregion
     #region Protected
 
@@ -57,7 +54,7 @@ public class Equipment : Actor, IInteractable
         _rend.enabled = true;
         
         _rb.angularDrag = 0f;
-        _rb.useGravity = _useGravity;
+        _rb.useGravity = true;
 
         _startPosition = transform.position;
         _startRotation = transform.rotation;
