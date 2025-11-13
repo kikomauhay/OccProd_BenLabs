@@ -35,8 +35,6 @@ public class Glass : Equipment
 {
     #region Properties
 
-    public event System.Action<float> CocktailServed;
-
     public bool HasDrink => _hasDrink;
     public Cocktail Cocktail => _cocktail;
 
