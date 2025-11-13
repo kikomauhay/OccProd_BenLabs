@@ -34,11 +34,13 @@ public class XRTrickRecognizer : MonoBehaviour
     private void OnEnable()
     {
         Shaker.ShakerLocked += IsCapped;
+        Shaker.ShakerUnlocked += ResetShaker;
     }
 
     private void OnDisable()
     {
         Shaker.ShakerLocked -= IsCapped;
+        Shaker.ShakerUnlocked -= ResetShaker; 
     }
 
     private void Start()
@@ -159,7 +161,7 @@ public class XRTrickRecognizer : MonoBehaviour
     }
 
     private void IsCapped() => _isShaking = true;
-    private void ResetShaker() => _isShaking = false;//call this once sink trigger has been setup
+    private void ResetShaker() => _isShaking = false;
 
     #endregion
 }
