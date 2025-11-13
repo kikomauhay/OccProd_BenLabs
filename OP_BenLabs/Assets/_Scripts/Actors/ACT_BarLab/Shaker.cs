@@ -25,6 +25,9 @@ public class Shaker : Equipment, IPourable
     [SerializeField] private Transform _shakerTip;
     [SerializeField] private float _pourThreshold;
 
+    [Header("Toggle Objects")]
+    [SerializeField] private GameObject _shakerCap;
+
     #endregion
     #region Private 
 
@@ -43,7 +46,7 @@ public class Shaker : Equipment, IPourable
                                               Ingredient.LIME_JUICE,
                                               Ingredient.COCONUT_WATER } },
     };
-    private bool _isPouring;
+    private bool _isPouring, _isLocked;
 
     #endregion
 
@@ -52,22 +55,26 @@ public class Shaker : Equipment, IPourable
     protected override void OnEnable()
     {
         base.OnEnable();
+        LiquidPour.OnShakerHit += AddIngredient;
         LiquidPour.ShakerEmptied += ResetShaker;
     }
     protected override void OnDisable()
     {
         base.OnDisable();
+        LiquidPour.OnShakerHit -= AddIngredient;
         LiquidPour.ShakerEmptied -= ResetShaker;
     }
     private void FixedUpdate() => INT_CheckPourAngle();
 
-/*    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.gameObject.GetComponent<ShakerCap>)
+        if (other.gameObject.layer == LayerMask.NameToLayer("ShakerCap"))
         {
-            ShakerLocked?.Invoke();
+            _isLocked = true;
+            Destroy(other.gameObject);
+            _shakerCap.gameObject.SetActive(true);
         }
-    }*/
+    }
 
     #endregion
     #region Public
@@ -98,12 +105,19 @@ public class Shaker : Equipment, IPourable
         OnBeginPourCocktail?.Invoke(_cocktail);
         _mixedDrink.Clear();
     }
+
+    public void MixingCocktail()
+    {
+        if (!_isLocked) return;
+        StartCoroutine(CO_ShakeDrink());
+    }
     
     public void Washed()
     {
         StopAllCoroutines();
     
         _isPouring = false;
+        _isLocked = false;
         _mixedDrink.Clear();
         _cocktail = Cocktail.EMPTY;
 
@@ -120,11 +134,27 @@ public class Shaker : Equipment, IPourable
         _mixedDrink = new List<Ingredient>();
         _cocktail = Cocktail.EMPTY;
         _isPouring = false;
+        _isLocked = false;
     }
 
     protected override void Test()
     {
 
+    }
+
+    private void AddIngredient(Ingredient ingredient)
+    {
+        if(_isLocked) return;
+
+        if (!_mixedDrink.Contains(ingredient))
+        {
+            _mixedDrink.Add(ingredient);
+            _logger.Log($"Added {ingredient} to shaker!", TextColor.CYAN, _isDevMode);
+        }
+        else
+        {
+            _logger.Log($"{ingredient} is already in the shaker.", TextColor.YELLOW, _isDevMode);
+        }
     }
 
     private void ResetShaker() => _cocktail = Cocktail.EMPTY;
@@ -139,9 +169,9 @@ public class Shaker : Equipment, IPourable
             foreach (var recipe in _recipes)
             {
                 // ensures that it has no extra/missing ingredients
-                bool isMatching = recipe.Value.All(i => _mixedDrink.Contains(i)) && 
-                                  _mixedDrink.Count == recipe.Value.Length;  
-                
+                bool isMatching = recipe.Value.All(i => _mixedDrink.Contains(i)) &&
+                                  _mixedDrink.Count == recipe.Value.Length;
+
                 if (isMatching)
                 {
                     _cocktail = recipe.Key;
@@ -155,9 +185,9 @@ public class Shaker : Equipment, IPourable
         }
 
         // time for the player to earn bonus points
-        yield return new WaitForSeconds(Random.Range(10f, 15f)); 
+        yield return new WaitForSeconds(Random.Range(10f, 15f));
         CompareIngredients();
     }
-        
+
     #endregion
 }
