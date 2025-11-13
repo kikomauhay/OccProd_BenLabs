@@ -14,8 +14,7 @@ public class Customer : Actor
 
     [Header("Customer Stats")]
     [SerializeField] private Cocktail _wantedCocktail;
-    [SerializeField] private float _decreaseRate;
-    [SerializeField] private float _reactionTimer;
+    [SerializeField] private float _decreaseRate, _reactionTimer;
 
     [Header("Drinks UI")]
     [SerializeField] private GameObject[] _drinkOrdersUI;   
@@ -29,6 +28,7 @@ public class Customer : Actor
 
     private CustomerActions _actions;
     private CustomerAppearance _appearance;
+    
     private float _customerScore;
 
     #endregion

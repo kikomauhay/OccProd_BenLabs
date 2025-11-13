@@ -161,7 +161,7 @@ public class Enemy : Actor
 
         _currHP = _maxHP;
         _moveSpeed = Random.Range(2f, 4f);
-        _rotSpeed = Random.Range(2f, 4f);
+        _rotSpeed = Random.Range(2f, 4f);   
 
         _soundEmitter.PlaySound(_etbSFXs[(int)_enemyType]);
     }

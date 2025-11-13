@@ -23,8 +23,6 @@ public class Equipment : Actor, IInteractable
 
     protected Vector3 _startPosition;
     protected Quaternion _startRotation;
-    
-    protected Shaker shakr;
 
     #endregion
     

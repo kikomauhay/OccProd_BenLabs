@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -24,33 +25,32 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Private 
 
+    private SoundManager _sndMgr;
+
     private FadeScreen _fadeScreen;
     private WaitForSeconds _fadeDuration;
 
     #endregion
 
-    #region Unity
-
-    protected override void Start()
-    {
-        Debug.Assert(_player, "Missing _player reference!", gameObject);
-        Debug.Assert(_lobbyWaypoint, "Missing _lobbyWaypoint reference!", gameObject);
-        Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", gameObject);
-        Debug.Assert(_player, "Missing _player reference!", gameObject);
-
-        base.Start();
-    }
-    
-    #endregion
-
     #region Helpers
 
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_player, "Missing _player reference!", gameObject);
+     
+        Debug.Assert(_lobbyWaypoint, "Missing _lobbyWaypoint reference!", gameObject);
+        Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", gameObject);
+
+        Debug.Assert(_fadeScreen, "Missing _fadeScreen reference!", gameObject);
+    }
     protected override void InitComponents()
     {
         _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
     }
     protected override void InitVariables()
     {
+        _sndMgr = SoundManager.Instance;
+
         IsFading = true;
         CanPause = true;
         InGame = false;
@@ -64,19 +64,20 @@ public class GameManager : Singleton<GameManager>
     public IEnumerator CO_Enter(FloorType type)
     {
         Vector3 pos = Vector3.zero;
+
         switch (type)
         {
-            case FloorType.BAR:      break;
-
             case FloorType.LOBBY:
                 pos = _lobbyWaypoint.localPosition;
                 break;
 
             case FloorType.GDD:
                 pos = _gddWaypoint.localPosition;
+                _sndMgr.PlaySound("SND_EnterVR");
                 break;
 
-            default: break;
+            case FloorType.BAR: break;
+            default:            break;
         }
 
         _logger.Log($"Teleported Player to {pos}", _isDevMode); 
@@ -95,13 +96,13 @@ public class GameManager : Singleton<GameManager>
 
         switch (type)
         {
-
             case FloorType.LOBBY: // final part of the game
                 // show the different logos
                 break;
 
             case FloorType.GDD:
                 _player.transform.position = _r803Waypoint.localPosition;
+                _sndMgr.PlaySound("SND_ExitVR");
                 StartCoroutine(CO_FadeOut());
                 break;
 
