@@ -61,6 +61,7 @@ public class Customer : Actor
         Cocktail SetRandomCocktail() => (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
         
         name = "Customer";
+
         _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
         _actions.IsMale = Random.value > 0.5f;
