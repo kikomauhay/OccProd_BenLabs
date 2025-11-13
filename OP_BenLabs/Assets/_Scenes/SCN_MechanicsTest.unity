@@ -1393,7 +1393,6 @@ MonoBehaviour:
   _isDevMode: 0
   _pickUpSFX: {fileID: 0}
   _landOnFloorSFX: {fileID: 0}
-  _useGravity: 0
 --- !u!114 &741833407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3500,6 +3499,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2991770472777300142, guid: 226b673fc6517e24db8eb932dccacc5e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6503656132458270902, guid: 226b673fc6517e24db8eb932dccacc5e,
         type: 3}
       propertyPath: m_Name

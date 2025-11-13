@@ -10,6 +10,7 @@ public class Shaker : Equipment, IPourable
     public IReadOnlyList<Ingredient> MixedDrink => _mixedDrink;
     public Cocktail Cocktail => _cocktail;
     public static event System.Action ShakerLocked;
+    public static event System.Action ShakerUnlocked;
     public static event System.Action<Cocktail> OnBeginPourCocktail;
     public static event System.Action OnStopPour;
 
@@ -71,8 +72,9 @@ public class Shaker : Equipment, IPourable
         if (other.gameObject.layer == LayerMask.NameToLayer("ShakerCap"))
         {
             _isLocked = true;
-            Destroy(other.gameObject);
             _shakerCap.gameObject.SetActive(true);
+            ShakerLocked?.Invoke();
+            Destroy(other.gameObject);
         }
     }
 
@@ -112,8 +114,9 @@ public class Shaker : Equipment, IPourable
     {
         _isGrabbed = true;
 
-        if (!_isLocked && _isShaking) return;
+        if (!_isLocked || _isShaking) return;
 
+        _logger.Log($"{this} object is shaking", TextColor.GREEN, _isDevMode);
         StartCoroutine(CO_ShakeDrink());
         _isShaking = true;
     }
@@ -174,6 +177,8 @@ public class Shaker : Equipment, IPourable
     private IEnumerator CO_DrainDrink()
     {
         yield return new WaitForSeconds(5F);
+
+        ShakerUnlocked?.Invoke();
         _cocktail = Cocktail.EMPTY;
     }
 

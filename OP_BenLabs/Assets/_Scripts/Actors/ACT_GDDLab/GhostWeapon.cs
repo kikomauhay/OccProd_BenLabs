@@ -15,25 +15,30 @@ public class GhostWeapon : Actor
     {
         base.Start();
 
-        //transform.DOLocalMove(_endPos, CYCLE_LENGTH)
-                 //.SetEase(Ease.InOutSine)
-                 //.SetLoops(-1, LoopType.Yoyo);
+        transform.DOLocalMove(_endPos, CYCLE_LENGTH)
+                 .SetEase(Ease.InOutSine)
+                 .SetLoops(-1, LoopType.Yoyo);
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.GetComponentInChildren<XROrigin>()) return;
-
-        if (_weaponType == WeaponType.SWORD)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics")
+            || other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
-            GDDManager.Instance.ActivateSword();
-            _logger.Log("Activated sword", _isDevMode);
-        }
-        else
-        {
-            GDDManager.Instance.ActivateHammer();
-            _logger.Log("Activated hammer", _isDevMode);
-        }
+            Debug.Log($"{other.gameObject.layer} has hit");
 
-        gameObject.SetActive(false);
+            if (_weaponType == WeaponType.SWORD)
+            {
+                GDDManager.Instance.ActivateSword();
+                Debug.Log($"{_weaponType} spawned");
+                //_logger.Log("Activated sword", _isDevMode);
+            }
+            else
+            {
+                GDDManager.Instance.ActivateHammer();
+                //_logger.Log("Activated hammer", _isDevMode);
+            }
+
+            gameObject.SetActive(false);
+        }
     }
 }
