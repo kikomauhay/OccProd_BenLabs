@@ -39,19 +39,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     #endregion
 
-    #region Unity
-
-    protected override void Start()
-    {
-        // Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-        Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
-        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
-
-        base.Start();
-    }
-
-    #endregion
     #region Public
 
     public void INT_BTN_StartGame()
@@ -93,12 +80,15 @@ public class BarManager : Singleton<BarManager>, IGameHandler
                 StopGame();
                 yield break;
             }
+            
             _logger.Log($"{GRACE_PERIOD}s grace period before spawning!", TextColor.YELLOW, _isDevMode);
             yield return new WaitForSeconds(GRACE_PERIOD);
 
             GameObject customerToSpawn = _isDevMode ? _testCustomer : _customerPrefab;
-            GameObject newCustomer = Instantiate(customerToSpawn, _customerSpawnpoint.position,
-                                                _customerSpawnpoint.rotation, _customerSpawnpoint);
+            GameObject newCustomer = Instantiate(customerToSpawn, 
+                                                _customerSpawnpoint.position,
+                                                _customerSpawnpoint.rotation, 
+                                                _customerSpawnpoint);
 
             _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
             _logger.Log("Spawned new customer!", _isDevMode);
@@ -112,22 +102,22 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         switch (trickName)
         {
             case "Pass.xml":
-                _totalScore += 5F;
+                _totalScore += 5f;
                 return;
 
             case "Toss.xml":
-                _totalScore += 10F;
+                _totalScore += 10f;
                 return;
 
             case "Spin.xml":
-                _totalScore += 15F;
+                _totalScore += 15f;
                 return;
         }
     }
 
-    public void Correct(float drinkScore)
+    public void Correct()
     {
-        _totalScore += drinkScore + SERVING_SCORE;
+        _totalScore += SERVING_SCORE;
         _customersServed++;
 
         _sndMgr.PlaySound("SND_Correct");
@@ -167,11 +157,18 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
         _logger.Log("Bar mini-game has finished!", _isDevMode);
     }
-    
+
 
     #endregion
     #region Helpers
 
+    protected override void AssertComponents()
+    {
+        // Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
+        Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
+        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
+    }
     protected override void InitComponents()
     {
         _startButton.SetActive(true);

@@ -44,7 +44,7 @@ public class ColliderCheck : Actor
             {
                 actions.CorrectReaction();
                 _sndMgr.PlaySound("SND_Correct");
-                _barMgr.Correct(glass.Score); 
+                _barMgr.Correct(); 
             }
             else
             {

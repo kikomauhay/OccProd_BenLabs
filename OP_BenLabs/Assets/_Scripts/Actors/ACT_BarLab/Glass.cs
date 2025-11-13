@@ -38,7 +38,6 @@ public class Glass : Equipment
     public event System.Action<float> CocktailServed;
 
     public bool HasDrink => _hasDrink;
-    public float Score => _score;
     public Cocktail Cocktail => _cocktail;
 
     #endregion
@@ -52,28 +51,19 @@ public class Glass : Equipment
 
     [Header("Drink Stats")]
     [SerializeField] private bool _hasDrink;
-    [SerializeField] private float _score;
+    // [SerializeField] private float _score;
     [SerializeField] private Cocktail _cocktail;
         
-    #endregion
-    #region Private
-
     #endregion
 
     #region Unity
         
-    protected override void Start()
-    {
-        // Debug.Assert(_drinks.Length == DRINK_COUNT, "Missing elements in _drinks!", gameObject);
-        base.Start();
-    }
 
     protected override void OnEnable()
     {
         base.OnEnable();
         LiquidPour.OnGlassHit += EnableDrink;
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -126,7 +116,6 @@ public class Glass : Equipment
 
         name = "Cocktail Glass";
         _hasDrink = false;
-        _score = 0f;
         _cocktail = Cocktail.EMPTY;
     }
 
@@ -142,7 +131,6 @@ public class Glass : Equipment
     private void ResetDrink()
     {
         _hasDrink = false;
-        _score = 0f;
         _cocktail = Cocktail.EMPTY;
 
         foreach (GameObject drink in _drinks)
