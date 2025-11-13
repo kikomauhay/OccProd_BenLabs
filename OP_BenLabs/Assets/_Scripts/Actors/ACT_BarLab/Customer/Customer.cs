@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CustomerActions))]
 public class Customer : Actor
@@ -17,8 +18,7 @@ public class Customer : Actor
     [SerializeField] private float _decreaseRate, _reactionTimer;
 
     [Header("Drinks UI")]
-    [SerializeField] private GameObject[] _drinkOrdersUI;   
-    [SerializeField] private Transform _orderUITransform;   
+    [SerializeField] private GameObject[] _drinkOrdersUI;
 
     #endregion
     #region Private
@@ -27,7 +27,7 @@ public class Customer : Actor
     private const float GRACE_PERIOD = 2f;
 
     private CustomerActions _actions;
-    private CustomerAppearance _appearance;
+    private Slider _sliderTimer;
     
     private float _customerScore;
 
@@ -42,18 +42,24 @@ public class Customer : Actor
     }
 
     #endregion
+    #region Private 
+
+    private void UI_UpdateTimer() => _sliderTimer.value = _customerScore / 100f;
+        
+    #endregion
     #region Helpers
 
     protected override void AssertComponents()
     {
-        // Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
-        // Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
+        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
     }
     protected override void InitComponents()
     {
-        _logger = BarManager.Instance.Logger;
         _actions = GetComponent<CustomerActions>();
-        _appearance = GetComponent<CustomerAppearance>();
+        _sliderTimer = GetComponentInChildren<Slider>();
+
+        if (!_isDevMode)
+            _logger = BarManager.Instance.Logger;
     }
     protected override void InitVariables()
     {
@@ -65,8 +71,7 @@ public class Customer : Actor
         _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
         _actions.IsMale = Random.value > 0.5f;
-
-        // _drinkOrdersUI[(int)_wantedCocktail].SetActive(true);
+        _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true); // check Cocktail enum to understand
 
         _logger.Log($"{this} wants a {_wantedCocktail}", _isDevMode);
     }
@@ -95,6 +100,7 @@ public class Customer : Actor
         {
             yield return new WaitForSeconds(PATIENCE_INTERVAL);
             _customerScore--;
+            UI_UpdateTimer();
 
             _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
         }
@@ -104,6 +110,7 @@ public class Customer : Actor
             _customerScore = 0f;
             _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
 
+            UI_UpdateTimer();
             StartCoroutine(CO_LostPatience());
         }
     }

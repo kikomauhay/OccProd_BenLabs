@@ -89,22 +89,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #endregion
     #region Public
 
-    public void ActivateMarker()
-    {
-        _leftHandTools[0].SetActive(_usingLeftHand);
-        _rightHandTools[0].SetActive(!_usingLeftHand);
-    }
-    public void ActivateSword()
-    {
-        _leftHandTools[1].SetActive(_usingLeftHand);
-        _rightHandTools[1].SetActive(!_usingLeftHand);
-    }
-    public void ActivateHammer()
-    {
-        _leftHandTools[2].SetActive(_usingLeftHand);
-        _rightHandTools[2].SetActive(!_usingLeftHand);
-    }
-
     public void INT_BTN_StartGame()
     {
         StartCoroutine(_gameMgr.CO_Enter(FloorType.GDD));
@@ -124,6 +108,22 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         StartCoroutine(_gameMgr.CO_Exit(FloorType.GDD));
 
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
+    }
+
+    public void ActivateMarker()
+    {
+        _leftHandTools[0].SetActive(_usingLeftHand);
+        _rightHandTools[0].SetActive(!_usingLeftHand);
+    }
+    public void ActivateSword()
+    {
+        _leftHandTools[1].SetActive(_usingLeftHand);
+        _rightHandTools[1].SetActive(!_usingLeftHand);
+    }
+    public void ActivateHammer()
+    {
+        _leftHandTools[2].SetActive(_usingLeftHand);
+        _rightHandTools[2].SetActive(!_usingLeftHand);
     }
 
     public void SpawnEnemy()
@@ -147,14 +147,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _enemyList.Add(e.gameObject);
         }
-        
+
         GameObject newEnemy = Instantiate(_ghostBlockGridList[_waveIndex][(int)BlockType.ENEMY].
                                           EnemyPrefab, RandomPositionInBox(), Quaternion.identity);
 
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
         _logger.Log("Spawned new enemy!", _isDevMode);
     }
-
+   
     public void RemoveBlock(CodeBlock cb) => _availableBlocksList.Remove(cb);
     public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
     public void UnbindEvents(Enemy e)
