@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(SoundEmitter), typeof(Rigidbody))]
 public class Enemy : Actor

@@ -368,7 +368,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -8.999939, y: 8.300001}
+  m_AnchoredPosition: {x: -8.999878, y: 8.300001}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2728033562296147685
@@ -762,7 +762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42927feda248dca43b2d68335569dc65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moneySFX: {fileID: 0}
+  _moneySFX: {fileID: 11400000, guid: b47051b08aa622e40b033a6a39e913c5, type: 2}
   _happyMaleSFXs:
   - {fileID: 11400000, guid: 310655b1c3e10d2498d274a349d3afdb, type: 2}
   - {fileID: 11400000, guid: 8826b82bf5a937f4e818b46f29defc79, type: 2}
@@ -798,12 +798,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _logger: {fileID: 0}
-  _isDevMode: 1
+  _isDevMode: 0
   _wantedCocktail: 0
   _decreaseRate: 1.65
   _reactionTimer: 2
-  _drinkOrdersUI: []
-  _orderUITransform: {fileID: 0}
+  _drinkOrdersUI:
+  - {fileID: 1188813373567576503}
+  - {fileID: 7354654531318019087}
+  - {fileID: 1187075971897741365}
 --- !u!1 &7354654531318019087
 GameObject:
   m_ObjectHideFlags: 0
