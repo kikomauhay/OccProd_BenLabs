@@ -7,15 +7,16 @@ public class WeaponSpawner : Actor
 
 	public void Enable(string weaponName)
 	{
-		if (GDDManager.Instance.GetPreferredWeapon() == weaponName)
+		if (GDDManager.Instance.PreferredWeapon == weaponName)
 		{
 			foreach (var item in _weapons)
 				item.SetActive(weaponName == item.name);
-			Debug.Log($"Spawned {weaponName}");
-		}
-		else
+
+            _logger.Log($"Spawned {weaponName}", _isDevMode);
+        }
+        else
 		{
-            _logger.Log($"{weaponName} has spawned. Wrong Weapon", _isDevMode);
+            _logger.Log("No weapon was made!", _isDevMode);
             //GDDManager.Instance.Retry()? Or whatever fucking function to reset the canvas
         }
 

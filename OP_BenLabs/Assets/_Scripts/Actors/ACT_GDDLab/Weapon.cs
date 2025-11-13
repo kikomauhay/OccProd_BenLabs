@@ -27,12 +27,13 @@ public class Weapon : Actor
     {
         GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
     }
-        
+
     #endregion
     #region Private
 
     private void EVENT_IncreaseDamage() => DamageModifier = 10f;
-        
+
+
     #endregion
 }
 

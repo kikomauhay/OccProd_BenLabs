@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 
@@ -9,7 +8,6 @@ public class GhostWeapon : Actor
 
     [Header("Tweening")]
     [SerializeField] private Vector3 _endPos;
-    [SerializeField] private Quaternion _endRot;
 
     private const float CYCLE_LENGTH = 2f;
 
@@ -18,10 +16,9 @@ public class GhostWeapon : Actor
         base.Start();
 
         transform.DOLocalMove(_endPos, CYCLE_LENGTH)
-                 .SetLoops(-1, LoopType.Yoyo)
-                 .SetEase(Ease.InOutSine);
+                 .SetEase(Ease.InOutSine)
+                 .SetLoops(-1, LoopType.Yoyo);
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (!other.GetComponentInChildren<XROrigin>()) return;
