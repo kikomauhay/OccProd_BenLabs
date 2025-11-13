@@ -43,10 +43,18 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void INT_BTN_StartGame()
     {
+        IEnumerator CO_DisableButton()
+        {
+            _startButton.SetActive(false);
+            yield return new WaitForSeconds(2f);
+            _startButton.SetActive(true);
+        }
+
         _soundEmitter.PlaySound(_startGameSFX);
         _totalScore = 0;
 
         SpawnCustomer();
+        StartCoroutine(CO_DisableButton());
 
         _logger.Log("Bar mini-game has started!", _isDevMode);
     }

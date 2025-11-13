@@ -31,24 +31,6 @@ public class LOB_IDScanner : Actor
     #endregion
     #region Unity
 
-    protected override void OnEnable()
-    {
-        base.OnEnable();
-        //add ID grab event
-    }
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-        //remove ID grab event
-    }
-    protected override void Start()
-    {
-        Debug.Assert(_invisibleWall, "Missing _invisibleWall reference!", gameObject);
-
-        _invisibleWall.SetActive(true);
-
-        base.Start();
-    }
     private void OnCollisionEnter(Collision other)
     {
         IEnumerator CO_ToggleInvisibleWall() // prevents the player from skipping exit stage
@@ -101,6 +83,14 @@ public class LOB_IDScanner : Actor
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            OpenGates();
+        }
+    }
+
     protected override void InitComponents()
     {
         _rend = GetComponent<MeshRenderer>();
@@ -112,14 +102,6 @@ public class LOB_IDScanner : Actor
 
         _leftGateStartPos = _leftGate.localPosition;
         _rightGateStartPos = _rightGate.localPosition;
-    }
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            OpenGates();
-        }
     }
 
     #endregion
