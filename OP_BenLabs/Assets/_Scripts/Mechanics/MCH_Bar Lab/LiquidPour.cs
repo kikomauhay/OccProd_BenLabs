@@ -20,6 +20,7 @@ public class LiquidPour : MonoBehaviour
 
     private LineRenderer _lineRenderer;
     private Vector3 _targetPosition;
+    private Bottle _bottle;
 
     #endregion
 
@@ -27,19 +28,21 @@ public class LiquidPour : MonoBehaviour
 
     private void OnEnable()
     {
+        _bottle = this.GetComponentInParent<Bottle>();
+
         Shaker.OnBeginPourCocktail += BeginPourCocktail;
         Shaker.OnStopPour += EndPour;
 
-        Bottle.OnBeginPourIngredient += BeginPourIngredient;
-        Bottle.OnStopPour += EndPour;
+        _bottle.OnBeginPourIngredient += BeginPourIngredient;
+        _bottle.OnStopPour += EndPour;
     }
     private void OnDisable()
     {
         Shaker.OnBeginPourCocktail -= BeginPourCocktail;
         Shaker.OnStopPour -= EndPour;
 
-        Bottle.OnBeginPourIngredient -= BeginPourIngredient;
-        Bottle.OnStopPour -= EndPour;
+        _bottle.OnBeginPourIngredient -= BeginPourIngredient;
+        _bottle.OnStopPour -= EndPour;
     }
     private void Awake() => _lineRenderer = GetComponent<LineRenderer>();
     private void Start()
@@ -55,6 +58,8 @@ public class LiquidPour : MonoBehaviour
 
     private void BeginPourCocktail(Cocktail cocktail)
     {
+        _layerMask = LayerMask.GetMask("Glass");
+
         Vector3 FindEndPoint()
         {
             RaycastHit hit;
@@ -79,7 +84,7 @@ public class LiquidPour : MonoBehaviour
                 MoveToPosition(0, transform.position);
                 AnimateToPosition(1, _targetPosition);
 
-                yield return new WaitForSeconds(3F);
+                yield return null;
 
                 ShakerEmptied?.Invoke();
             }
@@ -102,6 +107,8 @@ public class LiquidPour : MonoBehaviour
     }
     private void BeginPourIngredient(Ingredient ingredient)
     {
+        _layerMask = LayerMask.GetMask("Shaker");
+
         Vector3 FindEndPoint()
         {
             RaycastHit hit;
@@ -110,8 +117,9 @@ public class LiquidPour : MonoBehaviour
             Physics.Raycast(ray, out hit, 2.0F);
             Vector3 endPoint = hit.collider ? hit.point : ray.GetPoint(2.0F);
 
-            if (Physics.Raycast(hit.point, endPoint, _layerMask))
+            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit secondHit, 2.0f, _layerMask))
             {
+                Debug.Log("Ingredient Added");
                 OnShakerHit?.Invoke(ingredient);
             }
 
@@ -125,7 +133,7 @@ public class LiquidPour : MonoBehaviour
                 MoveToPosition(0, transform.position);
                 AnimateToPosition(1, _targetPosition);
 
-                yield return new WaitForSeconds(3F);
+                yield return null;
 
                 ShakerEmptied?.Invoke();
             }

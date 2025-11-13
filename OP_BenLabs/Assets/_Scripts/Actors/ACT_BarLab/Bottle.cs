@@ -6,8 +6,8 @@ public class Bottle : Equipment, IPourable
     #region Properties
 
     public Ingredient Ingredient => _ingredient;
-    public static event System.Action<Ingredient> OnBeginPourIngredient;
-    public static Action OnStopPour { get; set; }
+    public event System.Action<Ingredient> OnBeginPourIngredient;
+    public Action OnStopPour { get; set; }
 
     #endregion
     #region SerializeField
@@ -29,7 +29,23 @@ public class Bottle : Equipment, IPourable
 
     #region Unity
 
-    private void FixedUpdate() => INT_CheckPourAngle();
+    private void FixedUpdate()
+    {
+        float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
+
+        if (angle > _pourThreshold)
+        {
+            if (_isPouring) return;
+
+            INT_Pour();
+            _isPouring = true;
+        }
+        else
+        {
+            _isPouring = false;
+            OnStopPour?.Invoke();
+        }
+    }
 
     #endregion
     #region Public   
@@ -53,6 +69,7 @@ public class Bottle : Equipment, IPourable
     }
     public void INT_Pour()
     {
+        Debug.LogWarning("is pouring");
         Instantiate(_stream, _shakerTip.position,
                     Quaternion.identity, transform);
         OnBeginPourIngredient?.Invoke(_ingredient);
