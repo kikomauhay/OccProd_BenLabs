@@ -242,8 +242,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _logger: {fileID: 0}
   _isDevMode: 1
-  _testGoal: {fileID: 0}
-  _maxHP: 10
+  _enemyType: 0
   _minDistance: 2
-  _moveSpeed: 2
-  _rotSpeed: 10
+  _etbSFXs:
+  - {fileID: 11400000, guid: ba530739930c0c347b5415097e615b47, type: 2}
+  - {fileID: 11400000, guid: 72389ca13e169944d89ed3995d8baf0b, type: 2}
+  - {fileID: 11400000, guid: f429786230fccbd4982715f2586c86db, type: 2}
+  _ltbSFX: {fileID: 11400000, guid: 92627cf9675acda4b942668b3fc528b8, type: 2}

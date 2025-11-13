@@ -15,9 +15,9 @@ public class GhostWeapon : Actor
     {
         base.Start();
 
-        transform.DOLocalMove(_endPos, CYCLE_LENGTH)
-                 .SetEase(Ease.InOutSine)
-                 .SetLoops(-1, LoopType.Yoyo);
+        //transform.DOLocalMove(_endPos, CYCLE_LENGTH)
+                 //.SetEase(Ease.InOutSine)
+                 //.SetLoops(-1, LoopType.Yoyo);
     }
     private void OnTriggerEnter(Collider other)
     {
