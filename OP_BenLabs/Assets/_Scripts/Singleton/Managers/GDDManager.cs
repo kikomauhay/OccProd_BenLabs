@@ -82,7 +82,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         _xrAButton.action.Enable();
         _xrXButton.action.Enable();
-
+        _currHP = 5;
+        UI_UpdatePlayerLife();
         base.Start();
     }
 
