@@ -3751,9 +3751,21 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _dmgSFX
+      value: 
+      objectReference: {fileID: 11400000, guid: 2d0aaa30068b98f4e97d42668880afe6,
+        type: 2}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _logger
       value: 
       objectReference: {fileID: 1459625007}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _healSFX
+      value: 
+      objectReference: {fileID: 11400000, guid: 823f896464a0d454da9a6d7298b225e9,
+        type: 2}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _testGoal
@@ -3761,9 +3773,26 @@ PrefabInstance:
       objectReference: {fileID: 307515440}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
+      propertyPath: _isDevMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
       propertyPath: _objectType
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _gameOverSFX
+      value: 
+      objectReference: {fileID: 11400000, guid: 855b85f04fcf9f04ea805070a2b7cae5,
+        type: 2}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: _allWavesDone
+      value: 
+      objectReference: {fileID: 11400000, guid: d9cddabbc7815ee4faba74ec17547c07,
+        type: 2}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _sword.Array.data[0]

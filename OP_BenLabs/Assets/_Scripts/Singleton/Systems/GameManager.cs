@@ -76,19 +76,19 @@ public class GameManager : Singleton<GameManager>
             default:              break;
         }
 
-        _logger.Log($"Teleported Player to {pos}", _isDevMode); 
+        _logger.Log($"Teleported Player to {pos}", _isDevMode);
 
-        StartCoroutine(CO_FadeIn());
+        yield return StartCoroutine(CO_FadeIn());
         _player.transform.position = pos;
 
         _logger.Log($"Player Position: {_player.transform.position}", _isDevMode);
         _logger.Log($"Teleported Player to {type}!", _isDevMode);
 
-        yield return CO_FadeOut();
+        CO_FadeOut();
     }
     public IEnumerator CO_Exit(FloorType type)
     {
-        StartCoroutine(CO_FadeIn());
+        yield return StartCoroutine(CO_FadeIn());
 
         switch (type)
         {

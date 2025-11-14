@@ -21,21 +21,19 @@ public class GhostWeapon : Actor
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics")
-            || other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") || 
+            other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
-            Debug.Log($"{other.gameObject.layer} has hit");
+            _logger.Log($"{other.gameObject.layer} has hit", _isDevMode);
 
             if (_weaponType == WeaponType.SWORD)
             {
-                GDDManager.Instance.ActivateSword();
-                Debug.Log($"{_weaponType} spawned");
-                //_logger.Log("Activated sword", _isDevMode);
+                GDDManager.Instance.ActivateSword(true);
+                _logger.Log($"{_weaponType} spawned", _isDevMode);
             }
             else
             {
-                GDDManager.Instance.ActivateHammer();
-                //_logger.Log("Activated hammer", _isDevMode);
+                GDDManager.Instance.ActivateHammer(true);
             }
 
             gameObject.SetActive(false);

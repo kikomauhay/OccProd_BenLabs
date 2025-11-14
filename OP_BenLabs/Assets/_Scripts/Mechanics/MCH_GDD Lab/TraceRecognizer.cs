@@ -127,7 +127,7 @@ public class TraceRecognizer : MonoBehaviour
         else // recognize
         {
             Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
-            Debug.Log("Gesture Result: " + result.GestureClass + result.Score);
+            // Debug.Log("Gesture Result: " + result.GestureClass + result.Score);
 
             if (result.Score > recognitionThreshold)
             {

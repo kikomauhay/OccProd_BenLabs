@@ -349,7 +349,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -8.999817, y: 8.300001}
+  m_AnchoredPosition: {x: -8.999878, y: 8.300001}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4780204154727028711
@@ -724,7 +724,10 @@ MonoBehaviour:
   _objectType: 0
   _isDevMode: 0
   _enemyType: 0
-  _minDistance: 2
+  _minDistance: 0.01
+  _maxHP: 0
+  _enemyHPTxt: {fileID: 1514792886369934091}
+  _enemyHPslider: {fileID: 6514666488981072883}
   _etbSFXs:
   - {fileID: 11400000, guid: ba530739930c0c347b5415097e615b47, type: 2}
   - {fileID: 11400000, guid: 72389ca13e169944d89ed3995d8baf0b, type: 2}
