@@ -5,7 +5,7 @@ public class GameManager : Singleton<GameManager>
 {
     #region Properies
 
-    public GameObject Player => _player;
+    public Player Player => _player;
 
     public bool IsFading { get; private set; }
     public bool CanPause { get; private set; }
@@ -15,7 +15,7 @@ public class GameManager : Singleton<GameManager>
     #region SerializeField
 
     [Header("XR Player"), Tooltip("Needs the XR Origin Component")]
-    [SerializeField] private GameObject _player;
+    [SerializeField] private Player _player;
 
     [Header("Waypoints")]
     [SerializeField] private Transform _gddWaypoint;

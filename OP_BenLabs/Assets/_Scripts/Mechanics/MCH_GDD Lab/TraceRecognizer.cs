@@ -48,10 +48,7 @@ public class TraceRecognizer : MonoBehaviour
                         string xmlContent = www.downloadHandler.text;
                         trainingSet.Add(GestureIO.ReadGestureFromXML(xmlContent));
                     }
-                    else
-                    {
-                        Debug.LogError("Failed to load gesture: " + fileName + " | " + www.error);
-                    }
+                    else Debug.LogError("Failed to load gesture: " + fileName + " | " + www.error);
                 }
             }
         }
@@ -62,9 +59,7 @@ public class TraceRecognizer : MonoBehaviour
             string[] gestureFiles = Directory.GetFiles(Application.streamingAssetsPath, "*.xml");
 
             foreach (var item in gestureFiles)
-            {
                 trainingSet.Add(GestureIO.ReadGestureFromFile(item));
-            }
         }
         
         // Extra code for Android/Quest
@@ -72,7 +67,7 @@ public class TraceRecognizer : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        void StartTrace()
+        if (other.gameObject.GetComponent<Marker>())
         {
             isDrawing = true;
             positionList.Clear();
@@ -82,12 +77,9 @@ public class TraceRecognizer : MonoBehaviour
             {
                 Destroy(Instantiate(debugCubePrefab, 
                                     movementSource.position, 
-                                    Quaternion.identity), 3);
+                                    Quaternion.identity), 1f);
             }
-        }
-
-        if (other.gameObject.GetComponent<Marker>())
-            StartTrace();        
+        } 
     }
     private void OnTriggerStay(Collider other)
     {
@@ -107,47 +99,41 @@ public class TraceRecognizer : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        void EndTrace()
+        if (!other.gameObject.GetComponent<Marker>()) return;
+
+        isDrawing = false;
+
+        // Create Gesture from position list  
+        Point[] pointArray = new Point[positionList.Count];
+
+        for (int i = 0; i < positionList.Count; i++)
         {
-            isDrawing = false;
-
-            //Create Gesture from position list  
-            Point[] pointArray = new Point[positionList.Count];
-
-            for (int i = 0; i < positionList.Count; i++)
-            {
-                Vector2 screenPoint = Camera.main.WorldToScreenPoint(positionList[i]);
-
-                pointArray[i] = new Point(screenPoint.x, screenPoint.y, 0);
-            }
-
-            Gesture newGesture = new Gesture(pointArray);
-
-            //Adding our own gesture into the list
-            if (isCreationMode)
-            {
-                newGesture.Name = newGestureName;
-                trainingSet.Add(newGesture);
-
-                // to Store gesture into the PC
-                // We will later transfer this (name).xml file into the StreamingAssets folder where Start() will run and load all .xml files
-                string fileName = Application.persistentDataPath + "/" + newGestureName + ".xml";
-                GestureIO.WriteGesture(pointArray, newGestureName, fileName);
-            }
-            else // recognize
-            {
-                Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
-                Debug.Log("Gesture Result: " + result.GestureClass + result.Score);
-
-                if (result.Score > recognitionThreshold)
-                {
-                    OnRecognized.Invoke(result.GestureClass);
-                }
-            }
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(positionList[i]);
+            pointArray[i] = new Point(screenPoint.x, screenPoint.y, 0);
         }
 
-        if (other.gameObject.GetComponent<Marker>())
-            EndTrace();
+        Gesture newGesture = new Gesture(pointArray);
+
+        if (isCreationMode) // Adding our own gesture into the list
+        {
+            newGesture.Name = newGestureName;
+            trainingSet.Add(newGesture);
+
+            // to Store gesture into the PC
+            // We will later transfer this (name).xml file into the StreamingAssets folder where Start() will run and load all .xml files
+            string fileName = Application.persistentDataPath + "/" + newGestureName + ".xml";
+            GestureIO.WriteGesture(pointArray, newGestureName, fileName);
+        }
+        else // recognize
+        {
+            Result result = PointCloudRecognizer.Classify(newGesture, trainingSet.ToArray());
+            Debug.Log("Gesture Result: " + result.GestureClass + result.Score);
+
+            if (result.Score > recognitionThreshold)
+            {
+                OnRecognized.Invoke(result.GestureClass);
+            }
+        }
     }
 
     #endregion

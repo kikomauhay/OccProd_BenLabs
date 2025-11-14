@@ -36,7 +36,26 @@ public class Enemy : Actor
 
     #region Unity
 
-    private void LateUpdate() => TravelToPlayer();
+    private void LateUpdate()
+    {
+        Vector3 lookAtGoal = new Vector3(_goal.position.x,
+                                         transform.position.y,
+                                         _goal.position.z);
+        transform.LookAt(lookAtGoal);
+
+        // smooth rotation
+        Vector3 direction = lookAtGoal - transform.position;
+        transform.rotation = Quaternion.Slerp(transform.rotation,
+                                              Quaternion.LookRotation(direction),
+                                              Time.deltaTime * _rotSpeed);
+
+        // enemy travels to the goal (ignores Y-axis) 
+        if (Vector3.Distance(lookAtGoal, transform.position) > _minDistance)
+        {
+            Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
+            transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Weapon>())
@@ -90,31 +109,6 @@ public class Enemy : Actor
         {
             _currHP = 0f;
             Destroy(gameObject);
-        }
-    }
-    private void TravelToPlayer()
-    {
-        Vector3 lookAtGoal = new Vector3(_goal.position.x,
-                                         transform.position.y,
-                                         _goal.position.z);
-        transform.LookAt(lookAtGoal);
-
-        // smooth rotation
-        Vector3 direction = lookAtGoal - transform.position;
-        transform.rotation = Quaternion.Slerp(transform.rotation,
-                                              Quaternion.LookRotation(direction),
-                                              Time.deltaTime * _rotSpeed);
-
-        // enemy travels to the goal (ignores Y-axis) 
-        if (Vector3.Distance(lookAtGoal, transform.position) > _minDistance)
-        {
-            Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
-            transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
-        }
-        else
-        {
-            GDDManager.Instance.RemoveEnemy(gameObject);
-            Destroy(gameObject); // test
         }
     }
 
