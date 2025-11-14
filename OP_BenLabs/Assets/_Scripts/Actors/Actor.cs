@@ -20,6 +20,9 @@ public abstract class Actor : MonoBehaviour
     protected virtual void Awake() => InitComponents();
     protected virtual void Start()
     {
+        _logger = LogManager.Instance.Loggers[(int)_objectType];
+        _logger.Log($"Debugging enabled using <color=yellow>{_objectType}</color> _logger!", this, _isDevMode);
+
         AssertComponents();
         InitVariables();
     }
@@ -34,14 +37,8 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void Test() { }
 
-    protected virtual void AssertComponents() 
-    {
-        _logger.Log($"Debugging enabled using {_objectType} _logger!", _isDevMode);
-    }
-    protected virtual void InitComponents() 
-    {
-        _logger = LogManager.Instance.Loggers[(int)_objectType];
-    }
+    protected virtual void InitComponents() { }
+    protected virtual void AssertComponents() { }
     protected virtual void InitVariables() { }
 
     #endregion

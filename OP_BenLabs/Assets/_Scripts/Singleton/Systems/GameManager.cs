@@ -35,12 +35,12 @@ public class GameManager : Singleton<GameManager>
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_player, "Missing _player reference!", gameObject);
+        Debug.Assert(_player, "Missing _player reference!", this);
      
-        Debug.Assert(_r803Waypoint, "Missing _r803Waypoint reference!", gameObject);
-        Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", gameObject);
+        Debug.Assert(_r803Waypoint, "Missing _r803Waypoint reference!", this);
+        Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", this);
 
-        Debug.Assert(_fadeScreen, "Missing _fadeScreen reference!", gameObject);
+        Debug.Assert(_fadeScreen, "Missing _fadeScreen reference!", this);
     }
     protected override void InitComponents()
     {

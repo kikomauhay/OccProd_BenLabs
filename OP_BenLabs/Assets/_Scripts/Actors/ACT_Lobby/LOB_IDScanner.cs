@@ -48,7 +48,7 @@ public class LOB_IDScanner : Actor
             _rend.material.color = Color.green;
             _soundEmitter.PlaySound(_idScanSFX);
             StartCoroutine(CO_ToggleInvisibleWall());
-            OpenGates();
+            // OpenGates();
 
             _logger.Log("Openned the gates!", TextColor.GREEN, _isDevMode);
         }
@@ -100,8 +100,8 @@ public class LOB_IDScanner : Actor
     {
         _sndMgr = SoundManager.Instance;
 
-        _leftGateStartPos = _leftGate.localPosition;
-        _rightGateStartPos = _rightGate.localPosition;
+        // _leftGateStartPos = _leftGate.localPosition;
+        // _rightGateStartPos = _rightGate.localPosition;
     }
 
     #endregion

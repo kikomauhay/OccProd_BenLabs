@@ -20,10 +20,10 @@ public class Player : StaticInstance<Player>
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", gameObject);
-        Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", gameObject);
+        Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", this);
+        Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", this);
         
-        Debug.Assert(GetComponent<XROrigin>(), "Missing XROrigin reference!", gameObject);
+        Debug.Assert(GetComponent<XROrigin>(), "Missing XROrigin reference!", this);
 
         base.AssertComponents();
     }

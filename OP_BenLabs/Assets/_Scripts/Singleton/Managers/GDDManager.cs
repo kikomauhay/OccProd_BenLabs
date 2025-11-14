@@ -12,7 +12,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public System.Action OnBuffWeapon { get; set; }
     public string PreferredWeapon { get; private set; }
 
-    public Logger Logger => _logger;
     public int WaveIndex => _waveIndex;
 
     #endregion
@@ -84,6 +83,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _xrXButton.action.Enable();
         _currHP = 5;
         UI_UpdatePlayerLife();
+
         base.Start();
     }
 
@@ -280,11 +280,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", gameObject);
         Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", gameObject);
+
+        base.AssertComponents();
     }
     protected override void InitComponents()
     {
         _drawingCanvas.SetActive(false);
         _soundEmitter = GetComponent<SoundEmitter>();
+
+        base.InitComponents();
     }
     protected override void InitVariables()
     {

@@ -1,3 +1,5 @@
+using System.Data;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,9 +16,13 @@ public class Enemy : Actor
 
     [Header("Enemy Stats")]
     [SerializeField] private EnemyType _enemyType;
-    [SerializeField] private float _minDistance; // testing
+    [SerializeField] private float _minDistance, _maxHP;
 
-    [Header("UI/UX")]
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI _enemyHPTxt;
+    [SerializeField] private Slider _enemyHPslider;
+
+    [Header("SFX")]
     [SerializeField] private Sound[] _etbSFXs;
     [SerializeField] private Sound _ltbSFX;
 
@@ -30,7 +36,7 @@ public class Enemy : Actor
     private SoundEmitter _soundEmitter;
     private Transform _goal, _testGoal;
 
-    private float _maxHP, _currHP, _moveSpeed, _rotSpeed;
+    private float _currHP, _moveSpeed, _rotSpeed;
 
     #endregion
 
@@ -104,12 +110,20 @@ public class Enemy : Actor
 
         _currHP -= amt;
         _logger.Log($"Enemy's HP: {_currHP}", _isDevMode);
+        UI_UpdateHP();
 
         if (_currHP < 1f)
         {
             _currHP = 0f;
+            UI_UpdateHP();
             Destroy(gameObject);
         }
+    }
+
+    private void UI_UpdateHP()
+    {
+        _enemyHPTxt.text = $"{_currHP}/{_maxHP}";
+        _enemyHPslider.value = _currHP / _maxHP;
     }
 
     #endregion
@@ -117,14 +131,15 @@ public class Enemy : Actor
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_etbSFXs.Length != 3, "Missing elements in _etbSFXs!", gameObject);
-        Debug.Assert(_ltbSFX, "Missing _ltbSFX reference!", gameObject);
+        Debug.Assert(_etbSFXs.Length != 3, "Missing elements in _etbSFXs!", this);
+        Debug.Assert(_ltbSFX, "Missing _ltbSFX reference!", this);
     }
     protected override void InitComponents()
     {
-        _logger = GDDManager.Instance.Logger;
         _rb = GetComponent<Rigidbody>();
         _soundEmitter = GetComponent<SoundEmitter>();
+
+        base.InitComponents();
     }
     protected override void InitVariables()
     {
