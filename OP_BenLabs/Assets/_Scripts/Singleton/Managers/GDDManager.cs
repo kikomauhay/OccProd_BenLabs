@@ -32,17 +32,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private GameObject _swordImage, _hammerImage;
     [SerializeField, Space(10f)] private WeaponSpawner _weaponSpawner;
 
-    [Header("UI/UX")]
+    [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
     [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT;
-    [SerializeField] private Sound _startGameSFX, _gameOverSFX, _healSFX, _dmgSFX;
+    
+    [Header("SFX")]
+    [SerializeField] private Sound _startGameSFX;
+    [SerializeField] private Sound _gameOverSFX, _healSFX, _dmgSFX, _allWavesDone;
 
     [Header("VR Variables")]
     [SerializeField] private bool _usingLeftHand;
     [SerializeField] private InputActionReference _xrAButton, _xrXButton;
     [SerializeField] private GameObject[] _leftHandTools, _rightHandTools;
 
-    #endregion
+    #endregion   
     #region Private
 
     private GameManager _gameMgr;
@@ -51,12 +54,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private const float GRACE_PERIOD = 15f;
     private const float SPAWN_INTERVAL = 0.5f;
+    private const int MAX_WAVES = 3;
 
     private readonly float[] _prepTimes = new float[3] { 15f, 10f, 7f };
     private readonly int[] _enemiesToSpawn = new int[3] { 8, 16, 20 };
     private List<List<GhostBlock>> _ghostBlockGridList;
 
-    private List<GameObject> _enemyList;
+    [SerializeField] private List<GameObject> _enemyList; // test 
     private WaveState _waveState;
     private int _killCount, _waveIndex;
     private float _currHP;
@@ -81,8 +85,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         _xrAButton.action.Enable();
         _xrXButton.action.Enable();
-        _currHP = 5;
-        UI_UpdatePlayerLife();
 
         base.Start();
     }
@@ -111,20 +113,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
     }
 
-    public void ActivateMarker()
+    public void ActivateSword(bool active)
     {
-        _leftHandTools[0].SetActive(_usingLeftHand);
-        _rightHandTools[0].SetActive(!_usingLeftHand);
+        _leftHandTools[1].SetActive(active && _usingLeftHand);
+        _rightHandTools[1].SetActive(active && !_usingLeftHand);
     }
-    public void ActivateSword()
+    public void ActivateHammer(bool active)
     {
-        _leftHandTools[1].SetActive(_usingLeftHand);
-        _rightHandTools[1].SetActive(!_usingLeftHand);
-    }
-    public void ActivateHammer()
-    {
-        _leftHandTools[2].SetActive(_usingLeftHand);
-        _rightHandTools[2].SetActive(!_usingLeftHand);
+        _leftHandTools[2].SetActive(active && _usingLeftHand);
+        _rightHandTools[2].SetActive(active && !_usingLeftHand);
     }
 
     public void SpawnEnemy()
@@ -175,34 +172,44 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _currHP = 0f;
             INT_DoGameOver();
         }
+
+        _logger.Log($"HP: {_currHP}", _isDevMode);
     }
 
     #endregion
     #region Private 
 
-    private void EVENT_CountRemainingEnemies()
+    private void EVENT_CountRemainingEnemies(Enemy e)
     {
         _waveState = WaveState.COUNTING;
 
+        _enemyList.Remove(e.gameObject);
         _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN, _isDevMode);
 
-        if (_enemyList.Count == 0)
+        if (_enemyList.Count < 1)
         {
             _waveIndex++;
             UI_UpdateWaveIndex();
 
-            if (_waveIndex < 2)
+            if (_waveIndex < MAX_WAVES)
             {
                 StartCoroutine(CO_SpawnEnemyWave());
                 _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
             }
+            else
+            {
+                _soundEmitter.PlaySound(_allWavesDone);
+                _logger.Log("All waves done!", _isDevMode);
+            }
+
+            _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
         }
     }
     private void EVENT_IncrementKillCount()
     {
         _killCount++;
-        UI_UpdateKllCount();
         _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW, _isDevMode);
+        UI_UpdateKllCount();
     }
     private void EVENT_GainLife()
     {
@@ -227,23 +234,16 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         StartCoroutine(CO_ClearWaveTxt());
     }
-    private void UI_UpdatePlayerLife() => _waveCountTXT.text = $"Life: {_currHP}";
+    private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
     private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
 
+    private void EnableMarker(bool active)
+    {
+        _leftHandTools[0].SetActive(active && _usingLeftHand);
+        _rightHandTools[0].SetActive(active && !_usingLeftHand);
+    }
     private void ToggleMainHand(InputAction.CallbackContext context)
     {
-        /*
-        void SetActiveHand(bool isLeft)
-        {
-            _marker[0].SetActive(isLeft);
-            _sword[0].SetActive(isLeft);
-            _hammer[0].SetActive(isLeft);
-
-            _marker[1].SetActive(!isLeft);
-            _sword[1].SetActive(!isLeft);
-            _hammer[1].SetActive(!isLeft);
-        } */
-
         _usingLeftHand = !_usingLeftHand;
 
         for (int i = 0; i < 3; i++)
@@ -287,8 +287,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         _drawingCanvas.SetActive(false);
         _soundEmitter = GetComponent<SoundEmitter>();
-
-        base.InitComponents();
     }
     protected override void InitVariables()
     {
@@ -300,7 +298,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         _killCount = 0;
         _waveIndex = 0;
-        _currHP = 0f;
+        _currHP = 5f;
 
         _ghostBlockGridList = new List<List<GhostBlock>>()
         {
@@ -332,9 +330,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         {
             // play StartTimer.sfx
 
+            if (_waveIndex > 0)
+            {
+                ActivateHammer(false);
+                ActivateSword(false);
+            }
+
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
-            ActivateMarker();
+            EnableMarker(true);
 
             // variable assignment
             PreferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
@@ -342,27 +346,30 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             if      (PreferredWeapon == "Sword")  _swordImage.SetActive(true);
             else if (PreferredWeapon == "Hammer") _hammerImage.SetActive(true);
-      
+
+            /*
             switch (modifier)
             {
-                case Modifier.HEALTH: 
-                    _currHP += 5f;
+                case Modifier.HEALTH:
+                    _currHP++;
+                    UI_UpdatePlayerLife();
                     _logger.Log("Increased HP!", _isDevMode);
-                    break;                
-                
+                    break;
+
                 case Modifier.DAMAGE:
                     OnBuffWeapon?.Invoke();
                     _logger.Log("Increased damage!", _isDevMode);
-                    break;                
-                
-                case Modifier.REDUCED_ENEMIES: 
+                    break;
+
+                case Modifier.REDUCED_ENEMIES:
                     unitCount = _enemiesToSpawn[_waveIndex] - 1;
                     _logger.Log("Reduced enemies!", _isDevMode);
-                    break;                
-                
-                case Modifier.DEFAULT: break;                
-                default:               break;
+                    break;
+
+                case Modifier.DEFAULT: break;
+                default: break;
             }
+            */
 
             _logger.Log($"{GRACE_PERIOD}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
             _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);
@@ -370,7 +377,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
         IEnumerator CO_DoEnemySpawning()
         {
-            // play StopTimer.sfx
+            UI_UpdateKllCount();
+            UI_UpdatePlayerLife();
+            UI_UpdateWaveIndex();
             
             if (_availableBlocksList.Count > 0)
             {
@@ -384,7 +393,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
             _blockLabelsUI.SetActive(false);
-            ActivateMarker();
+            
+            EnableMarker(false);
 
             for (int i = 0; i < unitCount; i++)
             {

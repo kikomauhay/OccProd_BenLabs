@@ -8,7 +8,7 @@ public class Enemy : Actor
 {
     #region Properties
 
-    public System.Action OnDeath { get; set; }
+    public System.Action<Enemy> OnDeath { get; set; }
     public System.Action OnKilled { get; set; }
 
     #endregion
@@ -61,6 +61,11 @@ public class Enemy : Actor
             Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
         }
+        else
+        {
+            _gddMgr.TakeDamage();
+            Destroy(gameObject);
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -70,19 +75,12 @@ public class Enemy : Actor
 
             TakeDamage(w.Damage + w.DamageModifier);
             _logger.Log($"{this} took damage!", _isDevMode);
-            
-            return;
-        }
 
-        if (other.gameObject == _gameMgr.Player)
-        {
-            _gddMgr.TakeDamage();
-            Destroy(gameObject);
         }
     }
     private void OnDestroy()
     {
-        OnDeath?.Invoke();
+        OnDeath?.Invoke(this);
 
         if (_currHP == 0f)
             OnKilled?.Invoke();
@@ -131,7 +129,7 @@ public class Enemy : Actor
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_etbSFXs.Length != 3, "Missing elements in _etbSFXs!", this);
+        Debug.Assert(_etbSFXs.Length == 3, "Missing elements in _etbSFXs!", this);
         Debug.Assert(_ltbSFX, "Missing _ltbSFX reference!", this);
     }
     protected override void InitComponents()
@@ -174,6 +172,8 @@ public class Enemy : Actor
         _rotSpeed = Random.Range(2f, 4f);   
 
         _soundEmitter.PlaySound(_etbSFXs[(int)_enemyType]);
+
+        UI_UpdateHP();
     }
 
     #endregion
