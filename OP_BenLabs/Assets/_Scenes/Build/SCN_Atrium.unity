@@ -3649,6 +3649,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 335782402}
     m_Modifications:
+    - target: {fileID: 497509588287478753, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: movementSource
+      value: 
+      objectReference: {fileID: 1001958036}
+    - target: {fileID: 2018727286102504008, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: movementSource
+      value: 
+      objectReference: {fileID: 1001958036}
     - target: {fileID: 2572518802000306742, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: m_margin.z
@@ -3892,8 +3902,7 @@ PrefabInstance:
         type: 3}
       propertyPath: debugCubePrefab
       value: 
-      objectReference: {fileID: 382873277949752906, guid: 0f21f97bd78119e4cacff2cfb018de67,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 3350122297619000276, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -3953,6 +3962,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3405042764267600714, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3951194652282099918, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -4346,6 +4360,11 @@ PrefabInstance:
     - target: {fileID: 6886268612750534595, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7799662042634482524, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7835597591989406981, guid: a8a2fe0535ced9b438f25626b6a0defd,
