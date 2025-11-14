@@ -33,15 +33,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private GameObject _swordImage, _hammerImage;
     [SerializeField, Space(10f)] private WeaponSpawner _weaponSpawner;
 
-    [Header("UI/UX")]
+    [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
     [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT;
-    [SerializeField] private Sound _startGameSFX, _gameOverSFX, _healSFX, _dmgSFX;
+    
+    [Header("SFX")]
+    [SerializeField] private Sound _startGameSFX;
+    [SerializeField] private Sound _gameOverSFX, _healSFX, _dmgSFX;
 
     [Header("VR Variables")]
     [SerializeField] private bool _usingLeftHand;
     [SerializeField] private InputActionReference _xrAButton, _xrXButton;
-    [SerializeField] private GameObject[] _leftHandTools, _rightHandTools;
 
     #endregion
     #region Private
@@ -80,10 +82,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     protected override void Start()
     {
+        base.Start();
+
         _xrAButton.action.Enable();
         _xrXButton.action.Enable();
 
-        base.Start();
+        UI_UpdateKllCount();
+        UI_UpdateWaveIndex();
+        UI_UpdatePlayerLife();
     }
 
     #endregion
@@ -110,21 +116,28 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
     }
 
-    public void ActivateMarker()
+    private void ActivateMarker()
     {
-        _leftHandTools[0].SetActive(_usingLeftHand);
-        _rightHandTools[0].SetActive(!_usingLeftHand);
+        Player.Instance.LeftHandTools[0].SetActive(_usingLeftHand);
+        Player.Instance.RightHandTools[0].SetActive(!_usingLeftHand);
     }
     public void ActivateSword()
     {
-        _leftHandTools[1].SetActive(_usingLeftHand);
-        _rightHandTools[1].SetActive(!_usingLeftHand);
+        Player.Instance.LeftHandTools[1].SetActive(_usingLeftHand);
+        Player.Instance.RightHandTools[1].SetActive(!_usingLeftHand);
     }
     public void ActivateHammer()
     {
-        _leftHandTools[2].SetActive(_usingLeftHand);
-        _rightHandTools[2].SetActive(!_usingLeftHand);
+        Player.Instance.LeftHandTools[2].SetActive(_usingLeftHand);
+        Player.Instance.RightHandTools[2].SetActive(!_usingLeftHand);
     }
+
+    private void EnableMarker(bool active)
+    {
+        Player.Instance.LeftHandTools[0].SetActive(active && _usingLeftHand);
+        Player.Instance.RightHandTools[0].SetActive(active && !_usingLeftHand);
+    }
+
 
     public void SpawnEnemy()
     {
@@ -208,6 +221,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Random.value < 0.1f)
         {
             _currHP++;
+            _soundEmitter.PlaySound(_healSFX);
+            _logger.Log("Gained life!", _isDevMode);
+
             UI_UpdatePlayerLife();
         }
     }
@@ -226,30 +242,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         StartCoroutine(CO_ClearWaveTxt());
     }
-    private void UI_UpdatePlayerLife() => _waveCountTXT.text = $"Life: {_currHP}";
+    private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
     private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
 
     private void ToggleMainHand(InputAction.CallbackContext context)
     {
-        /*
-        void SetActiveHand(bool isLeft)
-        {
-            _marker[0].SetActive(isLeft);
-            _sword[0].SetActive(isLeft);
-            _hammer[0].SetActive(isLeft);
-
-            _marker[1].SetActive(!isLeft);
-            _sword[1].SetActive(!isLeft);
-            _hammer[1].SetActive(!isLeft);
-        } */
-
         _usingLeftHand = !_usingLeftHand;
 
         for (int i = 0; i < 3; i++)
         {
-            _leftHandTools[i].SetActive(_usingLeftHand);
-            _rightHandTools[i].SetActive(!_usingLeftHand);
+            Player.Instance.LeftHandTools[i].SetActive(_usingLeftHand);
+            Player.Instance.RightHandTools[i].SetActive(!_usingLeftHand);
         }
+
+        _logger.Log($"Using left hand: {_usingLeftHand}!", _isDevMode);
     }
 
     #endregion
@@ -269,6 +275,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Return)) StartCoroutine(CO_SpawnEnemyWave());
     }
 
+    protected override void InitComponents()
+    {
+        _drawingCanvas.SetActive(false);
+        _soundEmitter = GetComponent<SoundEmitter>();
+
+        base.InitComponents();
+    }
     protected override void AssertComponents()
     {
         Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", gameObject);
@@ -277,13 +290,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", gameObject);
         Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", gameObject);
 
-        Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", gameObject);
-        Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", gameObject);
-    }
-    protected override void InitComponents()
-    {
-        _drawingCanvas.SetActive(false);
-        _soundEmitter = GetComponent<SoundEmitter>();
+        base.AssertComponents();
     }
     protected override void InitVariables()
     {
@@ -329,7 +336,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveHandler.gameObject.SetActive(false);
             _drawingCanvas.SetActive(true);
-            ActivateMarker();
+            // ActivateMarker();
+            EnableMarker(true);
 
             // variable assignment
             PreferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
@@ -379,7 +387,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
             _blockLabelsUI.SetActive(false);
-            ActivateMarker();
+            EnableMarker(false);
+
 
             for (int i = 0; i < unitCount; i++)
             {

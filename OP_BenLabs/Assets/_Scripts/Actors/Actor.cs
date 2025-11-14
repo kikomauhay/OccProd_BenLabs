@@ -4,9 +4,12 @@ public abstract class Actor : MonoBehaviour
 {
     #region Members
 
+
     [Header("Debugging")]
-    [SerializeField] protected Logger _logger;
+    [SerializeField] private ObjectType _objectType;
     [SerializeField] protected bool _isDevMode;
+
+    protected Logger _logger;
 
     #endregion
 
@@ -33,11 +36,20 @@ public abstract class Actor : MonoBehaviour
 
     protected virtual void AssertComponents() 
     {
-        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
+        _logger.Log($"Debugging enabled using {_objectType} _logger!", _isDevMode);
     }
-    protected virtual void InitComponents() { }
+    protected virtual void InitComponents() 
+    {
+        _logger = LogManager.Instance.Loggers[(int)_objectType];
+    }
     protected virtual void InitVariables() { }
 
     #endregion
+}
+
+public enum ObjectType
+{
+    ACTOR = 0,
+    MANAGER = 1,
+    MECHANIC = 2
 }

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1060294163365964043}
   - component: {fileID: 1060294163365964041}
   m_Layer: 8
-  m_Name: Pink Marker (1)
+  m_Name: Right Marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1060294163831914065}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: -91.345, z: -26.556}
 --- !u!33 &1060294163365964045
 MeshFilter:
@@ -278,9 +278,9 @@ Transform:
   - {fileID: 4638671347137824938}
   - {fileID: 2946823196764508097}
   - {fileID: 9092101200801857330}
+  - {fileID: 1060294163365964055}
   - {fileID: 69936053046113829}
   - {fileID: 8484330347774355862}
-  - {fileID: 1060294163365964055}
   m_Father: {fileID: 1060294163594804065}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -0.933, z: 0}
@@ -1295,8 +1295,9 @@ GameObject:
   - component: {fileID: 1060294165197853534}
   - component: {fileID: 1060294165197853533}
   - component: {fileID: 1060294165197853532}
+  - component: {fileID: 8515223491386886593}
   m_Layer: 0
-  m_Name: XR Origin (Player)
+  m_Name: PRF_XR Origin (Player)
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1412,6 +1413,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_System: {fileID: 1060294165197853534}
   m_DelayTime: 0
+--- !u!114 &8515223491386886593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1060294165197853530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f925b4dc6ad262b4d929c03ad18452db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objectType: 0
+  _isDevMode: 0
+  _leftHandTools:
+  - {fileID: 3184549452502668964}
+  - {fileID: 334138524188253594}
+  - {fileID: 5790905697889943745}
+  _rightHandTools:
+  - {fileID: 1060294163365964054}
+  - {fileID: 2409392961658666802}
+  - {fileID: 9150250075197293141}
 --- !u!1 &1060294165425903763
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,9 +1468,9 @@ Transform:
   m_Children:
   - {fileID: 1094974647376031369}
   - {fileID: 2946823196884490859}
+  - {fileID: 1705146813147436408}
   - {fileID: 2680923179717776525}
   - {fileID: 6566033326753999618}
-  - {fileID: 1705146813147436408}
   - {fileID: 7132160428633214711}
   m_Father: {fileID: 1060294163594804065}
   m_RootOrder: 1
@@ -1836,7 +1859,7 @@ GameObject:
   - component: {fileID: 207573501676231575}
   - component: {fileID: 3377603564006955842}
   m_Layer: 8
-  m_Name: Pink Marker (2)
+  m_Name: Left Marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1855,7 +1878,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1060294165425903764}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: -92.278, z: -26.556}
 --- !u!33 &2688552537599650162
 MeshFilter:
@@ -1943,7 +1966,7 @@ PrefabInstance:
     - target: {fileID: 41274632816003310, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 41274632816003310, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
@@ -1998,7 +2021,7 @@ PrefabInstance:
     - target: {fileID: 2379368818461393401, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
       propertyPath: m_Name
-      value: R_MOD_Katana (1)
+      value: Right Katana
       objectReference: {fileID: 0}
     - target: {fileID: 2379368818461393401, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
@@ -2010,6 +2033,12 @@ PrefabInstance:
 --- !u!4 &69936053046113829 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 41274632816003310, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
+    type: 3}
+  m_PrefabInstance: {fileID: 30071056453992139}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2409392961658666802 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2379368818461393401, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
     type: 3}
   m_PrefabInstance: {fileID: 30071056453992139}
   m_PrefabAsset: {fileID: 0}
@@ -3830,7 +3859,7 @@ PrefabInstance:
     - target: {fileID: 41274632816003310, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 41274632816003310, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
@@ -3885,7 +3914,7 @@ PrefabInstance:
     - target: {fileID: 2379368818461393401, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
       propertyPath: m_Name
-      value: L_MOD_Katana
+      value: Left Katana
       objectReference: {fileID: 0}
     - target: {fileID: 2379368818461393401, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
         type: 3}
@@ -3894,6 +3923,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af3fc7b6a6616e74d8d7bb79f0294a79, type: 3}
+--- !u!1 &334138524188253594 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2379368818461393401, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
+    type: 3}
+  m_PrefabInstance: {fileID: 2712906827570076771}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2680923179717776525 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 41274632816003310, guid: af3fc7b6a6616e74d8d7bb79f0294a79,
@@ -3910,7 +3945,7 @@ PrefabInstance:
     - target: {fileID: 1453722524936247175, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1453722524936247175, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
@@ -3965,7 +4000,7 @@ PrefabInstance:
     - target: {fileID: 2265022980466113604, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
       propertyPath: m_Name
-      value: L_MOD_warhammer
+      value: Left Hammer
       objectReference: {fileID: 0}
     - target: {fileID: 2265022980466113604, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
@@ -3974,6 +4009,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6051c59ff4f68442b1eb747221f245d, type: 3}
+--- !u!1 &5790905697889943745 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2265022980466113604, guid: c6051c59ff4f68442b1eb747221f245d,
+    type: 3}
+  m_PrefabInstance: {fileID: 5707068338283445381}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6566033326753999618 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1453722524936247175, guid: c6051c59ff4f68442b1eb747221f245d,
@@ -3990,7 +4031,7 @@ PrefabInstance:
     - target: {fileID: 1453722524936247175, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1453722524936247175, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
@@ -4045,7 +4086,7 @@ PrefabInstance:
     - target: {fileID: 2265022980466113604, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
       propertyPath: m_Name
-      value: R_MOD_warhammer (1)
+      value: Right Hammer
       objectReference: {fileID: 0}
     - target: {fileID: 2265022980466113604, guid: c6051c59ff4f68442b1eb747221f245d,
         type: 3}
@@ -4057,6 +4098,12 @@ PrefabInstance:
 --- !u!4 &8484330347774355862 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1453722524936247175, guid: c6051c59ff4f68442b1eb747221f245d,
+    type: 3}
+  m_PrefabInstance: {fileID: 7030907990746545681}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &9150250075197293141 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2265022980466113604, guid: c6051c59ff4f68442b1eb747221f245d,
     type: 3}
   m_PrefabInstance: {fileID: 7030907990746545681}
   m_PrefabAsset: {fileID: 0}
