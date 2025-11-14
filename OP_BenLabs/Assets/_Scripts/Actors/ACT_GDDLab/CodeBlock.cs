@@ -101,6 +101,8 @@ public class CodeBlock : Actor, IInteractable
         _rend = GetComponent<MeshRenderer>();
         _rb = GetComponent<Rigidbody>();
         _soundEmitter = GetComponent<SoundEmitter>();
+
+        base.InitComponents();
     }
     protected override void InitVariables()
     {        

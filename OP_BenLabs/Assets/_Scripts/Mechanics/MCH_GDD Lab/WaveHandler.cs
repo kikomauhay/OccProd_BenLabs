@@ -18,7 +18,7 @@ public class WaveHandler : StaticInstance<WaveHandler>
 
     protected override void Start()
     {
-        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", gameObject);    
+        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", this);    
         base.Start();
     }
 

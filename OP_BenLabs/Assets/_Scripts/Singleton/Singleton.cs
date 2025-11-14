@@ -8,10 +8,6 @@ public abstract class StaticInstance<T> : Actor where T : MonoBehaviour
     protected override void Awake()
     {
         Instance = this as T;
-
-        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-        _logger.Log($"{name}'s developer mode enabled!", this, TextColor.YELLOW, _isDevMode);
-
         InitComponents();
     }
     protected virtual void OnApplicationQuit()
