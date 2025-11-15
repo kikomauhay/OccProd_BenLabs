@@ -9,7 +9,6 @@ public class TraceRecognizer : MonoBehaviour
 {
     #region Members
 
-    [SerializeField] private bool isDrawing = false;
     [SerializeField] private Transform movementSource;
     [SerializeField] private float recognitionThreshold = 0.9f;
 
@@ -69,7 +68,6 @@ public class TraceRecognizer : MonoBehaviour
     {
         if (other.gameObject.GetComponent<Marker>())
         {
-            isDrawing = true;
             positionList.Clear();
             positionList.Add(movementSource.position);
 
@@ -101,8 +99,6 @@ public class TraceRecognizer : MonoBehaviour
     {
         if (!other.gameObject.GetComponent<Marker>()) return;
 
-        isDrawing = false;
-
         // Create Gesture from position list  
         Point[] pointArray = new Point[positionList.Count];
 
@@ -132,6 +128,7 @@ public class TraceRecognizer : MonoBehaviour
             if (result.Score > recognitionThreshold)
             {
                 OnRecognized.Invoke(result.GestureClass);
+                GDDManager.Instance.EnableMarker(false);
             }
         }
     }
