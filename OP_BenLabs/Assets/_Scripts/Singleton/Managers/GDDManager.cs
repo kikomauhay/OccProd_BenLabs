@@ -113,15 +113,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
     }
 
-    public void ActivateSword(bool active)
+    public void EnableSword(bool active)
     {
         _leftHandTools[1].SetActive(active && _usingLeftHand);
         _rightHandTools[1].SetActive(active && !_usingLeftHand);
     }
-    public void ActivateHammer(bool active)
+    public void EnableHammer(bool active)
     {
         _leftHandTools[2].SetActive(active && _usingLeftHand);
         _rightHandTools[2].SetActive(active && !_usingLeftHand);
+    }
+    public void EnableMarker(bool active)
+    {
+        _leftHandTools[0].SetActive(active && _usingLeftHand);
+        _rightHandTools[0].SetActive(active && !_usingLeftHand);
     }
 
     public void SpawnEnemy()
@@ -189,11 +194,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_enemyList.Count < 1)
         {
             _waveIndex++;
-            UI_UpdateWaveIndex();
 
             if (_waveIndex < MAX_WAVES)
             {
+                UI_UpdateWaveIndex();
                 StartCoroutine(CO_SpawnEnemyWave());
+
                 _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
             }
             else
@@ -237,11 +243,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
     private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
 
-    private void EnableMarker(bool active)
-    {
-        _leftHandTools[0].SetActive(active && _usingLeftHand);
-        _rightHandTools[0].SetActive(active && !_usingLeftHand);
-    }
     private void ToggleMainHand(InputAction.CallbackContext context)
     {
         _usingLeftHand = !_usingLeftHand;
@@ -332,8 +333,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             if (_waveIndex > 0)
             {
-                ActivateHammer(false);
-                ActivateSword(false);
+                EnableHammer(false);
+                EnableSword(false);
             }
 
             _waveHandler.gameObject.SetActive(false);
@@ -393,8 +394,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveState = WaveState.SPAWNING;
             _drawingCanvas.SetActive(false);
             _blockLabelsUI.SetActive(false);
-            
-            EnableMarker(false);
 
             for (int i = 0; i < unitCount; i++)
             {
