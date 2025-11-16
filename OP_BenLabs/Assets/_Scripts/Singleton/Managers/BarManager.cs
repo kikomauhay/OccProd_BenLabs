@@ -21,6 +21,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     [Header("UI/UX")]
     [SerializeField] private Sound _startGameSFX;
     [SerializeField] private GameObject _startButton, _tutorialButton;
+    [SerializeField] private GameObject[] _onboardingBoxes;
 
     #endregion
     #region Private
@@ -49,7 +50,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             yield return new WaitForSeconds(2f);
             _startButton.SetActive(true);
         }
-
+        DisableOnboardingBoxes();
         _soundEmitter.PlaySound(_startGameSFX);
         _totalScore = 0;
 
@@ -151,6 +152,14 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     #endregion
     #region Private
+
+    private void DisableOnboardingBoxes()
+    {
+        for (int i = 0; i < _onboardingBoxes.Length; i++)
+        {
+            _onboardingBoxes[i].SetActive(false);
+        }
+    }
 
     private void TrickScore(float trickScore)
     {
