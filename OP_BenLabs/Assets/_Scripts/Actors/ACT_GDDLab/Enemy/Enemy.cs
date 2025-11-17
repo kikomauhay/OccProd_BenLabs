@@ -1,4 +1,3 @@
-using System.Data;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,7 +15,6 @@ public class Enemy : Actor
 
     [Header("Enemy Stats")]
     [SerializeField] private EnemyType _enemyType;
-    [SerializeField] private float _minDistance, _maxHP;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _enemyHPTxt;
@@ -29,19 +27,28 @@ public class Enemy : Actor
     #endregion
     #region Private
 
-    private GameManager _gameMgr;
     private GDDManager _gddMgr;
 
     private Rigidbody _rb;
     private SoundEmitter _soundEmitter;
     private Transform _goal, _testGoal;
 
-    private float _currHP, _moveSpeed, _rotSpeed;
+    private float _currHP, _maxHP, _moveSpeed, _rotSpeed;
+
+    private const float MINIMUM_DISTANCE = 0.2f;
 
     #endregion
 
     #region Unity
 
+    protected override void Start()
+    {
+        base.Start();
+        // start sine Y axis for floating movement 
+        UI_UpdateHP();
+
+        _soundEmitter.PlaySound(_etbSFXs[(int)_enemyType]);
+    }
     private void LateUpdate()
     {
         Vector3 lookAtGoal = new Vector3(_goal.position.x,
@@ -56,7 +63,7 @@ public class Enemy : Actor
                                               Time.deltaTime * _rotSpeed);
 
         // enemy travels to the goal (ignores Y-axis) 
-        if (Vector3.Distance(lookAtGoal, transform.position) > _minDistance)
+        if (Vector3.Distance(lookAtGoal, transform.position) > MINIMUM_DISTANCE)
         {
             Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
@@ -75,7 +82,6 @@ public class Enemy : Actor
 
             TakeDamage(w.Damage + w.DamageModifier);
             _logger.Log($"{this} took damage!", _isDevMode);
-
         }
     }
     private void OnDestroy()
@@ -98,6 +104,11 @@ public class Enemy : Actor
     #endregion
     #region Private
     
+    private void UI_UpdateHP()
+    {
+        _enemyHPTxt.text = $"{_currHP}/{_maxHP}";
+        _enemyHPslider.value = _currHP / _maxHP;
+    }
     private void TakeDamage(float amt)
     {
         if (amt < 0f)
@@ -118,12 +129,6 @@ public class Enemy : Actor
         }
     }
 
-    private void UI_UpdateHP()
-    {
-        _enemyHPTxt.text = $"{_currHP}/{_maxHP}";
-        _enemyHPslider.value = _currHP / _maxHP;
-    }
-
     #endregion
     #region Helpers
 
@@ -136,19 +141,15 @@ public class Enemy : Actor
     {
         _rb = GetComponent<Rigidbody>();
         _soundEmitter = GetComponent<SoundEmitter>();
-
-        base.InitComponents();
     }
     protected override void InitVariables()
     {
-        name = "Enemy";
-
-        _gameMgr = GameManager.Instance;
         _gddMgr = GDDManager.Instance;
 
         _rb.mass = 10f;
         _rb.angularDrag = 0f;
         _rb.useGravity = true;
+        _rb.isKinematic = true;
 
         switch (_enemyType)
         {
@@ -167,13 +168,11 @@ public class Enemy : Actor
             default: break;
         }
 
+        name = $"{_enemyType}";
+
         _currHP = _maxHP;
         _moveSpeed = Random.Range(2f, 4f);
         _rotSpeed = Random.Range(2f, 4f);   
-
-        _soundEmitter.PlaySound(_etbSFXs[(int)_enemyType]);
-
-        UI_UpdateHP();
     }
 
     #endregion
