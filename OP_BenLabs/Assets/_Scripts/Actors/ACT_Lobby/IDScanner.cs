@@ -32,10 +32,10 @@ public class IDScanner : Actor
     #endregion
     #region Unity
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<ID>())
-        { 
+        {
             _rend.material.color = Color.green;
             _soundEmitter.PlaySound(_idScanSFX);
             RotateGates();
@@ -102,7 +102,6 @@ public class IDScanner : Actor
         _sndMgr = SoundManager.Instance;
 
         _col.enabled = true;
-        _col.isTrigger = true;
 
         _leftStartRot = _leftGate.localRotation;
         _rightStartRot = _rightGate.localRotation;

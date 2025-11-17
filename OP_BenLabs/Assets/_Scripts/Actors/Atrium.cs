@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using UnityEditor.Purchasing;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
