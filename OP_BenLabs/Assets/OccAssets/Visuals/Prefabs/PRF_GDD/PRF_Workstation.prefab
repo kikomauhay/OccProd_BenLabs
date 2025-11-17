@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2019384405703232084}
+  - component: {fileID: 458339423963891336}
   m_Layer: 0
   m_Name: PRF_Workstation
   m_TagString: Untagged
@@ -35,6 +36,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &458339423963891336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119679583527150952}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 868f4b5739776a94faae331c4f0f4c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _img: {fileID: 2744456694524836137}
+  _specialWallpaper: {fileID: 0}
+  _defaultWallpapers:
+  - {fileID: 21300000, guid: 6d40b430fa30bb545889629516eb528d, type: 3}
+  - {fileID: 21300000, guid: e68479dc377a9e1419331b71812f6628, type: 3}
 --- !u!1 &3835991307967505998
 GameObject:
   m_ObjectHideFlags: 0
@@ -454,7 +472,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6329018305305362268}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -7.3}
+  m_LocalPosition: {x: 0, y: 0, z: -7.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

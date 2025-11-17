@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class Weapon : Actor
@@ -31,8 +32,11 @@ public class Weapon : Actor
     #endregion
     #region Private
 
-    private void EVENT_IncreaseDamage() => DamageModifier = 10f;
-
+    private void EVENT_IncreaseDamage() 
+    {
+        DamageModifier = 10f;
+        _logger.Log($"Total damage = {_dmg} + {DamageModifier}", _isDevMode);
+    }
 
     #endregion
 }

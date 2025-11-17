@@ -1,6 +1,4 @@
-using DG.Tweening;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer), typeof(SoundEmitter), typeof(BoxCollider))]
@@ -18,6 +16,7 @@ public class IDScanner : Actor
 
     [Header("Sounds")]
     [SerializeField] private Sound _idScanSFX;
+    [SerializeField] private Sound _wrongScanSFX;
 
     #endregion
     #region Private
@@ -46,7 +45,7 @@ public class IDScanner : Actor
         else
         {
             _rend.material.color = Color.red;
-            _sndMgr.PlaySound("SND_Wrong");
+            _soundEmitter.PlaySound(_wrongScanSFX);
             _logger.Log("Wrong ID!", TextColor.RED, _isDevMode);
         }
     }
@@ -88,6 +87,9 @@ public class IDScanner : Actor
 
         Debug.Assert(_leftGate, "Missing _leftGate reference!", this);
         Debug.Assert(_rightGate, "Missing _rightGate reference!", this);
+
+        Debug.Assert(_idScanSFX, "Missing _idScanSFX reference!", this);
+        Debug.Assert(_wrongScanSFX, "Missing _wrongScanSFX reference!", this);
     }
     protected override void InitComponents()
     {
