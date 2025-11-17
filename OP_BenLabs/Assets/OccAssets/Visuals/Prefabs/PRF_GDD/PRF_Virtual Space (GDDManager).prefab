@@ -742,7 +742,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6214476086529261286
 Transform:
   m_ObjectHideFlags: 0
@@ -851,7 +851,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8660853150569197617
 Transform:
   m_ObjectHideFlags: 0
@@ -1699,8 +1699,6 @@ MonoBehaviour:
   _objectType: 0
   _isDevMode: 0
   _collider: {fileID: 3350122296301354915}
-  _spawnArea: {fileID: 3350122297243809221}
-  _testGoal: {fileID: 0}
   _waveHandler: {fileID: 3350122298130101648}
   _blockLabelsUI: {fileID: 1691517116}
   _availableBlocksList:
@@ -1715,7 +1713,10 @@ MonoBehaviour:
   - {fileID: 3951194653413896632}
   - {fileID: 3951194653362538828}
   - {fileID: 3951194652842559058}
-  _drawingCanvas: {fileID: 3350122297619000278}
+  _drawingCanvases:
+  - {fileID: 3350122297619000278}
+  - {fileID: 7799662042634482524}
+  - {fileID: 3405042764267600714}
   _swordImage: {fileID: 8436566090527357797}
   _hammerImage: {fileID: 4940886719878669978}
   _weaponSpawner: {fileID: 3350122297794325856}
@@ -1723,10 +1724,11 @@ MonoBehaviour:
   _playerLivesTXT: {fileID: 3350122296326419905}
   _killCountTXT: {fileID: 2572518802000306742}
   _startGameSFX: {fileID: 0}
+  _startWaveSFX: {fileID: 11400000, guid: 332d6d81522c32441af72d002598ca8c, type: 2}
+  _allWavesDoneSFX: {fileID: 11400000, guid: d9cddabbc7815ee4faba74ec17547c07, type: 2}
   _gameOverSFX: {fileID: 11400000, guid: 855b85f04fcf9f04ea805070a2b7cae5, type: 2}
   _healSFX: {fileID: 11400000, guid: 823f896464a0d454da9a6d7298b225e9, type: 2}
   _dmgSFX: {fileID: 11400000, guid: 2d0aaa30068b98f4e97d42668880afe6, type: 2}
-  _allWavesDone: {fileID: 11400000, guid: d9cddabbc7815ee4faba74ec17547c07, type: 2}
   _usingLeftHand: 0
   _xrAButton: {fileID: 8065267368979011381, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
@@ -1734,7 +1736,6 @@ MonoBehaviour:
     type: 3}
   _leftHandTools: []
   _rightHandTools: []
-  _enemyList: []
 --- !u!1 &3350122296538551638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1886,7 +1887,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3350122296609050173
 Transform:
   m_ObjectHideFlags: 0

@@ -7,7 +7,8 @@ public class CustomerActions : MonoBehaviour
 
     public bool IsMale { get; set; }
 
-    [SerializeField] private Sound _moneySFX;
+    [Header("Debugging")]
+    [SerializeField] private bool _isDevMode;
 
     [Header("Male Reactions")]
     [SerializeField] private Sound[] _happyMaleSFXs;
@@ -32,9 +33,15 @@ public class CustomerActions : MonoBehaviour
         Debug.Assert(_angryMaleSFXs.Length != 0, "Missing elements in _angryMaleSFXs!", gameObject);
         Debug.Assert(_happyFemaleSFXs.Length != 0, "Missing elements in _happyFemaleSFXs!", gameObject);
         Debug.Assert(_angryFemaleSFXs.Length != 0, "Missing elements in _angryFemaleSFXs!", gameObject);
-        Debug.Assert(_moneySFX, "Missing _moneySFX reference!", gameObject);
 
         CorrectReaction();
+    }
+    private void Update()
+    {
+        if (!_isDevMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Alpha1)) CorrectReaction();
+        if (Input.GetKeyDown(KeyCode.Alpha2)) WrongReaction();
     }
 
     public void CorrectReaction() // can also act as the customer's ETB sound
@@ -49,7 +56,6 @@ public class CustomerActions : MonoBehaviour
                                 _angryMaleSFXs[Random.Range(0, _angryMaleSFXs.Length)] :
                                 _angryFemaleSFXs[Random.Range(0, _angryFemaleSFXs.Length)]);
     }
-    public void TipBartender() => _soundEmitter.PlaySound(_moneySFX);
 
     #endregion
 }

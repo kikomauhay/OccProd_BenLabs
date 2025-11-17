@@ -132,6 +132,12 @@ public class Enemy : Actor
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) _soundEmitter.PlaySound(_etbSFXs[Random.Range(0, _etbSFXs.Length)]);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) _soundEmitter.PlaySound(_ltbSFX); 
+    }
+
     protected override void AssertComponents()
     {
         Debug.Assert(_etbSFXs.Length == 3, "Missing elements in _etbSFXs!", this);
@@ -148,7 +154,7 @@ public class Enemy : Actor
 
         _rb.mass = 10f;
         _rb.angularDrag = 0f;
-        _rb.useGravity = true;
+        _rb.useGravity = false;
         _rb.isKinematic = true;
 
         switch (_enemyType)
