@@ -327,6 +327,30 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Modifier modifier = Modifier.DEFAULT;
         int unitCount = _enemiesToSpawn[_waveIndex];
 
+        void SetupModifers()
+        {    
+            switch (modifier)
+            {
+                case Modifier.HEALTH:
+                    _currHP++;
+                    UI_UpdatePlayerLife();
+                    _logger.Log("Increased HP!", _isDevMode);
+                    break;
+
+                case Modifier.DAMAGE:
+                    OnBuffWeapon?.Invoke();
+                    _logger.Log("Increased damage!", _isDevMode);
+                    break;
+
+                case Modifier.REDUCED_ENEMIES:
+                    unitCount = _enemiesToSpawn[_waveIndex] - 1;
+                    _logger.Log($"Reduced enemy count from {_enemiesToSpawn[_waveIndex]} to {unitCount}!", _isDevMode);
+                    break;
+
+                case Modifier.DEFAULT: break;
+                default: break;
+            }
+        }
         void PrepareWave() // prep time for the player to "draw" a weapon
         {
             // play StartTimer.sfx
@@ -348,29 +372,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             if      (PreferredWeapon == "Sword")  _swordImage.SetActive(true);
             else if (PreferredWeapon == "Hammer") _hammerImage.SetActive(true);
 
-            /*
-            switch (modifier)
-            {
-                case Modifier.HEALTH:
-                    _currHP++;
-                    UI_UpdatePlayerLife();
-                    _logger.Log("Increased HP!", _isDevMode);
-                    break;
-
-                case Modifier.DAMAGE:
-                    OnBuffWeapon?.Invoke();
-                    _logger.Log("Increased damage!", _isDevMode);
-                    break;
-
-                case Modifier.REDUCED_ENEMIES:
-                    unitCount = _enemiesToSpawn[_waveIndex] - 1;
-                    _logger.Log("Reduced enemies!", _isDevMode);
-                    break;
-
-                case Modifier.DEFAULT: break;
-                default: break;
-            }
-            */
+            SetupModifers();
 
             _logger.Log($"{GRACE_PERIOD}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
             _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);

@@ -199,8 +199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enableGizmos: 0
-  _maxDistance: 0
+  _enableGizmos: 1
+  _maxDistance: 1
 --- !u!114 &6069353996749656069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,6 +223,7 @@ MonoBehaviour:
   _leftTargetRot: {x: 0, y: 0, z: -0.21643962, w: 0.976296}
   _rightTargetRot: {x: 0, y: 0, z: 0.21643962, w: 0.976296}
   _idScanSFX: {fileID: 11400000, guid: 21fbc5e208a1d054db1e527e48dd4705, type: 2}
+  _wrongScanSFX: {fileID: 11400000, guid: 99f49f1d53db594418f8efb5a2dd9b91, type: 2}
 --- !u!1 &3836524808330598170
 GameObject:
   m_ObjectHideFlags: 0
@@ -233,7 +234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3836524808330598171}
   m_Layer: 0
-  m_Name: PRF_Normal Turnstile
+  m_Name: PRF_NormalTurnstile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
