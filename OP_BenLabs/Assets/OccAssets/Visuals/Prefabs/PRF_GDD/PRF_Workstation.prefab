@@ -65,6 +65,7 @@ GameObject:
   - component: {fileID: 4809170273243834967}
   - component: {fileID: 420769178651453253}
   - component: {fileID: 3290456960241598954}
+  - component: {fileID: 6751850445854113836}
   m_Layer: 0
   m_Name: ComputerDesk
   m_TagString: Untagged
@@ -151,6 +152,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 5219271814597838800, guid: 91a182836ca44b54a995d1736e5c8dd2, type: 3}
+--- !u!65 &6751850445854113836
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3835991307967505998}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7250161, y: 0.70635825, z: 1.6731491}
+  m_Center: {x: -0.36250746, y: 0.35317913, z: 0.83657455}
 --- !u!1 &4804350724658823521
 GameObject:
   m_ObjectHideFlags: 0
