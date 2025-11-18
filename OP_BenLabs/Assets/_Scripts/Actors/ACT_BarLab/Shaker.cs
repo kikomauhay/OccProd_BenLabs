@@ -65,8 +65,17 @@ public class Shaker : Equipment, IPourable
         LiquidPour.OnShakerHit -= AddIngredient;
         LiquidPour.ShakerEmptied -= ResetShaker;
     }
-    private void FixedUpdate() => INT_CheckPourAngle();
+    private void FixedUpdate()
+    {
+        if (!_isLocked) return;
 
+        if(_rb.velocity.magnitude > 0.5F)
+        {
+            MixingCocktail();
+        }
+
+        INT_CheckPourAngle();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("ShakerCap"))
@@ -112,13 +121,13 @@ public class Shaker : Equipment, IPourable
 
     public void MixingCocktail()
     {
+        if(_isShaking) return;
+
+        Debug.Log($"{_rb.velocity.magnitude}");
         _isGrabbed = true;
-
-        if (!_isLocked || _isShaking) return;
-
-        _logger.Log($"{this} object is shaking", TextColor.GREEN, _isDevMode);
         StartCoroutine(CO_ShakeDrink());
         _isShaking = true;
+        _logger.Log($"{this} object is shaking", TextColor.GREEN, _isDevMode);
     }
     
     public void Washed()
@@ -205,7 +214,7 @@ public class Shaker : Equipment, IPourable
         }
 
         // time for the player to earn bonus points
-        yield return new WaitForSeconds(Random.Range(10f, 15f));
+        yield return new WaitForSeconds(2F);
         CompareIngredients();
     }
 
