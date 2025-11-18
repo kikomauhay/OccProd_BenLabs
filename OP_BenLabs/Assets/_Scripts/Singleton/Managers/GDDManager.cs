@@ -97,14 +97,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         StartCoroutine(_gameMgr.CO_Enter(FloorType.GDD));
         _logger.Log("Game start!", TextColor.YELLOW, _isDevMode);
     }
-    public void INT_BTN_StartTutorial()
-    {
-        // TP player to the GDD area
-        // _soundEmitter.PlaySound(_colliderCheck.WrongSFX);
-
-        _logger.Log("No tutorial mode yet!", TextColor.RED, _isDevMode);
-    }
-
     public void INT_DoGameOver() // only be called once player gets 0 HP
     {
         _soundEmitter.PlaySound(_gameOverSFX);
