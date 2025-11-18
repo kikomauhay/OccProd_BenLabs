@@ -6,10 +6,12 @@ public class GameManager : Singleton<GameManager>
     #region Properies
 
     public Player Player => _player;
+    public Atrium Atrium { get; set; }
 
     public bool IsFading { get; private set; }
     public bool CanPause { get; private set; }
     public bool InGame { get; private set; }
+    public bool AtriumActive { get; set; }
 
     #endregion
     #region SerializeField
@@ -21,6 +23,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Transform _gddWaypoint;
     [SerializeField] private Transform _r803Waypoint;
 
+    [Header("Atrium Spanwpoints")]
+    [SerializeField] private GameObject _atriumPrefab;
+    [SerializeField] private Transform[] _lobbySpawnpoints, _gddSpawnpoints, _barLabSpawnpoints;
+
     #endregion
     #region Private 
 
@@ -31,7 +37,79 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    #region Unity
+
+    protected override void Start()
+    {
+        base.Start();
+        SpawnAtrium(FloorType.LOBBY);
+    }
+        
+    #endregion
+    #region Public
+
+    public void SpawnAtrium(FloorType floorType)
+    {
+        void Spawn(Transform t) 
+        {
+            GameObject atrium = Instantiate(_atriumPrefab, t.position, t.rotation);
+            AtriumActive = true;
+            Atrium = atrium.GetComponent<Atrium>();
+        }
+
+        if (AtriumActive || Random.value < 0.2f) return;
+
+        switch (floorType)
+        {
+            case FloorType.LOBBY:     
+                Spawn(_lobbySpawnpoints[Random.Range(0, _lobbySpawnpoints.Length)]);
+                break;
+
+            case FloorType.GDD:
+                Spawn(_gddSpawnpoints[Random.Range(0, _gddSpawnpoints.Length)]);
+                break;
+
+            case FloorType.BAR:
+                Spawn(_barLabSpawnpoints[Random.Range(0, _barLabSpawnpoints.Length)]);
+                break;     
+            
+            default: break;
+        }
+    }
+
+    #endregion
     #region Helpers
+
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            for (int i = 0; i < _lobbySpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, 
+                            _lobbySpawnpoints[i].position,
+                            _lobbySpawnpoints[i].rotation);
+            }   
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            for (int i = 0; i < _gddSpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, 
+                            _gddSpawnpoints[i].position,
+                            _gddSpawnpoints[i].rotation);
+            }   
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            for (int i = 0; i < _barLabSpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, 
+                            _barLabSpawnpoints[i].position,
+                            _barLabSpawnpoints[i].rotation);
+            }   
+        }
+    }
 
     protected override void AssertComponents()
     {
@@ -41,6 +119,10 @@ public class GameManager : Singleton<GameManager>
         Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", this);
 
         Debug.Assert(_fadeScreen, "Missing _fadeScreen reference!", this);
+
+        Debug.Assert(_lobbySpawnpoints.Length != 0, "Missing _lobbySpawnpoints elements!", this);
+        Debug.Assert(_gddSpawnpoints.Length != 0, "Missing _gddSpawnpoints elements!", this);
+        Debug.Assert(_barLabSpawnpoints.Length != 0, "Missing _barLabSpawnpoints elements!", this);
     }
     protected override void InitComponents()
     {
@@ -53,6 +135,7 @@ public class GameManager : Singleton<GameManager>
         IsFading = true;
         CanPause = true;
         InGame = false;
+        AtriumActive = false;
 
         _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
     }

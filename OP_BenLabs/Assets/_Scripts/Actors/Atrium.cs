@@ -19,11 +19,14 @@ public class Atrium : Actor, IInteractable
     {
         IEnumerator CO_FunnyRotation()
         {
-            // purr sfx
+            _soundEmitter.PlaySound(_purrSFX);
             // tween.rotation
-            yield return null;
+            yield return null; // null is temporary
 
             // poof sfx
+            GameManager.Instance.AtriumActive = false;
+            GameManager.Instance.Atrium = null;
+            
             Destroy(gameObject);
         }
 
@@ -33,7 +36,7 @@ public class Atrium : Actor, IInteractable
     protected override void Start()
     {
         base.Start();
-        // meow sfx
+        _soundEmitter.PlaySound(_meowSFXs[Random.Range(0, _meowSFXs.Length)]);
     }
     protected override void Update()
     {

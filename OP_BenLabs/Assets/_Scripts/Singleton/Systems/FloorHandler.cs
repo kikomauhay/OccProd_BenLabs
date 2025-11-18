@@ -12,6 +12,8 @@ public class FloorHandler : Singleton<FloorHandler>
     [SerializeField] private ElevatorDoor _elevDoor;
     [SerializeField] private SoundEmitter _soundEmitter; // no Sound here since it'll come from _elevDoor
 
+    private GameManager _gameMgr;
+
     #endregion
 
     #region Methods
@@ -29,8 +31,13 @@ public class FloorHandler : Singleton<FloorHandler>
     {  
         IEnumerator CO_MoveToFloor()
         {
-            if (!_elevDoor.IsClosed)
-                _elevDoor.BTN_Close();
+            if (!_elevDoor.IsClosed) _elevDoor.BTN_Close();
+
+            if (_gameMgr.AtriumActive) // in case the player didn't interact with Atrium
+            {
+                _gameMgr.AtriumActive = false;
+                Destroy(_gameMgr.Atrium.gameObject);
+            }
 
             _soundEmitter.PlaySound(_elevDoor.ButtonSFX);
             yield return _elevDoor.Delay;
@@ -40,6 +47,7 @@ public class FloorHandler : Singleton<FloorHandler>
                 _floors[i].gameObject.SetActive(i == idx);
                 _logger.Log($"Entering: {(FloorType)idx}", _isDevMode);
             }
+            _gameMgr.SpawnAtrium((FloorType)idx);
                
             _elevDoor.BTN_Open();
             yield return _elevDoor.Delay;
@@ -65,6 +73,11 @@ public class FloorHandler : Singleton<FloorHandler>
         if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
+    }
+
+    protected override void InitVariables()
+    {
+        _gameMgr = GameManager.Instance;   
     }
 
     #endregion
