@@ -752,7 +752,7 @@ Transform:
   m_GameObject: {fileID: 397796992999326690}
   m_LocalRotation: {x: -0, y: -0.7071068, z: 0.7071068, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0.99999994}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6866175221836213424}
@@ -791,7 +791,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 256
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 99a4b3cfeafd16b4495f6de720e0634a, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 08d2e80bf2659bd49b486302c5fc0b3f, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1035,7 +1035,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 256
   m_RenderingPath: -1
-  m_TargetTexture: {fileID: 8400000, guid: 99a4b3cfeafd16b4495f6de720e0634a, type: 2}
+  m_TargetTexture: {fileID: 8400000, guid: 82323b8ca06dc184a98fe9db83ad9dfe, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
@@ -1855,6 +1855,13 @@ MonoBehaviour:
   _swordImage: {fileID: 8436566090527357797}
   _hammerImage: {fileID: 4940886719878669978}
   _weaponSpawner: {fileID: 3350122297794325856}
+  _usingLeftHand: 0
+  _xrAButton: {fileID: 8065267368979011381, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  _xrXButton: {fileID: -7313570680974416105, guid: c348712bda248c246b8c49b3db54643f,
+    type: 3}
+  _leftHandTools: []
+  _rightHandTools: []
   _waveCountTXT: {fileID: 3350122296225640550}
   _playerLivesTXT: {fileID: 3350122296326419905}
   _killCountTXT: {fileID: 2572518802000306742}
@@ -1864,13 +1871,6 @@ MonoBehaviour:
   _gameOverSFX: {fileID: 11400000, guid: 855b85f04fcf9f04ea805070a2b7cae5, type: 2}
   _healSFX: {fileID: 11400000, guid: 823f896464a0d454da9a6d7298b225e9, type: 2}
   _dmgSFX: {fileID: 11400000, guid: 2d0aaa30068b98f4e97d42668880afe6, type: 2}
-  _usingLeftHand: 0
-  _xrAButton: {fileID: 8065267368979011381, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
-  _xrXButton: {fileID: -7313570680974416105, guid: c348712bda248c246b8c49b3db54643f,
-    type: 3}
-  _leftHandTools: []
-  _rightHandTools: []
 --- !u!1 &3350122296538551638
 GameObject:
   m_ObjectHideFlags: 0
