@@ -6,6 +6,7 @@ public class GameManager : Singleton<GameManager>
     #region Properies
 
     public Player Player => _player;
+    public Atrium Atrium { get; set; }
 
     public bool IsFading { get; private set; }
     public bool CanPause { get; private set; }
@@ -51,8 +52,9 @@ public class GameManager : Singleton<GameManager>
     {
         void Spawn(Transform t) 
         {
-            Instantiate(_atriumPrefab, t.position, t.rotation);
+            GameObject atrium = Instantiate(_atriumPrefab, t.position, t.rotation);
             AtriumActive = true;
+            Atrium = atrium.GetComponent<Atrium>();
         }
 
         if (AtriumActive || Random.value < 0.2f) return;
