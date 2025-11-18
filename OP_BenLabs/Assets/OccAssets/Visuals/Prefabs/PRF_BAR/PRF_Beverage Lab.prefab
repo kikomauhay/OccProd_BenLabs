@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8046978932404695221}
   - component: {fileID: 5180392669857788895}
   - component: {fileID: 5538393964307782977}
+  - component: {fileID: 4662006035237645366}
   m_Layer: 0
   m_Name: Ext_DoorHandle_Right
   m_TagString: Untagged
@@ -115,6 +116,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4662006035237645366
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 407908269016274879}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4196310523752495620, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &540436855641271568
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +205,7 @@ GameObject:
   - component: {fileID: 3764929465986699660}
   - component: {fileID: 4336415875175554156}
   - component: {fileID: 1296870788229941641}
+  - component: {fileID: 1173865563960730912}
   m_Layer: 0
   m_Name: BarDoorLeft
   m_TagString: Untagged
@@ -262,6 +278,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1173865563960730912
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1163877214085741916}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 6990523468461780625, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &1996297849984210473
 GameObject:
   m_ObjectHideFlags: 0
@@ -273,6 +303,7 @@ GameObject:
   - component: {fileID: 4128557455304992889}
   - component: {fileID: 2276215582980343755}
   - component: {fileID: 6866839146922128016}
+  - component: {fileID: 3378463946662635215}
   m_Layer: 0
   m_Name: BarWallBack
   m_TagString: Untagged
@@ -345,6 +376,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3378463946662635215
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996297849984210473}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 262496384714558771, guid: f5c6cb774b87fc743967691f7c996978, type: 3}
 --- !u!1 &2382518621551320390
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,6 +401,7 @@ GameObject:
   - component: {fileID: 9141066044916019236}
   - component: {fileID: 983591037384831959}
   - component: {fileID: 5611937414390709987}
+  - component: {fileID: 9207697752968385464}
   m_Layer: 0
   m_Name: Int_DoorHandle_Left
   m_TagString: Untagged
@@ -428,6 +474,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &9207697752968385464
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2382518621551320390}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1986902835805572436, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &2725826312397736313
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,6 +595,7 @@ GameObject:
   - component: {fileID: 5980482017647700993}
   - component: {fileID: 4211751512271288074}
   - component: {fileID: 6870951611821913786}
+  - component: {fileID: 758669523640477728}
   m_Layer: 0
   m_Name: WindowedWall
   m_TagString: Untagged
@@ -607,6 +668,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &758669523640477728
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3251501436211156279}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -1772274083363992919, guid: ca540ab4e6fd94f49a2d2832ad7059c6, type: 3}
 --- !u!1 &3377975147296759426
 GameObject:
   m_ObjectHideFlags: 0
@@ -618,6 +693,7 @@ GameObject:
   - component: {fileID: 3874285436836441141}
   - component: {fileID: 249389556380742480}
   - component: {fileID: 2679665199116015379}
+  - component: {fileID: 6631718847198281739}
   m_Layer: 0
   m_Name: Ext_DoorHandle_Left
   m_TagString: Untagged
@@ -690,6 +766,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6631718847198281739
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3377975147296759426}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4037476556124806888, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &5603668247201932233
 GameObject:
   m_ObjectHideFlags: 0
@@ -701,6 +791,7 @@ GameObject:
   - component: {fileID: 3187443073880543562}
   - component: {fileID: 841538171722131122}
   - component: {fileID: 384772928942612902}
+  - component: {fileID: 8740403058217773777}
   m_Layer: 0
   m_Name: BarCeiling
   m_TagString: Untagged
@@ -773,6 +864,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &8740403058217773777
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5603668247201932233}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2639453889661857515, guid: 98f8236861d828144b7d4d828d47cbb1, type: 3}
 --- !u!1 &5662529811429049162
 GameObject:
   m_ObjectHideFlags: 0
@@ -784,6 +889,7 @@ GameObject:
   - component: {fileID: 4860600060696399495}
   - component: {fileID: 2343271942709312654}
   - component: {fileID: 4257153344449926533}
+  - component: {fileID: 3834431486921308878}
   m_Layer: 0
   m_Name: BarDoorFrameLeft
   m_TagString: Untagged
@@ -856,6 +962,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3834431486921308878
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5662529811429049162}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1369153694754631950, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &5737046172832968021
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,6 +987,7 @@ GameObject:
   - component: {fileID: 7811651009912714996}
   - component: {fileID: 3982842408949290544}
   - component: {fileID: 8583011553139900519}
+  - component: {fileID: 3647298214421542047}
   m_Layer: 0
   m_Name: Int_DoorHandle_Right
   m_TagString: Untagged
@@ -939,6 +1060,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &3647298214421542047
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5737046172832968021}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 3382031412264448445, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &5896802545558851532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,6 +1181,7 @@ GameObject:
   - component: {fileID: 8268612876341361429}
   - component: {fileID: 5294658527697907403}
   - component: {fileID: 8839607029442237493}
+  - component: {fileID: 4451131722277445746}
   m_Layer: 0
   m_Name: BarDoorRight
   m_TagString: Untagged
@@ -1118,6 +1254,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &4451131722277445746
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6062201805621685482}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -2296666608829430052, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &6150178240786603258
 GameObject:
   m_ObjectHideFlags: 0
@@ -1334,6 +1484,7 @@ GameObject:
   - component: {fileID: 3945067427344031179}
   - component: {fileID: 646984189611632391}
   - component: {fileID: 7649697286137861196}
+  - component: {fileID: 2292660116887749917}
   m_Layer: 0
   m_Name: BarWallFront
   m_TagString: Untagged
@@ -1406,6 +1557,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2292660116887749917
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8432841236259643870}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 147084134339763685, guid: 42c7c705213cbd34ab3602432c623207, type: 3}
 --- !u!1 &8483373006169114552
 GameObject:
   m_ObjectHideFlags: 0
@@ -1417,6 +1582,7 @@ GameObject:
   - component: {fileID: 8369873039455680955}
   - component: {fileID: 8662051126370845910}
   - component: {fileID: 603538773808373571}
+  - component: {fileID: 1863695862125697493}
   m_Layer: 0
   m_Name: Columns
   m_TagString: Untagged
@@ -1489,6 +1655,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &1863695862125697493
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8483373006169114552}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -5387877993904369314, guid: 414bf935103f8b74db8ecfb6327e74f3, type: 3}
 --- !u!1 &8656005938530356676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1583,6 +1763,7 @@ GameObject:
   - component: {fileID: 2604372053228118370}
   - component: {fileID: 5628508906837294999}
   - component: {fileID: 7349833662730231617}
+  - component: {fileID: 5202945583921783328}
   m_Layer: 0
   m_Name: BarDoorFrameRight
   m_TagString: Untagged
@@ -1655,6 +1836,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5202945583921783328
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8913218765206860577}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4620217929053445657, guid: 3f3a149d96923ba40b0d009eb361d85c, type: 3}
 --- !u!1 &9112233322457379296
 GameObject:
   m_ObjectHideFlags: 0
