@@ -20,7 +20,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     [Header("UI/UX")]
     [SerializeField] private Sound _startGameSFX;
-    [SerializeField] private GameObject _startButton, _tutorialButton;
+    [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject[] _onboardingBoxes;
 
     #endregion
@@ -44,37 +44,24 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void INT_BTN_StartGame()
     {
-        IEnumerator CO_DisableButton()
-        {
-            _startButton.SetActive(false);
-            yield return new WaitForSeconds(2f);
-            _startButton.SetActive(true);
-        }
-        DisableOnboardingBoxes();
+        EnableOnboardingPanels(false);      
+        _startButton.SetActive(false);
         _soundEmitter.PlaySound(_startGameSFX);
         _totalScore = 0;
 
         SpawnCustomer();
-        StartCoroutine(CO_DisableButton());
-
         _logger.Log("Bar mini-game has started!", _isDevMode);
     }
-    public void INT_BTN_StartTutorial()
-    {
-        _sndMgr.PlaySound("SND_Unsure");
-        _logger.Log("No tutorial mode yet!", TextColor.RED, _isDevMode);
-    }
-
     public void INT_DoGameOver()
     {
         // player gets exited from the mini-game
         // play game_over.sfx
         // show highest score attained
 
-        // StopGame();
-
+        StopGame();
         _logger.Log("No game over logic yet!", TextColor.RED, _isDevMode);
     }
+
     public void SpawnCustomer()
     {
         IEnumerator CO_SpawnCustomer()
@@ -106,24 +93,25 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         StartCoroutine(CO_SpawnCustomer());
     }
 
-    public void TrickPointAllocation(string trickName)
+    public void AddTrickScore(string trickName)
     {
         switch (trickName)
         {
             case "Pass.xml":
                 _totalScore += 5f;
-                return;
+                break;
 
             case "Toss.xml":
                 _totalScore += 10f;
-                return;
+                break;
 
             case "Spin.xml":
                 _totalScore += 15f;
-                return;
+                break;
+            
+            default: break;
         }
     }
-
     public void Correct()
     {
         _totalScore += SERVING_SCORE;
@@ -153,26 +141,19 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     #endregion
     #region Private
 
-    private void DisableOnboardingBoxes()
-    {
-        for (int i = 0; i < _onboardingBoxes.Length; i++)
-        {
-            _onboardingBoxes[i].SetActive(false);
-        }
-    }
-
-    private void TrickScore(float trickScore)
-    {
-        _totalScore += trickScore;
-    }
-
     private void StopGame()
     {
-        _startButton.SetActive(true);
-
         StopAllCoroutines();
 
+        EnableOnboardingPanels(true);
+        _startButton.SetActive(true);
+        
         _logger.Log("Bar mini-game has finished!", _isDevMode);
+    }
+    private void EnableOnboardingPanels(bool isActive)
+    {
+        foreach (GameObject panels in _onboardingBoxes)
+            panels.SetActive(isActive);  
     }
 
 

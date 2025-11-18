@@ -1,8 +1,6 @@
 public interface IGameHandler
 {
     void INT_BTN_StartGame();
-    void INT_BTN_StartTutorial();
-
     void INT_DoGameOver();
 }
 
