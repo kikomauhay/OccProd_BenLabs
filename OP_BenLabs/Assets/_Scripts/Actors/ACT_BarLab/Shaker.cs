@@ -193,8 +193,10 @@ public class Shaker : Equipment, IPourable
 
     private IEnumerator CO_ShakeDrink() // gets called when the GO is picked up
     {
+        Debug.Log("CO_ShakeDrink Starting: Line 196");
         void CompareIngredients()
         {
+            Debug.Log("Compare Ingredients Starting: Line 199");
             foreach (var recipe in _recipes)
             {
                 // ensures that it has no extra/missing ingredients
@@ -205,12 +207,14 @@ public class Shaker : Equipment, IPourable
                 {
                     _cocktail = recipe.Key;
                     _logger.Log($"Created {recipe.Key}!", TextColor.GREEN, _isDevMode);
+                    Debug.Log($"Created {recipe.Key}!");
                     return;
                 }
             }
 
             _cocktail = Cocktail.WRONG;
             _logger.Log("Created dubious drink!", TextColor.RED, _isDevMode);
+            Debug.Log("Created dubious drink!");
         }
 
         // time for the player to earn bonus points

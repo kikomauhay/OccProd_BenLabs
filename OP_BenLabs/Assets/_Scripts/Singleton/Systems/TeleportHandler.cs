@@ -59,12 +59,12 @@ public class TeleportHandler : Singleton<TeleportHandler>
     private void LeftRayToggle(InputAction.CallbackContext context)
     {
         _leftRay.SetActive(true);
-        _logger.Log("Left Ray Enabled!", _isDevMode);
+        //_logger.Log("Left Ray Enabled!", _isDevMode);
     }
     private void RightRayToggle(InputAction.CallbackContext context)
     {
         _rightRay.SetActive(true);
-        _logger.Log("Right Ray Enabled!", _isDevMode);
+        //_logger.Log("Right Ray Enabled!", _isDevMode);
     }
 
     #endregion
