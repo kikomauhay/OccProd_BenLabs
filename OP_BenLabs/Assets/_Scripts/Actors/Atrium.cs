@@ -25,6 +25,8 @@ public class Atrium : Actor, IInteractable
 
             // poof sfx
             GameManager.Instance.AtriumActive = false;
+            GameManager.Instance.Atrium = null;
+            
             Destroy(gameObject);
         }
 
