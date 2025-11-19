@@ -1,124 +1,74 @@
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class CustomerAppearance : Actor
+public class CustomerAppearance : MonoBehaviour
 {
     #region Members
 
-    [Header("Customer Material Renderers")]
+    [Header("Debugging")]
+    [SerializeField] private bool _isDevMode;
+
+    [Header("Renderers")]
     [SerializeField] private SpriteRenderer _face;
     [SerializeField] private MeshRenderer[] _customerRenderer;
 
-    [Header("Customer Asserts"), Tooltip("0 = Neutral, 1 = Happy, 2 = Angry")]
+    [Header("Assets"), Tooltip("0 = Neutral, 1 = Happy, 2 = Angry")]
     [SerializeField] private GameObject _customerFace;
     [SerializeField] private Sprite[] _faceSprites;
-    [SerializeField] private Material[] _customerMaterials;
-
-    private SpriteRenderer _spriteRend;
+    [SerializeField] private Material[] _maleCustomerMaterials;
+    [SerializeField] private Material _femaleCustomerMaterial;
 
     #endregion
 
-    #region Helpers
+    #region Unity
 
-    protected override void Test()
+    private void Start()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) InitVariables();
-    }
-
-    protected override void InitComponents()
-    {
-        _spriteRend = GetComponent<SpriteRenderer>();
-    }
-    protected override void AssertComponents()
-    {
+        Debug.Assert(_face, "Missing _face reference!");
         Debug.Assert(_customerRenderer.Length == 4, "Missing _customerRenderer elements!");
+        Debug.Assert(_customerFace, "Missing _customerFace reference!");        
+
         Debug.Assert(_faceSprites.Length == 3, "Missing _faceSprites elements!");
-        Debug.Assert(_customerMaterials.Length == 3, "Missing _customerMaterials elements!");
+        Debug.Assert(_maleCustomerMaterials.Length == 2, "Missing _maleCustomerMaterials elements!");
+        Debug.Assert(_femaleCustomerMaterial, "Missing _femaleCustomerMaterial reference!");
     }
-    protected override void InitVariables()
+    private void Update()
     {
-        int i = Random.Range(0, _customerMaterials.Length);
+        if (_isDevMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            SetupCustomerBody(Random.value > 0.5f);
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+            SetEmotion((Emotion)Random.Range(0, 3));
+    }
+
+    #endregion
+    #region Public 
+
+    public void SetupCustomerBody(bool isMale)
+    {
+        int i = Random.Range(0, _maleCustomerMaterials.Length);
 
         foreach (MeshRenderer rend in _customerRenderer)
-            rend.material = new Material(_customerMaterials[i]);
-
-        _spriteRend.sprite = _faceSprites[0];
+        {
+            rend.material = new Material(isMale ? 
+                                        _maleCustomerMaterials[i] :  
+                                        _femaleCustomerMaterial);
+        }
     }
-
-    #endregion
-    #region Customer Reactions 
-
-    public void SetFacialEmotion(FaceVariant type)
-    {
-        //switch (type)
-        //{
-        //    case FaceVariant.NEUTRAL:
-        //        _face.sprite = _reactionFaces[0];
-        //        break;
-
-        //    case FaceVariant.HAPPY:
-        //        _face.sprite = _reactionFaces[1];
-        //        break;
-
-        //    case FaceVariant.SUS:
-        //        _face.sprite = _reactionFaces[2];
-        //        break;
-
-        //    default: break;
-        //}
-    }
-    public void SetAngryEmotion(int type)
-    {
-        //if (type < 0 || type > _madFaces.Length) 
-        //{
-        //    Debug.LogError($"{type} was out of range!");
-        //    return;
-        //}
-
-        //_face.sprite = _madFaces[type];
-    }
-    public IEnumerator DoChweing(float patienceRate) // I am not proud of this
-    {
-        yield return new WaitForSeconds(1f);
-
-        //float chewTime = 2f;
-
-        //if (patienceRate > 50) // is happy is a customer pateince meter or 50+
-        //{
-        //    _face.sprite = _chewingFaces[0];    
-        //    yield return new WaitForSeconds(chewTime);
-
-        //    _face.sprite = _chewingFaces[1];
-        //    yield return new WaitForSeconds(chewTime);
-
-        //    _face.sprite = _chewingFaces[0];
-        //    yield return new WaitForSeconds(chewTime);
-
-        //    yield break;
-        //}
-
-        //_face.sprite = _chewingFaces[3];
-        //yield return new WaitForSeconds(chewTime);
-
-        //_face.sprite = _chewingFaces[4];
-        //yield return new WaitForSeconds(chewTime);
-
-        //_face.sprite = _chewingFaces[3];
-        //yield return new WaitForSeconds(chewTime);
-    }
+    public void SetEmotion(Emotion type) => _face.sprite = _faceSprites[(int)type];
 
     #endregion
 }
 
 #region Enumerations
 
-public enum FaceVariant
+public enum Emotion
 {
     NEUTRAL = 0,
     HAPPY = 1,
-    MAD = 2,
-    SUS = 3
+    MAD = 2
 }
 
 #endregion

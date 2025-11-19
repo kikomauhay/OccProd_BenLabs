@@ -1878,7 +1878,7 @@ PrefabInstance:
     - target: {fileID: 1060294164324780655, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1060294165197853520, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
@@ -2784,8 +2784,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1376616796}
   - component: {fileID: 1376616799}
-  - component: {fileID: 1376616797}
   - component: {fileID: 1376616798}
+  - component: {fileID: 1376616797}
   m_Layer: 0
   m_Name: ~GameManager
   m_TagString: Untagged
@@ -2826,7 +2826,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectType: 1
-  _isDevMode: 1
+  _isDevMode: 0
   _player: {fileID: 271430742}
   _gddWaypoint: {fileID: 307515440}
   _r803Waypoint: {fileID: 1775923006}
