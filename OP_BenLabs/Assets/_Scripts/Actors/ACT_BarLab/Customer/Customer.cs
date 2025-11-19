@@ -40,15 +40,15 @@ public class Customer : Actor
     #region Unity
 
     protected override void Start()
-    {
+    { 
         base.Start();
 
-        // check Cocktail enum to understand
-        _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true);
-
+        _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true); // check Cocktail enum to understand
+        _appearance.SetEmotion(Emotion.NEUTRAL);
+        _appearance.SetupCustomerBody(_actions.IsMale);
+        
         UI_UpdateTimer();
         UI_UpdateOrderText();
-        
         StartCoroutine(CO_DecreaseRating());
     }
 
@@ -87,6 +87,7 @@ public class Customer : Actor
     protected override void InitComponents()
     {
         _actions = GetComponent<CustomerActions>();
+        _appearance = GetComponent<CustomerAppearance>();
         _sliderTimer = GetComponentInChildren<Slider>();
 
         if (!_isDevMode)

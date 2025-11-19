@@ -1,4 +1,3 @@
-using DG.Tweening;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -32,6 +31,7 @@ public class ColliderCheck : Actor
         void DoGlassCollision(Glass glass)
         {
             CustomerActions actions = CustomerOrder.GetComponent<CustomerActions>();
+            CustomerAppearance appearance = CustomerOrder.GetComponent<CustomerAppearance>();
 
             if (!glass.HasDrink)
             {
@@ -43,12 +43,16 @@ public class ColliderCheck : Actor
             if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
                 actions.CorrectReaction();
+                appearance.SetEmotion(Emotion.HAPPY);
+
                 _sndMgr.PlaySound("SND_Correct");
                 _barMgr.Correct(); 
             }
             else
             {
                 actions.WrongReaction();
+                appearance.SetEmotion(Emotion.MAD);
+
                 _sndMgr.PlaySound("SND_Wrong");
                 _barMgr.Wrong();
             }
@@ -78,13 +82,13 @@ public class ColliderCheck : Actor
         if (Input.GetKeyDown(KeyCode.U)) _sndMgr.PlaySound("SND_Unsure");
     }
 
-    protected override void AssertComponents()
-    {
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-    }
     protected override void InitComponents()
     {
         _collider = GetComponent<BoxCollider>();
+    }
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", this);
     }
     protected override void InitVariables()
     {
