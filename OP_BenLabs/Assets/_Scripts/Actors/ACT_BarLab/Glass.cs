@@ -48,9 +48,8 @@ public class Glass : Equipment
     [SerializeField] private GameObject[] _drinks;
 
     [Header("Drink Stats")]
-    [SerializeField] private bool _hasDrink;
-    // [SerializeField] private float _score;
     [SerializeField] private Cocktail _cocktail;
+    [SerializeField] private bool _hasDrink;
         
     #endregion
 
@@ -119,11 +118,11 @@ public class Glass : Equipment
 
     protected override void Test()
     {
-/*        if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
-        if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
-        if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
+    //    if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
+    //    if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
+    //    if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
 
-        if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();*/
+        if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
     }
 
     private void ResetDrink()

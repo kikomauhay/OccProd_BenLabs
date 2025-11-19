@@ -1,23 +1,26 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(CustomerActions))]
+[RequireComponent(typeof(CustomerActions), typeof(CustomerAppearance))]
 public class Customer : Actor
 {
     #region Properties
-
+    
     public Cocktail WantedCocktail => _wantedCocktail;
     public float CustomerScore => _customerScore;
 
     #endregion
-    #region Members
+    #region SerializeField
 
     [Header("Customer Stats")]
     [SerializeField] private Cocktail _wantedCocktail;
     [SerializeField] private float _decreaseRate, _reactionTimer;
 
-    [Header("Drinks UI")]
+    [Header("Customer UI")]
+    [SerializeField] private Slider _timerSlider;
+    [SerializeField] private TextMeshProUGUI _orderTXT;
     [SerializeField] private GameObject[] _drinkOrdersUI;
 
     #endregion
@@ -27,6 +30,7 @@ public class Customer : Actor
     private const float GRACE_PERIOD = 2f;
 
     private CustomerActions _actions;
+    private CustomerAppearance _appearance;
     private Slider _sliderTimer;
     
     private float _customerScore;
@@ -38,6 +42,13 @@ public class Customer : Actor
     protected override void Start()
     {
         base.Start();
+
+        // check Cocktail enum to understand
+        _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true);
+
+        UI_UpdateTimer();
+        UI_UpdateOrderText();
+        
         StartCoroutine(CO_DecreaseRating());
     }
 
@@ -45,13 +56,33 @@ public class Customer : Actor
     #region Private 
 
     private void UI_UpdateTimer() => _sliderTimer.value = _customerScore / 100f;
-        
+    private void UI_UpdateOrderText() => _orderTXT.text = $"{_wantedCocktail.ToString().Replace("_", " ")}";
+
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (GameObject order in _drinkOrdersUI)
+                order.SetActive(false);
+            
+            _wantedCocktail = (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+            _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true);
+            _logger.Log($"Customer got a {_wantedCocktail}", _isDevMode);
+            
+            UI_UpdateOrderText();
+        }
+    }
+
     protected override void AssertComponents()
     {
-        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
+        Debug.Assert(_actions, "Missing _actions reference!", this);
+        Debug.Assert(_appearance, "Missing _appearance reference!", this);
+        Debug.Assert(_timerSlider, "Missing _timerSlider reference!", this);
+        
+        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", this);
     }
     protected override void InitComponents()
     {
@@ -63,16 +94,13 @@ public class Customer : Actor
     }
     protected override void InitVariables()
     {
-        // only gets from the 3 possible drinks
-        Cocktail SetRandomCocktail() => (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
-        
-        name = "Customer";
+        // only gets from the three possible drinks
+        _wantedCocktail = (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+     
+        name = $"{_wantedCocktail} customer";
 
-        _wantedCocktail = _isDevMode ? Cocktail.TEQUILA_SUNRISE : SetRandomCocktail();
         _customerScore = 100f;
-        _actions.IsMale = Random.value > 0.5f;
-        _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true); // check Cocktail enum to understand
-
+        _actions.IsMale = Random.value > 0.5f;        
         _logger.Log($"{this} wants a {_wantedCocktail}", _isDevMode);
     }
 

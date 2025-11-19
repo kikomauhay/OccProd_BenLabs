@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CustomerAppearance), typeof(SoundEmitter))]
+[RequireComponent(typeof(SoundEmitter))]
 public class CustomerActions : MonoBehaviour
 {
     #region Members
