@@ -123,7 +123,6 @@ public class Shaker : Equipment, IPourable
     {
         if(_isShaking) return;
 
-        Debug.Log($"{_rb.velocity.magnitude}");
         _isGrabbed = true;
         StartCoroutine(CO_ShakeDrink());
         _isShaking = true;
@@ -139,6 +138,7 @@ public class Shaker : Equipment, IPourable
         _isLocked = false;
         _mixedDrink.Clear();
         _cocktail = Cocktail.EMPTY;
+        _shakerCap.gameObject.SetActive(false);
 
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
@@ -188,6 +188,7 @@ public class Shaker : Equipment, IPourable
         yield return new WaitForSeconds(5F);
 
         ShakerUnlocked?.Invoke();
+        _shakerCap.gameObject.SetActive(false);
         _cocktail = Cocktail.EMPTY;
     }
 
