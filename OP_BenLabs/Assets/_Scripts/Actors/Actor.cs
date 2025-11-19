@@ -4,7 +4,6 @@ public abstract class Actor : MonoBehaviour
 {
     #region Members
 
-
     [Header("Debugging")]
     [SerializeField] private ObjectType _objectType;
     [SerializeField] protected bool _isDevMode;
