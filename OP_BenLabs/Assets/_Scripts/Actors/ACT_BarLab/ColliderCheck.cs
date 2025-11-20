@@ -57,6 +57,8 @@ public class ColliderCheck : Actor
                 _barMgr.Wrong();
             }
 
+            CustomerOrder = null;
+
             Destroy(glass.gameObject);
             Destroy(CustomerOrder.gameObject);
         }
@@ -65,7 +67,7 @@ public class ColliderCheck : Actor
         {
             _logger.Log("Missing CustomerOrder reference!", TextColor.RED, _isDevMode);
             _sndMgr.PlaySound("SND_Unsure");
-            return;
+            return; 
         }
 
         if (other.gameObject.GetComponent<Glass>())
