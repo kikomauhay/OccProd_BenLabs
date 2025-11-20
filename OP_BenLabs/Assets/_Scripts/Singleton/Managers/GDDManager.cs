@@ -31,7 +31,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
-    [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT;
+    [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT, _modifierTXT;
 
     [Header("SFX")]
     [SerializeField] private Sound _startGameSFX;
@@ -54,6 +54,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private List<GameObject> _enemyList; 
     private WaveState _waveState;
+    private Modifier _modifier;
     private int _unitCount, _killCount, _waveIndex;
     private float _currHP;
 
@@ -82,6 +83,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _blockLabelsUI.SetActive(true);
 
         EnableButtons(false);
+
+        UI_UpdateKllCount();
+        UI_UpdatePlayerLife();
+        UI_UpdateWaveIndex();
     }
 
     #endregion
@@ -201,6 +206,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         {
             _waveIndex++;
             _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
+            SoundManager.Instance.PlaySound("SND_Correct"); // test
 
             if (_waveIndex < MAX_WAVES)
             {
@@ -236,6 +242,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void UI_UpdateWaveIndex() => _waveCountTXT.text = $"Wave {_waveIndex + 1}";
     private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
     private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
+    private void UI_UpdateModifier() => _modifierTXT.text = $"{_modifier}";
 
     private void ToggleMainHand(InputAction.CallbackContext context) => _usingLeftHand = !_usingLeftHand;
 
@@ -314,6 +321,33 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private IEnumerator CO_SpawnEnemyWave()
     {        
+        void SetupModifier()
+        {
+            _modifier = _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
+            UI_UpdateModifier();
+
+            switch (_modifier)
+            {
+                case Modifier.HEALTH:
+                    _currHP++;
+                    UI_UpdatePlayerLife();
+                    _logger.Log("Increased HP!", _isDevMode);
+                    break;
+
+                case Modifier.DAMAGE:
+                    OnBuffWeapon?.Invoke();
+                    _logger.Log("Increased damage!", _isDevMode);
+                    break;
+
+                case Modifier.REDUCED_ENEMIES:
+                    _unitCount--;
+                    _logger.Log($"Reduced enemy count from {_enemiesToSpawn[_waveIndex]} to {_unitCount}!", _isDevMode);
+                    break;
+
+                case Modifier.DEFAULT: break;
+                default:               break;
+            }
+        }
         void PrepareWave() // prep time for the player to "draw" a weapon
         {
             // play StartTimer.sfx
@@ -334,28 +368,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _gameMgr.Player.LeftHandTools[(int)preferredWeapon].SetActive(_usingLeftHand);
             _gameMgr.Player.RightHandTools[(int)preferredWeapon].SetActive(!_usingLeftHand);
 
-            // setup modifiers per wave
-            switch (_ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier)
-            {
-                case Modifier.HEALTH:
-                    _currHP++;
-                    UI_UpdatePlayerLife();
-                    _logger.Log("Increased HP!", _isDevMode);
-                    break;
-
-                case Modifier.DAMAGE:
-                    OnBuffWeapon?.Invoke();
-                    _logger.Log("Increased damage!", _isDevMode);
-                    break;
-
-                case Modifier.REDUCED_ENEMIES:
-                    _unitCount--;
-                    _logger.Log($"Reduced enemy count from {_enemiesToSpawn[_waveIndex]} to {_unitCount}!", _isDevMode);
-                    break;
-
-                case Modifier.DEFAULT: break;
-                default: break;
-            }
+            SetupModifier();
 
             _logger.Log($"{_prepTimes[_waveIndex]}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
             _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);

@@ -29,6 +29,17 @@ public class Weapon : Actor
         GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.GetComponent<Enemy>())
+        {
+            Enemy e = other.GetComponent<Enemy>();
+
+            e.TakeDamage(_dmg+ DamageModifier);
+            _logger.Log($"{this} took damage!", _isDevMode);
+        }
+    }
+
     #endregion
     #region Private
 
