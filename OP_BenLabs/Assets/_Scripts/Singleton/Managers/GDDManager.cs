@@ -24,7 +24,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private List<CodeBlock> _availableBlocksList;
 
     [Header("Trace Mechanic")]
-    [SerializeField] private GameObject[] _drawingCanvases;
     [SerializeField] private GameObject _swordImage, _hammerImage;
     [SerializeField, Space(10f)] private WeaponSpawner _weaponSpawner;
 
@@ -107,23 +106,18 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     public void EnableSword(bool active)
     {
-        _leftHandTools[1].SetActive(active && _usingLeftHand);
-        _rightHandTools[1].SetActive(active && !_usingLeftHand);
+        _leftHandTools[0].SetActive(active && _usingLeftHand);
+        _rightHandTools[0].SetActive(active && !_usingLeftHand);
     }
     public void EnableHammer(bool active)
     {
-        _leftHandTools[2].SetActive(active && _usingLeftHand);
-        _rightHandTools[2].SetActive(active && !_usingLeftHand);
-    }
-    public void EnableMarker(bool active)
-    {
-        _leftHandTools[0].SetActive(active && _usingLeftHand);
-        _rightHandTools[0].SetActive(active && !_usingLeftHand);
+        _leftHandTools[1].SetActive(active && _usingLeftHand);
+        _rightHandTools[1].SetActive(active && !_usingLeftHand);
     }
 
     public void SpawnEnemy()
     {
-        Vector3 RandomPositionInBox()
+        Vector3 GetRandomPositionInBox()
         {
             Vector3 size = _collider.size;
             Vector3 localPosition = new Vector3(Random.Range(-size.x / 2f, size.x / 2f),
@@ -144,7 +138,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         GameObject newEnemy = Instantiate(_ghostBlockGridList[_waveIndex][(int)BlockType.ENEMY].
-                                          EnemyPrefab, RandomPositionInBox(), Quaternion.identity);
+                                          EnemyPrefab, GetRandomPositionInBox(), Quaternion.identity);
 
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
         _logger.Log("Spawned new enemy!", _isDevMode);
@@ -184,7 +178,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void EVENT_CountRemainingEnemies(Enemy e)
     {
         _waveState = WaveState.COUNTING;
-
         _enemyList.Remove(e.gameObject);
         _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN, _isDevMode);
 
@@ -272,12 +265,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", this);
 
-        Debug.Assert(_drawingCanvases.Length == 3, "Missing _drawingCanvas elements!", this);
         Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", this);
         Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", this);
 
-        Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", this);
-        Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", this);
+        Debug.Assert(_leftHandTools.Length == 2, "Missing elements in _leftHandTools!", this);
+        Debug.Assert(_rightHandTools.Length == 2, "Missing elements in _rightHandTools!", this);
 
         Debug.Assert(_startGameSFX, "Missing _startGameSFX reference!", this);
         Debug.Assert(_startWaveSFX, "Missing _startWaveSFX reference!", this);
@@ -288,10 +280,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         Debug.Assert(_dmgSFX, "Missing _dmgSFX reference!", this);
     }
     protected override void InitComponents()
-    {
-        foreach (GameObject canvas in _drawingCanvases)
-            canvas.SetActive(false);
-        
+    {        
         _soundEmitter = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
@@ -365,8 +354,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             }
 
             _waveHandler.gameObject.SetActive(false);
-            _drawingCanvases[_waveIndex].SetActive(true);
-            EnableMarker(true);
 
             PreferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
             _modifier =        _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
@@ -410,7 +397,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         _waveState = WaveState.SPAWNING;
-        _drawingCanvases[_waveIndex].SetActive(false);
         _blockLabelsUI.SetActive(false);
 
         for (int i = 0; i < _unitCount; i++)

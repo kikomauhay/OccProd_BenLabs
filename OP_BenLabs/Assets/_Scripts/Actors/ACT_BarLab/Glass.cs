@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 /// <summary> - COCKTAIL COMBINATIONS -
@@ -46,10 +45,12 @@ public class Glass : Equipment
 
     [Header("Drinks"), Tooltip("0 = Tequila, 1 = Vodka, 2 = Coconut")]
     [SerializeField] private GameObject[] _drinks;
+    [SerializeField] private Sound[] _iceRefillSFXs;
 
     [Header("Drink Stats")]
     [SerializeField] private Cocktail _cocktail;
     [SerializeField] private bool _hasDrink;
+
         
     #endregion
 
@@ -65,6 +66,11 @@ public class Glass : Equipment
     {
         base.OnDisable();
         LiquidPour.OnGlassHit -= EnableDrink;
+    }
+    protected override void Start()
+    {
+        base.Start();
+        _soundEmitter.PlaySound(_iceRefillSFXs[Random.Range(0, _iceRefillSFXs.Length)]);
     }
 
     #endregion
@@ -103,10 +109,15 @@ public class Glass : Equipment
 
         _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW, _isDevMode);
     }
-        
+
     #endregion
     #region Helpers
-    
+
+    protected override void InitComponents()
+    {
+        base.InitComponents();
+        Debug.Assert(_iceRefillSFXs.Length == 3, "Missing _iceRefillSFX elements!", this);
+    }
     protected override void InitVariables()
     {
         base.InitVariables();
@@ -118,9 +129,9 @@ public class Glass : Equipment
 
     protected override void Test()
     {
-    //    if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
-    //    if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
-    //    if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
+        // if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
+        // if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
+        // if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
 
         if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
     }
@@ -133,7 +144,7 @@ public class Glass : Equipment
         foreach (GameObject drink in _drinks)
             drink.SetActive(false);
 
-        _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
+        _logger.Log($"{name} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
 
     #endregion
