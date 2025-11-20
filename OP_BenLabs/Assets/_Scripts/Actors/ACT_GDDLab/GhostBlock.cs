@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 [RequireComponent(typeof(BoxCollider), typeof(MeshRenderer), typeof(SoundEmitter))]
 public class GhostBlock : Actor, IInteractable
@@ -11,8 +8,8 @@ public class GhostBlock : Actor, IInteractable
     public static int FilledBlocks { get; private set; }
 
     public Modifier Modifier => _modifier;
+    public WeaponType WeaponType => _weaponType;
     public GameObject EnemyPrefab => _enemyPrefab;
-    public string WeaponContent => _weaponContent;
 
     #endregion
     #region SerializeField
@@ -22,8 +19,8 @@ public class GhostBlock : Actor, IInteractable
 
     [Header("Block Content"), Tooltip("Serialized for testing")]
     [SerializeField] private Modifier _modifier;
+    [SerializeField] private WeaponType _weaponType;
     [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private string _weaponContent;
 
     [Header("UI/UX")]
     [SerializeField] private Sound _snapSFX;
@@ -48,7 +45,7 @@ public class GhostBlock : Actor, IInteractable
             switch (cb.CurrentBlockType)
             {
                 case BlockType.WEAPON:
-                    _weaponContent = cb.WeaponContent;
+                    _weaponType = cb.WeaponType;
                     _rend.material.color = Color.blue;
 
                     break;

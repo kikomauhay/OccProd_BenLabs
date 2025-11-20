@@ -18,15 +18,6 @@ public class FloorHandler : Singleton<FloorHandler>
 
     #region Methods
 
-    protected override void Start()
-    {
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-        Debug.Assert(_elevDoor, "Missing _door reference!", gameObject);
-        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", gameObject);
-
-        base.Start();        
-    }
-
     public void BTN_EnterFloor(int idx) // only accessed from inside
     {  
         IEnumerator CO_MoveToFloor()
@@ -75,6 +66,12 @@ public class FloorHandler : Singleton<FloorHandler>
         if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
     }
 
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
+        Debug.Assert(_elevDoor, "Missing _door reference!", gameObject);
+        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", gameObject);
+    }
     protected override void InitVariables()
     {
         _gameMgr = GameManager.Instance;   

@@ -128,11 +128,7 @@ public class TraceRecognizer : MonoBehaviour
             if (result.Score > recognitionThreshold)
             {
                 OnRecognized?.Invoke(result.GestureClass);
-
                 SoundManager.Instance.PlaySound("SND_Poof");
-                // vfx for the poof 
-
-                GDDManager.Instance.ImmediateSpawning();
             }
         }
     }
