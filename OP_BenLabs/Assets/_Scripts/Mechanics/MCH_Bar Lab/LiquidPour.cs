@@ -134,8 +134,6 @@ public class LiquidPour : MonoBehaviour
                 AnimateToPosition(1, _targetPosition);
 
                 yield return null;
-
-                ShakerEmptied?.Invoke();
             }
         }
         IEnumerator CO_UpdateParticle()
