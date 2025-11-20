@@ -10,7 +10,7 @@ public class Player : StaticInstance<Player>
     public ReadOnlyArray<GameObject> LeftHandTools => _leftHandTools;
     public ReadOnlyArray<GameObject> RightHandTools => _rightHandTools;
 
-    [Header("Player Tools")]
+    [Header("Player Tools"), Tooltip("0 = Sword, 1 = Hammer")]
     [SerializeField] private GameObject[] _leftHandTools;
     [SerializeField] private GameObject[] _rightHandTools;
 
@@ -20,8 +20,8 @@ public class Player : StaticInstance<Player>
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_leftHandTools.Length == 3, "Missing elements in _leftHandTools!", this);
-        Debug.Assert(_rightHandTools.Length == 3, "Missing elements in _rightHandTools!", this);
+        Debug.Assert(_leftHandTools.Length == 2, "Missing elements in _leftHandTools!", this);
+        Debug.Assert(_rightHandTools.Length == 2, "Missing elements in _rightHandTools!", this);
         
         Debug.Assert(GetComponent<XROrigin>(), "Missing XROrigin reference!", this);
 

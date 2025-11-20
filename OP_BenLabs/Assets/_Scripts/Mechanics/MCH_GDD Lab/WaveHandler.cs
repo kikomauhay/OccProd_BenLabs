@@ -2,15 +2,13 @@ using UnityEngine;
 
 public class WaveHandler : StaticInstance<WaveHandler>
 {
-    #region Properties
+    #region Members
 
-    public System.Action OnAllBlocksFilled { get; set; }
     public GhostBlock[] GhostBlocks => _ghostBlocks;
 
-    #endregion
-    #region SerializeField
-
     [SerializeField] private GhostBlock[] _ghostBlocks;
+
+    private GDDManager _gddMgr;
 
     #endregion
 
@@ -18,14 +16,16 @@ public class WaveHandler : StaticInstance<WaveHandler>
 
     protected override void Start()
     {
-        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", this);    
+        _gddMgr = GDDManager.Instance;
+
+        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", this);
         base.Start();
     }
 
     public void CheckRemainingBlocks()
     {
         if (GhostBlock.FilledBlocks == 9)
-            OnAllBlocksFilled?.Invoke();
+            _gddMgr.EnableButtons(true);
     }
 
     #endregion

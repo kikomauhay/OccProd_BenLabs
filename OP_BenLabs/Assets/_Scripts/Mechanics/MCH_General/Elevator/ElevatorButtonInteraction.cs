@@ -71,9 +71,9 @@ public class ElevatorButtonInteraction : Actor
 
     private IEnumerator DisableButton()
     {
-        _button.interactable = false;
+        _button.gameObject.SetActive(false);
         yield return new WaitForSeconds(3f);
-        _button.interactable = true;
+        _button.gameObject.SetActive(true);
     }
     
     #endregion

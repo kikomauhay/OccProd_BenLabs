@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +12,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #region Properties
 
     public System.Action OnBuffWeapon { get; set; }
-    public string PreferredWeapon { get; private set; }
 
     #endregion
     #region SerializeField
@@ -20,12 +21,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Header("Wave Panel")]
     [SerializeField] private WaveHandler _waveHandler;
-    [SerializeField] private GameObject _blockLabelsUI;
     [SerializeField] private List<CodeBlock> _availableBlocksList;
-
-    [Header("Trace Mechanic")]
-    [SerializeField] private GameObject _swordImage, _hammerImage;
-    [SerializeField, Space(10f)] private WeaponSpawner _weaponSpawner;
+    [SerializeField] private GameObject _blockLabelsUI, _confirmButton, _cancelButton;
 
     [Header("VR Variables")]
     [SerializeField] private bool _usingLeftHand;
@@ -35,7 +32,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
     [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT;
-    
+
     [Header("SFX")]
     [SerializeField] private Sound _startGameSFX;
     [SerializeField] private Sound _startWaveSFX, _allWavesDoneSFX;
@@ -57,7 +54,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private List<GameObject> _enemyList; 
     private WaveState _waveState;
-    private Modifier _modifier;
     private int _unitCount, _killCount, _waveIndex;
     private float _currHP;
 
@@ -67,13 +63,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     protected override void OnEnable()
     {
-        _waveHandler.OnAllBlocksFilled += EVENT_StartWave;
         _xrAButton.action.performed += ToggleMainHand;
         _xrXButton.action.performed += ToggleMainHand;
     }
     protected override void OnDisable()
     {
-        _waveHandler.OnAllBlocksFilled -= EVENT_StartWave;
         _xrXButton.action.performed -= ToggleMainHand;
         _xrXButton.action.performed -= ToggleMainHand;
     }
@@ -86,6 +80,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         _waveHandler.gameObject.SetActive(true);
         _blockLabelsUI.SetActive(true);
+
+        EnableButtons(false);
     }
 
     #endregion
@@ -98,22 +94,42 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only be called once player gets 0 HP
     {
-        _soundEmitter.PlaySound(_gameOverSFX);
-        StartCoroutine(_gameMgr.CO_Exit(FloorType.GDD));
+        StopAllCoroutines();
 
+        foreach (GameObject e in _enemyList)
+            Destroy(e);
+
+        _enemyList.Clear();
+        _soundEmitter.PlaySound(_gameOverSFX);
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
+        
+        StartCoroutine(_gameMgr.CO_Exit(FloorType.GDD));
     }
 
+    public void BTN_Cancel()
+    {
+        // deleted old CodeBlocks
+        // removed refrences from all the GhostBlocks
+        // respawns new CodeBlocks
+    }
+    public void BTN_Confirm()
+    {
+        StartCoroutine(CO_SpawnEnemyWave());
+        _logger.Log("Confirmed wave starting!", _isDevMode);
+    }
+
+    /*
     public void EnableSword(bool active)
     {
-        _leftHandTools[0].SetActive(active && _usingLeftHand);
-        _rightHandTools[0].SetActive(active && !_usingLeftHand);
+        _gameMgr.Player.LeftHandTools[0].SetActive(active && _usingLeftHand);
+        _gameMgr.Player.RightHandTools[0].SetActive(active && !_usingLeftHand);
     }
     public void EnableHammer(bool active)
     {
-        _leftHandTools[1].SetActive(active && _usingLeftHand);
-        _rightHandTools[1].SetActive(active && !_usingLeftHand);
+        _gameMgr.Player.LeftHandTools[1].SetActive(active && _usingLeftHand);
+        _gameMgr.Player.RightHandTools[1].SetActive(active && !_usingLeftHand);
     }
+    */
 
     public void SpawnEnemy()
     {
@@ -166,10 +182,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         _logger.Log($"HP: {_currHP}", _isDevMode);
     }
-    public void ImmediateSpawning() // gets called when the player finishes the drawing before the prep time 
+    public void EnableButtons(bool isActive)
     {
-        StopCoroutine(CO_SpawnEnemyWave());
-        StartCoroutine(CO_DoEnemySpawning());
+        _confirmButton.SetActive(isActive);
+        _cancelButton.SetActive(isActive);
     }
 
     #endregion
@@ -184,10 +200,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_enemyList.Count < 1)
         {
             _waveIndex++;
+            _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
 
             if (_waveIndex < MAX_WAVES)
             {
                 UI_UpdateWaveIndex();
+                StopAllCoroutines();
                 StartCoroutine(CO_SpawnEnemyWave());
 
                 _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
@@ -197,14 +215,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 _soundEmitter.PlaySound(_allWavesDoneSFX);
                 _logger.Log("All waves done!", _isDevMode);
             }
-
-            _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
         }
     }
     private void EVENT_IncrementKillCount()
     {
         _killCount++;
         _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW, _isDevMode);
+        
         UI_UpdateKllCount();
     }
     private void EVENT_GainLife()
@@ -215,34 +232,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             UI_UpdatePlayerLife();
         }
     }
-    private void EVENT_StartWave() => StartCoroutine(CO_SpawnEnemyWave());
 
-    private void UI_UpdateWaveIndex()
-    {
-        IEnumerator CO_ClearWaveTxt()
-        {
-            _waveCountTXT.gameObject.SetActive(true);
-            _waveCountTXT.text = $"Wave {_waveIndex + 1}";
-
-            yield return new WaitForSeconds(10f);
-            _waveCountTXT.gameObject.SetActive(false);
-        }
-
-        StartCoroutine(CO_ClearWaveTxt());
-    }
+    private void UI_UpdateWaveIndex() => _waveCountTXT.text = $"Wave {_waveIndex + 1}";
     private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
     private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
 
-    private void ToggleMainHand(InputAction.CallbackContext context)
-    {
-        _usingLeftHand = !_usingLeftHand;
-
-        for (int i = 0; i < 3; i++)
-        {
-            _leftHandTools[i].SetActive(_usingLeftHand);
-            _rightHandTools[i].SetActive(!_usingLeftHand);
-        }
-    }
+    private void ToggleMainHand(InputAction.CallbackContext context) => _usingLeftHand = !_usingLeftHand;
 
     #endregion
     #region Helpers
@@ -264,17 +259,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     protected override void AssertComponents()
     {
         Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", this);
-
-        Debug.Assert(_weaponSpawner, "Missing _weaponSpawner reference!", this);
         Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", this);
+        Debug.Assert(_confirmButton, "Missing _confirmButton reference!", this);
+        Debug.Assert(_cancelButton, "Missing _cancelButton reference!", this);
 
         Debug.Assert(_leftHandTools.Length == 2, "Missing elements in _leftHandTools!", this);
         Debug.Assert(_rightHandTools.Length == 2, "Missing elements in _rightHandTools!", this);
 
+        Debug.Assert(_waveCountTXT, "Missing _waveCountTXT reference!", this);
+        Debug.Assert(_playerLivesTXT, "Missing _playerLivesTXT reference!", this);
+        Debug.Assert(_killCountTXT, "Missing _killCountTXT reference!", this);
+
         Debug.Assert(_startGameSFX, "Missing _startGameSFX reference!", this);
         Debug.Assert(_startWaveSFX, "Missing _startWaveSFX reference!", this);
         Debug.Assert(_allWavesDoneSFX, "Missing _allWavesDoneSFX reference!", this);
-
         Debug.Assert(_gameOverSFX, "Missing _gameOverSFX reference!", this);
         Debug.Assert(_healSFX, "Missing _healSFX reference!", this);
         Debug.Assert(_dmgSFX, "Missing _dmgSFX reference!", this);
@@ -316,12 +314,28 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private IEnumerator CO_SpawnEnemyWave()
     {        
-        _modifier = Modifier.DEFAULT;
-        _unitCount = _enemiesToSpawn[_waveIndex];
+        void PrepareWave() // prep time for the player to "draw" a weapon
+        {
+            // play StartTimer.sfx
+            
+            WeaponType preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponType;
 
-        void SetupModifers()
-        {    
-            switch (_modifier)
+            if (_waveIndex < 3)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    _gameMgr.Player.LeftHandTools[i].SetActive(false);
+                    _gameMgr.Player.RightHandTools[i].SetActive(false);
+                }
+            }
+            _waveHandler.gameObject.SetActive(false);
+
+            // only enables the correct weapon in hand
+            _gameMgr.Player.LeftHandTools[(int)preferredWeapon].SetActive(_usingLeftHand);
+            _gameMgr.Player.RightHandTools[(int)preferredWeapon].SetActive(!_usingLeftHand);
+
+            // setup modifiers per wave
+            switch (_ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier)
             {
                 case Modifier.HEALTH:
                     _currHP++;
@@ -340,28 +354,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                     break;
 
                 case Modifier.DEFAULT: break;
-                default:               break;
+                default: break;
             }
-        }
-        void PrepareWave() // prep time for the player to "draw" a weapon
-        {
-            // play StartTimer.sfx
-
-            if (_waveIndex > 0)
-            {
-                EnableHammer(false);
-                EnableSword(false);
-            }
-
-            _waveHandler.gameObject.SetActive(false);
-
-            PreferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponContent;
-            _modifier =        _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
-
-            if      (PreferredWeapon == "Sword")  _swordImage.SetActive(true);
-            else if (PreferredWeapon == "Hammer") _hammerImage.SetActive(true);
-
-            SetupModifers();
 
             _logger.Log($"{_prepTimes[_waveIndex]}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
             _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);
@@ -373,6 +367,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             yield break;
         }
 
+        _unitCount = _enemiesToSpawn[_waveIndex];
+
+        EnableButtons(false);
         PrepareWave();
         yield return new WaitForSeconds(_prepTimes[_waveIndex]);
         

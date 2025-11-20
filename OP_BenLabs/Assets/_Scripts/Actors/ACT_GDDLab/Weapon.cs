@@ -43,7 +43,7 @@ public class Weapon : Actor
 
 public enum WeaponType
 {
+    DEFAULT = -1,
     SWORD = 0,
-    HAMMER = 1,
-    RAPIER = 2
+    HAMMER = 1
 }
