@@ -36,7 +36,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [Header("SFX")]
     [SerializeField] private Sound _startGameSFX;
     [SerializeField] private Sound _startWaveSFX, _allWavesDoneSFX;
-    [SerializeField] private Sound _gameOverSFX, _healSFX, _dmgSFX;
+    [SerializeField] private Sound _gameOverSFX, _healSFX, _dmgSFX, _omsimSFX;
 
     #endregion   
     #region Private
@@ -202,11 +202,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _enemyList.Remove(e.gameObject);
         _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN, _isDevMode);
 
-        if (_enemyList.Count < 1)
+        if (_enemyList.Count == 0)
         {
             _waveIndex++;
             _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
-            SoundManager.Instance.PlaySound("SND_Correct"); // test
+            _soundEmitter.PlaySound(_omsimSFX); // test
 
             if (_waveIndex < MAX_WAVES)
             {
