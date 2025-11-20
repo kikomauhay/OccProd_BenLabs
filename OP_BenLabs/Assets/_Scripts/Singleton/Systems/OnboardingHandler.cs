@@ -44,7 +44,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     private void OnTriggerEnter(Collider other)
     {
         //To do when player approaches the ID on the table
-        XROrigin player = other.gameObject.GetComponent<XROrigin>();
+        VR_Hands player = other.gameObject.GetComponent<VR_Hands>();
 
         if(player != null)
         {
