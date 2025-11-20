@@ -28,12 +28,12 @@ public class GhostWeapon : Actor
 
             if (_weaponType == WeaponType.SWORD)
             {
-                GDDManager.Instance.EnableSword(true);
+                // GDDManager.Instance.EnableSword(true);
                 _logger.Log($"{_weaponType} spawned", _isDevMode);
             }
             else
             {
-                GDDManager.Instance.EnableHammer(true);
+                // GDDManager.Instance.EnableHammer(true);
             }
 
             gameObject.SetActive(false);

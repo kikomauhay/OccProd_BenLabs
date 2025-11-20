@@ -7,8 +7,8 @@ public class CodeBlock : Actor, IInteractable
 
     public BlockType CurrentBlockType => _currBlockType;
     public Modifier Modifier => _modifier;
+    public WeaponType WeaponType => _weaponType;
     public GameObject EnemyPrefab => _enemyPrefab;
-    public string WeaponContent => _weaponContent;
 
     #endregion
     #region SerializeField
@@ -18,8 +18,8 @@ public class CodeBlock : Actor, IInteractable
 
     [Header("Block Content")]
     [SerializeField] private Modifier _modifier;
+    [SerializeField] private WeaponType _weaponType;
     [SerializeField] private GameObject _enemyPrefab;
-    [SerializeField] private string _weaponContent;
 
     [Header("UI/UX")]
     [SerializeField] private Sound _grabSFX;
@@ -122,13 +122,13 @@ public class CodeBlock : Actor, IInteractable
                 break;
 
             case BlockType.ENEMY:
-                _weaponContent = string.Empty;
+                _weaponType = WeaponType.DEFAULT;
                 _modifier = Modifier.DEFAULT;
                 break;
 
             case BlockType.MODIFIER:
                 _enemyPrefab = null;
-                _weaponContent = string.Empty;
+                _weaponType = WeaponType.DEFAULT;
                 break;
 
             case BlockType.NOTHING: break;

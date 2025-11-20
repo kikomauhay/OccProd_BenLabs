@@ -7,6 +7,7 @@ public class WeaponSpawner : Actor
 
 	public void Enable(string weaponName)
 	{
+		/*
 		if (GDDManager.Instance.PreferredWeapon == weaponName)
 		{
 			foreach (var item in _weapons)
@@ -21,5 +22,6 @@ public class WeaponSpawner : Actor
         }
 
         _logger.Log("Enabled a weapon!", gameObject, TextColor.YELLOW, _isDevMode);
+		*/
 	}
 }
