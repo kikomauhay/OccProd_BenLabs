@@ -76,13 +76,13 @@ public class Enemy : Actor
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Weapon>())
-        {
-            Weapon w = other.GetComponent<Weapon>();
+        //if (other.GetComponent<Weapon>())
+        //{
+        //    Weapon w = other.GetComponent<Weapon>();
 
-            TakeDamage(w.Damage + w.DamageModifier);
-            _logger.Log($"{this} took damage!", _isDevMode);
-        }
+        //    TakeDamage(w.Damage + w.DamageModifier);
+        //    _logger.Log($"{this} took damage!", _isDevMode);
+        //}
     }
     private void OnDestroy()
     {
@@ -109,7 +109,7 @@ public class Enemy : Actor
         _enemyHPTxt.text = $"{_currHP}/{_maxHP}";
         _enemyHPslider.value = _currHP / _maxHP;
     }
-    private void TakeDamage(float amt)
+    public void TakeDamage(float amt)
     {
         if (amt < 0f)
         {
