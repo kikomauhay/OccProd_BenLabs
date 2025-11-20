@@ -131,7 +131,7 @@ public class TraceRecognizer : MonoBehaviour
 
                 SoundManager.Instance.PlaySound("SND_Poof");
                 // vfx for the poof 
-                GDDManager.Instance.EnableMarker(false);
+
                 GDDManager.Instance.ImmediateSpawning();
             }
         }
