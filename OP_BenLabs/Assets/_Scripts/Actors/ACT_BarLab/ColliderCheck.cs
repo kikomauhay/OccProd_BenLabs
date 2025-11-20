@@ -57,7 +57,7 @@ public class ColliderCheck : Actor
                 _barMgr.Wrong();
             }
 
-            Destroy(glass.gameObject); // test
+            Destroy(glass.gameObject);
             Destroy(CustomerOrder.gameObject);
         }
 
