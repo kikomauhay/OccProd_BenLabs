@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 public class BarManager : Singleton<BarManager>, IGameHandler
@@ -22,6 +23,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     [SerializeField] private Sound _startGameSFX;
     [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject[] _onboardingBoxes;
+    [SerializeField] private TextMeshProUGUI _scoreText;
 
     #endregion
     #region Private
@@ -49,6 +51,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _soundEmitter.PlaySound(_startGameSFX);
         _totalScore = 0;
 
+        UpdateScore();
         SpawnCustomer();
         _logger.Log("Bar mini-game has started!", _isDevMode);
     }
@@ -111,11 +114,14 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             
             default: break;
         }
+
+        UpdateScore();
     }
     public void Correct()
     {
         _totalScore += SERVING_SCORE;
         _customersServed++;
+        UpdateScore();
 
         _sndMgr.PlaySound("SND_Correct");
         _logger.Log($"Total score: {_totalScore}", _isDevMode);
@@ -190,6 +196,8 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.CapsLock)) StopGame();
         if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
     }
+
+    private void UpdateScore() => _scoreText.text = "Total Score: " + _totalScore.ToString();
 
     #endregion
 }
