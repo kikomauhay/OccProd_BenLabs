@@ -177,7 +177,7 @@ public class Enemy : Actor
         name = $"{_enemyType}";
 
         _currHP = _maxHP;
-        _moveSpeed = Random.Range(1f, 2f);
+        _moveSpeed = Random.Range(2f, 2.5f);
         _rotSpeed = Random.Range(2f, 4f);   
     }
 
