@@ -139,6 +139,7 @@ public class Shaker : Equipment, IPourable
         _mixedDrink.Clear();
         _cocktail = Cocktail.EMPTY;
         _shakerCap.gameObject.SetActive(false);
+        ResetPosition();
 
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
@@ -219,7 +220,7 @@ public class Shaker : Equipment, IPourable
         }
 
         // time for the player to earn bonus points
-        yield return new WaitForSeconds(2F);
+        yield return new WaitForSeconds(Random.Range(10F, 15F));
         CompareIngredients();
     }
 
