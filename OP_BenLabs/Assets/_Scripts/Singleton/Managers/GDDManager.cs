@@ -95,10 +95,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
-        ClearAllEnemies();
-
         _gameMgr.ExitVR();
         _soundEmitter.PlaySound(_gameOverSFX);
+        _waveHandler.gameObject.SetActive(true);
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
 
         if (_coroutineRunning)
@@ -108,6 +107,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             StopCoroutine(CO_Spawning());
         }
+
+        ResetWeapons();
+        ClearAllEnemies();
     }
 
     public void BTN_Cancel()
@@ -135,7 +137,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         void SetUpEnemy(Enemy e)
         {
             e.OnDeath += EVENT_CountEnemies;
-            e.OnKilled += EVENT_IncrementKillCount;
+            e.OnKilled += EVENT_AddToKills;
             e.OnKilled += EVENT_GainLife;
 
             e.SetGoal(_gameMgr.Player.transform);
@@ -154,7 +156,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public void UnbindEvents(Enemy e)
     {
         e.OnDeath -= EVENT_CountEnemies;
-        e.OnKilled -= EVENT_IncrementKillCount;
+        e.OnKilled -= EVENT_AddToKills;
         e.OnKilled -= EVENT_GainLife;
     }
     public void TakeDamage()
@@ -194,7 +196,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         ResetWeapons();
         WaveComplete();
     }
-    private void EVENT_IncrementKillCount()
+    private void EVENT_AddToKills()
     {
         _killCount++;
         _logger.Log($"Kill Count: {_killCount}", this, TextColor.YELLOW, _isDevMode);
@@ -206,6 +208,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Random.value < 0.1f)
         {
             _currHP++;
+            _soundEmitter.PlaySound(_healSFX);
+
             UI_UpdatePlayerLife();
         }
     }
@@ -275,6 +279,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         IEnumerator CO_FinishingActions()
         {
+            if (_enemyList.Count > 0)
+                ClearAllEnemies();
+
             _waveIndex++;
             _soundEmitter.PlaySound(_waveDoneSFX);
             _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
@@ -297,9 +304,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 _logger.Log($"Starting wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
             }
         }
-
-        if (_enemyList.Count > 0)
-            ClearAllEnemies();
 
         StartCoroutine(CO_FinishingActions());
     }
@@ -341,12 +345,21 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         // enemy spawning
         for (int i = 0; i < _unitCount; i++)
         {
+            if (!_gameMgr.Player.InsideVRSpace)
+            {
+                _logger.Log("Player is now outside the VR Space!", _isDevMode);
+                break;
+            }
+
             SpawnEnemy();
             yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
         }
 
         _coroutineRunning = false;
         _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
+
+        if (!_gameMgr.Player.InsideVRSpace)
+            ClearAllEnemies();
     }
 
     #endregion
