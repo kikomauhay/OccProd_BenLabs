@@ -29,7 +29,6 @@ public class GhostBlock : Actor, IInteractable
     #region Private
 
     private MeshRenderer _rend;
-    private BoxCollider _boxCol;
     private SoundEmitter _soundEmitter;
 
     private bool _isEmpty;
@@ -47,7 +46,6 @@ public class GhostBlock : Actor, IInteractable
                 case BlockType.WEAPON:
                     _weaponType = cb.WeaponType;
                     _rend.material.color = Color.blue;
-
                     break;
 
                 case BlockType.MODIFIER:
@@ -68,7 +66,6 @@ public class GhostBlock : Actor, IInteractable
             _isEmpty = false;
             FilledBlocks++;
             
-            GDDManager.Instance.RemoveBlock(cb);
             WaveHandler.Instance.CheckRemainingBlocks();
         }
 
@@ -89,11 +86,14 @@ public class GhostBlock : Actor, IInteractable
 
             _soundEmitter.PlaySound(_snapSFX);
             PassBlockInfo(codeBlock);
-            Destroy(codeBlock.gameObject); // add poof sfx before destorying 
+
+            codeBlock.transform.position = new Vector3(0f, 100f, 0f);
+            codeBlock.gameObject.SetActive(false);
+            // add poof sfx before destorying 
 
             _logger.Log($"{name} is now occupied with type: {codeBlock.CurrentBlockType}!", TextColor.YELLOW, _isDevMode);
             _logger.Log($"Filled blocks: {FilledBlocks}", _isDevMode);
-        }          
+        }
     }
 
     #endregion
@@ -101,13 +101,50 @@ public class GhostBlock : Actor, IInteractable
     #region Public
 
     public void INT_Interact() => _soundEmitter.PlaySound(_snapSFX);
+    public void ResetBlock()
+    {
+        _rend.material.color = Color.gray;
+        _isEmpty = true;
+
+        _weaponType = WeaponType.DEFAULT;
+        _modifier = Modifier.DEFAULT;
+        _enemyPrefab = null;
+        FilledBlocks = 0;
+
+        _logger.Log($"{name} has been reset!", _isDevMode);
+    }
+    public void ShowInformation()
+    {
+        switch (_allowedBlockType)
+        {
+            case BlockType.WEAPON: 
+                _logger.Log($"{name} contains", _isDevMode);
+                break;
+
+            case BlockType.ENEMY: 
+                _logger.Log($"{name} contains", _isDevMode);
+                break;
+
+            case BlockType.MODIFIER:
+                _logger.Log($"{name} contains", _isDevMode);
+                break;
+
+            case BlockType.NOTHING: break;
+            default:                break;
+        }
+    }
+
 
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) ShowInformation();
+    }
+
     protected override void InitComponents()
     {
-        _boxCol = GetComponent<BoxCollider>();
         _rend = GetComponent<MeshRenderer>();
         _soundEmitter = GetComponent<SoundEmitter>();
     }

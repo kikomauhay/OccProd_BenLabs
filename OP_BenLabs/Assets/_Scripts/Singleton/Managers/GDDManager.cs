@@ -39,6 +39,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #region Private
 
     private GameManager _gameMgr;
+    private SoundManager _sndMgr;
     private SoundEmitter _soundEmitter;
 
     private const float SPAWN_INTERVAL = 0.5f;
@@ -53,6 +54,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private Modifier _modifier;
     private int _unitCount, _killCount, _waveIndex;
     private float _currHP;
+    private bool _coroutineRunning;
 
     #endregion
 
@@ -102,14 +104,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _soundEmitter.PlaySound(_gameOverSFX);
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
 
-        StopCoroutine(CO_Spawning());
+        if (_coroutineRunning)
+        {
+            _coroutineRunning = false;
+            StopCoroutine(CO_Spawning());
+        }
     }
 
     public void BTN_Cancel()
     {
-        // deleted old CodeBlocks
-        // removed refrences from all the GhostBlocks
-        // respawns new CodeBlocks
+        ResetGame();
+        _logger.Log("Reseting current grid!", _isDevMode);
     }
     public void BTN_Confirm()
     {
@@ -188,6 +193,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             return;
         }
 
+        ResetWeapons();
         WaveComplete();
     }
     private void EVENT_IncrementKillCount()
@@ -223,6 +229,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _gameMgr.Player.LeftHandTools[i].SetActive(false);
             _gameMgr.Player.RightHandTools[i].SetActive(false);
         }
+
+        _logger.Log("Weapons have been reset!", _isDevMode);
     }
 
     private void StartWave()
@@ -267,24 +275,47 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     private void WaveComplete()
     {
-        _waveIndex++;
-        _soundEmitter.PlaySound(_waveDoneSFX);
-        _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
-
-        UI_UpdateWaveIndex();
-
-        if (_waveIndex == MAX_WAVE_INDEX)
+        IEnumerator CO_FinishingActions()
         {
-            _soundEmitter.PlaySound(_allWavesDoneSFX);
-            _logger.Log("All waves done!", _isDevMode);
+            _waveIndex++;
+            _soundEmitter.PlaySound(_waveDoneSFX);
+            _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
+
+            UI_UpdateWaveIndex();
+
+            yield return new WaitForSeconds(2f);
+
+            if (_waveIndex == MAX_WAVE_INDEX)
+            {
+                _soundEmitter.PlaySound(_allWavesDoneSFX);
+                _gameMgr.ExitVR();
+                _logger.Log("All waves done!", _isDevMode);
+
+                ResetGame();
+            }
+            else
+            {
+                StartWave();
+                _logger.Log($"Starting wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
+            }
         }
-        else
-        {
-            ResetWeapons();
-            StartWave();
 
-            _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
-        }        
+        StartCoroutine(CO_FinishingActions());
+    }
+    private void ResetGame()
+    {
+        _waveHandler.gameObject.SetActive(true);
+        
+        foreach (CodeBlock cb in _availableBlocksList)
+        {
+            cb.ResetPosition();
+            cb.gameObject.SetActive(true);
+        }
+
+        foreach (GhostBlock gb in _waveHandler.GhostBlocks)
+            gb.ResetBlock();
+
+        _logger.Log("Game has been reset!", _isDevMode);
     }
 
     #endregion
@@ -292,6 +323,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private IEnumerator CO_Spawning()
     {
+        if (_coroutineRunning)
+        {
+            _logger.Log("Coroutine is already running!", _isDevMode);
+            _sndMgr.PlaySound("SND_Unsure");
+            yield break;
+        }
+
+        _coroutineRunning = true;
         _waveState = WaveState.SPAWNING;
         _soundEmitter.PlaySound(_startWaveSFX);
 
@@ -316,6 +355,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         _waveState = WaveState.FINISHED;
+        _coroutineRunning = false;
         _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
     }
 
@@ -359,6 +399,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     protected override void InitVariables()
     {
         _gameMgr = GameManager.Instance;
+        _sndMgr = SoundManager.Instance;
 
         _enemyList = new List<GameObject>();
         _waveState = WaveState.WAITING;
@@ -381,6 +422,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                     _waveHandler.GhostBlocks[7], 
                     _waveHandler.GhostBlocks[8] }
         };
+
+        _coroutineRunning = false;
     }
 
     private void UpdateAllUI()

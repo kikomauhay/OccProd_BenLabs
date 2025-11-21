@@ -9,7 +9,6 @@ public class WaveHandler : StaticInstance<WaveHandler>
     [SerializeField] private GhostBlock[] _ghostBlocks;
     
     #endregion
-
     #region Methods
 
     protected override void Start()
