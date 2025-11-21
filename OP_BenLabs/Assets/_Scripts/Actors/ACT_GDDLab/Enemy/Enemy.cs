@@ -70,12 +70,13 @@ public class Enemy : Actor
         else // enemy got too close and hit the player
         {
             _gddMgr.TakeDamage();
+            _gddMgr.RemoveEnemy(gameObject);
+
             Destroy(gameObject);
         }
     }
     protected override void OnDisable()
     {
-        _gddMgr.RemoveEnemy(gameObject);
         OnDeath?.Invoke();
 
         if (_currHP == 0f)
@@ -111,11 +112,14 @@ public class Enemy : Actor
 
         _currHP -= amt;
         _logger.Log($"Enemy's HP: {_currHP}", _isDevMode);
+
         UI_UpdateHP();
 
         if (_currHP < 1f)
         {
             _currHP = 0f;
+            _gddMgr.RemoveEnemy(gameObject);
+
             UI_UpdateHP();
             Destroy(gameObject);
         }
