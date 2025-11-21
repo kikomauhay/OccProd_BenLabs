@@ -657,9 +657,9 @@ GameObject:
   - component: {fileID: 8073931462267346370}
   - component: {fileID: 8883224163540256629}
   - component: {fileID: 8883224163540256630}
+  - component: {fileID: 8883224163540256633}
   - component: {fileID: 8883224163540256628}
   - component: {fileID: 8883224163540256631}
-  - component: {fileID: 8883224163540256633}
   m_Layer: 0
   m_Name: PRF_Enemy_MissingTextures
   m_TagString: Untagged
@@ -715,6 +715,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8883224163540256633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8883224163540256632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9260807242ce7d4ca523880e89ae12c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _objectType: 0
+  _isDevMode: 0
+  _enemyType: 2
+  _enemyHPTxt: {fileID: 8612822706674936131}
+  _enemyHPslider: {fileID: 8612822704703161257}
+  _etbSFXs:
+  - {fileID: 11400000, guid: ba530739930c0c347b5415097e615b47, type: 2}
+  - {fileID: 11400000, guid: 72389ca13e169944d89ed3995d8baf0b, type: 2}
+  - {fileID: 11400000, guid: f429786230fccbd4982715f2586c86db, type: 2}
+  _ltbSFX: {fileID: 11400000, guid: 92627cf9675acda4b942668b3fc528b8, type: 2}
 --- !u!82 &8883224163540256628
 AudioSource:
   m_ObjectHideFlags: 0
@@ -825,25 +847,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enableGizmos: 0
   _maxDistance: 1
---- !u!114 &8883224163540256633
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8883224163540256632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9260807242ce7d4ca523880e89ae12c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
-  _enemyType: 2
-  _enemyHPTxt: {fileID: 8612822706674936131}
-  _enemyHPslider: {fileID: 8612822704703161257}
-  _etbSFXs:
-  - {fileID: 11400000, guid: ba530739930c0c347b5415097e615b47, type: 2}
-  - {fileID: 11400000, guid: 72389ca13e169944d89ed3995d8baf0b, type: 2}
-  - {fileID: 11400000, guid: f429786230fccbd4982715f2586c86db, type: 2}
-  _ltbSFX: {fileID: 11400000, guid: 92627cf9675acda4b942668b3fc528b8, type: 2}
