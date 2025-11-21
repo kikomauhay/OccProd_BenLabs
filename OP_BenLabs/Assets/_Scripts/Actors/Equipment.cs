@@ -33,7 +33,7 @@ public class Equipment : Actor, IInteractable
     protected void ResetPosition() 
     {
         transform.SetPositionAndRotation(_startPosition, _startRotation);
-        _soundEmitter.PlaySound(_landOnFloorSFX);
+        //_soundEmitter.PlaySound(_landOnFloorSFX);
 
         _logger.Log($"{name}'s position has been reset!", TextColor.YELLOW, _isDevMode);
     }

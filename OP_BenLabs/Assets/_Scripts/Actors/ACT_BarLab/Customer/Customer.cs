@@ -44,8 +44,8 @@ public class Customer : Actor
         base.Start();
 
         _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true); // check Cocktail enum to understand
-        _appearance.SetEmotion(Emotion.NEUTRAL);
-        _appearance.SetupCustomerBody(_actions.IsMale);
+        //_appearance.SetEmotion(Emotion.NEUTRAL);
+        //_appearance.SetupCustomerBody(_actions.IsMale);
         
         UI_UpdateTimer();
         UI_UpdateOrderText();

@@ -49,6 +49,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     public void INT_BTN_StartGame()
     {
         EnableOnboardingPanels(false);      
+        
         _startButton.SetActive(false);
         _soundEmitter.PlaySound(_startGameSFX);
         _totalScore = 0;
@@ -148,7 +149,8 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void SpawnCap()
     {
-        Instantiate(_shakerCap,_capSpawnPoint);
+        Instantiate(_shakerCap, _capSpawnPoint);
+        _logger.Log($"Cap Respawned at {_capSpawnPoint}", _isDevMode);
     }
 
     #endregion

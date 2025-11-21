@@ -30,6 +30,14 @@ public class GlassSpawner : XRBaseInteractable
         selectEntered.RemoveListener(GlassSpawn);
     }
 
+    private void Start()
+    {
+        if (interactionManager == null)
+            interactionManager = FindObjectOfType<XRInteractionManager>();
+
+        _isSpawning = false;
+    }
+
     private void GlassSpawn(SelectEnterEventArgs args)
     {
         if (_isSpawning) return;

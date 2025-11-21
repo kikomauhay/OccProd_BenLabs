@@ -43,7 +43,7 @@ public class ColliderCheck : Actor
             if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
                 actions.CorrectReaction();
-                appearance.SetEmotion(Emotion.HAPPY);
+                //appearance.SetEmotion(Emotion.HAPPY);
 
                 _sndMgr.PlaySound("SND_Correct");
                 _barMgr.Correct(); 
@@ -51,7 +51,7 @@ public class ColliderCheck : Actor
             else
             {
                 actions.WrongReaction();
-                appearance.SetEmotion(Emotion.MAD);
+                //appearance.SetEmotion(Emotion.MAD);
 
                 _sndMgr.PlaySound("SND_Wrong");
                 _barMgr.Wrong();
