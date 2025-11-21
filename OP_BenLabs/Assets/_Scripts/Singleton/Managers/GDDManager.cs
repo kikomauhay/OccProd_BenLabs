@@ -95,21 +95,31 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
-        _gameMgr.ExitVR();
-        _soundEmitter.PlaySound(_gameOverSFX);
-        _waveHandler.gameObject.SetActive(true);
-        _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
-
-        if (_coroutineRunning)
+        IEnumerator CO_GameOver()
         {
-            _coroutineRunning = false;
-            _logger.Log("CO_Spawning() has stopped!", _isDevMode);
+            _gameMgr.ExitVR();
+            _soundEmitter.PlaySound(_gameOverSFX);
+            _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
 
-            StopCoroutine(CO_Spawning());
+            if (_coroutineRunning)
+            {
+                _coroutineRunning = false;
+                _logger.Log("CO_Spawning() has stopped!", _isDevMode);
+
+                StopCoroutine(CO_Spawning());
+            }
+
+            ResetGame();
+            ResetWeapons();
+            ClearAllEnemies();
+
+            yield return new WaitForSeconds(1f);
+
+            _waveHandler.gameObject.SetActive(true);
+            _blockLabelsUI.SetActive(true);
         }
 
-        ResetWeapons();
-        ClearAllEnemies();
+        StartCoroutine(CO_GameOver());
     }
 
     public void BTN_Cancel()
@@ -239,6 +249,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         WeaponType preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponType;
 
+        foreach (CodeBlock cb in _codeBlocks)
+            cb.gameObject.SetActive(false);
+
         // setup for the wave
         _gameMgr.Player.LeftHandTools[(int)preferredWeapon].SetActive(_usingLeftHand);
         _gameMgr.Player.RightHandTools[(int)preferredWeapon].SetActive(!_usingLeftHand);
@@ -286,11 +299,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _soundEmitter.PlaySound(_waveDoneSFX);
             _logger.Log($"Wave {_waveIndex + 1}", _isDevMode);
 
-            UI_UpdateWaveIndex();
 
             yield return new WaitForSeconds(2f);
 
-            if (_waveIndex == MAX_WAVE_INDEX)
+            if (_waveIndex > MAX_WAVE_INDEX)
             {
                 _soundEmitter.PlaySound(_allWavesDoneSFX);
                 _gameMgr.ExitVR();
@@ -300,6 +312,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             }
             else
             {
+                UI_UpdateWaveIndex();
                 StartWave();
                 _logger.Log($"Starting wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
             }
@@ -310,7 +323,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void ResetGame()
     {
         EnableButtons(false);
+        ResetValues();
+        UpdateAllUI();
+
         _waveHandler.gameObject.SetActive(true);
+        _blockLabelsUI.SetActive(true);
         
         foreach (CodeBlock cb in _codeBlocks)
         {
@@ -321,6 +338,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         foreach (GhostBlock gb in _waveHandler.GhostBlocks)
             gb.ResetBlock();
 
+        GhostBlock.FilledBlocks = 0;
         _logger.Log("Game has been reset!", _isDevMode);
     }
 
@@ -434,6 +452,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             Destroy(e);
 
         _enemyList.Clear();
+    }
+    private void ResetValues()
+    {
+         _killCount = 0;
+        _waveIndex = 0;
+        _currHP = 5f;
+
+        _logger.Log("Values have been reset!", _isDevMode);
     }
 
     #endregion

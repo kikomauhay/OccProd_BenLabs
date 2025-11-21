@@ -5,7 +5,7 @@ public class GhostBlock : Actor, IInteractable
 {
     #region Properites
 
-    public static int FilledBlocks { get; private set; }
+    public static int FilledBlocks { get; set; }
 
     public Modifier Modifier => _modifier;
     public WeaponType WeaponType => _weaponType;
@@ -109,7 +109,6 @@ public class GhostBlock : Actor, IInteractable
         _weaponType = WeaponType.DEFAULT;
         _modifier = Modifier.DEFAULT;
         _enemyPrefab = null;
-        FilledBlocks = 0;
 
         _logger.Log($"{name} has been reset!", _isDevMode);
     }

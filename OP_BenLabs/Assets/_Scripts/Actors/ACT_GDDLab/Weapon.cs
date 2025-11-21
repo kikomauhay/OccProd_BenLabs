@@ -3,14 +3,12 @@ using UnityEngine;
 
 public class Weapon : Actor
 {
-    #region Properties
+    #region Members
 
     public WeaponType WeaponType => _weaponType;
     public float Damage => _dmg;
     public float DamageModifier { get; set; }
-
-    #endregion
-    #region SerializeField
+    private bool _isBuffed;
 
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
@@ -18,7 +16,7 @@ public class Weapon : Actor
 
     #endregion
 
-    #region Unity
+    #region Methods
 
     protected override void OnEnable()
     {
@@ -27,6 +25,12 @@ public class Weapon : Actor
     protected override void OnDisable() 
     {
         GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
+
+        if (_isBuffed)
+        {
+            DamageModifier = 0f;
+            _isBuffed = false;
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,17 +40,27 @@ public class Weapon : Actor
             Enemy e = other.GetComponent<Enemy>();
 
             e.TakeDamage(_dmg+ DamageModifier);
-            _logger.Log($"{this} took damage!", _isDevMode);
+            _logger.Log($"{name} dealt damage!", _isDevMode);
         }
     }
 
-    #endregion
-    #region Private
-
     private void EVENT_IncreaseDamage() 
     {
+        if (_isBuffed)
+        {
+            _logger.Log($"{name} has already been buuffed!", _isDevMode);
+            return;
+        }
+
         DamageModifier = 10f;
-        _logger.Log($"Total damage = {_dmg} + {DamageModifier}", _isDevMode);
+        _isBuffed = true;
+
+        _logger.Log($"{name} total damage: {_dmg} + {DamageModifier}", _isDevMode);
+    }
+
+    protected override void InitVariables()
+    {
+        _isBuffed = false;
     }
 
     #endregion
