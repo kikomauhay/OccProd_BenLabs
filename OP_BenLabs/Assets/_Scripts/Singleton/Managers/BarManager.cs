@@ -18,6 +18,8 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     [Header("Components")]
     [SerializeField] private ColliderCheck _colliderCheck;
     [SerializeField] private SoundEmitter _soundEmitter;
+    [SerializeField] private GameObject _shakerCap;
+    [SerializeField] private Transform _capSpawnPoint;
 
     [Header("UI/UX")]
     [SerializeField] private Sound _startGameSFX;
@@ -142,6 +144,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         }
 
         SpawnCustomer();
+    }
+
+    public void SpawnCap()
+    {
+        Instantiate(_shakerCap,_capSpawnPoint);
     }
 
     #endregion
