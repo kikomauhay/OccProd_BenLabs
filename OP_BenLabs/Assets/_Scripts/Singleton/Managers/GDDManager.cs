@@ -48,7 +48,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private readonly int[] _enemiesToSpawn = new int[3] { 8, 16, 20 };
     private List<List<GhostBlock>> _ghostBlockGridList;
 
-    private List<GameObject> _enemyList; 
+    [SerializeField] private List<GameObject> _enemyList; 
     private WaveState _waveState;
     private Modifier _modifier;
     private int _unitCount, _killCount, _waveIndex;
@@ -94,15 +94,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
-        StopCoroutine(CO_Spawning());
-
         foreach (GameObject e in _enemyList)
             Destroy(e);
 
         _enemyList.Clear();
         _gameMgr.ExitVR();
-
+        _soundEmitter.PlaySound(_gameOverSFX);
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
+
+        StopCoroutine(CO_Spawning());
     }
 
     public void BTN_Cancel()
@@ -163,12 +163,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_currHP < 1f)
         {
             _currHP = 0f;
-            _soundEmitter.PlaySound(_gameOverSFX);
-
             INT_DoGameOver();
         }
 
-        _logger.Log($"HP: {_currHP}", _isDevMode);
+        // _logger.Log($"HP: {_currHP}", _isDevMode);
+        _logger.Log($"Enemies left: {_enemyList.Count}", _isDevMode);
     }
     public void EnableButtons(bool isActive)
     {
@@ -283,9 +282,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         {
             ResetWeapons();
             StartWave();
+
             _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
-        }
-        
+        }        
     }
 
     #endregion
