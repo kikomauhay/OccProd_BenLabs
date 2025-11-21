@@ -21,6 +21,8 @@ public class WaveHandler : StaticInstance<WaveHandler>
     {
         if (GhostBlock.FilledBlocks == 9)
             GDDManager.Instance.EnableButtons(true);
+
+        _logger.Log("Enabled confirm buttons!", _isDevMode);
     }
 
     #endregion
