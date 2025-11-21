@@ -19,7 +19,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     [Header("Wave Panel")]
     [SerializeField] private WaveHandler _waveHandler;
-    [SerializeField] private List<CodeBlock> _availableBlocksList;
+    [SerializeField] private CodeBlock[] _codeBlocks;
     [SerializeField] private GameObject _blockLabelsUI, _confirmButton, _cancelButton;
 
     [Header("VR Variables")]
@@ -49,8 +49,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private readonly int[] _enemiesToSpawn = new int[3] { 8, 16, 20 };
     private List<List<GhostBlock>> _ghostBlockGridList;
 
-    [SerializeField] private List<GameObject> _enemyList; 
-    private WaveState _waveState;
+    [SerializeField, Tooltip("Visible for testing")] private List<GameObject> _enemyList; // test
     private Modifier _modifier;
     private int _unitCount, _killCount, _waveIndex;
     private float _currHP;
@@ -96,10 +95,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
-        foreach (GameObject e in _enemyList)
-            Destroy(e);
+        ClearAllEnemies();
 
-        _enemyList.Clear();
         _gameMgr.ExitVR();
         _soundEmitter.PlaySound(_gameOverSFX);
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
@@ -107,6 +104,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_coroutineRunning)
         {
             _coroutineRunning = false;
+            _logger.Log("CO_Spawning() has stopped!", _isDevMode);
+
             StopCoroutine(CO_Spawning());
         }
     }
@@ -151,7 +150,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         SetUpEnemy(newEnemy.GetComponent<Enemy>());
     }
    
-    public void RemoveBlock(CodeBlock cb) => _availableBlocksList.Remove(cb);
     public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
     public void UnbindEvents(Enemy e)
     {
@@ -187,7 +185,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         _logger.Log($"Enemies left: {_enemyList.Count}", TextColor.GREEN, _isDevMode);
 
-        if (_enemyList.Count > 1)
+        if (_enemyList.Count > 0)
         {
             _logger.Log($"There are {_enemyList.Count} remaining enemies left!", _isDevMode);
             return;
@@ -300,13 +298,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             }
         }
 
+        if (_enemyList.Count > 0)
+            ClearAllEnemies();
+
         StartCoroutine(CO_FinishingActions());
     }
     private void ResetGame()
     {
+        EnableButtons(false);
         _waveHandler.gameObject.SetActive(true);
         
-        foreach (CodeBlock cb in _availableBlocksList)
+        foreach (CodeBlock cb in _codeBlocks)
         {
             cb.ResetPosition();
             cb.gameObject.SetActive(true);
@@ -331,18 +333,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         _coroutineRunning = true;
-        _waveState = WaveState.SPAWNING;
         _soundEmitter.PlaySound(_startWaveSFX);
-
-        // remove all CodeBlocks
-        if (_availableBlocksList.Count > 0)
-        {
-            foreach (CodeBlock cb in _availableBlocksList)
-                Destroy(cb.gameObject);
-
-            _availableBlocksList.Clear();
-            _logger.Log("Removed remaining blocks!", _isDevMode);
-        }
         _blockLabelsUI.SetActive(false);
 
         yield return new WaitForSeconds(_prepTimes[_waveIndex]);
@@ -354,7 +345,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
         }
 
-        _waveState = WaveState.FINISHED;
         _coroutineRunning = false;
         _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
     }
@@ -364,20 +354,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     protected override void Test()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            foreach (GameObject e in _enemyList)
-                Destroy(e);
-
-            _enemyList.Clear();
-        }
-
+        if (Input.GetKeyDown(KeyCode.Backspace)) ClearAllEnemies();
         if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
     }
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_availableBlocksList.Count == 11, "Missing elements in _codeBlockList!", this);
+        Debug.Assert(_codeBlocks.Length == 11, "Missing elements in _codeBlockList!", this);
         Debug.Assert(_blockLabelsUI, "Missing _blockLabelsUI reference!", this);
         Debug.Assert(_confirmButton, "Missing _confirmButton reference!", this);
         Debug.Assert(_cancelButton, "Missing _cancelButton reference!", this);
@@ -402,7 +385,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _sndMgr = SoundManager.Instance;
 
         _enemyList = new List<GameObject>();
-        _waveState = WaveState.WAITING;
 
         _killCount = 0;
         _waveIndex = 0;
@@ -432,6 +414,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         UI_UpdatePlayerLife();
         UI_UpdateWaveIndex();
         UI_UpdateModifier();
+    }
+    private void ClearAllEnemies()
+    {
+        foreach (GameObject e in _enemyList)
+            Destroy(e);
+
+        _enemyList.Clear();
     }
 
     #endregion
