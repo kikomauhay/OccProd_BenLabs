@@ -155,7 +155,7 @@ public class GameManager : Singleton<GameManager>
             yield return StartCoroutine(CO_FadeOut(duration));
         }
 
-        StartCoroutine(CO_Enter(3f));
+        StartCoroutine(CO_Enter(2f));
     }
     public void ExitVR()
     {
@@ -169,7 +169,7 @@ public class GameManager : Singleton<GameManager>
             yield return StartCoroutine(CO_FadeOut(duration));
         }
 
-        StartCoroutine(CO_Exit(3f));
+        StartCoroutine(CO_Exit(2f));
     }
 
     /*

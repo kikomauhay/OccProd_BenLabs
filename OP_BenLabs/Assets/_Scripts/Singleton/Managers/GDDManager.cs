@@ -79,6 +79,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _blockLabelsUI.SetActive(true);
 
         EnableButtons(false);
+        UpdateAllUI();
     }
 
     #endregion
@@ -93,17 +94,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
-        StopAllCoroutines();
+        StopCoroutine(CO_Spawning());
 
         foreach (GameObject e in _enemyList)
             Destroy(e);
 
         _enemyList.Clear();
-        _soundEmitter.PlaySound(_gameOverSFX);
         _gameMgr.ExitVR();
 
         _logger.Log("Game over!", TextColor.YELLOW, _isDevMode);
-        _logger.Log($"Remaining enemies: {_enemyList.Count}", _isDevMode);
     }
 
     public void BTN_Cancel()
@@ -164,6 +163,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (_currHP < 1f)
         {
             _currHP = 0f;
+            _soundEmitter.PlaySound(_gameOverSFX);
+
             INT_DoGameOver();
         }
 
@@ -227,76 +228,41 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private void StartWave()
     {
-        void Preparation()
+        WeaponType preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponType;
+
+        // setup for the wave
+        _gameMgr.Player.LeftHandTools[(int)preferredWeapon].SetActive(_usingLeftHand);
+        _gameMgr.Player.RightHandTools[(int)preferredWeapon].SetActive(!_usingLeftHand);
+        _unitCount = _enemiesToSpawn[_waveIndex];
+        _modifier = _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
+        _waveHandler.gameObject.SetActive(false);
+
+        // implement modifier used
+        switch (_modifier)
         {
-            WeaponType preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponType;
+            case Modifier.HEALTH:
+                _currHP++;
+                _logger.Log("Increased HP!", _isDevMode);
+                break;
 
-            // setup for the wave
-            _gameMgr.Player.LeftHandTools[(int)preferredWeapon].SetActive(_usingLeftHand);
-            _gameMgr.Player.RightHandTools[(int)preferredWeapon].SetActive(!_usingLeftHand);
-            _unitCount = _enemiesToSpawn[_waveIndex];
-            _modifier = _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
+            case Modifier.DAMAGE:
+                OnBuffWeapon?.Invoke();
+                _logger.Log("Increased damage!", _isDevMode);
+                break;
 
-            // implement modifier used
-            switch (_modifier)
-            {
-                case Modifier.HEALTH:
-                    _currHP++;
-                    _logger.Log("Increased HP!", _isDevMode);
-                    break;
+            case Modifier.REDUCED_ENEMIES:
+                _unitCount--;
+                _logger.Log($"Reduced enemy count from {_enemiesToSpawn[_waveIndex]} to {_unitCount}!", _isDevMode);
+                break;
 
-                case Modifier.DAMAGE:
-                    OnBuffWeapon?.Invoke();
-                    _logger.Log("Increased damage!", _isDevMode);
-                    break;
-
-                case Modifier.REDUCED_ENEMIES:
-                    _unitCount--;
-                    _logger.Log($"Reduced enemy count from {_enemiesToSpawn[_waveIndex]} to {_unitCount}!", _isDevMode);
-                    break;
-
-                case Modifier.DEFAULT: break;
-                default: break;
-            }
-
-            UI_UpdateKllCount();
-            UI_UpdatePlayerLife();
-            UI_UpdateWaveIndex();
-            UI_UpdateModifier();
-
-            _logger.Log($"{_prepTimes[_waveIndex]}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
-            _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);
+            case Modifier.DEFAULT: break;
+            default:               break;
         }
-        IEnumerator CO_Spawning()
-        {
-            Preparation();
 
-            _waveState = WaveState.SPAWNING;
-            _soundEmitter.PlaySound(_startWaveSFX);
+        UpdateAllUI();
 
-            // remove all CodeBlocks
-            if (_availableBlocksList.Count > 0)
-            {
-                foreach (CodeBlock cb in _availableBlocksList)
-                    Destroy(cb.gameObject);
-
-                _availableBlocksList.Clear();
-                _logger.Log("Removed remaining blocks!", _isDevMode);
-            }
-            _blockLabelsUI.SetActive(false);
-
-            yield return new WaitForSeconds(_prepTimes[_waveIndex]);
-
-            // enemy spawning
-            for (int i = 0; i < _unitCount; i++)
-            {
-                SpawnEnemy();
-                yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
-            }
-
-            _waveState = WaveState.FINISHED;
-            _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
-        }
+        _logger.Log($"{_prepTimes[_waveIndex]}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
+        _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);
 
         StartCoroutine(CO_Spawning());
     }
@@ -320,6 +286,38 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _logger.Log($"Current Wave: {_waveIndex}", TextColor.GREEN, _isDevMode);
         }
         
+    }
+
+    #endregion
+    #region Enumerators
+
+    private IEnumerator CO_Spawning()
+    {
+        _waveState = WaveState.SPAWNING;
+        _soundEmitter.PlaySound(_startWaveSFX);
+
+        // remove all CodeBlocks
+        if (_availableBlocksList.Count > 0)
+        {
+            foreach (CodeBlock cb in _availableBlocksList)
+                Destroy(cb.gameObject);
+
+            _availableBlocksList.Clear();
+            _logger.Log("Removed remaining blocks!", _isDevMode);
+        }
+        _blockLabelsUI.SetActive(false);
+
+        yield return new WaitForSeconds(_prepTimes[_waveIndex]);
+
+        // enemy spawning
+        for (int i = 0; i < _unitCount; i++)
+        {
+            SpawnEnemy();
+            yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
+        }
+
+        _waveState = WaveState.FINISHED;
+        _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
     }
 
     #endregion
@@ -386,54 +384,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         };
     }
 
-    #endregion
-    #region Enumerators    
-
-    /*
-    private IEnumerator CO_SpawnEnemyWave()
+    private void UpdateAllUI()
     {
-        #region Helpers
-
-
-        IEnumerator CO_DoEnemySpawning()
-        {
-            _soundEmitter.PlaySound(_startWaveSFX);
-            yield return new WaitForSeconds(1f);
-
-            if (_availableBlocksList.Count > 0)
-            {
-                foreach (CodeBlock cb in _availableBlocksList)
-                    Destroy(cb.gameObject);
-
-                _availableBlocksList.Clear();
-                _logger.Log("Removed remaining blocks!", _isDevMode);
-            }
-
-            _waveState = WaveState.SPAWNING;
-            _blockLabelsUI.SetActive(false);
-
-            for (int i = 0; i < _unitCount; i++)
-            {
-                SpawnEnemy();
-                yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
-            }
-            _waveState = WaveState.FINISHED;
-            _logger.Log("Finished spawning!", TextColor.YELLOW, _isDevMode);
-        }
-
-        #endregion
-
-        if (_waveState == WaveState.SPAWNING) // prevents wave spawning overlaps
-        {
-            _logger.Log("Still spawning enemies!", this, TextColor.RED, _isDevMode);
-            yield break;
-        }
-
-        yield return new WaitForSeconds(_prepTimes[_waveIndex]);
-        yield return StartCoroutine(CO_DoEnemySpawning());
+        UI_UpdateKllCount();
+        UI_UpdatePlayerLife();
+        UI_UpdateWaveIndex();
+        UI_UpdateModifier();
     }
-    
-    */
 
     #endregion
 }
