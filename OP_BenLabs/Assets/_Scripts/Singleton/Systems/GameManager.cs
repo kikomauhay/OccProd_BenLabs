@@ -143,6 +143,36 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Enumerators
 
+    public void EnterVR()
+    { 
+        IEnumerator CO_Enter(float duration)
+        {
+            yield return StartCoroutine(CO_FadeIn(duration));
+            
+            _player.transform.position = _gddWaypoint.position;
+            _sndMgr.PlaySound("SND_EnterVR");
+
+            yield return StartCoroutine(CO_FadeOut(duration));
+        }
+
+        StartCoroutine(CO_Enter(3f));
+    }
+    public void ExitVR()
+    {
+        IEnumerator CO_Exit(float duration)
+        {
+            yield return StartCoroutine(CO_FadeIn(duration));
+
+            _player.transform.position = _r803Waypoint.position;
+            _sndMgr.PlaySound("SND_ExitVR");
+
+            yield return StartCoroutine(CO_FadeOut(duration));
+        }
+
+        StartCoroutine(CO_Exit(3f));
+    }
+
+    /*
     public IEnumerator CO_Enter(FloorType type)
     {
         Vector3 pos = Vector3.zero;
@@ -162,12 +192,12 @@ public class GameManager : Singleton<GameManager>
         _logger.Log($"Teleported Player to {pos}", _isDevMode);
 
         yield return StartCoroutine(CO_FadeIn());
-        _player.transform.position = pos;
 
         _logger.Log($"Player Position: {_player.transform.position}", _isDevMode);
         _logger.Log($"Teleported Player to {type}!", _isDevMode);
 
-        CO_FadeOut();
+        yield return CO_FadeOut();
+        _player.transform.position = pos;
     }
     public IEnumerator CO_Exit(FloorType type)
     {
@@ -191,21 +221,22 @@ public class GameManager : Singleton<GameManager>
 
         yield break;
     }
+    */
 
-    private IEnumerator CO_FadeIn()
+    private IEnumerator CO_FadeIn(float duration)
     {
         _fadeScreen.gameObject.SetActive(true);
         IsFading = true;
         _fadeScreen.FadeOut();
 
-        yield return _fadeScreen.FadeDuration;
+        yield return new WaitForSeconds(duration);
         IsFading = false;
     }
-    private IEnumerator CO_FadeOut()
+    private IEnumerator CO_FadeOut(float duration)
     {
         IsFading = true;
         _fadeScreen.FadeIn();
-        yield return _fadeScreen.FadeDuration;
+        yield return new WaitForSeconds(duration);
 
         IsFading = false;
     }
