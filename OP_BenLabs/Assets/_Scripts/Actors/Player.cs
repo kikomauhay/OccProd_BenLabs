@@ -10,6 +10,8 @@ public class Player : StaticInstance<Player>
     public ReadOnlyArray<GameObject> LeftHandTools => _leftHandTools;
     public ReadOnlyArray<GameObject> RightHandTools => _rightHandTools;
 
+    public bool InsideVRSpace { get; set; }
+
     [Header("Player Tools"), Tooltip("0 = Sword, 1 = Hammer")]
     [SerializeField] private GameObject[] _leftHandTools;
     [SerializeField] private GameObject[] _rightHandTools;
@@ -26,6 +28,10 @@ public class Player : StaticInstance<Player>
         Debug.Assert(GetComponent<XROrigin>(), "Missing XROrigin reference!", this);
 
         base.AssertComponents();
+    }
+    protected override void InitVariables()
+    {
+        InsideVRSpace = false;
     }
 
     #endregion
