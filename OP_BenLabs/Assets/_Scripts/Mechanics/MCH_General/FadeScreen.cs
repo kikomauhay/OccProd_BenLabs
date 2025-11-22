@@ -3,44 +3,26 @@ using UnityEngine;
 
 public class FadeScreen : MonoBehaviour
 {
-    #region Properties
+    #region Members
 
     public float FadeDuration => _fadeDuration;
-
-    #endregion
-    #region SerializeField 
-
-    [Header("Debugging")]
-    [SerializeField] private Logger _logger;
-    [SerializeField] private bool _isDevMode;
+    private Renderer _rend;
 
     [Header("Fade Settings")]
     [SerializeField] private bool _fadeOnStart;
     [SerializeField] private float _fadeDuration;
     [SerializeField] private Color _fadeColor;
-
-    #endregion
-    #region Private
-
-    private Renderer _renderer;
     
     #endregion
 
-    #region Unity
+    #region Methods
 
-    private void Awake() => _renderer = GetComponent<Renderer>();
+    private void Awake() => _rend = GetComponent<Renderer>();
     private void Start()
-    {
-        Debug.Assert(_logger, "<color=red>Missing _logger reference!</color>", gameObject);
-
-        _logger.Log($"{name}'s developer mode is enabled!", gameObject, TextColor.YELLOW, _isDevMode);
-        
+    {        
         if (_fadeOnStart) 
             FadeIn();
     }
-
-    #endregion
-    #region Public
 
     public void FadeIn() => Fade(1f, 0f);
     public void FadeOut() => Fade(0f, 1f);
@@ -59,7 +41,7 @@ public class FadeScreen : MonoBehaviour
                 // slowly sets the fade-in color 
                 Color newColor = _fadeColor;
                 newColor.a = Mathf.Lerp(alphaIn, alphaOut, timer / _fadeDuration);
-                _renderer.material.SetColor("_Color", newColor);
+                _rend.material.SetColor("_Color", newColor);
 
                 // changes opacity per frame
                 timer += Time.deltaTime;
@@ -68,8 +50,8 @@ public class FadeScreen : MonoBehaviour
 
             Color col = _fadeColor;
             col.a = alphaOut;
-            _renderer.material.SetColor("_Color", col); // resets the transparency back to normal
-            gameObject.SetActive(false);
+            _rend.material.SetColor("_Color", col); // resets the transparency back to normal
+            // gameObject.SetActive(false);
         }
 
         StartCoroutine(CO_Fade(alphaIn, alphaOut));

@@ -34,7 +34,7 @@ public class GlassCleaner : MonoBehaviour
         if (other.GetComponent<Shaker>())
         {
             other.GetComponent<Shaker>().Washed();
-            _soundEmitter.PlaySound(_waterSplashSFX);
+            //_soundEmitter.PlaySound(_waterSplashSFX);
         }
     }
 

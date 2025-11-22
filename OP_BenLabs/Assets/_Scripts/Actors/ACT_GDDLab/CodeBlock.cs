@@ -31,6 +31,9 @@ public class CodeBlock : Actor, IInteractable
     private BoxCollider _boxCol;
     private Rigidbody _rb;
     private SoundEmitter _soundEmitter;
+
+    private Vector3 _startPosition;
+    private Quaternion _startRotation;
     
     #endregion
 
@@ -63,6 +66,11 @@ public class CodeBlock : Actor, IInteractable
     #region Public
 
     public void INT_Interact() => _soundEmitter.PlaySound(_grabSFX);
+    public void ResetPosition()
+    {
+        transform.position = _startPosition;
+        transform.rotation = _startRotation;
+    }
 
     #endregion
     #region Helpers
@@ -134,6 +142,9 @@ public class CodeBlock : Actor, IInteractable
             case BlockType.NOTHING: break;
             default:                break;
         }
+
+        _startPosition = transform.position;
+        _startRotation = transform.rotation;
     }    
 
     #endregion

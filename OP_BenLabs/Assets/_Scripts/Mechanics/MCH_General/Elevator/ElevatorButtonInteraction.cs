@@ -19,20 +19,13 @@ public class ElevatorButtonInteraction : Actor
 
     #region Unity
 
-    protected override void Start()
-    {
-        Debug.Assert(_button, "Missing _button reference!", gameObject);
-        Debug.Assert(_endpos != Vector3.zero, "Missing _endpos reference!", gameObject);
-        Debug.Assert(CYCLE_LENGTH !=  0f, "Missing _cycleLength reference!", gameObject);
-
-        base.Start();
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.GetComponent<VR_Hands>() != null)
         {
             _button.onClick.Invoke();
+            
+            PushButton();
             StartCoroutine(DisableButton());
         }
         else _logger.Log("NO INTERACTION", TextColor.RED, _isDevMode);
@@ -40,17 +33,23 @@ public class ElevatorButtonInteraction : Actor
 
     #endregion
     #region Helpers
-
-    protected override void InitVariables()
-    {
-        _startPos = transform.localPosition;
-    }
     protected override void Test()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
             PushButton();
         }
+    }
+
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_button, "Missing _button reference!", gameObject);
+        Debug.Assert(_endpos != Vector3.zero, "Missing _endpos reference!", gameObject);
+        Debug.Assert(CYCLE_LENGTH != 0f, "Missing _cycleLength reference!", gameObject);
+    }
+    protected override void InitVariables()
+    {
+        _startPos = transform.localPosition;
     }
 
     private void PushButton()

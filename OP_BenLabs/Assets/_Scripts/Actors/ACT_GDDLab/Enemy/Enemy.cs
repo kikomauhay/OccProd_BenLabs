@@ -7,7 +7,7 @@ public class Enemy : Actor
 {
     #region Properties
 
-    public System.Action<Enemy> OnDeath { get; set; }
+    public System.Action OnDeath { get; set; }
     public System.Action OnKilled { get; set; }
 
     #endregion
@@ -31,11 +31,11 @@ public class Enemy : Actor
 
     private Rigidbody _rb;
     private SoundEmitter _soundEmitter;
-    private Transform _goal, _testGoal;
+    private Transform _goal;
 
     private float _currHP, _maxHP, _moveSpeed, _rotSpeed;
 
-    private const float MINIMUM_DISTANCE = 0.2f;
+    private const float MINIMUM_DISTANCE = 1f;
 
     #endregion
 
@@ -51,48 +51,41 @@ public class Enemy : Actor
     }
     private void LateUpdate()
     {
-        Vector3 lookAtGoal = new Vector3(_goal.position.x,
-                                         transform.position.y,
-                                         _goal.position.z);
+        Vector3 lookAtGoal = new Vector3(_goal.position.x, 
+                                        transform.position.y, 
+                                        _goal.position.z);
+        
         transform.LookAt(lookAtGoal);
 
-        // smooth rotation
         Vector3 direction = lookAtGoal - transform.position;
         transform.rotation = Quaternion.Slerp(transform.rotation,
                                               Quaternion.LookRotation(direction),
                                               Time.deltaTime * _rotSpeed);
 
-        // enemy travels to the goal (ignores Y-axis) 
         if (Vector3.Distance(lookAtGoal, transform.position) > MINIMUM_DISTANCE)
         {
             Vector3.Lerp(transform.position, _goal.position, _moveSpeed * Time.deltaTime);
             transform.Translate(0f, 0f, _moveSpeed * Time.deltaTime);
         }
-        else
+        else // enemy got too close and hit the player
         {
             _gddMgr.TakeDamage();
+            _gddMgr.RemoveEnemy(gameObject);
+
             Destroy(gameObject);
         }
     }
-    private void OnTriggerEnter(Collider other)
+    protected override void OnDisable()
     {
-        //if (other.GetComponent<Weapon>())
-        //{
-        //    Weapon w = other.GetComponent<Weapon>();
-
-        //    TakeDamage(w.Damage + w.DamageModifier);
-        //    _logger.Log($"{this} took damage!", _isDevMode);
-        //}
-    }
-    private void OnDestroy()
-    {
-        OnDeath?.Invoke(this);
+        OnDeath?.Invoke();
 
         if (_currHP == 0f)
+        {
             OnKilled?.Invoke();
+            _soundEmitter.PlaySound(_ltbSFX);
+        }
 
         _gddMgr.UnbindEvents(this);
-        _soundEmitter.PlaySound(_ltbSFX);
         _logger.Log($"{name} is destoryed!", TextColor.YELLOW, _isDevMode);
     }
 
@@ -119,11 +112,14 @@ public class Enemy : Actor
 
         _currHP -= amt;
         _logger.Log($"Enemy's HP: {_currHP}", _isDevMode);
+
         UI_UpdateHP();
 
         if (_currHP < 1f)
         {
             _currHP = 0f;
+            _gddMgr.RemoveEnemy(gameObject);
+
             UI_UpdateHP();
             Destroy(gameObject);
         }

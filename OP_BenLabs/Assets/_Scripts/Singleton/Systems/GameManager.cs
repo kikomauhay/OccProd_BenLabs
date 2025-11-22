@@ -57,8 +57,6 @@ public class GameManager : Singleton<GameManager>
             Atrium = atrium.GetComponent<Atrium>();
         }
 
-        if (AtriumActive || Random.value < 0.2f) return;
-
         switch (floorType)
         {
             case FloorType.LOBBY:     
@@ -75,6 +73,36 @@ public class GameManager : Singleton<GameManager>
             
             default: break;
         }
+    }
+    public void EnterVR()
+    {
+        IEnumerator CO_Enter(float duration)
+        {
+            yield return StartCoroutine(CO_FadeIn(duration));
+
+            _player.transform.position = _gddWaypoint.position;
+            _player.InsideVRSpace = true;
+            _sndMgr.PlaySound("SND_EnterVR");
+
+            yield return StartCoroutine(CO_FadeOut(duration));
+        }
+
+        StartCoroutine(CO_Enter(2f));
+    }
+    public void ExitVR()
+    {
+        IEnumerator CO_Exit(float duration)
+        {
+            yield return StartCoroutine(CO_FadeIn(duration));
+
+            _player.transform.position = _r803Waypoint.position;
+            _player.InsideVRSpace = false;
+            _sndMgr.PlaySound("SND_ExitVR");
+
+            yield return StartCoroutine(CO_FadeOut(duration));
+        }
+
+        StartCoroutine(CO_Exit(2f));
     }
 
     #endregion
@@ -143,69 +171,20 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Enumerators
 
-    public IEnumerator CO_Enter(FloorType type)
-    {
-        Vector3 pos = Vector3.zero;
-
-        switch (type)
-        {
-            case FloorType.GDD:
-                pos = _gddWaypoint.localPosition;
-                _sndMgr.PlaySound("SND_EnterVR");
-                break;
-
-            case FloorType.LOBBY: break;
-            case FloorType.BAR:   break;
-            default:              break;
-        }
-
-        _logger.Log($"Teleported Player to {pos}", _isDevMode);
-
-        yield return StartCoroutine(CO_FadeIn());
-        _player.transform.position = pos;
-
-        _logger.Log($"Player Position: {_player.transform.position}", _isDevMode);
-        _logger.Log($"Teleported Player to {type}!", _isDevMode);
-
-        CO_FadeOut();
-    }
-    public IEnumerator CO_Exit(FloorType type)
-    {
-        yield return StartCoroutine(CO_FadeIn());
-
-        switch (type)
-        {
-            case FloorType.LOBBY: // final part of the game
-                // show the different logos
-                break;
-
-            case FloorType.GDD:
-                _player.transform.position = _r803Waypoint.localPosition;
-                _sndMgr.PlaySound("SND_ExitVR");
-                StartCoroutine(CO_FadeOut());
-                break;
-
-            case FloorType.BAR: break;
-            default:            break;
-        }
-
-        yield break;
-    }
-
-    private IEnumerator CO_FadeIn()
+    private IEnumerator CO_FadeIn(float duration)
     {
         _fadeScreen.gameObject.SetActive(true);
         IsFading = true;
         _fadeScreen.FadeOut();
 
-        yield return _fadeScreen.FadeDuration;
+        yield return new WaitForSeconds(duration);
         IsFading = false;
     }
-    private IEnumerator CO_FadeOut()
+    private IEnumerator CO_FadeOut(float duration)
     {
         IsFading = true;
         _fadeScreen.FadeIn();
-        yield return _fadeScreen.FadeDuration;
+        yield return new WaitForSeconds(duration);
 
         IsFading = false;
     }
