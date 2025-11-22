@@ -44,9 +44,9 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     private void OnTriggerEnter(Collider other)
     {
         //To do when player approaches the ID on the table
-        VR_Hands player = other.gameObject.GetComponent<VR_Hands>();
 
-        if(player != null)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") ||
+           other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
             StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 10f));
             this.gameObject.GetComponent<BoxCollider>().enabled = false;
