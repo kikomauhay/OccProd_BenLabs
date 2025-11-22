@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class BarManager : Singleton<BarManager>, IGameHandler
 {
-    #region Properties
-
-    public Logger Logger => _logger;
-
-    #endregion
     #region SerializeField
 
     [Header("Customer Spawning")]
@@ -52,10 +47,12 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         
         _startButton.SetActive(false);
         _soundEmitter.PlaySound(_startGameSFX);
+        _sndMgr.PlayMusic("SND_BAR_BGM_01");
         _totalScore = 0;
 
-        UpdateScore();
+        UI_UpdateScore();
         SpawnCustomer();
+
         _logger.Log("Bar mini-game has started!", _isDevMode);
     }
     public void INT_DoGameOver()
@@ -65,6 +62,8 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         // show highest score attained
 
         StopGame();
+
+        _sndMgr.StopMusic();
         _logger.Log("No game over logic yet!", TextColor.RED, _isDevMode);
     }
 
@@ -77,7 +76,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
                 _logger.Log($"{_colliderCheck} already has a customer!", TextColor.RED, _isDevMode);
                 yield break;
             }
-            if (_customersServed > MAX_CUSTOMERS_SERVED)
+            if (_customersServed == MAX_CUSTOMERS_SERVED)
             {
                 StopGame();
                 yield break;
@@ -118,17 +117,18 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             default: break;
         }
 
-        UpdateScore();
+        UI_UpdateScore();
     }
     public void Correct()
     {
         _totalScore += SERVING_SCORE;
         _customersServed++;
-        UpdateScore();
+        UI_UpdateScore();
 
         _sndMgr.PlaySound("SND_Correct");
         _logger.Log($"Total score: {_totalScore}", _isDevMode);
 
+        ChangeMusic();
         SpawnCustomer();
     }
     public void Wrong()
@@ -144,6 +144,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             return;
         }
 
+        ChangeMusic();
         SpawnCustomer();
     }
 
@@ -156,13 +157,15 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     #endregion
     #region Private
 
+    private void UI_UpdateScore() => _scoreText.text = $"Total Score: { _totalScore}";
+
     private void StopGame()
     {
         StopAllCoroutines();
-
         EnableOnboardingPanels(true);
+
         _startButton.SetActive(true);
-        
+        _sndMgr.StopMusic();
         _logger.Log("Bar mini-game has finished!", _isDevMode);
     }
     private void EnableOnboardingPanels(bool isActive)
@@ -170,7 +173,25 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         foreach (GameObject panels in _onboardingBoxes)
             panels.SetActive(isActive);  
     }
+    private void ChangeMusic()
+    {
+        _sndMgr.StopMusic();
+        _sndMgr.PlayMusic($"SND_BAR_BGM_0{_customersServed + 1}");
 
+        /*
+        switch (_customersServed)
+        {
+            case 1: 
+                _sndMgr.PlayMusic("SND_BAR_BGM_02"); 
+                break;
+            case 2: 
+                _sndMgr.PlayMusic("SND_BAR_BGM_02"); 
+                break;
+
+            default: break;
+        }
+        */
+    }
 
     #endregion
     #region Helpers
@@ -206,7 +227,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
     }
 
-    private void UpdateScore() => _scoreText.text = "Total Score: " + _totalScore.ToString();
 
     #endregion
 }

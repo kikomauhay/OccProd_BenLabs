@@ -117,6 +117,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             _waveHandler.gameObject.SetActive(true);
             _blockLabelsUI.SetActive(true);
+            _sndMgr.StopMusic();
         }
 
         StartCoroutine(CO_GameOver());
@@ -283,6 +284,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         UpdateAllUI();
 
+        _sndMgr.PlayMusic("SND_GDD_BGM");
         _logger.Log($"{_prepTimes[_waveIndex]}s before enemy spawning!", TextColor.YELLOW, _isDevMode);
         _logger.Log($"{_gameMgr.Player} can start drawing!", TextColor.YELLOW, _isDevMode);
 
@@ -306,6 +308,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             {
                 _soundEmitter.PlaySound(_allWavesDoneSFX);
                 _gameMgr.ExitVR();
+                _sndMgr.StopMusic();
                 _logger.Log("All waves done!", _isDevMode);
 
                 ResetGame();
