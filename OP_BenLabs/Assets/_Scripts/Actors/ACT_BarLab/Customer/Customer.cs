@@ -89,9 +89,6 @@ public class Customer : Actor
         _actions = GetComponent<CustomerActions>();
         _appearance = GetComponent<CustomerAppearance>();
         _sliderTimer = GetComponentInChildren<Slider>();
-
-        if (!_isDevMode)
-            _logger = BarManager.Instance.Logger;
     }
     protected override void InitVariables()
     {
