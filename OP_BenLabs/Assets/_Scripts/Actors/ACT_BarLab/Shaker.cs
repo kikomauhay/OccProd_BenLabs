@@ -139,7 +139,9 @@ public class Shaker : Equipment, IPourable
         _mixedDrink.Clear();
         _cocktail = Cocktail.EMPTY;
         _shakerCap.gameObject.SetActive(false);
+        _rb.velocity = Vector3.zero;
         ResetPosition();
+        BarManager.Instance.CapDesapwned();
         BarManager.Instance.SpawnCap();
 
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);

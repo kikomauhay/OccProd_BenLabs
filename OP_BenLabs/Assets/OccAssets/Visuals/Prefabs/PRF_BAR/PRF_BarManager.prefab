@@ -2534,6 +2534,7 @@ GameObject:
   - component: {fileID: 6736191845663356186}
   - component: {fileID: 8936874162801452659}
   - component: {fileID: 4226238031735373747}
+  - component: {fileID: 6690052133340268223}
   m_Layer: 0
   m_Name: GlassSpawner
   m_TagString: Untagged
@@ -2726,6 +2727,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5518979842351520427, guid: ad816314c5ebe0f43a3f7c87f8a68d2a, type: 3}
+--- !u!54 &6690052133340268223
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5078721977754719439}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &5086525972446675121
 GameObject:
   m_ObjectHideFlags: 0

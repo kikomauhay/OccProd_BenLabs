@@ -36,6 +36,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     private int _currStrike, _customersServed;
     private float _totalScore;
+    private bool _capSpawned;
 
     #endregion
 
@@ -150,9 +151,14 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void SpawnCap()
     {
+        if (_capSpawned) return;
+
         Instantiate(_shakerCap, _capSpawnPoint);
+        _capSpawned = true;
         _logger.Log($"Cap Respawned at {_capSpawnPoint}", _isDevMode);
     }
+
+    public void CapDesapwned() => _capSpawned = false;
 
     #endregion
     #region Private
@@ -216,6 +222,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _currStrike = 0;
         _customersServed = 0;
         _totalScore = 0f;
+        _capSpawned = true;
     }
 
     protected override void Test()
