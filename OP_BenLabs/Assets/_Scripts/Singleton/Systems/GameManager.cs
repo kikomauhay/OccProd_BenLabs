@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -27,13 +28,15 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject _atriumPrefab;
     [SerializeField] private Transform[] _lobbySpawnpoints, _gddSpawnpoints, _barLabSpawnpoints;
 
+    [Header("VFXs")]
+    [SerializeField] private GameObject _poofVFXPrefab;
+
     #endregion
     #region Private 
 
     private SoundManager _sndMgr;
 
     private FadeScreen _fadeScreen;
-    private WaitForSeconds _fadeDuration;
 
     #endregion
 
@@ -56,6 +59,8 @@ public class GameManager : Singleton<GameManager>
             AtriumActive = true;
             Atrium = atrium.GetComponent<Atrium>();
         }
+
+        if (AtriumActive || Random.value < 0.2f) return;
 
         switch (floorType)
         {
@@ -104,6 +109,7 @@ public class GameManager : Singleton<GameManager>
 
         StartCoroutine(CO_Exit(2f));
     }
+    public void Poof(Transform t) => Destroy(Instantiate(_poofVFXPrefab, t.position, t.rotation), 2f);
 
     #endregion
     #region Helpers
@@ -164,8 +170,6 @@ public class GameManager : Singleton<GameManager>
         CanPause = true;
         InGame = false;
         AtriumActive = false;
-
-        _fadeDuration = new WaitForSeconds(_fadeScreen.FadeDuration);
     }
 
     #endregion

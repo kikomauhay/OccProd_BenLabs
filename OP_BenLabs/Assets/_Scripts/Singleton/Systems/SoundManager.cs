@@ -16,14 +16,6 @@ public class SoundManager : Singleton<SoundManager>
 
     #endregion
 
-    #region Helpers
-
-    protected override void Test()
-    {
-        
-    }
-
-    #endregion
     #region Audio Playback
 
     public void StopAllSounds()

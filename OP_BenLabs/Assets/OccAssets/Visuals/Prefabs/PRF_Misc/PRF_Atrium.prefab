@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 626852432749273919}
   - component: {fileID: 4547753137293962394}
   - component: {fileID: 1799234418670557264}
+  - component: {fileID: 6013336513102578811}
   - component: {fileID: 4547753137293962399}
   - component: {fileID: 4547753137293962392}
   - component: {fileID: 4547753137293962393}
@@ -30,8 +31,8 @@ Transform:
   m_GameObject: {fileID: 286214266932722053}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -86,6 +87,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &6013336513102578811
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286214266932722053}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8659943070623925175, guid: bab74bb1e859cd04a82780e145a4dfc1, type: 3}
 --- !u!82 &4547753137293962399
 AudioSource:
   m_ObjectHideFlags: 0
@@ -209,7 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _objectType: 0
-  _isDevMode: 0
+  _isDevMode: 1
+  _rotSpeed: 15
   _meowSFXs:
   - {fileID: 11400000, guid: d3f8f209cf64a7347a38b5920135a756, type: 2}
   - {fileID: 11400000, guid: f59ec45b24b142c4e9213bd44104d44d, type: 2}
