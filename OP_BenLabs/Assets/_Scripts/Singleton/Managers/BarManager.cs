@@ -79,9 +79,16 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         // show highest score attained
 
         StopGame();
+        INT_ResetValues();
 
         _sndMgr.StopMusic();
         _logger.Log("No game over logic yet!", TextColor.RED, _isDevMode);
+    }
+    public void INT_ResetValues()
+    {
+        _currStrike = 0;
+        _totalScore = 0;
+        _customersServed = 0;
     }
 
     public void SpawnCustomer()
@@ -143,15 +150,22 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     }
     public void Correct()
     {
+        IEnumerator CO_SpawnNewCustomer()
+        {
+            yield return new WaitForSeconds(GRACE_PERIOD);
+            SpawnCustomer();
+        }
+
         _totalScore += SERVING_SCORE;
         _customersServed++;
+                    
         UI_UpdateScore();
 
         _sndMgr.PlaySound("SND_Correct");
         _logger.Log($"Total score: {_totalScore}", _isDevMode);
 
         ChangeMusic();
-        SpawnCustomer();
+        StartCoroutine(CO_SpawnNewCustomer());
     }
     public void Wrong()
     {
@@ -184,7 +198,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     #endregion
     #region Private
 
-    private void UI_UpdateScore() => _scoreText.text = $"Total Score: { _totalScore}";
+    private void UI_UpdateScore() => _scoreText.text = $"Total Score: {_totalScore}";
 
     private void StopGame()
     {

@@ -119,6 +119,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         StartCoroutine(CO_GameOver());
     }
+    public void INT_ResetValues()
+    {
+        _killCount = 0;
+        _waveIndex = 0;
+        _currHP = 5f;
+
+        _logger.Log("Values have been reset!", _isDevMode);
+    }
 
     public void BTN_Cancel()
     {
@@ -335,7 +343,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void ResetGame()
     {
         EnableButtons(false);
-        ResetValues();
+        INT_ResetValues();
         UpdateAllUI();
 
         _waveHandler.gameObject.SetActive(true);
@@ -464,14 +472,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             Destroy(e);
 
         _enemyList.Clear();
-    }
-    private void ResetValues()
-    {
-         _killCount = 0;
-        _waveIndex = 0;
-        _currHP = 5f;
-
-        _logger.Log("Values have been reset!", _isDevMode);
     }
 
     #endregion
