@@ -44,7 +44,7 @@ public class GlassSpawner : XRBaseInteractable
 
         _isSpawning = true;
 
-        GameObject glass = Instantiate(_glassPrefab, _spawnPoint);
+        GameObject glass = Instantiate(_glassPrefab);
 
         XRGrabInteractable grabInteractable = glass.GetComponent<XRGrabInteractable>();
         interactionManager.SelectEnter(args.interactorObject, grabInteractable);
@@ -55,7 +55,7 @@ public class GlassSpawner : XRBaseInteractable
 
     private IEnumerator CO_FinishSpawning()
     {
-        yield return new WaitForSeconds(1F);
+        yield return new WaitForSeconds(2F);
         _isSpawning=false;
     }
 }
