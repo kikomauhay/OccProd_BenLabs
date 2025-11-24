@@ -131,6 +131,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public void BTN_Confirm()
     {
         StartWave();
+
+        if (_sndMgr.OnboardingPlaying)
+            _sndMgr.StopOnboarding();
+        
         _logger.Log("Confirmed wave starting!", _isDevMode);
     }
 

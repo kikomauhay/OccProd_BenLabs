@@ -6,6 +6,8 @@ public class VoiceColliderBox : Actor
     #region Members
         
     [SerializeField] private string _onbSFX;
+
+    private SoundManager _sndMgr;
     private BoxCollider _col;
 
     #endregion
@@ -15,7 +17,10 @@ public class VoiceColliderBox : Actor
         if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") ||
             other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
-            SoundManager.Instance.PlayOnboarding(_onbSFX);
+            if (_sndMgr.OnboardingPlaying)
+                _sndMgr.StopOnboarding();
+
+            _sndMgr.PlayOnboarding(_onbSFX);
             _col.enabled = false;
         }
     }
@@ -30,6 +35,8 @@ public class VoiceColliderBox : Actor
     }
     protected override void InitVariables()
     {
+        _sndMgr = SoundManager.Instance;
+
         _col.enabled = true;
         _col.isTrigger = true;
     }

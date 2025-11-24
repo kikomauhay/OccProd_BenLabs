@@ -44,8 +44,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void INT_BTN_StartGame()
     {
-        EnableOnboardingPanels(false);      
-        
+        EnableOnboardingPanels(false);
+
+        if (_sndMgr.OnboardingPlaying)
+            _sndMgr.StopOnboarding();
+
         _startButton.SetActive(false);
         _soundEmitter.PlaySound(_startGameSFX);
         _sndMgr.PlayMusic("SND_BAR_BGM_01");

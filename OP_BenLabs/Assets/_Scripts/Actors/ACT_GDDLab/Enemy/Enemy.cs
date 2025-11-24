@@ -80,10 +80,8 @@ public class Enemy : Actor
         OnDeath?.Invoke();
 
         if (_currHP == 0f)
-        {
             OnKilled?.Invoke();
-            _soundEmitter.PlaySound(_ltbSFX);
-        }
+        
 
         _gddMgr.UnbindEvents(this);
         _logger.Log($"{name} is destoryed!", TextColor.YELLOW, _isDevMode);
@@ -119,6 +117,7 @@ public class Enemy : Actor
         {
             _currHP = 0f;
             _gddMgr.RemoveEnemy(gameObject);
+            _soundEmitter.PlaySound(_ltbSFX);
 
             UI_UpdateHP();
             Destroy(gameObject);
