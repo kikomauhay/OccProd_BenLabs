@@ -1,17 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class GDDManager : Singleton<GDDManager>, IGameHandler
 {
-    #region Properties
-
-    public System.Action OnBuffWeapon { get; set; }
-
-    #endregion
     #region SerializeField
 
     [Header("Spawning & Waves")]
@@ -241,10 +238,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     private void ResetWeapons()
     {
-        for (int i = 0; i < 2; i++)
+        ReadOnlyArray<GameObject> weapons = _usingLeftHand ? 
+                                            _gameMgr.Player.LeftHandTools : 
+                                            _gameMgr.Player.RightHandTools;
+        
+        foreach (GameObject w in weapons)
         {
-            _gameMgr.Player.LeftHandTools[i].SetActive(false);
-            _gameMgr.Player.RightHandTools[i].SetActive(false);
+            w.GetComponent<Weapon>().ResetWeapon();
+            w.SetActive(false);
         }
 
         _logger.Log("Weapons have been reset!", _isDevMode);
@@ -253,16 +254,19 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void StartWave()
     {
         WeaponType preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponType;
-
+        GameObject mainWeapon = _usingLeftHand ?
+                                _gameMgr.Player.LeftHandTools[(int)preferredWeapon] :
+                                _gameMgr.Player.RightHandTools[(int)preferredWeapon];
+        
         foreach (CodeBlock cb in _codeBlocks)
             cb.gameObject.SetActive(false);
 
         // setup for the wave
-        _gameMgr.Player.LeftHandTools[(int)preferredWeapon].SetActive(_usingLeftHand);
-        _gameMgr.Player.RightHandTools[(int)preferredWeapon].SetActive(!_usingLeftHand);
+        mainWeapon.SetActive(true);
         _unitCount = _enemiesToSpawn[_waveIndex];
         _modifier = _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
         _waveHandler.gameObject.SetActive(false);
+
 
         // implement modifier used
         switch (_modifier)
@@ -273,7 +277,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 break;
 
             case Modifier.DAMAGE:
-                OnBuffWeapon?.Invoke();
+                mainWeapon.GetComponent<Weapon>().BuffWeapon();
                 _logger.Log("Increased damage!", _isDevMode);
                 break;
 
