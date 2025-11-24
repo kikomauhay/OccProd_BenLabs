@@ -127,17 +127,17 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         
         switch (trickName)
         {
-            case "Pass.xml":
+            case "Pass":
                 _logger.Log("Pass",_isDevMode);
                 _totalScore += 5f;
                 break;
 
-            case "Toss.xml":
+            case "Toss":
                 _logger.Log("Toss", _isDevMode);
                 _totalScore += 10f;
                 break;
 
-            case "Spin.xml":
+            case "Spin":
                 _logger.Log("Spin", _isDevMode);
                 _totalScore += 15f;
                 break;

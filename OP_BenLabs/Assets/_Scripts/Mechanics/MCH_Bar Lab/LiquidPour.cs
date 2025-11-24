@@ -70,7 +70,6 @@ public class LiquidPour : MonoBehaviour
 
             if (Physics.Raycast(hit.point, endPoint, _layerMask))
             {
-                Debug.LogWarning("Glass has been hit, invoke event");
                 OnGlassHit?.Invoke(cocktail);
             }
 
