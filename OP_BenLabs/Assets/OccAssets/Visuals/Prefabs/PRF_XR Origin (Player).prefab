@@ -59,7 +59,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1060294163803293003}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -126,7 +126,7 @@ MonoBehaviour:
   m_PhysicsTriggerInteraction: 1
   m_RequirePokeFilter: 1
   m_EnableUIInteraction: 1
-  m_DebugVisualizationsEnabled: 1
+  m_DebugVisualizationsEnabled: 0
   m_UIHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -633,6 +633,7 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 9030502420550223560}
   TargetController: {fileID: 1060294163831914065}
+  _handColliders: []
 --- !u!1 &1060294164324780655
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,6 +824,7 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 7356752264886701694}
   TargetController: {fileID: 1060294165425903764}
+  _handColliders: []
 --- !u!1 &1060294164812645786
 GameObject:
   m_ObjectHideFlags: 0
@@ -915,7 +917,7 @@ MonoBehaviour:
   m_PhysicsTriggerInteraction: 1
   m_RequirePokeFilter: 1
   m_EnableUIInteraction: 1
-  m_DebugVisualizationsEnabled: 1
+  m_DebugVisualizationsEnabled: 0
   m_UIHoverEntered:
     m_PersistentCalls:
       m_Calls: []
@@ -3124,6 +3126,7 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 0}
   TargetController: {fileID: 0}
+  _handColliders: []
 --- !u!1001 &1060294165096348984
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3244,6 +3247,7 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 0}
   TargetController: {fileID: 0}
+  _handColliders: []
 --- !u!4 &4638671347137824938 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5686134208185136530, guid: 1fd3a7c43c8190f4d8c167ebde694364,
