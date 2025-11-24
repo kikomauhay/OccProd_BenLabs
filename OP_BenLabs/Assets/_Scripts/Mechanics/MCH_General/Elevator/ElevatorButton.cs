@@ -1,11 +1,14 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ElevatorButtonInteraction : Actor
+public class ElevatorButton : Actor
 {
     #region Members
+
+    public static Action OnButtonPressed { get; set; }
 
     [SerializeField] private Button _button;
 
@@ -24,9 +27,9 @@ public class ElevatorButtonInteraction : Actor
         if (collision.gameObject.GetComponent<VR_Hands>() != null)
         {
             _button.onClick.Invoke();
+            OnButtonPressed?.Invoke();
             
             PushButton();
-            StartCoroutine(DisableButton());
         }
         else _logger.Log("NO INTERACTION", TextColor.RED, _isDevMode);
     }
@@ -54,26 +57,15 @@ public class ElevatorButtonInteraction : Actor
 
     private void PushButton()
     {
-        IEnumerator CO_PushLogic()
+        IEnumerator CO_Push()
         {
             transform.DOLocalMove(_endpos, CYCLE_LENGTH);
             yield return new WaitForSeconds(0.2f);
             transform.DOLocalMove(_startPos, CYCLE_LENGTH);
         }
 
-        StartCoroutine(CO_PushLogic());
+        StartCoroutine(CO_Push());
     }
 
-    #endregion
-
-    #region Enumerators
-
-    private IEnumerator DisableButton()
-    {
-        _button.interactable = false;
-        yield return new WaitForSeconds(3f);
-        _button.interactable = true;
-    }
-    
     #endregion
 }

@@ -1,6 +1,7 @@
 
 using UnityEngine;
 
+[RequireComponent(typeof(SoundEmitter))]
 public class Weapon : Actor
 {
     #region Members
@@ -14,9 +15,13 @@ public class Weapon : Actor
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private float _dmg;
 
+    [SerializeField] private Sound[] _hitSFXs;
+
+    private SoundEmitter _soundEmitter;
+
     #endregion
 
-    #region Methods
+    #region Unity
 
     protected override void OnEnable()
     {
@@ -32,7 +37,6 @@ public class Weapon : Actor
             _isBuffed = false;
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Enemy>())
@@ -40,9 +44,13 @@ public class Weapon : Actor
             Enemy e = other.GetComponent<Enemy>();
 
             e.TakeDamage(_dmg+ DamageModifier);
+            _soundEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);
             _logger.Log($"{name} dealt damage!", _isDevMode);
         }
     }
+
+    #endregion
+    #region Private
 
     private void EVENT_IncreaseDamage() 
     {
@@ -58,6 +66,13 @@ public class Weapon : Actor
         _logger.Log($"{name} total damage: {_dmg} + {DamageModifier}", _isDevMode);
     }
 
+    #endregion
+    #region Helpers
+
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_hitSFXs.Length != 0, "Missing _hitSFX elements!", this);
+    }
     protected override void InitVariables()
     {
         _isBuffed = false;

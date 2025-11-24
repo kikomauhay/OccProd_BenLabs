@@ -3,8 +3,11 @@ using System;
 
 public class SoundManager : Singleton<SoundManager> 
 {
-    
+
     #region SerializeField
+
+    public bool OnboardingPlaying => _onboardingSource.isPlaying;
+    public bool MusicPlaying => _musicSource.isPlaying;
 
     [Header("Audio Sources")]
     [SerializeField] private AudioSource _onboardingSource;

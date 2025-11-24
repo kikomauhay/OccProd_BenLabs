@@ -29,9 +29,12 @@ public class Atrium : Actor, IInteractable
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<VR_Hands>())
+        if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") ||
+            other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
+        {
             INT_Interact();
-        
+            _logger.Log("MEOW", _isDevMode);
+        }
     }
 
     public void INT_Interact()

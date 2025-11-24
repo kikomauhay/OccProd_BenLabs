@@ -12,11 +12,12 @@ public class VoiceColliderBox : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<VR_Hands>())
+        if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") ||
+            other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
-            SoundManager.Instance.PlaySound(_onbSFX);
+            SoundManager.Instance.PlayOnboarding(_onbSFX);
             _col.enabled = false;
-        }        
+        }
     }
 
     protected override void AssertComponents()
