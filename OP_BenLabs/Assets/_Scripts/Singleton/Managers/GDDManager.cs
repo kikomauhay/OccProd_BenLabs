@@ -315,6 +315,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             if (_waveIndex > MAX_WAVE_INDEX)
             {
                 _soundEmitter.PlaySound(_allWavesDoneSFX);
+                _gameMgr.UI_UpdateGDDHiScore(_killCount);
                 _gameMgr.ExitVR();
                 _sndMgr.StopMusic();
                 _logger.Log("All waves done!", _isDevMode);

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
@@ -31,6 +32,9 @@ public class GameManager : Singleton<GameManager>
     [Header("VFXs")]
     [SerializeField] private GameObject _poofVFXPrefab;
 
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI _txt_TotalGDDScore;
+
     #endregion
     #region Private 
 
@@ -51,6 +55,10 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Public
 
+    public void UI_UpdateGDDHiScore(int score)
+    {
+        _txt_TotalGDDScore.text = score.ToString();
+    }
     public void SpawnAtrium(FloorType floorType)
     {
         void Spawn(Transform t) 
