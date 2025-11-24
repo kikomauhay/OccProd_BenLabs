@@ -15,6 +15,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     [SerializeField] private SoundEmitter _soundEmitter;
     [SerializeField] private GameObject _shakerCap;
     [SerializeField] private Transform _capSpawnPoint;
+    [SerializeField] private XRTrickRecognizer _trickRecognizer;
 
     [Header("UI/UX")]
     [SerializeField] private Sound _startGameSFX;
@@ -39,6 +40,18 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     private bool _capSpawned;
 
     #endregion
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        _trickRecognizer.OnRecognized.AddListener(AddTrickScore);
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+        _trickRecognizer.OnRecognized.RemoveListener(AddTrickScore);
+    }
 
     #region Public
 
@@ -104,23 +117,28 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void AddTrickScore(string trickName)
     {
+        _logger.Log("Calculating Score", _isDevMode);
         switch (trickName)
         {
             case "Pass.xml":
+                _logger.Log("Pass",_isDevMode);
                 _totalScore += 5f;
                 break;
 
             case "Toss.xml":
+                _logger.Log("Toss", _isDevMode);
                 _totalScore += 10f;
                 break;
 
             case "Spin.xml":
+                _logger.Log("Spin", _isDevMode);
                 _totalScore += 15f;
                 break;
             
             default: break;
         }
 
+        _logger.Log("AddingScore", _isDevMode);
         UI_UpdateScore();
     }
     public void Correct()

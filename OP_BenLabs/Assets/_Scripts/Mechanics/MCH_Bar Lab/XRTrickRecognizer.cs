@@ -160,8 +160,8 @@ public class XRTrickRecognizer : MonoBehaviour
         }
     }
 
-    private void IsCapped() => _isShaking = true;
-    private void ResetShaker() => _isShaking = false;
+    private void IsCapped() => _shakerCapped = true;
+    private void ResetShaker() => _shakerCapped = false;
 
     #endregion
 }
