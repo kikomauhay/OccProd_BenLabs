@@ -1,4 +1,5 @@
 
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
 
 public class Weapon : Actor
@@ -13,6 +14,11 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private float _dmg;
+
+    [Header("XR Controller Settings")]
+    [SerializeField] private XRBaseController _controller;
+    [SerializeField] private float _amplitude;
+    [SerializeField] private float _duration;
 
     #endregion
 
@@ -39,6 +45,7 @@ public class Weapon : Actor
         {
             Enemy e = other.GetComponent<Enemy>();
 
+            TriggerHaptic();
             e.TakeDamage(_dmg+ DamageModifier);
             _logger.Log($"{name} dealt damage!", _isDevMode);
         }
@@ -61,6 +68,12 @@ public class Weapon : Actor
     protected override void InitVariables()
     {
         _isBuffed = false;
+    }
+
+    private void TriggerHaptic()
+    {
+        if (_controller == null) return;
+        _controller.SendHapticImpulse(_amplitude, _duration);
     }
 
     #endregion
