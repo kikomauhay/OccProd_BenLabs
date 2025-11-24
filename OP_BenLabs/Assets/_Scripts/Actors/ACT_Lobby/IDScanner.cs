@@ -29,6 +29,7 @@ public class IDScanner : Actor
     private Quaternion _leftStartRot, _rightStartRot;
 
     #endregion
+    
     #region Unity
 
     private void OnTriggerEnter(Collider other)
@@ -37,7 +38,11 @@ public class IDScanner : Actor
         {
             _rend.material.color = Color.green;
             _soundEmitter.PlaySound(_idScanSFX);
+            
             RotateGates();
+
+            if (_sndMgr.OnboardingPlaying)
+                _sndMgr.StopOnboarding();
 
             _logger.Log("Opened the gates!", TextColor.GREEN, _isDevMode);
         }

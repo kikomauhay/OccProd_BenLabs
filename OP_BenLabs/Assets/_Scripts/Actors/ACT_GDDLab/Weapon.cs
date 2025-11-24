@@ -2,6 +2,8 @@
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
 
+[RequireComponent(typeof(SoundEmitter))]
+
 public class Weapon : Actor
 {
     #region Members
@@ -14,15 +16,17 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private float _dmg;
+    [SerializeField] private Sound[] _hitSFXs;
 
     [Header("XR Controller Settings")]
     [SerializeField] private XRBaseController _controller;
-    [SerializeField] private float _amplitude;
-    [SerializeField] private float _duration;
+    [SerializeField] private float _amplitude, _duration;
+
+    private SoundEmitter _soundEmitter;
 
     #endregion
 
-    #region Methods
+    #region Unity
 
     protected override void OnEnable()
     {
@@ -38,7 +42,6 @@ public class Weapon : Actor
             _isBuffed = false;
         }
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Enemy>())
@@ -46,10 +49,15 @@ public class Weapon : Actor
             Enemy e = other.GetComponent<Enemy>();
 
             TriggerHaptic();
-            e.TakeDamage(_dmg+ DamageModifier);
+            e.TakeDamage(_dmg + DamageModifier);
+
+            _soundEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);
             _logger.Log($"{name} dealt damage!", _isDevMode);
         }
     }
+
+    #endregion
+    #region Private
 
     private void EVENT_IncreaseDamage() 
     {
@@ -65,15 +73,32 @@ public class Weapon : Actor
         _logger.Log($"{name} total damage: {_dmg} + {DamageModifier}", _isDevMode);
     }
 
-    protected override void InitVariables()
-    {
-        _isBuffed = false;
-    }
-
     private void TriggerHaptic()
     {
         if (_controller == null) return;
         _controller.SendHapticImpulse(_amplitude, _duration);
+    }
+
+    #endregion
+    #region Helpers
+
+    protected override void InitComponents()
+    {
+        _soundEmitter = GetComponent<SoundEmitter>();
+    }
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_weaponType != WeaponType.DEFAULT, "Using default value!", this);
+        Debug.Assert(_dmg != 0, "_dmg is 0!", this);
+        Debug.Assert(_hitSFXs.Length != 0, "Missing _hitSFXs elements!", this);
+
+        Debug.Assert(_controller, "Missing _controller reference!", this);
+        Debug.Assert(_amplitude != 0, "Missing _amplitude reference!", this);
+        Debug.Assert(_duration != 0, "Missing _duration reference!", this);
+    }
+    protected override void InitVariables()
+    {
+        _isBuffed = false;
     }
 
     #endregion
