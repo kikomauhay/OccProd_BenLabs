@@ -8,11 +8,6 @@ public class Weapon : Actor
 {
     #region Members
 
-    public WeaponType WeaponType => _weaponType;
-    public float Damage => _dmg;
-    public float DamageModifier { get; set; }
-    private bool _isBuffed;
-
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private float _dmg;
@@ -23,25 +18,13 @@ public class Weapon : Actor
     [SerializeField] private float _amplitude, _duration;
 
     private SoundEmitter _soundEmitter;
+    private float _damageModifier;
+    private bool _isBuffed;
 
     #endregion
 
     #region Unity
 
-    protected override void OnEnable()
-    {
-        GDDManager.Instance.OnBuffWeapon += EVENT_IncreaseDamage;
-    }
-    protected override void OnDisable() 
-    {
-        GDDManager.Instance.OnBuffWeapon -= EVENT_IncreaseDamage;
-
-        if (_isBuffed)
-        {
-            DamageModifier = 0f;
-            _isBuffed = false;
-        }
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<Enemy>())
@@ -49,7 +32,7 @@ public class Weapon : Actor
             Enemy e = other.GetComponent<Enemy>();
 
             TriggerHaptic();
-            e.TakeDamage(_dmg + DamageModifier);
+            e.TakeDamage(_dmg + _damageModifier);
 
             _soundEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);
             _logger.Log($"{name} dealt damage!", _isDevMode);
@@ -57,21 +40,21 @@ public class Weapon : Actor
     }
 
     #endregion
-    #region Private
+    #region Public
 
-    private void EVENT_IncreaseDamage() 
+    public void BuffWeapon()
     {
-        if (_isBuffed)
-        {
-            _logger.Log($"{name} has already been buuffed!", _isDevMode);
-            return;
-        }
-
-        DamageModifier = 10f;
+        _damageModifier = 10;
         _isBuffed = true;
-
-        _logger.Log($"{name} total damage: {_dmg} + {DamageModifier}", _isDevMode);
     }
+    public void ResetWeapon()
+    {
+        _damageModifier = 0;
+        _isBuffed = false;
+    }
+
+    #endregion
+    #region Private
 
     private void TriggerHaptic()
     {
@@ -98,7 +81,7 @@ public class Weapon : Actor
     }
     protected override void InitVariables()
     {
-        _isBuffed = false;
+        ResetWeapon();
     }
 
     #endregion

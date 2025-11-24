@@ -175,11 +175,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 316198b043fb23442b0731e02d959a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
+  _objectType: 1
   _isDevMode: 0
-  _onboardingSource: {fileID: 5774335688661066756}
-  _soundSource: {fileID: 5774335689695160874}
-  _musicSource: {fileID: 5774335690496492384}
+  _sources:
+  - {fileID: 5774335688661066756}
+  - {fileID: 5774335689695160874}
+  - {fileID: 5774335690496492384}
   _onb:
   - {fileID: 11400000, guid: 38f1c12c88b7bb34d82cca371e151ed9, type: 2}
   - {fileID: 11400000, guid: 9b92c6ae326f0ec49957a9b2f995be78, type: 2}
