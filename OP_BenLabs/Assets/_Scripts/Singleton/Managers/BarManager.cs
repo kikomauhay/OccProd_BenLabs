@@ -46,7 +46,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         base.OnEnable();
         _trickRecognizer.OnRecognized.AddListener(AddTrickScore);
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -125,6 +124,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     public void AddTrickScore(string trickName)
     {
         _logger.Log("Calculating Score", _isDevMode);
+        
         switch (trickName)
         {
             case "Pass.xml":
@@ -146,6 +146,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         }
 
         _logger.Log("AddingScore", _isDevMode);
+        
         UI_UpdateScore();
     }
     public void Correct()
@@ -169,6 +170,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     }
     public void Wrong()
     {
+        IEnumerator CO_SpawnNewCustomer()
+        {
+            yield return new WaitForSeconds(GRACE_PERIOD);
+            SpawnCustomer();
+        }
         _currStrike++;
         _customersServed++;
 
@@ -181,18 +187,22 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         }
 
         ChangeMusic();
-        SpawnCustomer();
+        StartCoroutine(CO_SpawnNewCustomer());
     }
 
     public void SpawnCap()
     {
-        if (_capSpawned) return;
+        if (_capSpawned)
+        {
+            _sndMgr.PlaySound("SND_Unsure");
+            _logger.Log("Cap is already spawned!", _isDevMode);
+            return;
+        }
 
         Instantiate(_shakerCap, _capSpawnPoint);
         _capSpawned = true;
         _logger.Log($"Cap Respawned at {_capSpawnPoint}", _isDevMode);
     }
-
     public void CapDesapwned() => _capSpawned = false;
 
     #endregion
@@ -219,19 +229,18 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _sndMgr.StopMusic();
         _sndMgr.PlayMusic($"SND_BAR_BGM_0{_customersServed + 1}");
 
-        /*
-        switch (_customersServed)
-        {
-            case 1: 
-                _sndMgr.PlayMusic("SND_BAR_BGM_02"); 
-                break;
-            case 2: 
-                _sndMgr.PlayMusic("SND_BAR_BGM_02"); 
-                break;
+        //switch (_customersServed)
+        //{
+        //    case 1:
+        //        _sndMgr.PlayMusic("SND_BAR_BGM_02");
+        //        break;
+        //    case 2:
+        //        _sndMgr.PlayMusic("SND_BAR_BGM_02");
+        //        break;
 
-            default: break;
-        }
-        */
+        //    default: break;
+        //}
+
     }
 
     #endregion
