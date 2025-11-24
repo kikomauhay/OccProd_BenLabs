@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FloorHandler : Singleton<FloorHandler>
 {
@@ -11,12 +12,25 @@ public class FloorHandler : Singleton<FloorHandler>
     [Header("Components")]
     [SerializeField] private ElevatorDoor _elevDoor;
     [SerializeField] private SoundEmitter _soundEmitter; // no Sound here since it'll come from _elevDoor
+    [SerializeField] private Button[] _buttons;
 
     private GameManager _gameMgr;
+    private WaitForSeconds _disableDuration;
 
     #endregion
 
-    #region Methods
+    #region Unity
+
+    protected override void OnEnable()
+    {
+        ElevatorButton.OnButtonPressed += EVENT_DisableInteraction;
+    }
+    protected override void OnDisable()
+    {
+        ElevatorButton.OnButtonPressed -= EVENT_DisableInteraction;
+    }
+
+    #endregion
 
     public void BTN_EnterFloor(int idx) // only accessed from inside
     {  
@@ -58,6 +72,27 @@ public class FloorHandler : Singleton<FloorHandler>
 
         StartCoroutine(CO_MoveToFloor());
     }
+    private void EVENT_DisableInteraction()
+    {
+        IEnumerator CO_Disable()
+        {
+            foreach (Button btn in _buttons) 
+                btn.interactable = false;
+
+            _logger.Log("Disabled all buttons!", _isDevMode);
+
+            yield return _disableDuration;
+
+            foreach (Button btn in _buttons)
+                btn.interactable = true;
+
+            _logger.Log("Enabled all buttons!", _isDevMode);
+        }
+
+        StartCoroutine(CO_Disable());
+    }
+
+    #region Helpers
 
     protected override void Test()
     {
@@ -68,13 +103,16 @@ public class FloorHandler : Singleton<FloorHandler>
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-        Debug.Assert(_elevDoor, "Missing _door reference!", gameObject);
-        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", gameObject);
+        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", this);
+
+        Debug.Assert(_elevDoor, "Missing _door reference!", this);
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", this);
+        Debug.Assert(_buttons.Length == 17, "Missing _buttons elements!", this);
     }
     protected override void InitVariables()
     {
-        _gameMgr = GameManager.Instance;   
+        _gameMgr = GameManager.Instance;
+        _disableDuration = new WaitForSeconds(5f);
     }
 
     #endregion
