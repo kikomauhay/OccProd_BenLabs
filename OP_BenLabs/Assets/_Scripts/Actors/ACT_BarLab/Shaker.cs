@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine;
 using System.Linq;
 
@@ -48,6 +49,7 @@ public class Shaker : Equipment, IPourable
                                               Ingredient.COCONUT_WATER } },
     };
     private bool _isPouring, _isLocked, _isShaking, _isGrabbed;
+    private XRBaseInteractor _interactor;
 
     #endregion
 
@@ -147,6 +149,10 @@ public class Shaker : Equipment, IPourable
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
     }
 
+    public void SubscribeController(SelectEnterEventArgs args) => _interactor = args.interactorObject as XRBaseInteractor;
+
+    public void RemoveController(SelectExitEventArgs args) => _interactor = null;
+
     public void IsReleased() => _isGrabbed = false;
         
     #endregion
@@ -182,6 +188,14 @@ public class Shaker : Equipment, IPourable
         }
     }
 
+    private void SendHaptics(float amp, float dur)
+    {
+        if(_interactor is XRBaseControllerInteractor controllerInteractor)
+        {
+            controllerInteractor.SendHapticImpulse(amp, dur);
+        }
+    }
+
     private void ResetShaker() => StartCoroutine(CO_DrainDrink());
 
     #endregion
@@ -210,6 +224,7 @@ public class Shaker : Equipment, IPourable
 
                 if (isMatching)
                 {
+                    SendHaptics(0.4F, 0.4F);
                     _cocktail = recipe.Key;
                     _logger.Log($"Created {recipe.Key}!", TextColor.GREEN, _isDevMode);
                     Debug.Log($"Created {recipe.Key}!");
@@ -217,6 +232,7 @@ public class Shaker : Equipment, IPourable
                 }
             }
 
+            SendHaptics(0.8F, 0.5F);
             _cocktail = Cocktail.WRONG;
             _logger.Log("Created dubious drink!", TextColor.RED, _isDevMode);
             Debug.Log("Created dubious drink!");
