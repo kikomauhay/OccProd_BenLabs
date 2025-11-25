@@ -158,8 +158,7 @@ public class Shaker : Equipment, IPourable
     public void SubscribeController(SelectEnterEventArgs args) => _interactor = args.interactorObject as XRBaseInteractor;
 
     public void RemoveController(SelectExitEventArgs args) => _interactor = null;
-
-    public void IsReleased() => _isGrabbed = false;
+        public void IsReleased() => _isGrabbed = false;
         
     #endregion
     #region Helpers
