@@ -41,7 +41,8 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     private int _currStrike, _customersServed;
     private float _totalScore;
-    private bool _capSpawned, _minigamePlaying;
+    [SerializeField] private int _capSpawned;
+    [SerializeField] private bool _minigamePlaying;
 
     #endregion
 
@@ -203,7 +204,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     public void SpawnCap()
     {
-        if (_capSpawned)
+        if (_capSpawned > 0)
         {
             _sndMgr.PlaySound("SND_Unsure");
             _logger.Log("Cap is already spawned!", _isDevMode);
@@ -211,10 +212,10 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         }
 
         Instantiate(_shakerCap, _capSpawnPoint);
-        _capSpawned = true;
+        _capSpawned++;
         _logger.Log($"Cap Respawned at {_capSpawnPoint}", _isDevMode);
     }
-    public void CapDesapwned() => _capSpawned = false;
+    public void CapDespawned() => _capSpawned--;
 
     #endregion
     #region Private
@@ -271,7 +272,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _customersServed = 0;
         _totalScore = 0f;
 
-        _capSpawned = true;
+        _capSpawned = 1;
         _minigamePlaying = false;
     }
 
