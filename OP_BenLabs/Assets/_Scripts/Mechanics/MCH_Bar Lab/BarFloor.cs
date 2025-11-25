@@ -16,5 +16,10 @@ public class BarFloor : Floor
             Destroy(collision.gameObject);
             BarManager.Instance.SpawnCap();
         }
+        else if(collision.gameObject.GetComponent<Bottle>() != null)
+        {
+            Bottle b = collision.gameObject.GetComponent<Bottle>();
+            b.ResetBottle();
+        }
     }
 }

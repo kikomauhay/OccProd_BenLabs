@@ -53,8 +53,8 @@ public class ColliderCheck : Actor
                 actions.CorrectReaction();
                 appearance.SetEmotion(Emotion.HAPPY);
 
-                CustomerOrder = null;
                 _barMgr.Correct();
+
             }
             else
             {
@@ -62,10 +62,12 @@ public class ColliderCheck : Actor
                 appearance.SetEmotion(Emotion.MAD);
 
                 _barMgr.Wrong();
-
-                Destroy(other.gameObject);
-                Destroy(CustomerOrder.gameObject);
             }
+
+            Destroy(other.gameObject);
+            Destroy(CustomerOrder.gameObject);
+
+            CustomerOrder = null;
         }
     }
 

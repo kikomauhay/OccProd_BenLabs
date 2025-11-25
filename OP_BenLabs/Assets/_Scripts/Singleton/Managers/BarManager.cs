@@ -122,8 +122,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
             GameObject newCustomer = Instantiate(_customerPrefab, 
                                                  _customerSpawnpoint.position,
-                                                 _customerSpawnpoint.rotation, 
-                                                 _customerSpawnpoint);
+                                                 _customerSpawnpoint.rotation);
 
             _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
             _logger.Log("Spawned new customer!", _isDevMode);
