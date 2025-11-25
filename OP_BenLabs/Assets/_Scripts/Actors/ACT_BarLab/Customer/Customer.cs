@@ -1,34 +1,38 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-[RequireComponent(typeof(CustomerAppearance), typeof(CustomerActions))]
+[RequireComponent(typeof(CustomerActions), typeof(CustomerAppearance))]
 public class Customer : Actor
 {
     #region Properties
-
-    public bool IsHappy => _customerScore != 0f;
+    
+    public Cocktail WantedCocktail => _wantedCocktail;
+    public float CustomerScore => _customerScore;
 
     #endregion
-    #region Members
+    #region SerializeField
 
     [Header("Customer Stats")]
-    [SerializeField] private float _decreaseRate;
-    [SerializeField] private float _reactionTimer;
+    [SerializeField] private Cocktail _wantedCocktail;
+    [SerializeField] private float _decreaseRate, _reactionTimer, _rotOffset;
 
-    [Header("Drinks UI")]
-    [SerializeField] private GameObject[] _drinkOrdersUI;   
-    [SerializeField] private Transform _orderUITransform; 
+    [Header("Customer UI")]
+    [SerializeField] private Slider _timerSlider;
+    [SerializeField] private TextMeshProUGUI _orderTXT;
+    [SerializeField] private GameObject[] _drinkOrdersUI;
 
     #endregion
     #region Private
 
-    private const float PATIENCE_INTERVAL = 5f;
+    private const float PATIENCE_INTERVAL = 2f;
     private const float GRACE_PERIOD = 2f;
 
     private CustomerActions _actions;
     private CustomerAppearance _appearance;
-    private GameObject _customerOrderUI;
-
+    private Slider _sliderTimer;
+    
     private float _customerScore;
 
     #endregion
@@ -36,41 +40,71 @@ public class Customer : Actor
     #region Unity
 
     protected override void Start()
-    {
-        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", gameObject);
-        Debug.Assert(_orderUITransform, "Missing reference in _orderUITransform!", gameObject);
+    { 
+        base.Start();
 
-        base.Start(); // already contains both init methods
-
+        _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true); // check Cocktail enum to understand
+        //_appearance.SetEmotion(Emotion.NEUTRAL);
+        //_appearance.SetupCustomerBody(_actions.IsMale);
+        
+        UI_UpdateTimer();
+        UI_UpdateOrderText();
         StartCoroutine(CO_DecreaseRating());
-    }
-    private void OnDestroy()
-    {
-
     }
 
     #endregion
-    #region Private
+    #region Private 
 
-    private void CreateCustomerUI() // aligns Order UI & Customer Order
-    {
-        _customerOrderUI = Instantiate(_drinkOrdersUI[0],
-                                       _orderUITransform.position,
-                                       _orderUITransform.rotation,
-                                       transform);
-    }
+    private void UI_UpdateTimer() => _sliderTimer.value = _customerScore / 100f;
+    private void UI_UpdateOrderText() => _orderTXT.text = $"{_wantedCocktail.ToString().Replace("_", " ")}";
 
     #endregion
     #region Helpers
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            foreach (GameObject order in _drinkOrdersUI)
+                order.SetActive(false);
+            
+            _wantedCocktail = (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+            _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true);
+            _logger.Log($"Customer got a {_wantedCocktail}", _isDevMode);
+            
+            UI_UpdateOrderText();
+        }
+    }
+
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_actions, "Missing _actions reference!", this);
+        Debug.Assert(_appearance, "Missing _appearance reference!", this);
+        Debug.Assert(_timerSlider, "Missing _timerSlider reference!", this);
+        
+        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", this);
+    }
     protected override void InitComponents()
     {
         _actions = GetComponent<CustomerActions>();
         _appearance = GetComponent<CustomerAppearance>();
+        _sliderTimer = GetComponentInChildren<Slider>();
     }
     protected override void InitVariables()
     {
+        // only gets from the three possible drinks
+        _wantedCocktail = (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+     
+        name = $"{_wantedCocktail} customer";
+
         _customerScore = 100f;
+        _actions.IsMale = Random.value > 0.5f;
+
+        transform.rotation = Quaternion.Euler(transform.rotation.x,
+                                              transform.rotation.y + _rotOffset,
+                                              transform.rotation.z);
+
+        _logger.Log($"{this} wants a {_wantedCocktail}", _isDevMode);
     }
 
     #endregion
@@ -78,34 +112,38 @@ public class Customer : Actor
 
     private IEnumerator CO_DecreaseRating()
     {
+        IEnumerator CO_LostPatience()
+        {
+            _logger.Log("Customer lost patience!", TextColor.RED, _isDevMode);
+            _actions.WrongReaction();
+            yield return new WaitForSeconds(2f);
+
+            Destroy(gameObject);
+            BarManager.Instance.Wrong();
+        }
+
+        _logger.Log($"{GRACE_PERIOD}s before losing patience!", _isDevMode);
         yield return new WaitForSeconds(GRACE_PERIOD);
+        
+        _logger.Log($"Initial customer Score: {_customerScore}", _isDevMode);
 
         while (_customerScore > 0f)
         {
             yield return new WaitForSeconds(PATIENCE_INTERVAL);
             _customerScore--;
+            UI_UpdateTimer();
 
-            if (_isDevMode)
-                _logger.Log($"Customer Score: {_customerScore}");
+            _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
         }
 
         if (_customerScore < 1f)
         {
             _customerScore = 0f;
+            _logger.Log($"Customer Score: {_customerScore}", _isDevMode);
 
-            if (_isDevMode)
-                _logger.Log($"Customer Score: {_customerScore}");
-
-            yield return StartCoroutine(CO_LostPatience());
+            UI_UpdateTimer();
+            StartCoroutine(CO_LostPatience());
         }
-    }
-    private IEnumerator CO_LostPatience()
-    {
-        if (_isDevMode)
-            _logger.Log("Customer waited too much!", ColorType.RED);
-
-        yield return new WaitForSeconds(2f);
-        Destroy(gameObject);
     }
 
     #endregion

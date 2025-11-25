@@ -3,12 +3,25 @@ BenLabs Debug Keys
 -NOTE-
     * Make sure that Dev Mode is ticked on to see the console logs.
 
-[SceneHandler.cs]
-- 1: Load Lobby Floor
-- 2: Load SHRIM Floor
-- 3: Load GDD Floor
+[FloorHandler.cs]
+- 1: Enter Lobby 
+- 2: Enter 8F
+- 3: Enter 10F
 
 [GDDManager.cs]
 - Space: Spawn Enemy
 - Backspace: Delete all enemies
-- Enter: StartCoroutine(CO_StartWave());
+- Enter: StartCoroutine(CO_StartWave())
+
+[BarManager.cs]
+- Tab: StartGame()
+- Caps Lock: StopGame()
+
+[ColliderCheck.cs]
+- C: correct.sfx
+- W: wrong.sfx
+- U: unsure.sfx
+
+[ElevatorDoor.cs]
+- Left Arrow: Open Doors
+- Right Arrow: Close Doors

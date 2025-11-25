@@ -1,122 +1,78 @@
-using System.Collections;
 using UnityEngine;
 
-public class CustomerAppearance : MonoBehaviour 
+[RequireComponent(typeof(SpriteRenderer))]
+public class CustomerAppearance : MonoBehaviour
 {
     #region Members
 
-    [Header("Customer Material Renderers")]
+    [Header("Debugging")]
+    [SerializeField] private bool _isDevMode;
+
+    [Header("Renderers")]
     [SerializeField] private SpriteRenderer _face;
-    [SerializeField] private MeshRenderer _ears, _tail, _body;
+    [SerializeField] private MeshRenderer[] _customerRenderer;
 
-    [Tooltip("0 = Calico, 1 = Siamese, 2 = Tabby, 3 = Torbie, 4 = Tuxedo")] 
-    [SerializeField] private SkinVariant[] _skinVariants;
+    [Header("Assets"), Tooltip("0 = Neutral, 1 = Happy, 2 = Angry")]
+    [SerializeField] private GameObject[] _customerFaces;
+    [SerializeField] private Material[] _maleCustomerMaterials;
+    [SerializeField] private Material _femaleCustomerMaterial;
 
-    [Header("Face Types")] 
-    [SerializeField] private Sprite[] _reactionFaces; // 0 = neutral, 1 = happy, 2 = sus
-    [SerializeField] private Sprite[] _chewingFaces;  // 0-1 = normal, 2-3 = sus
-    [SerializeField] private Sprite[] _madFaces; // 0 = angry, 1 = angrier, 2 = angriest
-                                                 // angry     = less than 50 pts in patience meter
-                                                 // angrier   = got the wrong order 
-                                                 // angriest  = customer lost all patience 
     #endregion
-    
+
     #region Unity
-    
+
     private void Start()
-    {        
-        int i = Random.Range(0, _skinVariants.Length);
+    {
+        Debug.Assert(_face, "Missing _face reference!");
+        Debug.Assert(_customerRenderer.Length == 4, "Missing _customerRenderer elements!");
+        Debug.Assert(_customerFaces.Length == 3, "Missing _customerFaces elements!");        
 
-        _body.material = _skinVariants[i].BodyMaterial;
-        _ears.material = _skinVariants[i].EarVariants[Random.Range(0, _skinVariants[i].EarVariants.Length)];
-        _tail.material = _skinVariants[i].TailVariants[Random.Range(0, _skinVariants[i].TailVariants.Length)];
+        Debug.Assert(_maleCustomerMaterials.Length == 2, "Missing _maleCustomerMaterials elements!");
+        Debug.Assert(_femaleCustomerMaterial, "Missing _femaleCustomerMaterial reference!");
 
-        _face.sprite = _reactionFaces[0];
+        SetEmotion(Emotion.HAPPY);
+    }
+    private void Update()
+    {
+        if (_isDevMode) return;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+            SetupCustomerBody(Random.value > 0.5f);
+
+        if (Input.GetKeyDown(KeyCode.Backspace))
+            SetEmotion((Emotion)Random.Range(0, 3));
     }
 
     #endregion
-    #region Customer Reactions 
+    #region Public 
 
-    public void SetFacialEmotion(FaceVariant type)
+    public void SetupCustomerBody(bool isMale)
     {
-        switch (type)
+        int i = Random.Range(0, _maleCustomerMaterials.Length);
+
+        foreach (MeshRenderer rend in _customerRenderer)
         {
-            case FaceVariant.NEUTRAL:
-                _face.sprite = _reactionFaces[0];
-                break;
-            
-            case FaceVariant.HAPPY:
-                _face.sprite = _reactionFaces[1];
-                break;
-
-            case FaceVariant.SUS:
-                _face.sprite = _reactionFaces[2];
-                break;
-
-            default: break;
+            rend.material = new Material(isMale ? 
+                                        _maleCustomerMaterials[i] :  
+                                        _femaleCustomerMaterial);
         }
     }
-    public void SetAngryEmotion(int type)
+    public void SetEmotion(Emotion type)
     {
-        if (type < 0 || type > _madFaces.Length) 
-        {
-            Debug.LogError($"{type} was out of range!");
-            return;
-        }
-
-        _face.sprite = _madFaces[type];
-    }
-    public IEnumerator DoChweing(float patienceRate) // I am not proud of this
-    {
-        yield return new WaitForSeconds(1f);
-
-        float chewTime = 2f;
-
-        if (patienceRate > 50) // is happy is a customer pateince meter or 50+
-        {
-            _face.sprite = _chewingFaces[0];    
-            yield return new WaitForSeconds(chewTime);
-
-            _face.sprite = _chewingFaces[1];
-            yield return new WaitForSeconds(chewTime);
-
-            _face.sprite = _chewingFaces[0];
-            yield return new WaitForSeconds(chewTime);
-
-            yield break;
-        }
-
-        _face.sprite = _chewingFaces[3];
-        yield return new WaitForSeconds(chewTime);
-
-        _face.sprite = _chewingFaces[4];
-        yield return new WaitForSeconds(chewTime);
-
-        _face.sprite = _chewingFaces[3];
-        yield return new WaitForSeconds(chewTime);
+        for (int i = 0; i < _customerFaces.Length; i++)
+            _customerFaces[i].SetActive((int)type == i);
     }
 
     #endregion
 }
 
-#region Structres
-
-[System.Serializable]
-public struct SkinVariant
-{
-    public Material BodyMaterial;
-    public Material[] EarVariants, TailVariants; 
-}
-
-#endregion
 #region Enumerations
 
-    public enum FaceVariant
-    {
-        NEUTRAL,
-        HAPPY,
-        MAD,
-        SUS
-    }
+public enum Emotion
+{
+    NEUTRAL = 0,
+    HAPPY = 1,
+    MAD = 2
+}
 
 #endregion

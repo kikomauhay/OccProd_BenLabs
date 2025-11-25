@@ -37,9 +37,12 @@ public class VR_Hands : MonoBehaviour
 
     public void DisableHandCollider()
     {
+        if (this == null || gameObject == null) return;
+        if (_handColliders == null || _handColliders.Length == 0) return;
+
         foreach (var item in _handColliders)
         {
-            item.enabled = false;
+            item.enabled = false; // timing issue => gets called when it's already deleted
         }    
     }
 
@@ -48,6 +51,9 @@ public class VR_Hands : MonoBehaviour
     #region Private
     private void EnableHandCollider()
     {
+        if (this == null || gameObject == null) return;
+        if (_handColliders == null || _handColliders.Length == 0) return;
+
         foreach (var item in _handColliders)
         {
             item.enabled = true;
