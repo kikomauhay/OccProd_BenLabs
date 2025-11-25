@@ -134,21 +134,22 @@ public class Shaker : Equipment, IPourable
     
     public void Washed()
     {
+        ResetPosition();
         StopAllCoroutines();
 
         if(_isLocked)
-        {
             BarManager.Instance.CapDespawned();
-        }
     
         _isShaking = false;
         _isPouring = false;
         _isLocked = false;
+
         _mixedDrink.Clear();
         _cocktail = Cocktail.EMPTY;
-        _shakerCap.gameObject.SetActive(false);
         _rb.velocity = Vector3.zero;
-        ResetPosition();
+
+        _checkPanel.SetActive(false);
+        _shakerCap.gameObject.SetActive(false);
         BarManager.Instance.SpawnCap();
 
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
@@ -208,6 +209,7 @@ public class Shaker : Equipment, IPourable
         yield return new WaitForSeconds(5F);
 
         ShakerUnlocked?.Invoke();
+        OnStopPour?.Invoke();
         _checkPanel.SetActive(false);
         _shakerCap.gameObject.SetActive(false);
         _cocktail = Cocktail.EMPTY;

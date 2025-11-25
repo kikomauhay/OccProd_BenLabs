@@ -633,7 +633,6 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 9030502420550223560}
   TargetController: {fileID: 1060294163831914065}
-  _handColliders: []
 --- !u!1 &1060294164324780655
 GameObject:
   m_ObjectHideFlags: 0
@@ -824,7 +823,6 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 7356752264886701694}
   TargetController: {fileID: 1060294165425903764}
-  _handColliders: []
 --- !u!1 &1060294164812645786
 GameObject:
   m_ObjectHideFlags: 0
@@ -2546,6 +2544,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1060294165425903764}
     m_Modifications:
+    - target: {fileID: 192947176973848341, guid: 5dbc6704f0137b84baec4e7624c9ecc1,
+        type: 3}
+      propertyPath: m_text
+      value: Squeeze the grip to grab objects
+      objectReference: {fileID: 0}
+    - target: {fileID: 2729447382241472805, guid: 5dbc6704f0137b84baec4e7624c9ecc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5547467966481426592, guid: 5dbc6704f0137b84baec4e7624c9ecc1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5878281867584957398, guid: 5dbc6704f0137b84baec4e7624c9ecc1,
         type: 3}
       propertyPath: m_IsActive
@@ -3126,7 +3139,6 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 0}
   TargetController: {fileID: 0}
-  _handColliders: []
 --- !u!1001 &1060294165096348984
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3247,7 +3259,6 @@ MonoBehaviour:
       type: 3}
   HandAnimator: {fileID: 0}
   TargetController: {fileID: 0}
-  _handColliders: []
 --- !u!4 &4638671347137824938 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5686134208185136530, guid: 1fd3a7c43c8190f4d8c167ebde694364,

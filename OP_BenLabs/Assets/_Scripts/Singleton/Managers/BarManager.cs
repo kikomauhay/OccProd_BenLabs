@@ -177,6 +177,12 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _soundEmitter.PlaySound(_correctSFX);
         _logger.Log($"Total score: {_totalScore}", _isDevMode);
 
+        if (_customersServed == MAX_CUSTOMERS_SERVED)
+        {
+            INT_DoGameOver();
+            return;
+        }
+
         ChangeMusic();
         StartCoroutine(CO_SpawnNewCustomer());
     }
@@ -192,7 +198,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _customersServed++;
         _soundEmitter.PlaySound(_wrongSFX);
 
-        if (_currStrike == MAX_STRIKES)
+        if (_currStrike == MAX_STRIKES || _customersServed == MAX_CUSTOMERS_SERVED)
         {
             INT_DoGameOver();
             return;
@@ -231,19 +237,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     {
         _sndMgr.StopMusic();
         _sndMgr.PlayMusic($"SND_BAR_BGM_0{_customersServed + 1}");
-
-        //switch (_customersServed)
-        //{
-        //    case 1:
-        //        _sndMgr.PlayMusic("SND_BAR_BGM_02");
-        //        break;
-        //    case 2:
-        //        _sndMgr.PlayMusic("SND_BAR_BGM_02");
-        //        break;
-
-        //    default: break;
-        //}
-
     }
 
     #endregion
