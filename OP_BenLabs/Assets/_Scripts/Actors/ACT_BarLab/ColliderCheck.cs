@@ -11,7 +11,7 @@ public class ColliderCheck : Actor
     #endregion
     #region SerializeField
 
-    [Header("Components")]
+    [Header("SFX")]
     [SerializeField] private SoundEmitter _soundEmitter;
 
     #endregion
@@ -28,8 +28,16 @@ public class ColliderCheck : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        void DoGlassCollision(Glass glass)
+        if (!CustomerOrder)
         {
+            _logger.Log("Missing CustomerOrder reference!", TextColor.RED, _isDevMode);
+            _sndMgr.PlaySound("SND_Unsure");
+            return;
+        }
+
+        if (other.gameObject.GetComponent<Glass>())
+        {
+            Glass glass = other.gameObject.GetComponent<Glass>();
             CustomerActions actions = CustomerOrder.GetComponent<CustomerActions>();
             CustomerAppearance appearance = CustomerOrder.GetComponent<CustomerAppearance>();
 
@@ -43,34 +51,22 @@ public class ColliderCheck : Actor
             if (glass.Cocktail == CustomerOrder.WantedCocktail)
             {
                 actions.CorrectReaction();
-                //appearance.SetEmotion(Emotion.HAPPY);
+                appearance.SetEmotion(Emotion.HAPPY);
 
                 CustomerOrder = null;
-                _sndMgr.PlaySound("SND_Correct");
                 _barMgr.Correct();
             }
             else
             {
                 actions.WrongReaction();
-                //appearance.SetEmotion(Emotion.MAD);
+                appearance.SetEmotion(Emotion.MAD);
 
-                _sndMgr.PlaySound("SND_Wrong");
                 _barMgr.Wrong();
 
                 Destroy(other.gameObject);
                 Destroy(CustomerOrder.gameObject);
             }
         }
-
-        if (!CustomerOrder)
-        {
-            _logger.Log("Missing CustomerOrder reference!", TextColor.RED, _isDevMode);
-            _sndMgr.PlaySound("SND_Unsure");
-            return; 
-        }
-
-        if (other.gameObject.GetComponent<Glass>())
-            DoGlassCollision(other.gameObject.GetComponent<Glass>());
     }
 
     #endregion
