@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class BarManager : Singleton<BarManager>, IGameHandler
 {
+    #region Properties
+
+    public System.Action OnCustomerSpawn { get; set; }
+    public bool MinigamePlaying => _minigamePlaying;
+
+    #endregion
     #region SerializeField
 
     [Header("Customer Spawning")]
     [SerializeField] private Transform _customerSpawnpoint; // add a y-offset before instantiating the prefab
-    [SerializeField] private GameObject _customerPrefab, _testCustomer;
+    [SerializeField] private GameObject _customerPrefab;
 
     [Header("Components")]
     [SerializeField] private ColliderCheck _colliderCheck;
@@ -18,16 +24,14 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     [SerializeField] private XRTrickRecognizer _trickRecognizer;
 
     [Header("UI/UX")]
-    [SerializeField] private Sound _startGameSFX;
+    [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private GameObject _startButton;
     [SerializeField] private GameObject[] _onboardingBoxes;
-    [SerializeField] private TextMeshProUGUI _scoreText;
+    [SerializeField] private Sound _startGameSFX, _correctSFX, _wrongSFX;
 
     #endregion
     #region Private
 
-    private GameManager _gameMgr;
-    private OnboardingHandler _onbHandlr;
     private SoundManager _sndMgr;
 
     private const int MAX_STRIKES = 3;
@@ -37,9 +41,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     private int _currStrike, _customersServed;
     private float _totalScore;
-    private bool _capSpawned;
+    private bool _capSpawned, _minigamePlaying;
 
     #endregion
+
+    #region Unity
 
     protected override void OnEnable()
     {
@@ -52,6 +58,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _trickRecognizer.OnRecognized.RemoveListener(AddTrickScore);
     }
 
+    #endregion
     #region Public
 
     public void INT_BTN_StartGame()
@@ -62,9 +69,10 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             _sndMgr.StopOnboarding();
 
         _startButton.SetActive(false);
-        _soundEmitter.PlaySound(_startGameSFX);
         _sndMgr.PlayMusic("SND_BAR_BGM_01");
+        
         _totalScore = 0;
+        _minigamePlaying = true;
 
         UI_UpdateScore();
         SpawnCustomer();
@@ -72,16 +80,19 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _logger.Log("Bar mini-game has started!", _isDevMode);
     }
     public void INT_DoGameOver()
-    {
-        // player gets exited from the mini-game
-        // play game_over.sfx
+    {        
         // show highest score attained
-
-        StopGame();
+        
+        StopAllCoroutines();
+        EnableOnboardingPanels(true);
         INT_ResetValues();
 
+        OnCustomerSpawn?.Invoke(); // gets called to reset the bottles one last time
+
+        _minigamePlaying = false;
+        _startButton.SetActive(true);
         _sndMgr.StopMusic();
-        _logger.Log("No game over logic yet!", TextColor.RED, _isDevMode);
+        _logger.Log("Bar mini-game has finished!", _isDevMode);
     }
     public void INT_ResetValues()
     {
@@ -101,23 +112,24 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             }
             if (_customersServed == MAX_CUSTOMERS_SERVED)
             {
-                StopGame();
+                _logger.Log("Already at the max amount of customers!", TextColor.RED, _isDevMode);
                 yield break;
             }
-            
+
+            _soundEmitter.PlaySound(_startGameSFX);
             _logger.Log($"{GRACE_PERIOD}s grace period before spawning!", TextColor.YELLOW, _isDevMode);
             yield return new WaitForSeconds(GRACE_PERIOD);
 
-            GameObject customerToSpawn = _isDevMode ? _testCustomer : _customerPrefab;
-            GameObject newCustomer = Instantiate(customerToSpawn, 
-                                                _customerSpawnpoint.position,
-                                                _customerSpawnpoint.rotation, 
-                                                _customerSpawnpoint);
+            GameObject newCustomer = Instantiate(_customerPrefab, 
+                                                 _customerSpawnpoint.position,
+                                                 _customerSpawnpoint.rotation, 
+                                                 _customerSpawnpoint);
 
             _colliderCheck.CustomerOrder = newCustomer.GetComponent<Customer>();
             _logger.Log("Spawned new customer!", _isDevMode);
         }
 
+        OnCustomerSpawn?.Invoke();
         StartCoroutine(CO_SpawnCustomer());
     }
 
@@ -162,7 +174,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
                     
         UI_UpdateScore();
 
-        _sndMgr.PlaySound("SND_Correct");
+        _soundEmitter.PlaySound(_correctSFX);
         _logger.Log($"Total score: {_totalScore}", _isDevMode);
 
         ChangeMusic();
@@ -175,10 +187,10 @@ public class BarManager : Singleton<BarManager>, IGameHandler
             yield return new WaitForSeconds(GRACE_PERIOD);
             SpawnCustomer();
         }
+
         _currStrike++;
         _customersServed++;
-
-        _sndMgr.PlaySound("SND_Wrong");
+        _soundEmitter.PlaySound(_wrongSFX);
 
         if (_currStrike == MAX_STRIKES)
         {
@@ -210,15 +222,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     private void UI_UpdateScore() => _scoreText.text = $"Total Score: {_totalScore}";
 
-    private void StopGame()
-    {
-        StopAllCoroutines();
-        EnableOnboardingPanels(true);
-
-        _startButton.SetActive(true);
-        _sndMgr.StopMusic();
-        _logger.Log("Bar mini-game has finished!", _isDevMode);
-    }
     private void EnableOnboardingPanels(bool isActive)
     {
         foreach (GameObject panels in _onboardingBoxes)
@@ -245,10 +248,14 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     #endregion
     #region Helpers
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
+    }
 
     protected override void AssertComponents()
     {
-        // Debug.Assert(_customerPrefab, "Missing _customerPrefab reference!", gameObject);
         Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
         Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
         Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
@@ -259,25 +266,15 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     }
     protected override void InitVariables()
     {
-        _gameMgr = GameManager.Instance;
-        _onbHandlr = OnboardingHandler.Instance;
         _sndMgr = SoundManager.Instance;
 
         _currStrike = 0;
         _customersServed = 0;
         _totalScore = 0f;
+
         _capSpawned = true;
+        _minigamePlaying = false;
     }
-
-    protected override void Test()
-    {
-        if (!_isDevMode) return;
-
-        if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
-        if (Input.GetKeyDown(KeyCode.CapsLock)) StopGame();
-        if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
-    }
-
 
     #endregion
 }

@@ -51,7 +51,9 @@ public class Glass : Equipment
     [SerializeField] private Cocktail _cocktail;
     [SerializeField] private bool _hasDrink;
 
-        
+    [Header("SFX")]
+    [SerializeField] private Sound _poofSFX;
+
     #endregion
 
     #region Unity
@@ -106,6 +108,9 @@ public class Glass : Equipment
         _hasDrink = true;
         _cocktail = cocktail;
         _drinks[(int)cocktail].SetActive(true);
+        
+        _soundEmitter.PlaySound(_poofSFX);
+        GameManager.Instance.Poof(transform);
 
         _logger.Log($"{this} has a {_cocktail} active!", TextColor.YELLOW, _isDevMode);
     }

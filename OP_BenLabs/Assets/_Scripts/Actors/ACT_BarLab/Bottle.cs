@@ -29,6 +29,14 @@ public class Bottle : Equipment, IPourable
 
     #region Unity
 
+    protected override void OnEnable()
+    {
+        BarManager.Instance.OnCustomerSpawn += ResetPosition;
+    }
+    protected override void OnDisable()
+    {
+        BarManager.Instance.OnCustomerSpawn -= ResetPosition;
+    }
     private void FixedUpdate()
     {
         float angle = Vector3.Angle(_shakerTip.up, Vector3.up);
