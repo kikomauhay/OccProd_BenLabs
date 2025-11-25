@@ -1007,6 +1007,7 @@ MonoBehaviour:
   _shakerCap: {fileID: 6331274933411278099, guid: fc541db110633ee4e9aa4623223cb3d1,
     type: 3}
   _capSpawnPoint: {fileID: 5166493361103186614}
+  _trickRecognizer: {fileID: 0}
   _startGameSFX: {fileID: 11400000, guid: 1c6268168c6223a4f81a6e34e922fa8a, type: 2}
   _startButton: {fileID: 5634077423523251483}
   _onboardingBoxes:
@@ -5832,17 +5833,17 @@ PrefabInstance:
     - target: {fileID: 8044163519302061353, guid: 3ceb0dcc952362f4197d077973e5d015,
         type: 3}
       propertyPath: m_fontStyle
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8044163519302061353, guid: 3ceb0dcc952362f4197d077973e5d015,
         type: 3}
       propertyPath: m_fontColor.b
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8044163519302061353, guid: 3ceb0dcc952362f4197d077973e5d015,
         type: 3}
       propertyPath: m_fontColor.g
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8044163519302061353, guid: 3ceb0dcc952362f4197d077973e5d015,
         type: 3}
@@ -5852,7 +5853,7 @@ PrefabInstance:
     - target: {fileID: 8044163519302061353, guid: 3ceb0dcc952362f4197d077973e5d015,
         type: 3}
       propertyPath: m_fontColor32.rgba
-      value: 4294967295
+      value: 4278190335
       objectReference: {fileID: 0}
     - target: {fileID: 8044163519302061353, guid: 3ceb0dcc952362f4197d077973e5d015,
         type: 3}
