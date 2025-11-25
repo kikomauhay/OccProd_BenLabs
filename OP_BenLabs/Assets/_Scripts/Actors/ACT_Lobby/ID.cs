@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class ID : Equipment
 {
-    //empty for now, will add the OSM code's later on
+    public void ResetID()
+    {
+        ResetPosition();
+    }
 }
