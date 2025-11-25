@@ -14,6 +14,7 @@ public class BarFloor : Floor
         else if(collision.gameObject.layer == LayerMask.NameToLayer("ShakerCap"))
         {
             Destroy(collision.gameObject);
+            BarManager.Instance.CapDespawned();
             BarManager.Instance.SpawnCap();
         }
         else if(collision.gameObject.GetComponent<Bottle>() != null)

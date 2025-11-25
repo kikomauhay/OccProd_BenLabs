@@ -107,7 +107,7 @@ public class Glass : Equipment
         _hasDrink = true;
         _cocktail = cocktail;
         _checkPanel.SetActive(true);
-        _drinks[(int)cocktail].SetActive(true);
+        _drinks[(int)cocktail + 1].SetActive(true);
         
         _soundEmitter.PlaySound(_poofSFX);
         GameManager.Instance.Poof(transform);
