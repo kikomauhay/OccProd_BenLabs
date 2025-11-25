@@ -208,6 +208,15 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         StartCoroutine(CO_SpawnNewCustomer());
     }
 
+    public void DecreaseScore()
+    {
+        _totalScore -= 20f;
+
+        if (_totalScore < 0f)
+            _totalScore = 0f;
+
+        UI_UpdateScore();
+    }
     public void SpawnCap()
     {
         if (_capSpawned > 0)

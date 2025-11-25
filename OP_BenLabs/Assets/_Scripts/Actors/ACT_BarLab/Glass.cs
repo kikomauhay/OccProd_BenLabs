@@ -107,7 +107,19 @@ public class Glass : Equipment
         _hasDrink = true;
         _cocktail = cocktail;
         _checkPanel.SetActive(true);
-        _drinks[(int)cocktail + 1].SetActive(true);
+
+        switch (_cocktail)
+        {
+            case Cocktail.TEQUILA_SUNRISE:
+                _drinks[0].SetActive(true);
+                break;
+            case Cocktail.VODKA_CITRUS:
+                _drinks[1].SetActive(true);
+                break;
+            case Cocktail.COCONUT_MARGARITA:
+                _drinks[2].SetActive(true);
+                break;
+        }
         
         _soundEmitter.PlaySound(_poofSFX);
         GameManager.Instance.Poof(transform);
