@@ -135,6 +135,11 @@ public class Shaker : Equipment, IPourable
     public void Washed()
     {
         StopAllCoroutines();
+
+        if(_isLocked)
+        {
+            BarManager.Instance.CapDespawned();
+        }
     
         _isShaking = false;
         _isPouring = false;
@@ -144,7 +149,6 @@ public class Shaker : Equipment, IPourable
         _shakerCap.gameObject.SetActive(false);
         _rb.velocity = Vector3.zero;
         ResetPosition();
-        BarManager.Instance.CapDesapwned();
         BarManager.Instance.SpawnCap();
 
         _logger.Log($"{this} has no more drink!", TextColor.YELLOW, _isDevMode);
