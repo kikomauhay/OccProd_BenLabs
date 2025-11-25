@@ -47,7 +47,7 @@ public class ColliderCheck : Actor
 
                 CustomerOrder = null;
                 _sndMgr.PlaySound("SND_Correct");
-                _barMgr.Correct(); 
+                _barMgr.Correct();
             }
             else
             {
@@ -56,14 +56,10 @@ public class ColliderCheck : Actor
 
                 _sndMgr.PlaySound("SND_Wrong");
                 _barMgr.Wrong();
+
+                Destroy(other.gameObject);
+                Destroy(CustomerOrder.gameObject);
             }
-
-
-            Destroy(other.gameObject);
-            Debug.Log("The glass has been destroyed!");
-            
-            Destroy(CustomerOrder.gameObject);
-            Debug.Log("CustomerOrder has been destroyed!");
         }
 
         if (!CustomerOrder)

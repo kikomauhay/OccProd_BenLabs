@@ -15,6 +15,8 @@ public class FloorHandler : Singleton<FloorHandler>
     [SerializeField] private Button[] _buttons;
 
     private GameManager _gameMgr;
+    private BarManager _barMgr;
+
     private WaitForSeconds _disableDuration;
 
     #endregion
@@ -55,7 +57,11 @@ public class FloorHandler : Singleton<FloorHandler>
             _gameMgr.SpawnAtrium((FloorType)idx);
                
             _elevDoor.BTN_Open();
-            yield return _elevDoor.Delay;
+
+            if (_barMgr.MinigamePlaying)
+                _barMgr.INT_DoGameOver(); // in case player immediatly leaves the bar
+
+                yield return _elevDoor.Delay;
             _elevDoor.BTN_Close();
         }
 
@@ -112,6 +118,8 @@ public class FloorHandler : Singleton<FloorHandler>
     protected override void InitVariables()
     {
         _gameMgr = GameManager.Instance;
+        _barMgr = BarManager.Instance;
+        
         _disableDuration = new WaitForSeconds(5f);
     }
 
