@@ -45,6 +45,7 @@ public class Glass : Equipment
 
     [Header("Drinks"), Tooltip("0 = Tequila, 1 = Vodka, 2 = Coconut")]
     [SerializeField] private GameObject[] _drinks;
+    [SerializeField] private GameObject _checkPanel;
     [SerializeField] private Sound[] _iceRefillSFXs;
 
     [Header("Drink Stats")]
@@ -87,8 +88,6 @@ public class Glass : Equipment
     }
     public void Served()
     {
-        // give the score to GameMgr + STARTING_SCORE before resetting the drink
-
         ResetDrink();
         _logger.Log("Drink has been served!", gameObject, _isDevMode);
     }
@@ -107,6 +106,7 @@ public class Glass : Equipment
 
         _hasDrink = true;
         _cocktail = cocktail;
+        _checkPanel.SetActive(true);
         _drinks[(int)cocktail].SetActive(true);
         
         _soundEmitter.PlaySound(_poofSFX);
@@ -145,6 +145,7 @@ public class Glass : Equipment
     {
         _hasDrink = false;
         _cocktail = Cocktail.EMPTY;
+        _checkPanel.SetActive(false);
 
         foreach (GameObject drink in _drinks)
             drink.SetActive(false);

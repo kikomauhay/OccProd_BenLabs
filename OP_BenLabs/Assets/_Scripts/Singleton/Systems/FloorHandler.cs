@@ -54,14 +54,14 @@ public class FloorHandler : Singleton<FloorHandler>
                 _floors[i].gameObject.SetActive(i == idx);
                 _logger.Log($"Entering: {(FloorType)idx}", _isDevMode);
             }
+
             _gameMgr.SpawnAtrium((FloorType)idx);
-               
             _elevDoor.BTN_Open();
 
             if (_barMgr.MinigamePlaying)
                 _barMgr.INT_DoGameOver(); // in case player immediatly leaves the bar
 
-                yield return _elevDoor.Delay;
+            yield return _elevDoor.Delay;
             _elevDoor.BTN_Close();
         }
 
