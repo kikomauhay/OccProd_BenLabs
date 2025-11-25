@@ -167,11 +167,8 @@ public class Shaker : Equipment, IPourable
         _cocktail = Cocktail.EMPTY;
         _isPouring = false;
         _isLocked = false;
-    }
 
-    protected override void Test()
-    {
-
+        _checkPanel.SetActive(false);
     }
 
     private void AddIngredient(Ingredient ingredient)

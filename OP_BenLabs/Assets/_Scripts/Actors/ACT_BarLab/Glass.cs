@@ -130,6 +130,8 @@ public class Glass : Equipment
         name = "Cocktail Glass";
         _hasDrink = false;
         _cocktail = Cocktail.EMPTY;
+
+        _checkPanel.SetActive(false);
     }
 
     protected override void Test()

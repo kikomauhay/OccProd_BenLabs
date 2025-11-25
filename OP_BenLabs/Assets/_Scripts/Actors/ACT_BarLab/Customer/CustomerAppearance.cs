@@ -13,8 +13,7 @@ public class CustomerAppearance : MonoBehaviour
     [SerializeField] private MeshRenderer[] _customerRenderer;
 
     [Header("Assets"), Tooltip("0 = Neutral, 1 = Happy, 2 = Angry")]
-    [SerializeField] private GameObject _customerFace;
-    [SerializeField] private Sprite[] _faceSprites;
+    [SerializeField] private GameObject[] _customerFaces;
     [SerializeField] private Material[] _maleCustomerMaterials;
     [SerializeField] private Material _femaleCustomerMaterial;
 
@@ -26,11 +25,12 @@ public class CustomerAppearance : MonoBehaviour
     {
         Debug.Assert(_face, "Missing _face reference!");
         Debug.Assert(_customerRenderer.Length == 4, "Missing _customerRenderer elements!");
-        Debug.Assert(_customerFace, "Missing _customerFace reference!");        
+        Debug.Assert(_customerFaces.Length == 3, "Missing _customerFaces elements!");        
 
-        Debug.Assert(_faceSprites.Length == 3, "Missing _faceSprites elements!");
         Debug.Assert(_maleCustomerMaterials.Length == 2, "Missing _maleCustomerMaterials elements!");
         Debug.Assert(_femaleCustomerMaterial, "Missing _femaleCustomerMaterial reference!");
+
+        SetEmotion(Emotion.HAPPY);
     }
     private void Update()
     {
@@ -57,7 +57,11 @@ public class CustomerAppearance : MonoBehaviour
                                         _femaleCustomerMaterial);
         }
     }
-    public void SetEmotion(Emotion type) => _face.sprite = _faceSprites[(int)type];
+    public void SetEmotion(Emotion type)
+    {
+        for (int i = 0; i < _customerFaces.Length; i++)
+            _customerFaces[i].SetActive((int)type == i);
+    }
 
     #endregion
 }
