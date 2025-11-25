@@ -29,6 +29,7 @@ public class Shaker : Equipment, IPourable
 
     [Header("Toggle Objects")]
     [SerializeField] private GameObject _shakerCap;
+    [SerializeField] private GameObject _checkPanel;
 
     #endregion
     #region Private 
@@ -71,7 +72,7 @@ public class Shaker : Equipment, IPourable
     {
         if (!_isLocked) return;
 
-        if(_rb.velocity.magnitude > 0.5F)
+        if(_rb.velocity.magnitude > 0.5f)
         {
             MixingCocktail();
         }
@@ -206,16 +207,15 @@ public class Shaker : Equipment, IPourable
         yield return new WaitForSeconds(5F);
 
         ShakerUnlocked?.Invoke();
+        _checkPanel.SetActive(false);
         _shakerCap.gameObject.SetActive(false);
         _cocktail = Cocktail.EMPTY;
     }
 
     private IEnumerator CO_ShakeDrink() // gets called when the GO is picked up
     {
-        Debug.Log("CO_ShakeDrink Starting: Line 196");
         void CompareIngredients()
         {
-            Debug.Log("Compare Ingredients Starting: Line 199");
             foreach (var recipe in _recipes)
             {
                 // ensures that it has no extra/missing ingredients
@@ -224,7 +224,7 @@ public class Shaker : Equipment, IPourable
 
                 if (isMatching)
                 {
-                    SendHaptics(0.4F, 0.4F);
+                    SendHaptics(0.4f, 0.4f);
                     _cocktail = recipe.Key;
                     _logger.Log($"Created {recipe.Key}!", TextColor.GREEN, _isDevMode);
                     Debug.Log($"Created {recipe.Key}!");
@@ -232,15 +232,16 @@ public class Shaker : Equipment, IPourable
                 }
             }
 
-            SendHaptics(0.8F, 0.5F);
+            SendHaptics(0.8f, 0.5f);
             _cocktail = Cocktail.WRONG;
             _logger.Log("Created dubious drink!", TextColor.RED, _isDevMode);
             Debug.Log("Created dubious drink!");
         }
 
         // time for the player to earn bonus points
-        yield return new WaitForSeconds(Random.Range(10F, 15F));
+        yield return new WaitForSeconds(Random.Range(10f, 15f));
         CompareIngredients();
+        _checkPanel.SetActive(true);
     }
 
     #endregion
