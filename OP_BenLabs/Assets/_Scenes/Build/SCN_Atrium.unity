@@ -566,6 +566,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 814758837}
+  - {fileID: 1495682832}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1894,6 +1895,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7188082015707702975, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_margin.z
+      value: -32.049583
+      objectReference: {fileID: 0}
     - target: {fileID: 7286533456374933867, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
@@ -3041,7 +3047,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1941823524}
+    m_TransformParent: {fileID: 335782402}
     m_Modifications:
     - target: {fileID: 107841522, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
       propertyPath: m_fontAsset
@@ -3209,7 +3215,7 @@ PrefabInstance:
     - target: {fileID: 3350122296476153058, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3350122296476153058, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -4724,8 +4730,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1495682832}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
