@@ -82,6 +82,8 @@ public class Bottle : Equipment, IPourable
                     Quaternion.identity, transform);
         OnBeginPourIngredient?.Invoke(_ingredient);
     }
+
+    public void ResetBottle() => ResetPosition();
         
     #endregion
 }

@@ -16,7 +16,7 @@ public class Customer : Actor
 
     [Header("Customer Stats")]
     [SerializeField] private Cocktail _wantedCocktail;
-    [SerializeField] private float _decreaseRate, _reactionTimer;
+    [SerializeField] private float _decreaseRate, _reactionTimer, _rotOffset;
 
     [Header("Customer UI")]
     [SerializeField] private Slider _timerSlider;
@@ -98,7 +98,12 @@ public class Customer : Actor
         name = $"{_wantedCocktail} customer";
 
         _customerScore = 100f;
-        _actions.IsMale = Random.value > 0.5f;        
+        _actions.IsMale = Random.value > 0.5f;
+
+        transform.rotation = Quaternion.Euler(transform.rotation.x,
+                                              transform.rotation.y + _rotOffset,
+                                              transform.rotation.z);
+
         _logger.Log($"{this} wants a {_wantedCocktail}", _isDevMode);
     }
 
