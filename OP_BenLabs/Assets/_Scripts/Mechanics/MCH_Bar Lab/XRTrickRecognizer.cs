@@ -104,8 +104,6 @@ public class XRTrickRecognizer : MonoBehaviour
 
     #region Helpers
 
-    //these will be referenced on the unity event OnSelectEntered & OnSelectExited
-
     public void StartTrace()
     {
         if (_isShaking && !_shakerCapped) return;
