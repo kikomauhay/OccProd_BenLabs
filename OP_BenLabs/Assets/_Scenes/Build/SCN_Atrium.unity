@@ -373,6 +373,12 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &215958989 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2499756375502174986, guid: f9e50382e3fe434418f70e4ac82ed023,
+    type: 3}
+  m_PrefabInstance: {fileID: 5650250552023886224}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &245983257 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5650250552135631241, guid: f9e50382e3fe434418f70e4ac82ed023,
@@ -563,6 +569,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &357057093 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4014168074568716127, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 814758836}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &366503974 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6973210836628150652, guid: 0eff3c973227cf84282ba188233b0289,
@@ -1594,6 +1606,16 @@ PrefabInstance:
       propertyPath: _trickRecognizer
       value: 
       objectReference: {fileID: 814758838}
+    - target: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _onboardingBoxes.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _onboardingBoxes.Array.data[2]
+      value: 
+      objectReference: {fileID: 357057093}
     - target: {fileID: 2026419893649808056, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1714,6 +1736,27 @@ PrefabInstance:
       propertyPath: _useGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4313524205325484437, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_text
+      value: " Serve your customer! Grab the glass near the sink and pour the shaker
+        on it. <color=yellow>\n- You can get a new shaker by throwing it at the sink
+        after you serve\ngood luck bartender!\n press play when ready\n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4380505826869314960, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_text
+      value: 'get a high score by serving 3 customers their order <color=yellow>
+
+        -
+        Check the customer''s order above their head
+
+        - start making the
+        drink based on the recipes below
+
+        - You have a set time before the
+        customer leaves and get 0 points!'
+      objectReference: {fileID: 0}
     - target: {fileID: 4383557112883656671, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
@@ -1779,6 +1822,13 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 5898643608949201826, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_text
+      value: "Pour the liquids and Enterain your customer before you serve the drink<color=yellow>\n-
+        Get bonus points with flair! \n    - Pass the shaker around, \n    - toss
+        it in the air, \n    - or attempt a mid-air spin before the catch. \n"
+      objectReference: {fileID: 0}
     - target: {fileID: 6148052656667752546, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -2064,12 +2114,12 @@ PrefabInstance:
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.68
+      value: -2.91
       objectReference: {fileID: 0}
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.367
+      value: -10.346
       objectReference: {fileID: 0}
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
@@ -2560,6 +2610,7 @@ MonoBehaviour:
   _poofVFXPrefab: {fileID: 2611135798559895553, guid: 03277cac3d95b3d46a37879aea695411,
     type: 3}
   _txt_TotalGDDScore: {fileID: 7423495154638889248}
+  _logo: {fileID: 215958989}
 --- !u!114 &1376616798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4891,7 +4942,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2110349553
 Transform:
   m_ObjectHideFlags: 0
@@ -5060,12 +5111,12 @@ PrefabInstance:
     - target: {fileID: 7946348821684726375, guid: 2c0157852c2ffb4439a43696940d999f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.225
+      value: 0.946
       objectReference: {fileID: 0}
     - target: {fileID: 8739167108850971083, guid: 2c0157852c2ffb4439a43696940d999f,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.24
+      value: 1.111
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c0157852c2ffb4439a43696940d999f, type: 3}
@@ -6820,10 +6871,35 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3542134167392424819, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 3542134167392424819, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.42
+      objectReference: {fileID: 0}
     - target: {fileID: 3670847390192439146, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_Convex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877554792868026862, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 2.9003756
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877554792868026862, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3877554792868026862, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_Center.z
+      value: -0.37481225
       objectReference: {fileID: 0}
     - target: {fileID: 4176566546304377647, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}

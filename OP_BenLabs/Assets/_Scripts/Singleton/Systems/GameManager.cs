@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _txt_TotalGDDScore;
+    [SerializeField] private GameObject _logo;
 
     #endregion
     #region Private 
@@ -54,6 +55,11 @@ public class GameManager : Singleton<GameManager>
         
     #endregion
     #region Public
+
+    public void DisbaleLogo()
+    {
+        _logo.SetActive(false);
+    }
 
     public void UI_UpdateGDDHiScore(int score)
     {

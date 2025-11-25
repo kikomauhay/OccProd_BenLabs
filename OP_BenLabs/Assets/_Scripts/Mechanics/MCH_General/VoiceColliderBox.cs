@@ -19,6 +19,7 @@ public class VoiceColliderBox : Actor
         {
             _soundEmitter.PlaySound(_onbSFX);
             _col.enabled = false;
+            GameManager.Instance.DisbaleLogo();
         }
     }
 
