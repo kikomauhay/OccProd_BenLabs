@@ -48,7 +48,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
         if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") ||
            other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
-            StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 10f));
+            StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 7f));
             this.gameObject.GetComponent<BoxCollider>().enabled = false;
             _canvasPickUpID.SetActive(false);
         }
@@ -74,7 +74,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
     private IEnumerator StartVROnb(float timer)
     {
         yield return new WaitForSeconds(timer);
-        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 10f));
+        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 7f));
     }
 
     //To turn off the canvas for the VR Onboarding, but can be used for other stuff
