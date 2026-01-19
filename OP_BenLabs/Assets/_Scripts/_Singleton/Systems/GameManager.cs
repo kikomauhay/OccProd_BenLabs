@@ -50,7 +50,7 @@ public class GameManager : Singleton<GameManager>
     protected override void Start()
     {
         base.Start();
-        SpawnAtrium(FloorType.LOBBY);
+        SpawnAtrium(FloorType.Lobby);
     }
         
     #endregion
@@ -78,7 +78,7 @@ public class GameManager : Singleton<GameManager>
 
         switch (floorType)
         {
-            case FloorType.LOBBY:     
+            case FloorType.Lobby:     
                 Spawn(_lobbySpawnpoints[Random.Range(0, _lobbySpawnpoints.Length)]);
                 break;
 
@@ -86,7 +86,7 @@ public class GameManager : Singleton<GameManager>
                 Spawn(_gddSpawnpoints[Random.Range(0, _gddSpawnpoints.Length)]);
                 break;
 
-            case FloorType.BAR:
+            case FloorType.Bar:
                 Spawn(_barLabSpawnpoints[Random.Range(0, _barLabSpawnpoints.Length)]);
                 break;     
             

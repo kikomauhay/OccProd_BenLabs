@@ -27,7 +27,7 @@ public abstract class Singleton<T> : StaticInstance<T> where T : MonoBehaviour
     }
 }
 
-public abstract class PersistentSingleton<T> : Singleton<T> where T : MonoBehaviour
+public abstract class PersistentSingleton<T> : Singleton<T> where T : StaticInstance<T>
 {
     protected override void Awake()
     {

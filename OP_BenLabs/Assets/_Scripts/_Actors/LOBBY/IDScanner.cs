@@ -20,8 +20,6 @@ public class IDScanner : Actor
     #endregion
     #region Private
 
-    private AudioManager _sndMgr;
-
     private Renderer _rend;
     private SoundEmitter _soundEmitter;
     private BoxCollider _col;
@@ -30,6 +28,39 @@ public class IDScanner : Actor
 
     #endregion
     
+    #region Actor
+
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Delete)) RotateGates();
+    }
+
+    protected override void AssertComponents()
+    {
+        a_logger.AssertReference(_invisibleWall);
+
+        a_logger.AssertReference(_leftGate);
+        a_logger.AssertReference(_rightGate);
+
+        a_logger.AssertReference(_idScanSFX);
+    }
+    protected override void InitComponents()
+    {
+        _rend = GetComponent<MeshRenderer>();
+        _soundEmitter = GetComponent<SoundEmitter>();
+        _col = GetComponent<BoxCollider>();
+    }
+    protected override void InitVariables()
+    {
+        a_audMgr = AudioManager.Instance;
+
+        _col.enabled = true;
+
+        _leftStartRot = _leftGate.localRotation;
+        _rightStartRot = _rightGate.localRotation;
+    }
+
+    #endregion
     #region Unity
 
     private void OnTriggerEnter(Collider other)
@@ -41,8 +72,8 @@ public class IDScanner : Actor
             
             RotateGates();
 
-            if (_sndMgr.OnboardingPlaying)
-                _sndMgr.StopOnboarding();
+            if (a_audMgr.OnboardingPlaying)
+                a_audMgr.StopOnboarding();
 
             a_logger.Log("Opened the gates!", TextColor.Lime, a_isDevMode);
         }
@@ -74,39 +105,6 @@ public class IDScanner : Actor
         a_logger.Log("Rotating gates!", a_isDevMode);
         StartCoroutine(CO_GateMovement());
         a_logger.Log("Gates rotated!", a_isDevMode);
-    }
-
-    #endregion
-    #region Helpers
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Delete)) RotateGates();
-    }
-
-    protected override void AssertComponents()
-    {
-        Debug.Assert(_invisibleWall, "Missing _invisibleWall reference!", this);
-
-        Debug.Assert(_leftGate, "Missing _leftGate reference!", this);
-        Debug.Assert(_rightGate, "Missing _rightGate reference!", this);
-
-        Debug.Assert(_idScanSFX, "Missing _idScanSFX reference!", this);
-    }
-    protected override void InitComponents()
-    {
-        _rend = GetComponent<MeshRenderer>();
-        _soundEmitter = GetComponent<SoundEmitter>();
-        _col = GetComponent<BoxCollider>();
-    }
-    protected override void InitVariables()
-    {
-        _sndMgr = AudioManager.Instance;
-
-        _col.enabled = true;
-
-        _leftStartRot = _leftGate.localRotation;
-        _rightStartRot = _rightGate.localRotation;
     }
 
     #endregion

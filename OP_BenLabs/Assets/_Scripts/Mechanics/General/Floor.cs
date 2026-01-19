@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Floor : MonoBehaviour 
+public class Floor : MonoBehaviour
 {
     public FloorType FloorType => _floorType;
     [SerializeField] private FloorType _floorType;
@@ -9,7 +9,8 @@ public class Floor : MonoBehaviour
 [System.Serializable]
 public enum FloorType
 {
-    LOBBY = 0,
+    Lobby = 0,
     GDD = 1,
-    BAR = 2
+    Bar = 2,
+    Inaccesible = 3
 };

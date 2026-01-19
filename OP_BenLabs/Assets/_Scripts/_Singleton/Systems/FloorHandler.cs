@@ -6,21 +6,44 @@ public class FloorHandler : Singleton<FloorHandler>
 {
     #region Members
 
-    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
-    [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
+    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F, 3 = Inaccesible Floors")]  
+    [SerializeField] private Floor[] _floors; // refer to Floor.cs for the enum
     
     [Header("Components")]
     [SerializeField] private ElevatorDoor _elevDoor;
     [SerializeField] private SoundEmitter _soundEmitter; // no Sound here since it'll come from _elevDoor
     [SerializeField] private Button[] _buttons;
 
-    private GameManager _gameMgr;
     private BarManager _barMgr;
-
     private WaitForSeconds _disableDuration;
 
     #endregion
 
+    #region Actor
+
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
+    }
+    protected override void InitComponents()
+    {
+        _barMgr = BarManager.Instance;
+    }
+    protected override void AssertComponents()
+    {
+        a_logger.AssertReference(_floors.Length == System.Enum.GetValues(typeof(FloorType)).Length);
+        a_logger.AssertReference(_elevDoor);
+        a_logger.AssertReference(_soundEmitter);
+        a_logger.AssertReference(_buttons.Length == 17);
+    }
+    protected override void InitVariables()
+    {        
+        _disableDuration = new WaitForSeconds(5f);
+    }
+
+    #endregion
     #region Unity
 
     protected override void OnEnable()
@@ -40,10 +63,10 @@ public class FloorHandler : Singleton<FloorHandler>
         {
             if (!_elevDoor.IsClosed) _elevDoor.BTN_Close();
 
-            if (_gameMgr.AtriumActive) // in case the player didn't interact with Atrium
+            if (a_gameMgr.AtriumActive) // in case the player didn't interact with Atrium
             {
-                _gameMgr.AtriumActive = false;
-                Destroy(_gameMgr.Atrium.gameObject);
+                a_gameMgr.AtriumActive = false;
+                Destroy(a_gameMgr.Atrium.gameObject);
             }
 
             _soundEmitter.PlaySound(_elevDoor.ButtonSFX);
@@ -55,7 +78,7 @@ public class FloorHandler : Singleton<FloorHandler>
                 a_logger.Log($"Entering: {(FloorType)idx}", a_isDevMode);
             }
 
-            _gameMgr.SpawnAtrium((FloorType)idx);
+            a_gameMgr.SpawnAtrium((FloorType)idx);
             _elevDoor.BTN_Open();
 
             if (_barMgr.MinigamePlaying)
@@ -97,31 +120,4 @@ public class FloorHandler : Singleton<FloorHandler>
 
         StartCoroutine(CO_Disable());
     }
-
-    #region Helpers
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
-    }
-
-    protected override void AssertComponents()
-    {
-        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", this);
-
-        Debug.Assert(_elevDoor, "Missing _door reference!", this);
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", this);
-        Debug.Assert(_buttons.Length == 17, "Missing _buttons elements!", this);
-    }
-    protected override void InitVariables()
-    {
-        _gameMgr = GameManager.Instance;
-        _barMgr = BarManager.Instance;
-        
-        _disableDuration = new WaitForSeconds(5f);
-    }
-
-    #endregion
 }
