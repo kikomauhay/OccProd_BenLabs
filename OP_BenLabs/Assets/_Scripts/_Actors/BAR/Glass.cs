@@ -57,6 +57,32 @@ public class Glass : Equipment
 
     #endregion
 
+    #region Actor
+
+    protected override void Test()
+    {
+        // if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
+        // if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
+        // if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
+
+        if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
+    }
+    protected override void InitComponents()
+    {
+        base.InitComponents();
+        a_logger.AssertReference(_iceRefillSFXs.Length == 3);
+    }
+    protected override void InitVariables()
+    {
+        base.InitVariables();
+
+        _hasDrink = false;
+        _cocktail = Cocktail.Empty;
+
+        _checkPanel.SetActive(false);
+    }
+        
+    #endregion
     #region Unity
 
     protected override void OnEnable()
@@ -132,30 +158,6 @@ public class Glass : Equipment
 
     #endregion
     #region Helpers
-
-    protected override void InitComponents()
-    {
-        base.InitComponents();
-        a_logger.AssertReference(_iceRefillSFXs.Length == 3, this);
-    }
-    protected override void InitVariables()
-    {
-        base.InitVariables();
-
-        _hasDrink = false;
-        _cocktail = Cocktail.Empty;
-
-        _checkPanel.SetActive(false);
-    }
-
-    protected override void Test()
-    {
-        // if (Input.GetKeyDown(KeyCode.Alpha4)) EnableDrink(0);
-        // if (Input.GetKeyDown(KeyCode.Alpha5)) EnableDrink(1);
-        // if (Input.GetKeyDown(KeyCode.Alpha6)) EnableDrink(2);
-
-        if (Input.GetKeyDown(KeyCode.Delete)) ResetDrink();
-    }
 
     private void ResetDrink()
     {

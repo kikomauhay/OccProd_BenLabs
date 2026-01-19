@@ -46,7 +46,7 @@ public class SoundEmitter : Actor
     {
         if (s == null)
         {
-            a_logger.AssertReference(s, this);
+            a_logger.AssertReference(s);
             return;
         }
 
