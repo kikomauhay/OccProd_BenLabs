@@ -25,8 +25,8 @@ public class Equipment : Actor, IInteractable
 
     protected override void AssertComponents()
     {
-        a_logger.AssertReference(e_pickUpSFX, this);
-        a_logger.AssertReference(e_landOnFloorSFX, this);
+        a_logger.AssertReference(e_pickUpSFX);
+        a_logger.AssertReference(e_landOnFloorSFX);
     }
     protected override void InitComponents()
     {
