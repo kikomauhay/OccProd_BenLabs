@@ -25,13 +25,13 @@ public class Weapon : Actor
 
     protected override void AssertComponents()
     {
-        a_logger.AssertReference(_weaponType != WeaponType.Default);
-        a_logger.AssertReference(_dmg != 0);
-        a_logger.AssertReference(_hitSFXs.Length != 0);
+        a_logger.AssertReference(_weaponType != WeaponType.Default, this);
+        a_logger.AssertReference(_dmg != 0, this);
+        a_logger.AssertReference(_hitSFXs.Length != 0, this);
 
-        a_logger.AssertReference(_controller);
-        a_logger.AssertReference(_amplitude != 0);
-        a_logger.AssertReference(_duration != 0);
+        a_logger.AssertReference(_controller, this);
+        a_logger.AssertReference(_amplitude != 0, this);
+        a_logger.AssertReference(_duration != 0, this);
     }
     protected override void InitComponents()
     {

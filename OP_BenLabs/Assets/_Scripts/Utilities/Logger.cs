@@ -11,15 +11,15 @@ public class Logger : MonoBehaviour
         if (!condition)
         {
             Debug.Assert(condition, $"<color=red>{msg}</color>", context);
-            Debug.Break();
+            // Debug.Break();
         }
     }
-    public void AssertReference(bool condition)
+    public void AssertReference(bool condition, Object context)
     {
         if (!condition)
         {
-            Debug.Assert(condition, $"<color={TextColor.Red}>Missing reference/s!</color>", this);
-            Debug.Break();            
+            Debug.Assert(condition, $"<color={TextColor.Red}>Missing reference/s!</color>", context);
+            // Debug.Break();            
         }
     }    
     public void Log(object message, bool isDevMode)

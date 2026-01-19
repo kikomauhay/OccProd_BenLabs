@@ -62,20 +62,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     protected override void AssertComponents()
     {
-        a_logger.AssertReference(_codeBlocks.Length == 11);
-        a_logger.AssertReference(_blockLabelsUI);
-        a_logger.AssertReference(_confirmButton);
-        a_logger.AssertReference(_cancelButton);
+        a_logger.AssertReference(_codeBlocks.Length == 11, this);
+        a_logger.AssertReference(_blockLabelsUI, this);
+        a_logger.AssertReference(_confirmButton, this);
+        a_logger.AssertReference(_cancelButton, this);
 
-        a_logger.AssertReference(_waveCountTXT);
-        a_logger.AssertReference(_playerLivesTXT);
-        a_logger.AssertReference(_killCountTXT);
+        a_logger.AssertReference(_waveCountTXT, this);
+        a_logger.AssertReference(_playerLivesTXT, this);
+        a_logger.AssertReference(_killCountTXT, this);
 
-        a_logger.AssertReference(_startWaveSFX);
-        a_logger.AssertReference(_allWavesDoneSFX);
-        a_logger.AssertReference(_gameOverSFX);
-        a_logger.AssertReference(_healSFX);
-        a_logger.AssertReference(_dmgSFX);
+        a_logger.AssertReference(_startWaveSFX, this);
+        a_logger.AssertReference(_allWavesDoneSFX, this);
+        a_logger.AssertReference(_gameOverSFX, this);
+        a_logger.AssertReference(_healSFX, this);
+        a_logger.AssertReference(_dmgSFX, this);
     }
     protected override void InitComponents()
     {        

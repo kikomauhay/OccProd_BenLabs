@@ -16,7 +16,7 @@ public class GlassCleaner : Actor
 
     protected override void AssertComponents()
     {
-        a_logger.AssertReference(_waterSplashSFX);
+        // a_logger.AssertReference(_waterSplashSFX, this);
     }
     protected override void InitComponents() => _sndEmitter = GetComponent<SoundEmitter>();
 

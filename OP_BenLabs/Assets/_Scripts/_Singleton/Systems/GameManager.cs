@@ -35,13 +35,7 @@ public class GameManager : Singleton<GameManager>
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _txt_TotalGDDScore;
     [SerializeField] private GameObject _logo;
-
-    #endregion
-    #region Private 
-
-    private AudioManager _sndMgr;
-
-    private FadeScreen _fadeScreen;
+    [SerializeField] private FadeScreen _fadeScreen;
 
     #endregion
 
@@ -101,7 +95,7 @@ public class GameManager : Singleton<GameManager>
 
             _player.transform.position = _gddWaypoint.position;
             _player.InsideVRSpace = true;
-            _sndMgr.PlaySound("SND_EnterVR");
+            a_audMgr.PlaySound("SND_EnterVR");
 
             yield return StartCoroutine(CO_FadeOut(duration));
         }
@@ -116,7 +110,7 @@ public class GameManager : Singleton<GameManager>
 
             _player.transform.position = _r803Waypoint.position;
             _player.InsideVRSpace = false;
-            _sndMgr.PlaySound("SND_ExitVR");
+            a_audMgr.PlaySound("SND_ExitVR");
 
             yield return StartCoroutine(CO_FadeOut(duration));
         }
@@ -178,7 +172,7 @@ public class GameManager : Singleton<GameManager>
     }
     protected override void InitVariables()
     {
-        _sndMgr = AudioManager.Instance;
+        a_audMgr = AudioManager.Instance;
 
         IsFading = true;
         CanPause = true;

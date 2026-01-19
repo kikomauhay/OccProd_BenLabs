@@ -1,13 +1,14 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Bottle : Equipment, IPourable
 {
     #region Properties
 
-    public Ingredient Ingredient => _ingredient;
-    public event System.Action<Ingredient> OnBeginPourIngredient;
+    public event Action<Ingredient> OnBeginPourIngredient;
     public Action OnStopPour { get; set; }
+    public Ingredient Ingredient => _ingredient;
 
     #endregion
     #region SerializeField
@@ -31,7 +32,13 @@ public class Bottle : Equipment, IPourable
 
     protected override void OnEnable()
     {
-        BarManager.Instance.OnCustomerSpawn += ResetPosition;
+        IEnumerator CO_DelayedBinding()
+        {
+            yield return null;
+            BarManager.Instance.OnCustomerSpawn += ResetPosition;
+        }
+
+        StartCoroutine(CO_DelayedBinding());
     }
     protected override void OnDisable()
     {
