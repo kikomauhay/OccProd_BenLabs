@@ -1,30 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
-
 
 public class DebugDisplay : MonoBehaviour
 {
-    Dictionary<string, string> debugLogs = new Dictionary<string, string>();
+    #region Members
+        
+    private Dictionary<string, string> _debugLogs = new Dictionary<string, string>();
+    public TextMeshProUGUI _display;
 
-    public TextMeshProUGUI display;
+    #endregion
 
-    private void Update()
-    {
-
-    }
-
-    private void OnEnable()
-    {
-        Application.logMessageReceived += HandleLog;
-    }
-
-    private void OnDisable()
-    {
-        Application.logMessageReceived -= HandleLog;
-    }
+    #region Members
+        
+    private void OnEnable() => Application.logMessageReceived += HandleLog;
+    private void OnDisable() => Application.logMessageReceived -= HandleLog;
 
     private void HandleLog(string logString, string stackTrace, LogType type)
     {
@@ -34,31 +24,26 @@ public class DebugDisplay : MonoBehaviour
             string debugKey = splitString[0];
             string debugValue = splitString.Length > 1 ? splitString[1] : " ";
 
-            if(debugLogs.ContainsKey(debugKey))
-            {
-                debugLogs[debugKey] = debugValue;
-            }
-            else
-            {
-                debugLogs.Add(debugKey, debugValue);
-            }
+            if (_debugLogs.ContainsKey(debugKey))
+                _debugLogs[debugKey] = debugValue;
+        
+            else 
+                _debugLogs.Add(debugKey, debugValue);
         }
 
         string displayText = " ";
 
-        foreach (KeyValuePair<string, string> log in debugLogs)
+        foreach (KeyValuePair<string, string> log in _debugLogs)
         {
             if (log.Value == " ")
-            {
                 displayText += log.Key + "\n";
-            }
+            
             else
-            {
                 displayText += log.Key + ": " + log.Value + "\n";
-            }
-            display.text = displayText;
+            
+            _display.text = displayText;
         }
-
-
     }
+
+    #endregion 
 }
