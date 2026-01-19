@@ -16,7 +16,7 @@ public class SoundEmitter : Actor
 
     protected override void AssertComponents()
     {
-        a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", this);
+        // a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", this);
     }
     protected override void InitComponents()
     {
@@ -46,7 +46,7 @@ public class SoundEmitter : Actor
     {
         if (s == null)
         {
-            a_logger.AssertReference(s);
+            a_logger.AssertReference(s, this);
             return;
         }
 

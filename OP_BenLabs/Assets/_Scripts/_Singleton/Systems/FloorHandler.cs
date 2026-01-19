@@ -33,10 +33,10 @@ public class FloorHandler : Singleton<FloorHandler>
     }
     protected override void AssertComponents()
     {
-        a_logger.AssertReference(_floors.Length == System.Enum.GetValues(typeof(FloorType)).Length);
-        a_logger.AssertReference(_elevDoor);
-        a_logger.AssertReference(_soundEmitter);
-        a_logger.AssertReference(_buttons.Length == 17);
+        a_logger.AssertReference(_floors.Length == System.Enum.GetValues(typeof(FloorType)).Length, this);
+        a_logger.AssertReference(_elevDoor, this);
+        a_logger.AssertReference(_soundEmitter, this);
+        a_logger.AssertReference(_buttons.Length == 17, this);
     }
     protected override void InitVariables()
     {        

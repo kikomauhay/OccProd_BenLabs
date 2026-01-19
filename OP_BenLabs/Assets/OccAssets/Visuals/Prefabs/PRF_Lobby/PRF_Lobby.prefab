@@ -755,8 +755,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enableGizmos: 0
-  _maxDistance: 0
+  a_objectType: 0
+  a_isDevMode: 0
+  _enableGizmos: 1
+  _maxDistance: 1
 --- !u!114 &5077015976224947368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,8 +771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -5168,6 +5170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &6789706115081442374
@@ -5182,8 +5186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -6758,6 +6762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &7926535630504876381
@@ -6772,8 +6778,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -8489,6 +8495,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &8415485051454955858
@@ -8503,8 +8511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -8940,6 +8948,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &8848709866816042245
@@ -8954,8 +8964,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -9982,6 +9992,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 2
 --- !u!114 &2696277119972205901
@@ -9996,8 +10008,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338386944c6e9294cb4eaf346aa7498b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _onbSFX: {fileID: 11400000, guid: 862ed24fe1bd4a44897a8c147b48bccd, type: 2}
 --- !u!1 &4641803985333165201
 GameObject:
@@ -18569,10 +18581,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a7176ca89a1cb418977fa08287b74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
-  _pickUpSFX: {fileID: 0}
-  _landOnFloorSFX: {fileID: 0}
+  a_objectType: 0
+  a_isDevMode: 0
+  e_pickUpSFX: {fileID: 0}
+  e_landOnFloorSFX: {fileID: 0}
 --- !u!82 &9061404588776043399
 AudioSource:
   m_ObjectHideFlags: 0
@@ -18681,6 +18693,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 0
   _maxDistance: 0
 --- !u!1 &9102038063065742403
