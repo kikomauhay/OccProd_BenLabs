@@ -18,6 +18,26 @@ public class AudioManager : Singleton<AudioManager>
 
     #endregion
 
+    #region Actor
+
+    protected override void AssertComponents()
+    {
+        a_logger.AssertReference(_sources.Length == 3, this);
+
+        a_logger.AssertReference(_onb.Length != 0, this);
+        a_logger.AssertReference(_sfx.Length != 0, this);
+        a_logger.AssertReference(_bgm.Length != 0, this);
+    }
+    protected override void InitVariables()
+    {
+        foreach (AudioSource src in _sources)
+        {
+            src.spatialBlend = 0f;
+            src.maxDistance = 100f;
+        }
+    }
+
+    #endregion
     #region Pubilc
 
     public void PlayOnboarding(string title)
@@ -93,26 +113,6 @@ public class AudioManager : Singleton<AudioManager>
         foreach (AudioSource src in _sources)
             if (src.isPlaying)
                 src.Stop();
-    }
-
-    #endregion
-    #region Helpers
-
-    protected override void AssertComponents()
-    {
-        Debug.Assert(_sources.Length == 3, "Missing _sources elements!", this);
-
-        Debug.Assert(_onb.Length != 0, "Missing _onb elements!", this);
-        Debug.Assert(_sfx.Length != 0, "Missing _sfx elements!", this);
-        Debug.Assert(_bgm.Length != 0, "Missing _bgm elements!", this);
-    }
-    protected override void InitVariables()
-    {
-        foreach (AudioSource src in _sources)
-        {
-            src.spatialBlend = 0f;
-            src.maxDistance = 100f;
-        }
     }
 
     #endregion

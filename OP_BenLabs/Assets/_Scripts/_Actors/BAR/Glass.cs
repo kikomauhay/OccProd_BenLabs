@@ -70,7 +70,7 @@ public class Glass : Equipment
     protected override void InitComponents()
     {
         base.InitComponents();
-        a_logger.AssertReference(_iceRefillSFXs.Length == 3);
+        a_logger.AssertReference(_iceRefillSFXs.Length == 3, this);
     }
     protected override void InitVariables()
     {

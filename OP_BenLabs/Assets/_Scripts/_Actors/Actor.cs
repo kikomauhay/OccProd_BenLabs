@@ -25,18 +25,20 @@ public abstract class Actor : MonoBehaviour
     #region Unity
 
     protected virtual void Awake()
-    {
+    { 
         a_audMgr = AudioManager.Instance;
         a_gameMgr = GameManager.Instance;
-
         a_logger = LogManager.Instance.Loggers[(int)a_objectType];
         a_logger.Log($"Debugging enabled using <color=yellow>{a_objectType}</color> _logger!", a_isDevMode);
 
-        AssertComponents();
+        AssertComponents();        
         InitComponents();
     }
     protected virtual void OnEnable() { } // subscribe to events
-    protected virtual void Start() => InitVariables();
+    protected virtual void Start()
+    {
+        InitVariables();
+    }
     protected virtual void Update()
     {
         if (a_isDevMode)            

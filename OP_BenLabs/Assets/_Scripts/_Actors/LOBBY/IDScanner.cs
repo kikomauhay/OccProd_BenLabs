@@ -37,12 +37,12 @@ public class IDScanner : Actor
 
     protected override void AssertComponents()
     {
-        a_logger.AssertReference(_invisibleWall);
+        a_logger.AssertReference(_invisibleWall, this);
 
-        a_logger.AssertReference(_leftGate);
-        a_logger.AssertReference(_rightGate);
+        a_logger.AssertReference(_leftGate, this);
+        a_logger.AssertReference(_rightGate, this);
 
-        a_logger.AssertReference(_idScanSFX);
+        a_logger.AssertReference(_idScanSFX, this);
     }
     protected override void InitComponents()
     {
