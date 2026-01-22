@@ -7,6 +7,9 @@ public class Weapon : Actor
 {
     #region Members
 
+    [Header("Necessary Scripts")]
+    [SerializeField] private VelocityChecker _velocityChecker;
+
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private float _dmg;
@@ -47,6 +50,8 @@ public class Weapon : Actor
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_velocityChecker.MagIsValid == false) return;
+
         void TriggerHaptic()
         {
             if (_controller != null)
