@@ -1,25 +1,55 @@
-using DG.Tweening;
 using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
+[RequireComponent(typeof(BoxCollider), typeof(Button))]
 public class ElevatorButton : Actor
 {
     #region Members
 
     public static Action OnButtonPressed { get; set; }
-
-    [SerializeField] private Button _button;
-
+    
     [Header("Tweening")]
     [SerializeField] private Vector3 _endpos;
 
-    private const float CYCLE_LENGTH = 0.2f;
+    private const float CYCLE_LENGTH = 0.2f;    
+    private Button _button;
+    private BoxCollider _col;
     private Vector3 _startPos;
 
     #endregion
+    #region Actor
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            PushButton();
+            a_logger.Log("Button pushed", a_isDevMode);
+        }
+    }
+    protected override void AssertReferences()
+    {
+        a_logger.AssertReference(_endpos != Vector3.zero, this);
+        a_logger.AssertReference(CYCLE_LENGTH != 0f, this);
+    }
+    protected override void InitComponents()
+    {
+        _button = GetComponent<Button>();
+        _col = GetComponent<BoxCollider>();
+    }
+    protected override void InitVariables()
+    {
+        _button.enabled = true;
+        _col.enabled = true;
+        _col.isTrigger = false;
+        
+        _startPos = transform.localPosition;
+    }
+
+    #endregion
     #region Unity
 
     private void OnCollisionEnter(Collision collision)
@@ -35,37 +65,20 @@ public class ElevatorButton : Actor
     }
 
     #endregion
-    #region Helpers
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            PushButton();
-        }
-    }
-
-    protected override void AssertComponents()
-    {
-        Debug.Assert(_button, "Missing _button reference!", gameObject);
-        Debug.Assert(_endpos != Vector3.zero, "Missing _endpos reference!", gameObject);
-        Debug.Assert(CYCLE_LENGTH != 0f, "Missing _cycleLength reference!", gameObject);
-    }
-    protected override void InitVariables()
-    {
-        _startPos = transform.localPosition;
-    }
 
     private void PushButton()
     {
         IEnumerator CO_Push()
         {
             transform.DOLocalMove(_endpos, CYCLE_LENGTH);
+            // _buttonTransform.DOLocalMove(_endpos, CYCLE_LENGTH);
+
             yield return new WaitForSeconds(0.2f);
+         
             transform.DOLocalMove(_startPos, CYCLE_LENGTH);
+            // _buttonTransform.DOLocalMove(_startPos, CYCLE_LENGTH);
         }
 
         StartCoroutine(CO_Push());
     }
-
-    #endregion
 }

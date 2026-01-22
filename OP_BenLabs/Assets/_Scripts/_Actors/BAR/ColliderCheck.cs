@@ -85,7 +85,7 @@ public class ColliderCheck : Actor
     {
         _collider = GetComponent<BoxCollider>();
     }
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", this);
     }

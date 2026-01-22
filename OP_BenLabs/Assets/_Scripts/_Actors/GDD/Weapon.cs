@@ -23,7 +23,7 @@ public class Weapon : Actor
 
     #region Actor
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         a_logger.AssertReference(_weaponType != WeaponType.Default, this);
         a_logger.AssertReference(_dmg != 0, this);

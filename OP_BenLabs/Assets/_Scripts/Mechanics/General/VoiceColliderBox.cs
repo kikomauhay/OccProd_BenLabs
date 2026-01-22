@@ -23,7 +23,7 @@ public class VoiceColliderBox : Actor
         }
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_onbSFX, "Missing _onbSFX reference!", this);
     }

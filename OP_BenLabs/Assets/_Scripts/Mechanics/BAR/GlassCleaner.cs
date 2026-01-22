@@ -14,7 +14,7 @@ public class GlassCleaner : Actor
 
     #region Actor
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         // a_logger.AssertReference(_waterSplashSFX, this);
     }

@@ -20,14 +20,14 @@ public class Player : StaticInstance<Player>
 
     #region Helpers
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_leftHandTools.Length == 2, "Missing elements in _leftHandTools!", this);
         Debug.Assert(_rightHandTools.Length == 2, "Missing elements in _rightHandTools!", this);
         
         Debug.Assert(GetComponent<XROrigin>(), "Missing XROrigin reference!", this);
 
-        base.AssertComponents();
+        base.AssertReferences();
     }
     protected override void InitVariables()
     {

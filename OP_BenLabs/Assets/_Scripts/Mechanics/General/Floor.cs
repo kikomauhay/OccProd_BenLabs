@@ -11,6 +11,7 @@ public enum FloorType
 {
     Lobby = 0,
     GDD = 1,
-    Bar = 2,
-    Inaccesible = 3
+    Cafeteria = 2,
+    Bar = 3,
+    Inaccesible = 4
 };

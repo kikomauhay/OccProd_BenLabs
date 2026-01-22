@@ -256,7 +256,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
         Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);

@@ -23,7 +23,7 @@ public class Equipment : Actor, IInteractable
     
     #region Actor
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         // a_logger.AssertReference(e_pickUpSFX, this);
         // a_logger.AssertReference(e_landOnFloorSFX, this);
@@ -48,7 +48,11 @@ public class Equipment : Actor, IInteractable
     #endregion
     #region Public
 
-    public virtual void INT_Interact() => e_sndEmitter.PlaySound(e_pickUpSFX);
+    public virtual void INT_Interact()
+    {
+        if (e_pickUpSFX != null)
+            e_sndEmitter.PlaySound(e_pickUpSFX);
+    }
         
     #endregion
     #region Protected

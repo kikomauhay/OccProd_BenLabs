@@ -82,7 +82,7 @@ public class Atrium : Actor, IInteractable
         
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_meowSFXs.Length == 2, "Missing _meowSFX elements!", this);
         Debug.Assert(_purrSFX, "Missing _purrSFX reference!", this);
