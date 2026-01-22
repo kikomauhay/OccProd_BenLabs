@@ -133,7 +133,7 @@ public class Enemy : Actor
         if (Input.GetKeyDown(KeyCode.Alpha2)) _soundEmitter.PlaySound(_ltbSFX); 
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_etbSFXs.Length == 3, "Missing elements in _etbSFXs!", this);
         Debug.Assert(_ltbSFX, "Missing _ltbSFX reference!", this);

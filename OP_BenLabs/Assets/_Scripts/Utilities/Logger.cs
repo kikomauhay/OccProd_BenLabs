@@ -41,3 +41,10 @@ public enum TextColor
     Lime = 2, 
     Cyan = 3,
 }
+
+public enum LoggerType
+{
+    Actor = 0,
+    Manager = 1,
+    Component = 2
+}

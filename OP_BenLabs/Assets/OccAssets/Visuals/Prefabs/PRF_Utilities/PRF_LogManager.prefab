@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4757517930728290168}
   - component: {fileID: 4757517930728290169}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   a_objectType: 0
+  a_logger: {fileID: 4757517930728290169}
   a_isDevMode: 0
   _loggers:
   - {fileID: 4757517932380025635}
@@ -109,7 +110,7 @@ GameObject:
   - component: {fileID: 4757517932380025634}
   - component: {fileID: 4757517932380025635}
   m_Layer: 0
-  m_Name: Actors
+  m_Name: Actor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +155,7 @@ GameObject:
   - component: {fileID: 1684266134573783493}
   - component: {fileID: 8395536514011967474}
   m_Layer: 0
-  m_Name: Mechanics
+  m_Name: Component
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

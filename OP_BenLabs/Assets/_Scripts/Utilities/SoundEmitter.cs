@@ -14,17 +14,18 @@ public class SoundEmitter : Actor
     #endregion
     #region Actor
 
-    protected override void AssertComponents()
-    {
-        // a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", this);
-    }
     protected override void InitComponents()
     {
         _src = GetComponent<AudioSource>();
     }
+    protected override void AssertReferences()
+    {
+        a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", gameObject);
+    }
     protected override void InitVariables()
     {
         _src.spatialBlend = 1f;
+        _src.minDistance = 0.3f;
         _src.maxDistance = _maxDistance;
     }
 
@@ -46,7 +47,7 @@ public class SoundEmitter : Actor
     {
         if (s == null)
         {
-            a_logger.AssertReference(s, this);
+            a_logger.AssertReference(s, gameObject);
             return;
         }
 

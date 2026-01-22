@@ -38,7 +38,7 @@ public class ElevatorDoor : Actor
         if (Input.GetKeyDown(KeyCode.RightArrow)) BTN_Close();
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         a_logger.AssertReference(_soundEmitter, this);
         a_logger.AssertReference(a_logger, this);

@@ -6,16 +6,20 @@ public class FloorHandler : Singleton<FloorHandler>
 {
     #region Members
 
-    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F, 3 = Inaccesible Floors")]  
+    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 9F, 3 = 10F, 4 = Inaccesible Floors")]  
     [SerializeField] private Floor[] _floors; // refer to Floor.cs for the enum
+
+    [Header("Elevator Buttons")]  
+    [SerializeField] private Button[] _buttons;
     
     [Header("Components")]
     [SerializeField] private ElevatorDoor _elevDoor;
     [SerializeField] private SoundEmitter _soundEmitter; // no Sound here since it'll come from _elevDoor
-    [SerializeField] private Button[] _buttons;
 
+    private const int FLOOR_COUNT = 5;
+    private const int ELEVATOR_BUTTON_COUNT = 49; // 16 buttons * 3 panels + 2 buttons outside - 1 bell button on the side 
+    
     private BarManager _barMgr;
-    private WaitForSeconds _disableDuration;
 
     #endregion
 
@@ -31,16 +35,12 @@ public class FloorHandler : Singleton<FloorHandler>
     {
         _barMgr = BarManager.Instance;
     }
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
-        a_logger.AssertReference(_floors.Length == System.Enum.GetValues(typeof(FloorType)).Length, this);
-        a_logger.AssertReference(_elevDoor, this);
-        a_logger.AssertReference(_soundEmitter, this);
-        a_logger.AssertReference(_buttons.Length == 17, this);
-    }
-    protected override void InitVariables()
-    {        
-        _disableDuration = new WaitForSeconds(5f);
+        a_logger.AssertReference(_floors.Length == FLOOR_COUNT, gameObject);
+        a_logger.AssertReference(_buttons.Length == ELEVATOR_BUTTON_COUNT, gameObject);
+        a_logger.AssertReference(_elevDoor, gameObject);
+        a_logger.AssertReference(_soundEmitter, gameObject);
     }
 
     #endregion
@@ -56,6 +56,11 @@ public class FloorHandler : Singleton<FloorHandler>
     }
 
     #endregion
+
+    public void BTN_EmergencyBell()
+    {
+        // just ring bell
+    }
 
     public void BTN_EnterFloor(int idx) // only accessed from inside
     {  
@@ -110,7 +115,7 @@ public class FloorHandler : Singleton<FloorHandler>
 
             a_logger.Log("Disabled all buttons!", a_isDevMode);
 
-            yield return _disableDuration;
+            yield return new WaitForSeconds(5f);
 
             foreach (Button btn in _buttons)
                 btn.interactable = true;

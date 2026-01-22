@@ -20,7 +20,7 @@ public class AudioManager : Singleton<AudioManager>
 
     #region Actor
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         a_logger.AssertReference(_sources.Length == 3, this);
 

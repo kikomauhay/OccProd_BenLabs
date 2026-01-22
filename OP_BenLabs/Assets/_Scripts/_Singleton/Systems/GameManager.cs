@@ -153,7 +153,7 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_player, "Missing _player reference!", this);
      

@@ -5,7 +5,7 @@ public abstract class Actor : MonoBehaviour
     #region Members
 
     [Header("Debugging")]
-    [SerializeField] private ObjectType a_objectType;
+    [SerializeField] private LoggerType a_loggerType;
     [SerializeField] protected bool a_isDevMode;
 
     protected AudioManager a_audMgr;     
@@ -17,8 +17,8 @@ public abstract class Actor : MonoBehaviour
     #region Actor
 
     protected virtual void Test() { }
-    protected virtual void AssertComponents() { }
     protected virtual void InitComponents() { }
+    protected virtual void AssertReferences() { }
     protected virtual void InitVariables() { }
 
     #endregion
@@ -28,15 +28,16 @@ public abstract class Actor : MonoBehaviour
     { 
         a_audMgr = AudioManager.Instance;
         a_gameMgr = GameManager.Instance;
-        a_logger = LogManager.Instance.Loggers[(int)a_objectType];
-        a_logger.Log($"Debugging enabled using <color=yellow>{a_objectType}</color> _logger!", a_isDevMode);
 
-        AssertComponents();        
         InitComponents();
     }
     protected virtual void OnEnable() { } // subscribe to events
     protected virtual void Start()
     {
+        a_logger = LogManager.Instance.Loggers[(int)a_loggerType];
+        a_logger.Log($"Activated Logger with type: <color=yellow>{a_loggerType}</color>", a_isDevMode); 
+
+        AssertReferences();
         InitVariables();
     }
     protected virtual void Update()
@@ -47,11 +48,4 @@ public abstract class Actor : MonoBehaviour
     protected virtual void OnDisable() { } // unsubscribe to events
 
     #endregion
-}
-
-public enum ObjectType
-{
-    Actor = 0,
-    Manager = 1,
-    Mechanic = 2
 }

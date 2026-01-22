@@ -76,7 +76,7 @@ public class Customer : Actor
         }
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_actions, "Missing _actions reference!", this);
         Debug.Assert(_appearance, "Missing _appearance reference!", this);

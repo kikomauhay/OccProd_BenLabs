@@ -60,7 +60,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Backspace)) ClearAllEnemies();
         if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
     }
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         a_logger.AssertReference(_codeBlocks.Length == 11, this);
         a_logger.AssertReference(_blockLabelsUI, this);
