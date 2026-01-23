@@ -755,8 +755,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enableGizmos: 0
-  _maxDistance: 0
+  a_objectType: 0
+  a_isDevMode: 0
+  _enableGizmos: 1
+  _maxDistance: 1
 --- !u!114 &5077015976224947368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,8 +771,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -5168,6 +5170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &6789706115081442374
@@ -5182,8 +5186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -5223,6 +5227,37 @@ Transform:
   - {fileID: 5923845479066678574}
   m_Father: {fileID: 5446145856243151980}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2093620871626956713
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2078677222311219616}
+  m_Layer: 0
+  m_Name: AttachPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2078677222311219616
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2093620871626956713}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0961, y: 0.063, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4387524752877032137}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2127242971867199833
 GameObject:
@@ -6758,6 +6793,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &7926535630504876381
@@ -6772,8 +6809,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -8489,6 +8526,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &8415485051454955858
@@ -8503,8 +8542,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -8940,6 +8979,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 1
 --- !u!114 &8848709866816042245
@@ -8954,8 +8995,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2baeb4dba8f5f64cb761b3b56c366f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _invisibleWall: {fileID: 6114333355045893520}
   _cycleLength: 5
   _gateDelay: 5
@@ -9982,6 +10023,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 2
 --- !u!114 &2696277119972205901
@@ -9996,8 +10039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 338386944c6e9294cb4eaf346aa7498b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_objectType: 0
+  a_isDevMode: 0
   _onbSFX: {fileID: 11400000, guid: 862ed24fe1bd4a44897a8c147b48bccd, type: 2}
 --- !u!1 &4641803985333165201
 GameObject:
@@ -18322,6 +18365,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7636238428518912491}
+  - {fileID: 2078677222311219616}
   m_Father: {fileID: 1082000365550686968}
   m_RootOrder: 59
   m_LocalEulerAnglesHint: {x: -90, y: 180, z: 0}
@@ -18507,7 +18551,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
-  m_AttachTransform: {fileID: 0}
+  m_AttachTransform: {fileID: 2078677222311219616}
   m_SecondaryAttachTransform: {fileID: 0}
   m_UseDynamicAttach: 0
   m_MatchAttachPosition: 1
@@ -18569,10 +18613,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a7176ca89a1cb418977fa08287b74a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
-  _pickUpSFX: {fileID: 0}
-  _landOnFloorSFX: {fileID: 0}
+  a_objectType: 0
+  a_isDevMode: 0
+  e_pickUpSFX: {fileID: 0}
+  e_landOnFloorSFX: {fileID: 0}
+  _attachPoint: {fileID: 0}
 --- !u!82 &9061404588776043399
 AudioSource:
   m_ObjectHideFlags: 0
@@ -18681,6 +18726,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_objectType: 0
+  a_isDevMode: 0
   _enableGizmos: 0
   _maxDistance: 0
 --- !u!1 &9102038063065742403
