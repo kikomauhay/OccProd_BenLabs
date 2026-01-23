@@ -6,7 +6,7 @@ public class FloorHandler : Singleton<FloorHandler>
 {
     #region Members
 
-    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 10F")]
+    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 9F, 3 = 10F, 4 = Inaccesible")]
     [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
     
     [Header("Components")]
@@ -18,6 +18,9 @@ public class FloorHandler : Singleton<FloorHandler>
     private BarManager _barMgr;
 
     private WaitForSeconds _disableDuration;
+
+    private const int FLOOR_COUNT = 4;
+    private const int BUTTON_COUNT = 49; // 16 buttons * 3 panels + 2 outside - 1 bell button not present
 
     #endregion
 
@@ -109,11 +112,11 @@ public class FloorHandler : Singleton<FloorHandler>
 
     protected override void AssertComponents()
     {
-        Debug.Assert(_floors.Length == 3, "Missing _rooms elements!", this);
+        Debug.Assert(_floors.Length == FLOOR_COUNT, "Missing _rooms elements!", this);
 
         Debug.Assert(_elevDoor, "Missing _door reference!", this);
         Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", this);
-        Debug.Assert(_buttons.Length == 17, "Missing _buttons elements!", this);
+        Debug.Assert(_buttons.Length == BUTTON_COUNT, "Missing _buttons elements!", this);
     }
     protected override void InitVariables()
     {
