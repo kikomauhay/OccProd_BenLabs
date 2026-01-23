@@ -6,44 +6,24 @@ public class FloorHandler : Singleton<FloorHandler>
 {
     #region Members
 
-    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 9F, 3 = 10F, 4 = Inaccesible Floors")]  
-    [SerializeField] private Floor[] _floors; // refer to Floor.cs for the enum
-
-    [Header("Elevator Buttons")]  
-    [SerializeField] private Button[] _buttons;
+    [Header("Floors"), Tooltip("0 = Lobby, 1 = 8F, 2 = 9F, 3 = 10F, 4 = Inaccesible")]
+    [SerializeField] private Floor[] _floors; // will change to enums once all floors are made
     
     [Header("Components")]
     [SerializeField] private ElevatorDoor _elevDoor;
     [SerializeField] private SoundEmitter _soundEmitter; // no Sound here since it'll come from _elevDoor
+    [SerializeField] private Button[] _buttons;
 
-    private const int FLOOR_COUNT = 5;
-    private const int ELEVATOR_BUTTON_COUNT = 49; // 16 buttons * 3 panels + 2 buttons outside - 1 bell button on the side 
-    
+    private GameManager _gameMgr;
     private BarManager _barMgr;
 
-    #endregion
+    private WaitForSeconds _disableDuration;
 
-    #region Actor
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
-    }
-    protected override void InitComponents()
-    {
-        _barMgr = BarManager.Instance;
-    }
-    protected override void AssertReferences()
-    {
-        a_logger.AssertReference(_floors.Length == FLOOR_COUNT, gameObject);
-        a_logger.AssertReference(_buttons.Length == ELEVATOR_BUTTON_COUNT, gameObject);
-        a_logger.AssertReference(_elevDoor, gameObject);
-        a_logger.AssertReference(_soundEmitter, gameObject);
-    }
+    private const int FLOOR_COUNT = 4;
+    private const int BUTTON_COUNT = 49; // 16 buttons * 3 panels + 2 outside - 1 bell button not present
 
     #endregion
+
     #region Unity
 
     protected override void OnEnable()
@@ -57,21 +37,16 @@ public class FloorHandler : Singleton<FloorHandler>
 
     #endregion
 
-    public void BTN_EmergencyBell()
-    {
-        // just ring bell
-    }
-
     public void BTN_EnterFloor(int idx) // only accessed from inside
     {  
         IEnumerator CO_MoveToFloor()
         {
             if (!_elevDoor.IsClosed) _elevDoor.BTN_Close();
 
-            if (a_gameMgr.AtriumActive) // in case the player didn't interact with Atrium
+            if (_gameMgr.AtriumActive) // in case the player didn't interact with Atrium
             {
-                a_gameMgr.AtriumActive = false;
-                Destroy(a_gameMgr.Atrium.gameObject);
+                _gameMgr.AtriumActive = false;
+                Destroy(_gameMgr.Atrium.gameObject);
             }
 
             _soundEmitter.PlaySound(_elevDoor.ButtonSFX);
@@ -80,10 +55,10 @@ public class FloorHandler : Singleton<FloorHandler>
             for (int i = 0; i < _floors.Length; i++)
             {
                 _floors[i].gameObject.SetActive(i == idx);
-                a_logger.Log($"Entering: {(FloorType)idx}", a_isDevMode);
+                _logger.Log($"Entering: {(FloorType)idx}", _isDevMode);
             }
 
-            a_gameMgr.SpawnAtrium((FloorType)idx);
+            _gameMgr.SpawnAtrium((FloorType)idx);
             _elevDoor.BTN_Open();
 
             if (_barMgr.MinigamePlaying)
@@ -95,12 +70,12 @@ public class FloorHandler : Singleton<FloorHandler>
 
         if (idx < 0)
         {
-            a_logger.Log($"{this} cannot go there!", a_isDevMode);
+            _logger.Log($"{this} cannot go there!", _isDevMode);
             return;
         }
         if (!GameManager.Instance.CanPause)
         {
-            a_logger.Log("You cannot go to that floor at this time!", a_isDevMode);
+            _logger.Log("You cannot go to that floor at this time!", _isDevMode);
             return;
         }
 
@@ -113,16 +88,43 @@ public class FloorHandler : Singleton<FloorHandler>
             foreach (Button btn in _buttons) 
                 btn.interactable = false;
 
-            a_logger.Log("Disabled all buttons!", a_isDevMode);
+            _logger.Log("Disabled all buttons!", _isDevMode);
 
-            yield return new WaitForSeconds(5f);
+            yield return _disableDuration;
 
             foreach (Button btn in _buttons)
                 btn.interactable = true;
 
-            a_logger.Log("Enabled all buttons!", a_isDevMode);
+            _logger.Log("Enabled all buttons!", _isDevMode);
         }
 
         StartCoroutine(CO_Disable());
     }
+
+    #region Helpers
+
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1)) BTN_EnterFloor(0);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) BTN_EnterFloor(1);
+        if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
+    }
+
+    protected override void AssertComponents()
+    {
+        Debug.Assert(_floors.Length == FLOOR_COUNT, "Missing _rooms elements!", this);
+
+        Debug.Assert(_elevDoor, "Missing _door reference!", this);
+        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", this);
+        Debug.Assert(_buttons.Length == BUTTON_COUNT, "Missing _buttons elements!", this);
+    }
+    protected override void InitVariables()
+    {
+        _gameMgr = GameManager.Instance;
+        _barMgr = BarManager.Instance;
+        
+        _disableDuration = new WaitForSeconds(5f);
+    }
+
+    #endregion
 }

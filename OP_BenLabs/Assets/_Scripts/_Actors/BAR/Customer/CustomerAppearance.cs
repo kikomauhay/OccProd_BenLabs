@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public class CustomerAppearance : MonoBehaviour
 {
     #region Members
@@ -14,8 +13,7 @@ public class CustomerAppearance : MonoBehaviour
 
     [Header("Assets"), Tooltip("0 = Neutral, 1 = Happy, 2 = Angry")]
     [SerializeField] private GameObject[] _customerFaces;
-    [SerializeField] private Material[] _maleCustomerMaterials;
-    [SerializeField] private Material _femaleCustomerMaterial;
+    [SerializeField] private Material[] _customerMaterials;
 
     #endregion
 
@@ -27,17 +25,16 @@ public class CustomerAppearance : MonoBehaviour
         Debug.Assert(_customerRenderer.Length == 4, "Missing _customerRenderer elements!");
         Debug.Assert(_customerFaces.Length == 3, "Missing _customerFaces elements!");        
 
-        Debug.Assert(_maleCustomerMaterials.Length == 2, "Missing _maleCustomerMaterials elements!");
-        Debug.Assert(_femaleCustomerMaterial, "Missing _femaleCustomerMaterial reference!");
+        Debug.Assert(_customerMaterials.Length == 3, "Missing _maleCustomerMaterials elements!");
 
-        SetEmotion(Emotion.HAPPY);
+        SetEmotion(Emotion.Happy);
     }
     private void Update()
     {
         if (_isDevMode) return;
 
         if (Input.GetKeyDown(KeyCode.Space))
-            SetupCustomerBody(Random.value > 0.5f);
+            SetupCustomerBody();
 
         if (Input.GetKeyDown(KeyCode.Backspace))
             SetEmotion((Emotion)Random.Range(0, 3));
@@ -46,16 +43,12 @@ public class CustomerAppearance : MonoBehaviour
     #endregion
     #region Public 
 
-    public void SetupCustomerBody(bool isMale)
+    public void SetupCustomerBody()
     {
-        int i = Random.Range(0, _maleCustomerMaterials.Length);
+        int i = Random.Range(0, _customerMaterials.Length);
 
-        foreach (MeshRenderer rend in _customerRenderer)
-        {
-            rend.material = new Material(isMale ? 
-                                        _maleCustomerMaterials[i] :  
-                                        _femaleCustomerMaterial);
-        }
+        foreach (MeshRenderer rend in _customerRenderer) 
+            rend.material = new Material(_customerMaterials[i]);
     }
     public void SetEmotion(Emotion type)
     {
@@ -70,9 +63,9 @@ public class CustomerAppearance : MonoBehaviour
 
 public enum Emotion
 {
-    NEUTRAL = 0,
-    HAPPY = 1,
-    MAD = 2
+    Neutral = 0,
+    Happy = 1,
+    Mad = 2
 }
 
 #endregion
