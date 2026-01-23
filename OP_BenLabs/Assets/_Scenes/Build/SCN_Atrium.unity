@@ -387,6 +387,11 @@ PrefabInstance:
       propertyPath: _isDevMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5885108639837411402, guid: 2b50814cfd352af45bfb0e25e44282ca,
+        type: 3}
+      propertyPath: a_isDevMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6657197168029212934, guid: 2b50814cfd352af45bfb0e25e44282ca,
         type: 3}
       propertyPath: m_IsActive
@@ -495,7 +500,7 @@ PrefabInstance:
     - target: {fileID: 6657197168893914973, guid: 2b50814cfd352af45bfb0e25e44282ca,
         type: 3}
       propertyPath: m_Name
-      value: PRF_Elevator_NEW (FloorHandler)
+      value: ~PRF_Elevator_NEW (FloorHandler)
       objectReference: {fileID: 0}
     - target: {fileID: 6657197169803684416, guid: 2b50814cfd352af45bfb0e25e44282ca,
         type: 3}
@@ -740,6 +745,11 @@ PrefabInstance:
     - target: {fileID: 6744633058494393145, guid: 2b50814cfd352af45bfb0e25e44282ca,
         type: 3}
       propertyPath: _isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6744633058494393145, guid: 2b50814cfd352af45bfb0e25e44282ca,
+        type: 3}
+      propertyPath: a_isDevMode
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7346942957738118391, guid: 2b50814cfd352af45bfb0e25e44282ca,
@@ -1880,8 +1890,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77c8a6329fe51eb44aaf735d0a10819b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_loggerType: 0
+  a_isDevMode: 0
   _leftRay: {fileID: 2946823196540906808}
   _rightRay: {fileID: 2946823196656695442}
   RightTeleport: {fileID: -3133693787775318047, guid: c348712bda248c246b8c49b3db54643f,
@@ -2260,7 +2270,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37213712dd7cbba438b9e0d5627a440b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  display: {fileID: 1737583726}
+  _display: {fileID: 0}
 --- !u!4 &581082452 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5650250552604636356, guid: f9e50382e3fe434418f70e4ac82ed023,
@@ -2768,7 +2778,7 @@ PrefabInstance:
     - target: {fileID: 2026419893099881138, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_Name
-      value: ~BeverageCounter (BarManager)
+      value: ~PRF_BarManager (BeverageCounter)
       objectReference: {fileID: 0}
     - target: {fileID: 2026419893099881138, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
@@ -2848,6 +2858,16 @@ PrefabInstance:
     - target: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _objectType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: a_isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: a_loggerType
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
@@ -3875,18 +3895,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5650250552023886224}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1348685827 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6657197168832295239, guid: 17afa9c5b28309446a88de5f05f969a8,
-    type: 3}
-  m_PrefabInstance: {fileID: 3224924724849728666}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1376616795
 GameObject:
   m_ObjectHideFlags: 0
@@ -3935,8 +3943,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa1a54a7f0d7b3f42b0170a9c11cfa55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 1
-  _isDevMode: 0
+  a_loggerType: 0
+  a_isDevMode: 0
   _player: {fileID: 8515223491546496659}
   _gddWaypoint: {fileID: 307515440}
   _r803Waypoint: {fileID: 1775923006}
@@ -3962,6 +3970,7 @@ MonoBehaviour:
     type: 3}
   _txt_TotalGDDScore: {fileID: 7423495154638889248}
   _logo: {fileID: 215958989}
+  _fadeScreen: {fileID: 0}
 --- !u!114 &1376616798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3974,6 +3983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_loggerType: 1
+  a_isDevMode: 0
   _enableGizmos: 0
   _maxDistance: 1.06
 --- !u!82 &1376616799
@@ -4612,10 +4623,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3350122296476153068, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: a_loggerType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3350122296476153070, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: m_Name
-      value: ~Virtual Space (GDDManager)
+      value: ~PRF_GDDManager (Virtual Space)
       objectReference: {fileID: 0}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
@@ -5798,8 +5814,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9215f0d1804fd94c8a3922372ab41a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 1
-  _isDevMode: 0
+  a_loggerType: 0
+  a_isDevMode: 0
   _vrOnboardingLines: []
   _barOnboardingLines: []
   _gddOnboardingLines: []
@@ -5821,6 +5837,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_loggerType: 0
+  a_isDevMode: 0
   _enableGizmos: 0
   _maxDistance: 0
 --- !u!82 &1798129083
@@ -7758,7 +7776,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _button
       value: 
-      objectReference: {fileID: 1348685827}
+      objectReference: {fileID: 0}
     - target: {fileID: 7771381760359487890, guid: 17afa9c5b28309446a88de5f05f969a8,
         type: 3}
       propertyPath: _logger
@@ -8019,10 +8037,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1819599838}
     m_Modifications:
+    - target: {fileID: 1348664647487052773, guid: 140223ea2570f0c498a5579156e4ed90,
+        type: 3}
+      propertyPath: a_loggerType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4757517931097432358, guid: 140223ea2570f0c498a5579156e4ed90,
         type: 3}
       propertyPath: m_Name
-      value: ~LogManager
+      value: ~PRF_LogManager
       objectReference: {fileID: 0}
     - target: {fileID: 4757517931097432359, guid: 140223ea2570f0c498a5579156e4ed90,
         type: 3}
@@ -8518,7 +8541,7 @@ PrefabInstance:
     - target: {fileID: 5774335688671076573, guid: 602f52daeba893a47822ff7d4e5edba0,
         type: 3}
       propertyPath: m_Name
-      value: ~SoundManager
+      value: ~PRF_AudioManager
       objectReference: {fileID: 0}
     - target: {fileID: 5774335690496492384, guid: 602f52daeba893a47822ff7d4e5edba0,
         type: 3}

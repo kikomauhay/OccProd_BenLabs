@@ -8,7 +8,7 @@ public abstract class Actor : MonoBehaviour
     [SerializeField] private LoggerType a_loggerType;
     [SerializeField] protected bool a_isDevMode;
 
-    protected AudioManager a_audMgr;     
+    protected AudioManager a_audMgr;
     protected GameManager a_gameMgr;
     protected Logger a_logger;
 
@@ -24,16 +24,13 @@ public abstract class Actor : MonoBehaviour
     #endregion
     #region Unity
 
-    protected virtual void Awake()
-    { 
-        a_audMgr = AudioManager.Instance;
-        a_gameMgr = GameManager.Instance;
-
-        InitComponents();
-    }
+    protected virtual void Awake() => InitComponents();
     protected virtual void OnEnable() { } // subscribe to events
     protected virtual void Start()
     {
+        a_audMgr = AudioManager.Instance;
+        a_gameMgr = GameManager.Instance;
+
         a_logger = LogManager.Instance.Loggers[(int)a_loggerType];
         a_logger.Log($"Activated Logger with type: <color=yellow>{a_loggerType}</color>", a_isDevMode); 
 

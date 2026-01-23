@@ -55,7 +55,7 @@ public class FloorHandler : Singleton<FloorHandler>
             for (int i = 0; i < _floors.Length; i++)
             {
                 _floors[i].gameObject.SetActive(i == idx);
-                _logger.Log($"Entering: {(FloorType)idx}", _isDevMode);
+                a_logger.Log($"Entering: {(FloorType)idx}", a_isDevMode);
             }
 
             _gameMgr.SpawnAtrium((FloorType)idx);
@@ -70,12 +70,12 @@ public class FloorHandler : Singleton<FloorHandler>
 
         if (idx < 0)
         {
-            _logger.Log($"{this} cannot go there!", _isDevMode);
+            a_logger.Log($"{this} cannot go there!", a_isDevMode);
             return;
         }
         if (!GameManager.Instance.CanPause)
         {
-            _logger.Log("You cannot go to that floor at this time!", _isDevMode);
+            a_logger.Log("You cannot go to that floor at this time!", a_isDevMode);
             return;
         }
 
@@ -88,14 +88,14 @@ public class FloorHandler : Singleton<FloorHandler>
             foreach (Button btn in _buttons) 
                 btn.interactable = false;
 
-            _logger.Log("Disabled all buttons!", _isDevMode);
+            a_logger.Log("Disabled all buttons!", a_isDevMode);
 
             yield return _disableDuration;
 
             foreach (Button btn in _buttons)
                 btn.interactable = true;
 
-            _logger.Log("Enabled all buttons!", _isDevMode);
+            a_logger.Log("Enabled all buttons!", a_isDevMode);
         }
 
         StartCoroutine(CO_Disable());
@@ -110,7 +110,7 @@ public class FloorHandler : Singleton<FloorHandler>
         if (Input.GetKeyDown(KeyCode.Alpha3)) BTN_EnterFloor(2);
     }
 
-    protected override void AssertComponents()
+    protected override void AssertReferences()
     {
         Debug.Assert(_floors.Length == FLOOR_COUNT, "Missing _rooms elements!", this);
 
