@@ -52,6 +52,7 @@ public class ElevatorButton : Actor
     #endregion
     #region Unity
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.GetComponent<VR_Hands>() != null)
@@ -63,10 +64,11 @@ public class ElevatorButton : Actor
         }
         else a_logger.Log("NO INTERACTION", TextColor.Red, a_isDevMode);
     }
+    */
 
     #endregion
 
-    private void PushButton()
+    public void PushButton()
     {
         IEnumerator CO_Push()
         {
