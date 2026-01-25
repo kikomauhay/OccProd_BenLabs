@@ -42,8 +42,8 @@ GameObject:
   - component: {fileID: 3137365004693432663}
   - component: {fileID: 2869518886316435782}
   - component: {fileID: 243782474972821003}
-  - component: {fileID: 748467147507816814}
   - component: {fileID: 2105209877707160589}
+  - component: {fileID: 748467147507816814}
   - component: {fileID: 1771578737220765868}
   - component: {fileID: 9015124182539899642}
   - component: {fileID: 4003888223293455338}
@@ -122,6 +122,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &2105209877707160589
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827378070615452543}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1197940916539719349, guid: bb530a446325a4547845c8e5b2489a6f, type: 3}
 --- !u!54 &748467147507816814
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -138,20 +152,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &2105209877707160589
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 827378070615452543}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1197940916539719349, guid: bb530a446325a4547845c8e5b2489a6f, type: 3}
 --- !u!82 &1771578737220765868
 AudioSource:
   m_ObjectHideFlags: 0
@@ -424,8 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a_objectType: 0
-  a_logger: {fileID: 0}
+  a_loggerType: 0
   a_isDevMode: 0
   _enableGizmos: 0
   _maxDistance: 1
@@ -441,8 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5470a072b7f5124458596cdd93e2a5ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a_objectType: 0
-  a_logger: {fileID: 0}
+  a_loggerType: 0
   a_isDevMode: 0
   e_pickUpSFX: {fileID: 11400000, guid: 9faf650f2d2c2cb4080cc268c9a3abde, type: 2}
   e_landOnFloorSFX: {fileID: 11400000, guid: 9faf650f2d2c2cb4080cc268c9a3abde, type: 2}
