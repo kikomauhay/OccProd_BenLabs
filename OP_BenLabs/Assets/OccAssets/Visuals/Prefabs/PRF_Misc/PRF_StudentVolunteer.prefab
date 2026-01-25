@@ -176,11 +176,7 @@ MonoBehaviour:
   - {fileID: 7550715241209659007}
   - {fileID: 0}
   - {fileID: 0}
-  _maleCustomerMaterials:
-  - {fileID: 2100000, guid: b6ccfa5fcc882c0458b18fb4a305a0b4, type: 2}
-  - {fileID: 2100000, guid: 441585fd0e73ec542bb648d0aecfe073, type: 2}
-  - {fileID: 2100000, guid: 9db2c2ca4316b0f46bb91dc1008da45f, type: 2}
-  _femaleCustomerMaterial: {fileID: 0}
+  _customerMaterials: []
 --- !u!114 &1427130549188699080
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1009,7 +1005,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7550715241209659007}
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.45, y: 0.403, z: 0.034}
+  m_LocalPosition: {x: 0.45, y: 0.209, z: 0.034}
   m_LocalScale: {x: 0.082119994, y: 0.082119994, z: 0.082119994}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1057,7 +1053,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -1634893845, guid: af35feeaaf720044b8890fad259ec00a, type: 3}
+  m_Sprite: {fileID: 968921453, guid: af35feeaaf720044b8890fad259ec00a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
