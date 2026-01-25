@@ -1,3 +1,4 @@
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 
@@ -18,7 +19,7 @@ public class Logger : MonoBehaviour
     {
         if (!condition)
         {
-            Debug.Assert(condition, $"<color={TextColor.Red}>Missing reference/s!</color>", context);
+            Debug.Assert(condition, $"<color={TextColor.Red}>Missing {context}!</color>", context);
             // Debug.Break();            
         }
     }    
