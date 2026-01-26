@@ -20,7 +20,7 @@ public class SoundEmitter : Actor
     }
     protected override void AssertReferences()
     {
-        a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", gameObject);
+        a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", this);
     }
     protected override void InitVariables()
     {
@@ -61,6 +61,7 @@ public class SoundEmitter : Actor
 
         else _src.PlayOneShot(_src.clip);
     }
+    public void StopSound() => _src.Stop();
 
     #endregion
 }
