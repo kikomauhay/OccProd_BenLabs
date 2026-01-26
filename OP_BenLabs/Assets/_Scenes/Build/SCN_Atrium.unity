@@ -3375,11 +3375,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PRF_InaccessibleFloor
       objectReference: {fileID: 0}
-    - target: {fileID: 4545681782423894908, guid: d68b265fb05ee1f4ea5953a1e4606b02,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4545681782423894909, guid: d68b265fb05ee1f4ea5953a1e4606b02,
         type: 3}
       propertyPath: m_RootOrder
@@ -3434,11 +3429,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7423495155396780759, guid: d68b265fb05ee1f4ea5953a1e4606b02,
-        type: 3}
-      propertyPath: _floorType
-      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d68b265fb05ee1f4ea5953a1e4606b02, type: 3}
@@ -8837,6 +8827,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.713
       objectReference: {fileID: 0}
+    - target: {fileID: 1101024529699532897, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1685735389682954248, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2147871487019542416, guid: 0eff3c973227cf84282ba188233b0289,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -8952,6 +8952,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5191530091785783173, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5640255829393647766, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6587716189548871598, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6884515440908092304, guid: 0eff3c973227cf84282ba188233b0289,
         type: 3}
       propertyPath: m_LastSelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -8961,6 +8976,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.713
+      objectReference: {fileID: 0}
+    - target: {fileID: 8077701911677818224, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8813623960843455614, guid: 0eff3c973227cf84282ba188233b0289,
+        type: 3}
+      propertyPath: _enableGizmos
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0eff3c973227cf84282ba188233b0289, type: 3}
