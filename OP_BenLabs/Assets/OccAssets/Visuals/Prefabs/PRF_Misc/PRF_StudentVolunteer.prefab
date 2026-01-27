@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 1427130549188699087}
   - component: {fileID: 1427130549188699086}
   - component: {fileID: 1427130549188699081}
-  - component: {fileID: 1427130549188699080}
-  - component: {fileID: 1427130549188699083}
   - component: {fileID: 1427130549188699085}
   - component: {fileID: 2122546303080594674}
   m_Layer: 0
@@ -32,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1427130549188699082}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.000000059604645, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7550715241209659006}
@@ -177,65 +175,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   _customerMaterials: []
---- !u!114 &1427130549188699080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427130549188699082}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42927feda248dca43b2d68335569dc65, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isDevMode: 0
-  _happyMaleSFXs:
-  - {fileID: 11400000, guid: 310655b1c3e10d2498d274a349d3afdb, type: 2}
-  - {fileID: 11400000, guid: 8826b82bf5a937f4e818b46f29defc79, type: 2}
-  - {fileID: 11400000, guid: 768d3950634f99342b8956ce2f1e7d81, type: 2}
-  _angryMaleSFXs:
-  - {fileID: 11400000, guid: b6298a4123cfed94e96fbe4d5eb12e40, type: 2}
-  - {fileID: 11400000, guid: 4f416e6a133761c48b6f18b37e67a554, type: 2}
-  - {fileID: 11400000, guid: fbb0a62c240f43d47bf59b7578234e4f, type: 2}
-  _happyFemaleSFXs:
-  - {fileID: 11400000, guid: 5a23fe05cf9bfcc4b985c8710ab00ed2, type: 2}
-  - {fileID: 11400000, guid: 0773b98f31b773342ade1f676e69f61e, type: 2}
-  - {fileID: 11400000, guid: a55f40a1b59126f47ac42c50f0b50c01, type: 2}
-  - {fileID: 11400000, guid: fde67e492da043848a0020c329f9f8fa, type: 2}
-  - {fileID: 11400000, guid: 078142d01893e3148942420c12054482, type: 2}
-  - {fileID: 11400000, guid: 40897a7f743b8b74ca8fec8bc2bd7a44, type: 2}
-  _angryFemaleSFXs:
-  - {fileID: 11400000, guid: cff383e81f4874f4f80746b1408b2d35, type: 2}
-  - {fileID: 11400000, guid: 121eb35395b2f17448e1bd93bfa930b8, type: 2}
-  - {fileID: 11400000, guid: 6ae0a2c661ab1ec438f0258df9a2a2b8, type: 2}
-  - {fileID: 11400000, guid: c1a7c5ed86d85ff42b035f0140ac3980, type: 2}
-  - {fileID: 11400000, guid: 25aed04af9314ea4982e5ab0ab29aed4, type: 2}
-  - {fileID: 11400000, guid: 359a8e92d8e0b5546b0a6be8378e80ae, type: 2}
---- !u!114 &1427130549188699083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427130549188699082}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 104495702f22da84fa06f13ce30d34c3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  a_loggerType: 0
-  a_isDevMode: 0
-  _wantedCocktail: 0
-  _decreaseRate: 1.65
-  _reactionTimer: 2
-  _rotOffset: 90
-  _timerSlider: {fileID: 0}
-  _orderTXT: {fileID: 0}
-  _drinkOrdersUI:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!23 &1427130549188699085
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -779,8 +718,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1916894901095918452}
   - component: {fileID: 1416674134084122726}
+  - component: {fileID: 6845821024684424615}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: HandCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -814,6 +754,108 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.1, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6845821024684424615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6268372002332509949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a35f6cfbfba9b548aaa00d52cfe8a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_Colliders: []
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  m_OnFirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnLastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnDeactivate:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &6630564967689682472
 GameObject:
   m_ObjectHideFlags: 0
