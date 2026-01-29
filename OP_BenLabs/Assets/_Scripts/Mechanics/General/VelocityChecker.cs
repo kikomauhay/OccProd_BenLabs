@@ -6,12 +6,12 @@ public class VelocityChecker : MonoBehaviour
 {
     #region SerializeField
 
-    [SerializeField] private float _magCheck;
     [SerializeField] private Rigidbody _rb;
 
     #endregion
     #region Public
 
+    public float MagCheck;
     public bool MagIsValid;
 
     #endregion
@@ -27,10 +27,12 @@ public class VelocityChecker : MonoBehaviour
     {
         if (_rb == null) return;
 
-        if(_rb.velocity.magnitude > _magCheck)
+        if(_rb.velocity.magnitude > MagCheck)
         {
             MagIsValid=true;
         }
+        else
+            MagIsValid=false;
     }
     #endregion
 }
