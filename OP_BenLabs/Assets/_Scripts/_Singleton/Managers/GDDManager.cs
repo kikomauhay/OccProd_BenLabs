@@ -169,6 +169,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveHandler.gameObject.SetActive(true);
             _blockLabelsUI.SetActive(true);
             a_audMgr.StopMusic();
+
+            StampCard.Instance.Stamp(3);
         }
 
         StartCoroutine(CO_GameOver());
