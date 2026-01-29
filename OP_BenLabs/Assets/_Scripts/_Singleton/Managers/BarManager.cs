@@ -31,9 +31,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     #endregion
     #region Private
-
-    private AudioManager _sndMgr;
-
+ 
     private const int MAX_STRIKES = 3;
     private const int MAX_CUSTOMERS_SERVED = 3;
     private const float SERVING_SCORE = 100f;
@@ -46,6 +44,33 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
     #endregion
 
+    #region Actor
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
+        if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
+    }
+    protected override void InitComponents()
+    {
+        _startButton.SetActive(true);
+    }
+    protected override void AssertReferences()
+    {
+        a_logger.AssertReference(_soundEmitter, this);
+        a_logger.AssertReference(_colliderCheck, this);
+        a_logger.AssertReference(_customerSpawnpoint, this);
+    }
+    protected override void InitVariables()
+    {
+        _currStrike = 0;
+        _customersServed = 0;
+        _totalScore = 0f;
+
+        _capSpawned = 1;
+        _minigamePlaying = false;
+    }
+
+    #endregion
     #region Unity
 
     protected override void OnEnable()
@@ -66,11 +91,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     {
         EnableOnboardingPanels(false);
 
-        if (_sndMgr.OnboardingPlaying)
-            _sndMgr.StopOnboarding();
+        if (a_audMgr.OnboardingPlaying)
+            a_audMgr.StopOnboarding();
 
         _startButton.SetActive(false);
-        _sndMgr.PlayMusic("SND_BAR_BGM_01");
+        a_audMgr.PlayMusic("SND_BAR_BGM_01");
         
         _totalScore = 0;
         _minigamePlaying = true;
@@ -92,8 +117,9 @@ public class BarManager : Singleton<BarManager>, IGameHandler
 
         _minigamePlaying = false;
         _startButton.SetActive(true);
-        _sndMgr.StopMusic();
+        a_audMgr.StopMusic();
         a_logger.Log("Bar mini-game has finished!", a_isDevMode);
+        StampCard.Instance.Stamp(6);
     }
     public void INT_ResetValues()
     {
@@ -221,7 +247,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     {
         if (_capSpawned > 0)
         {
-            _sndMgr.PlaySound("SND_Unsure");
+            a_audMgr.PlaySound("SND_Unsure");
             a_logger.Log("Cap is already spawned!", a_isDevMode);
             return;
         }
@@ -244,39 +270,9 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     }
     private void ChangeMusic()
     {
-        _sndMgr.StopMusic();
-        _sndMgr.PlayMusic($"SND_BAR_BGM_0{_customersServed + 1}");
+        a_audMgr.StopMusic();
+        a_audMgr.PlayMusic($"SND_BAR_BGM_0{_customersServed + 1}");
     }
 
-    #endregion
-    #region Helpers
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Tab)) INT_BTN_StartGame();
-        if (Input.GetKeyDown(KeyCode.Space)) SpawnCustomer();
-    }
-
-    protected override void AssertReferences()
-    {
-        Debug.Assert(_soundEmitter, "Missing _soundEmitter reference!", gameObject);
-        Debug.Assert(_colliderCheck, "Missing _colliderCheck reference!", gameObject);
-        Debug.Assert(_customerSpawnpoint, "Missing _customerSpawnpoint reference!", gameObject);
-    }
-    protected override void InitComponents()
-    {
-        _startButton.SetActive(true);
-    }
-    protected override void InitVariables()
-    {
-        _sndMgr = AudioManager.Instance;
-
-        _currStrike = 0;
-        _customersServed = 0;
-        _totalScore = 0f;
-
-        _capSpawned = 1;
-        _minigamePlaying = false;
-    }
-
-    #endregion
+    #endregion    
 }
