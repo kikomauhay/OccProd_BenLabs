@@ -71,6 +71,7 @@ public class Atrium : Actor, IInteractable
         }
 
         StartCoroutine(CO_FunnyRotation());
+        StampCard.Instance.Stamp(7);
     }
 
     #region Helpers

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-public class StampCard : Actor
+public class StampCard : StaticInstance<StampCard>
 {
     #region Members
 
@@ -10,7 +10,7 @@ public class StampCard : Actor
     [SerializeField] private GameObject[] _checkMarks;
 
     [Header("SFXs")]
-    [SerializeField] private Sound _stampSFX; 
+    [SerializeField] private Sound _stampSFX;
         
     #endregion
 
