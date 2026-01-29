@@ -12,7 +12,6 @@ public class Weapon : Actor
 
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
-    [SerializeField] private float _dmg;
     [SerializeField] private Sound[] _hitSFXs;
 
     [Header("XR Controller Settings")]
@@ -21,6 +20,7 @@ public class Weapon : Actor
 
     private SoundEmitter _sndEmitter;
     private float _damageModifier;
+    private float _dmg;
 
     #endregion
 
@@ -57,12 +57,42 @@ public class Weapon : Actor
             if (_controller != null)
                 _controller.SendHapticImpulse(_amplitude, _duration);
         }
-        
+
+        void CalcDamage(float mag)
+        {
+            switch (_weaponType)
+            {
+                case WeaponType.Sword:
+
+                    float SwrdDmg = mag switch
+                    {
+                        >= 10f => 12f,
+                        >= 5f => 6f,
+                        _ => 0f
+                    };
+
+                    SwrdDmg = _dmg;
+                    break;
+                case WeaponType.Hammer:
+
+                    float HmrDmg = mag switch
+                    {
+                        >= 10f => 20f,
+                        >= 5f => 10f,
+                        _ => 0f
+                    };
+
+                    HmrDmg = _dmg;
+                    break;
+            }
+        }
+
         if (other.GetComponent<Enemy>())
         {
             Enemy e = other.GetComponent<Enemy>();
 
             TriggerHaptic();
+            CalcDamage(_velocityChecker.MagCheck);
             e.TakeDamage(_dmg + _damageModifier);
 
             _sndEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);
