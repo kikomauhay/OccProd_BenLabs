@@ -1,18 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 
-public class Marker : MonoBehaviour
+[RequireComponent(typeof(XRGrabInteractable))]
+public class Marker : Actor
 {
-    // Start is called before the first frame update
-    void Start()
+    public void ReleaseMarker()
     {
-        
-    }
+        // add a checker if there's a drawing in the white board
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        StampCard.Instance.Stamp(1);
     }
 }

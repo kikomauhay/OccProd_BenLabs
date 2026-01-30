@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Floor : MonoBehaviour
 {
+    public bool HasVisited { get; set; } = false;
     public FloorType FloorType => _floorType;
     [SerializeField] private FloorType _floorType;
 }
