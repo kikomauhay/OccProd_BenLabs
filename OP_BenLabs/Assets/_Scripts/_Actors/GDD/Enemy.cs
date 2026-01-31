@@ -150,7 +150,7 @@ public class Enemy : Actor
         _rb.mass = 10f;
         _rb.angularDrag = 0f;
         _rb.useGravity = false;
-        _rb.isKinematic = true;
+        _rb.isKinematic = false;
 
         switch (_enemyType)
         {
