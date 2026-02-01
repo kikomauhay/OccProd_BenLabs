@@ -50,8 +50,6 @@ public class Weapon : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_velocityChecker.MagIsValid == false) return;
-
         void TriggerHaptic()
         {
             if (_controller != null)
@@ -67,8 +65,7 @@ public class Weapon : Actor
                     float SwrdDmg = mag switch
                     {
                         >= 10f => 12f,
-                        >= 5f => 6f,
-                        _ => 0f
+                        _ => 6f
                     };
 
                     SwrdDmg = _dmg;
@@ -78,8 +75,7 @@ public class Weapon : Actor
                     float HmrDmg = mag switch
                     {
                         >= 10f => 20f,
-                        >= 5f => 10f,
-                        _ => 0f
+                        _ => 10f
                     };
 
                     HmrDmg = _dmg;
@@ -89,10 +85,11 @@ public class Weapon : Actor
 
         if (other.GetComponent<Enemy>())
         {
+            if (_velocityChecker.CurrentMagnitude < 5F) return;
             Enemy e = other.GetComponent<Enemy>();
 
             TriggerHaptic();
-            CalcDamage(_velocityChecker.MagCheck);
+            CalcDamage(_velocityChecker.CurrentMagnitude);
             e.TakeDamage(_dmg + _damageModifier);
 
             _sndEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);

@@ -6,33 +6,25 @@ public class VelocityChecker : MonoBehaviour
 {
     #region SerializeField
 
-    [SerializeField] private Rigidbody _rb;
+    [SerializeField] Logger _logger;
+
+    private Vector3 _lastPos;
 
     #endregion
     #region Public
-
-    public float MagCheck;
-    public bool MagIsValid;
+    public float CurrentMagnitude;
 
     #endregion
 
     #region Unity
 
-    private void Awake()
-    {
-        MagIsValid = false;
-    }
-
     private void FixedUpdate()
     {
-        if (_rb == null) return;
+        Vector3 velocity = (transform.position - _lastPos) / Time.fixedDeltaTime;
+        CurrentMagnitude = velocity.magnitude;
+        _lastPos = transform.position;
 
-        if(_rb.velocity.magnitude > MagCheck)
-        {
-            MagIsValid=true;
-        }
-        else
-            MagIsValid=false;
+        _logger.Log($"{CurrentMagnitude}",true);
     }
     #endregion
 }
