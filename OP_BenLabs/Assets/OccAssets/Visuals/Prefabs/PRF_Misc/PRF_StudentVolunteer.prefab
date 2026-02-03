@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2122546303080594674}
   - component: {fileID: 1427130549188699087}
   - component: {fileID: 1427130549188699086}
-  - component: {fileID: 1427130549188699081}
+  - component: {fileID: 8986483563100894285}
   m_Layer: 0
   m_Name: PRF_StudentVolunteer
   m_TagString: Untagged
@@ -207,30 +207,26 @@ MonoBehaviour:
   a_isDevMode: 0
   _enableGizmos: 0
   _maxDistance: 2
---- !u!114 &1427130549188699081
+--- !u!114 &8986483563100894285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427130549188699082}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed3c26d7ab5ddd34682b8b5564424791, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e4e709b97aad5442b63c2587916dd29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDevMode: 0
-  _face: {fileID: 0}
-  _customerRenderer:
+  a_loggerType: 0
+  a_isDevMode: 0
+  _meshRends:
   - {fileID: 6431922799042782912}
   - {fileID: 730862676816304197}
   - {fileID: 5000748718086324243}
   - {fileID: 7931128047788099604}
-  _customerFaces:
-  - {fileID: 7550715241209659007}
-  - {fileID: 0}
-  - {fileID: 0}
-  _customerMaterials: []
+  _voiceLine: {fileID: 0}
 --- !u!1 &1754457728346771022
 GameObject:
   m_ObjectHideFlags: 0
