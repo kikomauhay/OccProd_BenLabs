@@ -1,11 +1,8 @@
 using UnityEngine;
 
-public class CustomerAppearance : MonoBehaviour
+public class CustomerAppearance : Actor
 {
     #region Members
-
-    [Header("Debugging")]
-    [SerializeField] private bool _isDevMode;
 
     [Header("Renderers")]
     [SerializeField] private SpriteRenderer _face;
@@ -16,28 +13,34 @@ public class CustomerAppearance : MonoBehaviour
     [SerializeField] private Material[] _customerMaterials;
 
     #endregion
+    
+    #region Actor
 
-    #region Unity
-
-    private void Start()
-    {
-        Debug.Assert(_face, "Missing _face reference!");
-        Debug.Assert(_customerRenderer.Length == 4, "Missing _customerRenderer elements!");
-        Debug.Assert(_customerFaces.Length == 3, "Missing _customerFaces elements!");        
-
-        Debug.Assert(_customerMaterials.Length == 3, "Missing _maleCustomerMaterials elements!");
-
-        SetEmotion(Emotion.Happy);
-    }
-    private void Update()
-    {
-        if (_isDevMode) return;
-
+    protected override void Test()
+    {   
         if (Input.GetKeyDown(KeyCode.Space))
             SetupCustomerBody();
 
         if (Input.GetKeyDown(KeyCode.Backspace))
             SetEmotion((Emotion)Random.Range(0, 3));
+    }
+    protected override void AssertReferences()
+    {
+        a_logger.AssertReference(_face, this);
+        a_logger.AssertReference(_customerRenderer.Length == 4, this);
+        a_logger.AssertReference(_customerFaces.Length == 3, this);        
+
+        a_logger.AssertReference(_customerMaterials.Length == 3, this);
+    }
+        
+    #endregion
+
+    #region Unity
+
+    protected override void Start()
+    {
+        base.Start();
+        SetEmotion(Emotion.Happy);
     }
 
     #endregion
