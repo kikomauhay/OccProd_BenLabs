@@ -29,7 +29,11 @@ public class NPC : Actor
     #endregion
     #region Private
 
-    public void TriggerVoiceLine() => _sndEmtr.PlaySound(_voiceLine);
+    public void TriggerVoiceLine()
+    {
+        _sndEmtr.PlaySound(_voiceLine);
+        Debug.Log($"Voice Line: {_voiceLine.name}");
+    }
         
     #endregion
 }

@@ -13,6 +13,7 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private Sound[] _hitSFXs;
+    [SerializeField] private float _maxMagnitude = 0.1f;
 
     [Header("XR Controller Settings")]
     [SerializeField] private XRBaseController _controller;
@@ -67,8 +68,7 @@ public class Weapon : Actor
                         >= 10f => 12f,
                         _ => 6f
                     };
-
-                    SwrdDmg = _dmg;
+                    _dmg = SwrdDmg;
                     break;
                 case WeaponType.Hammer:
 
@@ -77,15 +77,14 @@ public class Weapon : Actor
                         >= 10f => 20f,
                         _ => 10f
                     };
-
-                    HmrDmg = _dmg;
+                    _dmg = HmrDmg;
                     break;
             }
         }
 
         if (other.GetComponent<Enemy>())
         {
-            if (_velocityChecker.CurrentMagnitude < 5F) return;
+            if (_velocityChecker.CurrentMagnitude < _maxMagnitude) return;
             Enemy e = other.GetComponent<Enemy>();
 
             TriggerHaptic();
