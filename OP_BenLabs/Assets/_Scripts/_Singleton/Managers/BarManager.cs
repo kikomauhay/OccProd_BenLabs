@@ -84,6 +84,11 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _trickRecognizer.OnRecognized.RemoveListener(AddTrickScore);
     }
 
+    protected override void Update()
+    {
+        Test();
+    }
+
     #endregion
     #region Public
 
