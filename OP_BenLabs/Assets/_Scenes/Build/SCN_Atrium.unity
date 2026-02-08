@@ -3558,8 +3558,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 528410961012555219, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.015
+      objectReference: {fileID: 0}
+    - target: {fileID: 528410961012555219, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.23839998
+      objectReference: {fileID: 0}
+    - target: {fileID: 528410961012555219, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.178
       objectReference: {fileID: 0}
     - target: {fileID: 586741643948842549, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
@@ -3857,11 +3867,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2026419893649808063, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2026419895073243210, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
@@ -3877,16 +3882,6 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
-    - target: {fileID: 2763904223178256162, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2800851195716311216, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2975415809019172595, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -3907,11 +3902,6 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
-    - target: {fileID: 3405658069700911922, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3558612796608814296, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_IsActive
@@ -4043,11 +4033,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5659560679139871133, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5725601931086367704, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
@@ -4059,11 +4044,6 @@ PrefabInstance:
       value: "Pour the liquids and Enterain your customer before you serve the drink<color=yellow>\n-
         Get bonus points with flair! \n    - Pass the shaker around, \n    - toss
         it in the air, \n    - or attempt a mid-air spin before the catch. \n"
-      objectReference: {fileID: 0}
-    - target: {fileID: 6094633329083957448, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6148052656667752546, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
@@ -6051,6 +6031,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _objectType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: a_isDevMode
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3350122296476153071, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}

@@ -24,7 +24,7 @@ public class VelocityChecker : MonoBehaviour
         CurrentMagnitude = velocity.magnitude;
         _lastPos = transform.position;
 
-        _logger.Log($"{CurrentMagnitude}",true);
+        //_logger.Log($"{CurrentMagnitude}",true);
     }
     #endregion
 }

@@ -13,13 +13,14 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private Sound[] _hitSFXs;
-    [SerializeField] private float _maxMagnitude = 0.1f;
+    
 
     [Header("XR Controller Settings")]
     [SerializeField] private XRBaseController _controller;
     [SerializeField] private float _amplitude, _duration;
 
     private SoundEmitter _sndEmitter;
+    private float _maxMagnitude = 20.0f;
     private float _damageModifier;
     private float _dmg;
 
@@ -30,7 +31,7 @@ public class Weapon : Actor
     protected override void AssertReferences()
     {
         a_logger.AssertReference(_weaponType != WeaponType.Default, this);
-        a_logger.AssertReference(_dmg != 0, this);
+        //a_logger.AssertReference(_dmg != 0, this);
         a_logger.AssertReference(_hitSFXs.Length != 0, this);
 
         a_logger.AssertReference(_controller, this);
@@ -93,6 +94,7 @@ public class Weapon : Actor
 
             _sndEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);
             a_logger.Log($"{name} dealt damage!", a_isDevMode);
+            Debug.Log($"Current Velocity: {_velocityChecker.CurrentMagnitude}");
         }
     }
 
