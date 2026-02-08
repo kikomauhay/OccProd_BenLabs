@@ -5,8 +5,8 @@ public class StampCard : StaticInstance<StampCard>
 {
     #region Members
 
-    public SoundEmitter SoundEmitter { get; set; }
 
+    [SerializeField] public SoundEmitter _sndEmtr;
     [SerializeField] private GameObject[] _checkMarks;
 
     [Header("SFXs")]
@@ -18,8 +18,9 @@ public class StampCard : StaticInstance<StampCard>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_checkMarks.Length == 9, gameObject);
-        a_logger.AssertReference(_stampSFX, gameObject);
+        a_logger.AssertReference(_sndEmtr, this);
+        a_logger.AssertReference(_checkMarks.Length == 9, this);
+        a_logger.AssertReference(_stampSFX, this);
     }
 
     #endregion
@@ -38,11 +39,10 @@ public class StampCard : StaticInstance<StampCard>
 
     public void Stamp(int i) 
     {
-        if (!_checkMarks[i].activeSelf)
-        {
-            _checkMarks[i].SetActive(true);
-            SoundEmitter.PlaySound(_stampSFX);
-        }
+        if (_checkMarks[i].activeSelf) return;
+
+        _checkMarks[i].SetActive(true);
+        _sndEmtr.PlaySound(_stampSFX);
     }
         
     #endregion

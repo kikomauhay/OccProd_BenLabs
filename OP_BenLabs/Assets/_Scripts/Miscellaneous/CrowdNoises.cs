@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+using UnityEditor.Rendering.PostProcessing;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
@@ -5,34 +7,50 @@ public class CrowdNoises : Actor
 {
     #region Members
 
-    [SerializeField] private Sound _maleCrowdSFX;
-    [SerializeField] private Sound _femaleCrowdSFX;
+    [SerializeField] private Sound _softCrowdSFX;
+    [SerializeField] private Sound[] _loudCrowdSFXs;
         
-    private SoundEmitter _sndEmitter;
+    private SoundEmitter _sndEmtr;
 
     #endregion
     #region Actor
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            _sndEmtr.StopSound();
+            TriggerCrowdSound();
+        }
+    }
     protected override void InitComponents()
     {
-        _sndEmitter = GetComponent<SoundEmitter>();
+        _sndEmtr = GetComponent<SoundEmitter>();
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_maleCrowdSFX, this);
-        a_logger.AssertReference(_femaleCrowdSFX, this);
+        a_logger.AssertReference(_softCrowdSFX, this);
+        a_logger.AssertReference(_loudCrowdSFXs.Length == 3, this);
     }
 
     #endregion
     #region Unity
 
-    protected override void Start()  
+    protected override void Start()
     {
-        _sndEmitter.PlaySound(Random.value > 0.5f ? _maleCrowdSFX : 
-                                                    _femaleCrowdSFX);
+        base.Start();
+        TriggerCrowdSound();
     }
+    protected override void OnDisable() => _sndEmtr.StopSound();
+        
+    #endregion
+    #region Private
 
-    protected override void OnDisable() => _sndEmitter.StopSound();
+    private void TriggerCrowdSound()
+    {
+        _sndEmtr.PlaySound(Random.value > 0.5f ? _loudCrowdSFXs[Random.Range(0, _loudCrowdSFXs.Length)] : 
+                                                 _softCrowdSFX);
+    }
         
     #endregion
 }

@@ -231,10 +231,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  a_loggerType: 0
+  a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 0
-  _maxDistance: 0
+  _maxDistance: 1
 --- !u!114 &1940825425548482027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,6 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
+  _sndEmtr: {fileID: 2140155811312017397}
   _checkMarks:
   - {fileID: 4617305587751145576}
   - {fileID: 7583725320831618621}

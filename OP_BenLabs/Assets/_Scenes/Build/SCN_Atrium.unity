@@ -3877,6 +3877,16 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 2763904223178256162, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2800851195716311216, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2975415809019172595, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -3897,6 +3907,11 @@ PrefabInstance:
       propertyPath: _logger
       value: 
       objectReference: {fileID: 4757517932154350423}
+    - target: {fileID: 3405658069700911922, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3558612796608814296, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_IsActive
@@ -4028,6 +4043,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5659560679139871133, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5725601931086367704, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
@@ -4039,6 +4059,11 @@ PrefabInstance:
       value: "Pour the liquids and Enterain your customer before you serve the drink<color=yellow>\n-
         Get bonus points with flair! \n    - Pass the shaker around, \n    - toss
         it in the air, \n    - or attempt a mid-air spin before the catch. \n"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6094633329083957448, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6148052656667752546, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
@@ -4241,6 +4266,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PRF_InaccessibleFloor
+      objectReference: {fileID: 0}
+    - target: {fileID: 4545681782423894908, guid: d68b265fb05ee1f4ea5953a1e4606b02,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4545681782423894909, guid: d68b265fb05ee1f4ea5953a1e4606b02,
         type: 3}
@@ -9817,11 +9847,37 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2641067081081957174, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: _maxDistance
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2983036865265966266, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: _voiceLine
       value: 
       objectReference: {fileID: 11400000, guid: c134bbcc44dc3ad4cbcb412d31261110,
+        type: 2}
+    - target: {fileID: 2983036865265966266, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: a_isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3059201463669618407, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: a_isDevMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3059201463669618407, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: a_loggerType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3059201463669618407, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: _softCrowdSFX
+      value: 
+      objectReference: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b,
         type: 2}
     - target: {fileID: 3542134167392424819, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
