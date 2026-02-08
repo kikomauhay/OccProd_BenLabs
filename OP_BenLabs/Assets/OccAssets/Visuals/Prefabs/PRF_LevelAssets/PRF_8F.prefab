@@ -17604,7 +17604,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &25979843747432232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17619,8 +17619,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}
 --- !u!1 &3660567763744341541
 GameObject:
   m_ObjectHideFlags: 0
@@ -22574,7 +22577,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &4596438129247803982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22589,8 +22592,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}
 --- !u!1 &4465820149863500917
 GameObject:
   m_ObjectHideFlags: 0
@@ -32517,7 +32523,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &2365532029438104261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32532,8 +32538,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}
 --- !u!1 &6651230786781944136
 GameObject:
   m_ObjectHideFlags: 0
@@ -37438,7 +37447,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &3869533851174498432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37453,8 +37462,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}
 --- !u!1 &7852595178093594999
 GameObject:
   m_ObjectHideFlags: 0
@@ -40158,7 +40170,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &4474506915784997554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40173,8 +40185,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}
 --- !u!1 &8450463281762551388
 GameObject:
   m_ObjectHideFlags: 0
@@ -42967,7 +42982,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &943833650475506558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42982,8 +42997,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}
 --- !u!1 &8908655866035332637
 GameObject:
   m_ObjectHideFlags: 0
@@ -44666,7 +44684,7 @@ MonoBehaviour:
   a_loggerType: 2
   a_isDevMode: 0
   _enableGizmos: 1
-  _maxDistance: 3
+  _maxDistance: 2
 --- !u!114 &1600389270683820649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44681,5 +44699,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   a_loggerType: 2
   a_isDevMode: 0
-  _maleCrowdSFX: {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
-  _femaleCrowdSFX: {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  _softCrowdSFX: {fileID: 11400000, guid: 8bce4b3ea5dec454d8188a9c49804e9b, type: 2}
+  _loudCrowdSFXs:
+  - {fileID: 11400000, guid: 800d6c06a5ae21745b061fa76235fa22, type: 2}
+  - {fileID: 11400000, guid: 6fe566b1c9722e44fa484b8c616a0b1a, type: 2}
+  - {fileID: 11400000, guid: 8d5f578330d02ba4b9e043d7e978685b, type: 2}

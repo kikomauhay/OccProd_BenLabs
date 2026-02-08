@@ -30,8 +30,9 @@ public abstract class Actor : MonoBehaviour
     {
         a_audMgr = AudioManager.Instance;
         a_gameMgr = GameManager.Instance;
+        
         a_logger = LogManager.Instance.Loggers[(int)a_loggerType];
-        a_logger.Log($"Activated Logger with type: <{TextColor.Yellow}>{a_loggerType}</color>", a_isDevMode); 
+        a_logger.Log($"Activated Logger with type: <color=yellow>{a_loggerType}</color>", a_isDevMode); 
 
         AssertReferences();
         InitVariables();
