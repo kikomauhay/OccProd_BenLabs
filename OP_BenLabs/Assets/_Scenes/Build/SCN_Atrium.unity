@@ -3716,6 +3716,21 @@ PrefabInstance:
       propertyPath: _useGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1916917906898770578, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916917907925212025, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916917907925212025, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1988744929269535237, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: _logger
@@ -5235,6 +5250,9 @@ MonoBehaviour:
   _player: {fileID: 8515223491546496659}
   _gddWaypoint: {fileID: 307515440}
   _r803Waypoint: {fileID: 1775923006}
+  _whiteboard: {fileID: 0}
+  _whiteboardNPC: {fileID: 0}
+  _busNPC: {fileID: 0}
   _atriumPrefab: {fileID: 286214266932722053, guid: 7d3c8b4418347b942bd3bf5e030095a9,
     type: 3}
   _lobbySpawnpoints:
