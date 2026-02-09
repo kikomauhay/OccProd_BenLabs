@@ -124,7 +124,9 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _startButton.SetActive(true);
         a_audMgr.StopMusic();
         a_logger.Log("Bar mini-game has finished!", a_isDevMode);
+        
         StampCard.Instance.Stamp(6);
+        a_gameMgr.EnableFinalNPCs();
     }
     public void INT_ResetValues()
     {

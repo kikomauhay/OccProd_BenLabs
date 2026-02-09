@@ -8,7 +8,7 @@ using TMPro;
 [RequireComponent(typeof(SoundEmitter))]
 public class GDDManager : Singleton<GDDManager>, IGameHandler
 {
-    #region SerializeField
+    #region Inspector
 
     [Header("Spawning & Waves")]
     [SerializeField] private BoxCollider _col;
@@ -42,8 +42,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private List<List<GhostBlock>> _ghostBlockGridList;
 
     private SoundEmitter _sndEmitter;
-
-    [SerializeField, Tooltip("Visible for testing")] 
     private List<GameObject> _enemyList;
     
     private Modifier _modifier;
@@ -171,6 +169,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             a_audMgr.StopMusic();
 
             StampCard.Instance.Stamp(3);
+            a_gameMgr.EnableFinalNPCs();
         }
 
         StartCoroutine(CO_GameOver());
