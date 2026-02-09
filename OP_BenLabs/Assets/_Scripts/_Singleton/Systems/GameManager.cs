@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class GameManager : Singleton<GameManager>
     public bool AtriumActive { get; set; }
 
     #endregion
-    #region SerializeField
+    #region Inspector
 
     [Header("XR Player"), Tooltip("Needs the XR Origin Component")]
     [SerializeField] private Player _player;
@@ -24,6 +23,10 @@ public class GameManager : Singleton<GameManager>
     [Header("Waypoints")]
     [SerializeField] private Transform _gddWaypoint;
     [SerializeField] private Transform _r803Waypoint;
+
+    [Header("Onboarding")]
+    [SerializeField] private GameObject _whiteboard;
+    [SerializeField] private GameObject _whiteboardNPC, _busNPC;
 
     [Header("Atrium Spanwpoints")]
     [SerializeField] private GameObject _atriumPrefab;
@@ -39,26 +42,94 @@ public class GameManager : Singleton<GameManager>
 
     #endregion
 
+    #region Actor
+
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            for (int i = 0; i < _lobbySpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, 
+                            _lobbySpawnpoints[i].position,
+                            _lobbySpawnpoints[i].rotation);
+            }   
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            for (int i = 0; i < _gddSpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, 
+                            _gddSpawnpoints[i].position,
+                            _gddSpawnpoints[i].rotation);
+            }   
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            for (int i = 0; i < _barLabSpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, 
+                            _barLabSpawnpoints[i].position,
+                            _barLabSpawnpoints[i].rotation);
+            }   
+        }
+    }
+    protected override void AssertReferences()
+    {
+        a_logger.AssertReference(_player, this);
+     
+        a_logger.AssertReference(_r803Waypoint, this);
+        a_logger.AssertReference(_gddWaypoint, this);
+
+        a_logger.AssertReference(_fadeScreen, this);
+
+        a_logger.AssertReference(_whiteboard, this);    
+        a_logger.AssertReference(_whiteboardNPC, this);    
+        a_logger.AssertReference(_busNPC, this);    
+
+        a_logger.AssertReference(_poofVFXPrefab, this);    
+
+        a_logger.AssertReference(_atriumPrefab, this);
+        a_logger.AssertReference(_lobbySpawnpoints.Length != 0, this);
+        a_logger.AssertReference(_gddSpawnpoints.Length != 0, this);
+        a_logger.AssertReference(_barLabSpawnpoints.Length != 0, this);
+    }
+    protected override void InitComponents()
+    {
+        _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
+    }
+    protected override void InitVariables()
+    {
+        IsFading = true;
+        CanPause = true;
+        InGame = false;
+        AtriumActive = false;
+    }
+
+    #endregion
     #region Unity
 
     protected override void Start()
     {
         base.Start();
         SpawnAtrium(FloorType.Lobby);
+
+        _whiteboard.SetActive(false);
+        _whiteboardNPC.SetActive(false);
+        _busNPC.SetActive(false);
     }
         
     #endregion
     #region Public
 
-    public void DisbaleLogo()
+    public void UI_UpdateGDDHiScore(int score) => _txt_TotalGDDScore.text = score.ToString();
+    public void EnableFinalNPCs()
     {
-        _logo.SetActive(false);
+        _whiteboard.SetActive(true);
+        _whiteboardNPC.SetActive(true);
+        _busNPC.SetActive(true);
     }
-
-    public void UI_UpdateGDDHiScore(int score)
-    {
-        _txt_TotalGDDScore.text = score.ToString();
-    }
+    public void DisableLogo() => _logo.SetActive(false);    
     public void SpawnAtrium(FloorType floorType)
     {
         void Spawn(Transform t) 
@@ -120,67 +191,7 @@ public class GameManager : Singleton<GameManager>
     public void Poof(Transform t) => Destroy(Instantiate(_poofVFXPrefab, t.position, t.rotation), 2f);
 
     #endregion
-    #region Helpers
-
-    protected override void Test()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            for (int i = 0; i < _lobbySpawnpoints.Length; i++)
-            {
-                Instantiate(_atriumPrefab, 
-                            _lobbySpawnpoints[i].position,
-                            _lobbySpawnpoints[i].rotation);
-            }   
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            for (int i = 0; i < _gddSpawnpoints.Length; i++)
-            {
-                Instantiate(_atriumPrefab, 
-                            _gddSpawnpoints[i].position,
-                            _gddSpawnpoints[i].rotation);
-            }   
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            for (int i = 0; i < _barLabSpawnpoints.Length; i++)
-            {
-                Instantiate(_atriumPrefab, 
-                            _barLabSpawnpoints[i].position,
-                            _barLabSpawnpoints[i].rotation);
-            }   
-        }
-    }
-
-    protected override void AssertReferences()
-    {
-        Debug.Assert(_player, "Missing _player reference!", this);
-     
-        Debug.Assert(_r803Waypoint, "Missing _r803Waypoint reference!", this);
-        Debug.Assert(_gddWaypoint, "Missing _gddWaypoint reference!", this);
-
-        Debug.Assert(_fadeScreen, "Missing _fadeScreen reference!", this);
-
-        Debug.Assert(_lobbySpawnpoints.Length != 0, "Missing _lobbySpawnpoints elements!", this);
-        Debug.Assert(_gddSpawnpoints.Length != 0, "Missing _gddSpawnpoints elements!", this);
-        Debug.Assert(_barLabSpawnpoints.Length != 0, "Missing _barLabSpawnpoints elements!", this);
-    }
-    protected override void InitComponents()
-    {
-        _fadeScreen = _player.GetComponentInChildren<FadeScreen>();
-    }
-    protected override void InitVariables()
-    {
-        a_audMgr = AudioManager.Instance;
-
-        IsFading = true;
-        CanPause = true;
-        InGame = false;
-        AtriumActive = false;
-    }
-
-    #endregion
+    
     #region Enumerators
 
     private IEnumerator CO_FadeIn(float duration)
