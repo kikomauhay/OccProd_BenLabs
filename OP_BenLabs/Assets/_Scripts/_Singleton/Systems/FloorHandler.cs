@@ -18,7 +18,7 @@ public class FloorHandler : Singleton<FloorHandler>
     private StampCard _stampCard;
     private WaitForSeconds _disableDuration;
 
-    private const int FLOOR_COUNT = 4;
+    private const int FLOOR_COUNT = 5;
     private const int BUTTON_COUNT = 49; // 16 buttons * 3 panels + 2 outside - 1 bell button not present
 
     #endregion
