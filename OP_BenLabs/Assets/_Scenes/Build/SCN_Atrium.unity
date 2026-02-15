@@ -2824,7 +2824,7 @@ Transform:
   m_Children:
   - {fileID: 288429152}
   m_Father: {fileID: 2359499602224762483}
-  m_RootOrder: 35
+  m_RootOrder: 33
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: -84.436}
 --- !u!114 &323377393
 MonoBehaviour:
@@ -9785,7 +9785,7 @@ PrefabInstance:
     - target: {fileID: 2359499602012654025, guid: 6c23a9a06025120468b59bc043a479ab,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2359499602012654026, guid: 6c23a9a06025120468b59bc043a479ab,
         type: 3}
@@ -9881,6 +9881,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LastSelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3206503230298698670, guid: 6c23a9a06025120468b59bc043a479ab,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6c23a9a06025120468b59bc043a479ab, type: 3}
@@ -10012,7 +10017,7 @@ PrefabInstance:
     - target: {fileID: 1082000365550686971, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1895672293433242359, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
@@ -10106,6 +10111,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 4482741084870313216, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4594098906503535152, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_Layer
@@ -10152,6 +10162,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 5052379783939312445, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5070788360942919986, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_Layer
@@ -10171,6 +10186,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PRF_Whiteboard_StudentVolunteer (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224885763070912060, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5372014794389165755, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
