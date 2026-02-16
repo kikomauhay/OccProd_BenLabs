@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary> - COCKTAIL COMBINATIONS -
@@ -133,23 +134,29 @@ public class Glass : Equipment
         _cocktail = cocktail;
         _checkPanel.SetActive(true);
 
+        int index = -1;
+
         switch (_cocktail)
         {
             case Cocktail.Tequila_Sunrise:
-                _drinks[0].SetActive(true);
+                index = 0;
                 break;
 
             case Cocktail.Vodka_Citrus:
-                _drinks[1].SetActive(true);
+                index = 1;
                 break;
 
             case Cocktail.Coconut_Mergarita:
-                _drinks[2].SetActive(true);
+                index = 2;
                 break;
-
-            default: break;
         }
-        
+
+        if (index != -1)
+        {
+            Renderer rend = _drinks[index].GetComponent<Renderer>();
+            StartCoroutine(FillDrink(rend.material, 2f));
+        }
+
         e_sndEmitter.PlaySound(_poofSFX);
         GameManager.Instance.Poof(transform);
 
@@ -169,6 +176,26 @@ public class Glass : Equipment
             drink.SetActive(false);
 
         a_logger.Log($"{name} has no more drink!", TextColor.Yellow, a_isDevMode);
+    }
+
+    private IEnumerator FillDrink(Material mat, float duration)
+    {
+        float start = mat.GetFloat("_Fill");
+        float target = 0.56f;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time/ duration;
+
+            float value = Mathf.Lerp(start, target, t);
+            mat.SetFloat("_Fill",value);
+
+            yield return null;
+        }
+
+        mat.SetFloat("_Fill",target);
     }
 
     #endregion
