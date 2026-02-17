@@ -59,6 +59,7 @@ public class LiquidPour : MonoBehaviour
     private void BeginPourCocktail(Cocktail cocktail)
     {
         _layerMask = LayerMask.GetMask("Glass");
+        ColorChange(cocktail);
 
         Vector3 FindEndPoint()
         {
@@ -183,6 +184,25 @@ public class LiquidPour : MonoBehaviour
     {
         Vector3 currentPosition = _lineRenderer.GetPosition(index);
         return currentPosition == targetPosition;
+    }
+
+    private void ColorChange(Cocktail cocktail)
+    {
+        switch (cocktail)
+        {
+            case Cocktail.Tequila_Sunrise:
+                _lineRenderer.startColor = Color.red;
+                _lineRenderer.endColor = Color.red;
+                break;
+            case Cocktail.Coconut_Mergarita:
+                _lineRenderer.startColor = Color.green;
+                _lineRenderer.endColor = Color.green;
+                break;
+            case Cocktail.Vodka_Citrus:
+                _lineRenderer.startColor = Color.blue;
+                _lineRenderer.endColor = Color.blue;
+                break;
+        }
     }
 
     #endregion
