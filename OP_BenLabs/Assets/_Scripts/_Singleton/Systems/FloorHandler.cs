@@ -119,7 +119,8 @@ public class FloorHandler : Singleton<FloorHandler>
                 a_logger.Log($"{_floors[i].FloorType} has not been visited yet!", a_isDevMode);
                 continue;
             }
-            
+
+            _barMgr.gameObject.SetActive((FloorType)idx != FloorType.Cafeteria);
             switch ((FloorType)idx)
             {
                 case FloorType.Lobby:     _stampCard.Stamp(8); break;
