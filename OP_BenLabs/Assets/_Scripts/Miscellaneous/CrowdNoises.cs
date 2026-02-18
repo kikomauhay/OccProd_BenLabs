@@ -1,5 +1,4 @@
 using Unity.VisualScripting;
-using UnityEditor.Rendering.PostProcessing;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
