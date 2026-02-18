@@ -155,15 +155,15 @@ public class Enemy : Actor
         switch (_enemyType)
         {
             case EnemyType.CRASHES:
-                _maxHP = 10f;
+                _maxHP = 32f;
                 break;
 
             case EnemyType.SAVE_ERROR:
-                _maxHP = 8f;
+                _maxHP = 22f;
                 break;
 
             case EnemyType.MISSING_TEXTURE:
-                _maxHP = 2f;
+                _maxHP = 14f;
                 break;
 
             default: break;
