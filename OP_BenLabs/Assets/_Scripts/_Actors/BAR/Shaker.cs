@@ -137,8 +137,8 @@ public class Shaker : Equipment, IPourable
         ResetPosition();
         StopAllCoroutines();
 
-        if(_isLocked)
-            BarManager.Instance.CapDespawned();
+        if (_isLocked)
+            BarManager.Instance.DeductCapCount();
     
         _isShaking = false;
         _isPouring = false;
@@ -156,9 +156,8 @@ public class Shaker : Equipment, IPourable
     }
 
     public void SubscribeController(SelectEnterEventArgs args) => _interactor = args.interactorObject as XRBaseInteractor;
-
     public void RemoveController(SelectExitEventArgs args) => _interactor = null;
-        public void IsReleased() => _isGrabbed = false;
+    public void IsReleased() => _isGrabbed = false;
         
     #endregion
     #region Helpers
@@ -177,7 +176,7 @@ public class Shaker : Equipment, IPourable
 
     private void AddIngredient(Ingredient ingredient)
     {
-        if(_isLocked) return;
+        if (_isLocked) return;
 
         if (!_mixedDrink.Contains(ingredient))
         {
@@ -192,7 +191,7 @@ public class Shaker : Equipment, IPourable
 
     private void SendHaptics(float amp, float dur)
     {
-        if(_interactor is XRBaseControllerInteractor controllerInteractor)
+        if (_interactor is XRBaseControllerInteractor controllerInteractor)
         {
             controllerInteractor.SendHapticImpulse(amp, dur);
         }
