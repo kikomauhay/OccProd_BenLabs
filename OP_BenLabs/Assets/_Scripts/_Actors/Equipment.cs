@@ -25,8 +25,8 @@ public class Equipment : Actor, IInteractable
 
     protected override void AssertReferences()
     {
-        // a_logger.AssertReference(e_pickUpSFX, this);
-        // a_logger.AssertReference(e_landOnFloorSFX, this);
+        a_logger.AssertReference(e_pickUpSFX, this);
+        a_logger.AssertReference(e_landOnFloorSFX, this);
     }
     protected override void InitComponents()
     {
@@ -60,7 +60,9 @@ public class Equipment : Actor, IInteractable
     protected void ResetPosition() 
     {
         transform.SetPositionAndRotation(e_startPosition, e_startRotation);
-        e_sndEmitter.PlaySound(e_landOnFloorSFX);
+
+        if (e_landOnFloorSFX != null)
+            e_sndEmitter.PlaySound(e_landOnFloorSFX);
 
         a_logger.Log($"{name}'s position has been reset!", TextColor.Yellow, a_isDevMode);
     }

@@ -121,6 +121,7 @@ public class FloorHandler : Singleton<FloorHandler>
             }
 
             _barMgr.gameObject.SetActive((FloorType)idx != FloorType.Cafeteria);
+            
             switch ((FloorType)idx)
             {
                 case FloorType.Lobby:     _stampCard.Stamp(8); break;

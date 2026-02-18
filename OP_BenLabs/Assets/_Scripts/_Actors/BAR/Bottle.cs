@@ -34,7 +34,7 @@ public class Bottle : Equipment, IPourable
     {
         IEnumerator CO_DelayedBinding()
         {
-            yield return null;
+            yield return new WaitForSeconds(2f);
             BarManager.Instance.OnCustomerSpawn += ResetPosition;
         }
 
@@ -84,9 +84,10 @@ public class Bottle : Equipment, IPourable
     }
     public void INT_Pour()
     {
-        Debug.LogWarning("is pouring");
+        a_logger.Log("pouring", TextColor.Yellow, a_isDevMode);
         Instantiate(_stream, _shakerTip.position,
                     Quaternion.identity, transform);
+
         OnBeginPourIngredient?.Invoke(_ingredient);
     }
 

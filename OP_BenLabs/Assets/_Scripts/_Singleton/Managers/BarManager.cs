@@ -84,11 +84,6 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _trickRecognizer.OnRecognized.RemoveListener(AddTrickScore);
     }
 
-    protected override void Update()
-    {
-        Test();
-    }
-
     #endregion
     #region Public
 
@@ -263,7 +258,7 @@ public class BarManager : Singleton<BarManager>, IGameHandler
         _capSpawned++;
         a_logger.Log($"Cap Respawned at {_capSpawnPoint}", a_isDevMode);
     }
-    public void CapDespawned() => _capSpawned--;
+    public void DeductCapCount() => _capSpawned--;
 
     #endregion
     #region Private
