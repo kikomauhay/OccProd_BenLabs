@@ -5,21 +5,21 @@ public class WaveHandler : StaticInstance<WaveHandler>
     #region Members
 
     public GhostBlock[] GhostBlocks => _ghostBlocks;
-
     [SerializeField] private GhostBlock[] _ghostBlocks;
-    
+
+    private const int GHOST_BLOCK_COUNT = 6;
+
     #endregion
     #region Methods
 
-    protected override void Start()
+    protected override void AssertReferences()
     {
-        Debug.Assert(_ghostBlocks.Length == 9, "Missing elements in _ghostBlocks!", this);
-        base.Start();
+        a_logger.AssertReference(_ghostBlocks.Length == GHOST_BLOCK_COUNT, this);
     }
-
+   
     public void CheckRemainingBlocks()
     {
-        if (GhostBlock.FilledBlocks == 9)
+        if (GhostBlock.FilledBlocks == GHOST_BLOCK_COUNT)
             GDDManager.Instance.EnableButtons(true);
 
         a_logger.Log("Enabled confirm buttons!", a_isDevMode);

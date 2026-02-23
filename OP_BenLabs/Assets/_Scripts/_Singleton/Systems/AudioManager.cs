@@ -114,6 +114,9 @@ public class AudioManager : Singleton<AudioManager>
             if (src.isPlaying)
                 src.Stop();
     }
-
+    public void PlayCorrect() => PlaySound("SND_Correct");
+    public void PlayWrong() => PlaySound("SND_Wrong");
+    public void PlayUnsure() => PlaySound("SND_Unsure");
+    
     #endregion
 }

@@ -45,19 +45,19 @@ public class CodeBlock : Actor, IInteractable
         
         switch (_currBlockType)
         {
-            case BlockType.WEAPON:
+            case BlockType.Weapon:
                 _rend.material.color = Color.blue;
                 break;
 
-            case BlockType.ENEMY:
+            case BlockType.Enemy:
                 _rend.material.color = Color.red;
                 break;
 
-            case BlockType.MODIFIER:
+            case BlockType.Modifier:
                 _rend.material.color = Color.yellow;
                 break;
 
-            case BlockType.NOTHING: break;
+            case BlockType.Nothing: break;
             default:                break;
         }
     }
@@ -79,23 +79,23 @@ public class CodeBlock : Actor, IInteractable
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            _currBlockType = BlockType.NOTHING;
+            _currBlockType = BlockType.Nothing;
 
             switch (_currBlockType)
             {
-                case BlockType.WEAPON:
+                case BlockType.Weapon:
                     _rend.material.color = Color.blue;
                     break;
 
-                case BlockType.ENEMY:
+                case BlockType.Enemy:
                     _rend.material.color = Color.red;
                     break;
 
-                case BlockType.MODIFIER:
+                case BlockType.Modifier:
                     _rend.material.color = Color.yellow;
                     break;
 
-                case BlockType.NOTHING: break;
+                case BlockType.Nothing: break;
                 default: break;
             }
 
@@ -124,22 +124,22 @@ public class CodeBlock : Actor, IInteractable
 
         switch (_currBlockType) // prevents overlaps of diffent block types
         {
-            case BlockType.WEAPON:
+            case BlockType.Weapon:
                 _enemyPrefab = null;
-                _modifier = Modifier.DEFAULT;
+                _modifier = Modifier.Default;
                 break;
 
-            case BlockType.ENEMY:
+            case BlockType.Enemy:
                 _weaponType = WeaponType.Default;
-                _modifier = Modifier.DEFAULT;
+                _modifier = Modifier.Default;
                 break;
 
-            case BlockType.MODIFIER:
+            case BlockType.Modifier:
                 _enemyPrefab = null;
                 _weaponType = WeaponType.Default;
                 break;
 
-            case BlockType.NOTHING: break;
+            case BlockType.Nothing: break;
             default:                break;
         }
 
@@ -152,16 +152,16 @@ public class CodeBlock : Actor, IInteractable
 
 public enum BlockType
 {
-    NOTHING = -1,
-    WEAPON = 0,
-    MODIFIER = 1,
-    ENEMY = 2
+    Nothing = -1,
+    Weapon = 0,
+    Modifier = 1,
+    Enemy = 2
 }
 
 public enum Modifier
 {
-    DEFAULT = 0,
-    HEALTH = 1,
-    DAMAGE = 2,
-    REDUCED_ENEMIES = 3
+    Default = 0,
+    Health = 1,
+    Damage = 2,
+    Reduced_Enemies = 3
 }
