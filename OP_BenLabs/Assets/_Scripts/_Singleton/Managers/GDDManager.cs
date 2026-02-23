@@ -202,7 +202,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     
     public void TakeDamage()
     {
-        // _currHP--;
+        _currHP--;
         _sndEmtr.PlaySound(_playerDamagedSFX);
         UI_UpdatePlayerLife();
 
@@ -365,7 +365,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         int idx = Random.Range(0, _waveIndex + 1);
 
         // a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
-        GameObject enemyObj = _enemyPrefabs[Random.Range(0, idx)];
+        GameObject enemyObj = Instantiate(_enemyPrefabs[Random.Range(0, idx)]);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
 
         // a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
