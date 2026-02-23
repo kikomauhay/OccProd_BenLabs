@@ -20,7 +20,7 @@ public class Weapon : Actor
     [SerializeField] private float _amplitude, _duration;
 
     private SoundEmitter _sndEmitter;
-    private float _maxMagnitude = 20.0f;
+    private float _maxMagnitude = 12.0f;
     private float _damageModifier;
     private float _dmg;
 
