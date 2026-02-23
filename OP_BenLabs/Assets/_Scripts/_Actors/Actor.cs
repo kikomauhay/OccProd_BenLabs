@@ -46,3 +46,35 @@ public abstract class Actor : MonoBehaviour
 
     #endregion
 }
+
+/* - ACTOR SCRIPT TEMPLATE-
+
+using UnityEngine;
+
+public class ScriptName : Actor
+{
+    #region Properties
+        
+    #endregion
+    #region Inspector
+        
+    #endregion
+    #region Private
+        
+    #endregion
+
+    #region Actor
+        
+    #endregion
+    #region Unity
+        
+    #endregion
+    #region Public
+        
+    #endregion
+    #region Private
+
+    #endregion
+}
+
+*/
