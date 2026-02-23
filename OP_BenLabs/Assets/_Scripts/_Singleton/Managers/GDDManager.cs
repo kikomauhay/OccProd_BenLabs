@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
 using TMPro;
 
 [RequireComponent(typeof(SoundEmitter))]
@@ -10,13 +9,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 {
     #region Inspector
 
-    [Header("Spawning & Waves")]
-    [SerializeField] private BoxCollider _col;
-
-    [Header("Wave Panel")]
-    [SerializeField] private WaveHandler _waveHandler;
-    [SerializeField] private CodeBlock[] _codeBlocks;
+    [Header("Wave System")]
+    [SerializeField] private WaveHandler _waveHandlr;
+    [SerializeField] private BoxCollider _spawnpointBounds;
     [SerializeField] private GameObject _blockLabelsUI, _confirmButton, _cancelButton;
+    [SerializeField] private CodeBlock[] _codeBlocks;
+    [SerializeField] private GameObject[] _enemyPrefabs;
 
     [Header("VR Variables")]
     [SerializeField] private bool _usingLeftHand;
@@ -26,28 +24,30 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
     [SerializeField] private TextMeshProUGUI _playerLivesTXT, _killCountTXT, _modifierTXT;
 
-    [Header("SFX")]
+    [Header("SFXs")]
     [SerializeField] private Sound _startWaveSFX;
-    [SerializeField] private Sound _waveDoneSFX ,_allWavesDoneSFX;
-    [SerializeField] private Sound _gameOverSFX, _healSFX, _dmgSFX;
+    [SerializeField] private Sound _waveDoneSFX, _allWavesDoneSFX;
+    [SerializeField] private Sound _gameOverSFX, _playerHealSFX, _playerDamagedSFX;
 
     #endregion   
     #region Private
 
-    private const float SPAWN_INTERVAL = 0.5f;
+    private const int CODE_BLOCK_COUNT = 8;
+    private const int STARTING_HEALTH = 5;
     private const int MAX_WAVE_INDEX = 2;
+    private const int MAX_WEAPON_COUNT = 2;
 
-    private readonly float[] _prepTimes = new float[3] { 15f, 10f, 7f };
-    private readonly int[] _enemiesToSpawn = new int[3] { 8, 16, 20 };
-    private List<List<GhostBlock>> _ghostBlockGridList;
+    private SoundEmitter _sndEmtr;
 
-    private SoundEmitter _sndEmitter;
+    private Modifier _currentModifier; // used in UI & DoWavePreparations()
+    private WaitForSeconds _gracePeriod, _second;
+
+    private List<GhostBlock[]> _ghostBlockGridList;
     private List<GameObject> _enemyList;
+    private float[] _enemyTimers;
     
-    private Modifier _modifier;
-    private int _unitCount, _killCount, _waveIndex;
-    private float _currHP;
-    private bool _coroutineRunning;
+    private int _killCount, _waveIndex;
+    private float _currHP, _timer;
 
     #endregion
 
@@ -55,54 +55,54 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     
     protected override void Test()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace)) ClearAllEnemies();
-        if (Input.GetKeyDown(KeyCode.Space)) SpawnEnemy();
+        if (Input.GetKeyDown(KeyCode.Return)) SpawnEnemy();
+        if (Input.GetKeyDown(KeyCode.Space)) BTN_Confirm();
+    }
+    protected override void InitComponents()
+    {        
+        _sndEmtr = GetComponent<SoundEmitter>();
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_codeBlocks.Length == 11, this);
+        a_logger.AssertReference(_waveHandlr, this);
+        a_logger.AssertReference(_spawnpointBounds, this);
         a_logger.AssertReference(_blockLabelsUI, this);
         a_logger.AssertReference(_confirmButton, this);
         a_logger.AssertReference(_cancelButton, this);
+        a_logger.AssertReference(_codeBlocks.Length == CODE_BLOCK_COUNT, this);
+        // a_logger.AssertReference(_enemyPrefabs.Length == System.Enum.GetValues(typeof(EnemyType)).Length, this);
+
+        a_logger.AssertReference(_xrAButton, this);
+        a_logger.AssertReference(_xrXButton, this);
 
         a_logger.AssertReference(_waveCountTXT, this);
         a_logger.AssertReference(_playerLivesTXT, this);
         a_logger.AssertReference(_killCountTXT, this);
+        a_logger.AssertReference(_modifierTXT, this);
 
         a_logger.AssertReference(_startWaveSFX, this);
+        a_logger.AssertReference(_waveDoneSFX, this);
         a_logger.AssertReference(_allWavesDoneSFX, this);
         a_logger.AssertReference(_gameOverSFX, this);
-        a_logger.AssertReference(_healSFX, this);
-        a_logger.AssertReference(_dmgSFX, this);
-    }
-    protected override void InitComponents()
-    {        
-        _sndEmitter = GetComponent<SoundEmitter>();
+        a_logger.AssertReference(_playerHealSFX, this);
+        a_logger.AssertReference(_playerDamagedSFX, this);
     }
     protected override void InitVariables()
     {
-        _enemyList = new List<GameObject>();
+        GhostBlock[] Take(int start, int length) => _waveHandlr.GhostBlocks[start..length];
 
+        _currentModifier = Modifier.Default;
+        _gracePeriod = new(2.5f);
+        _second = new(1f);
+
+        _ghostBlockGridList = new() { Take(0, 2), Take(2, 4), Take(4, 6) };
+        _enemyList = new();
+        _enemyTimers = new[] { 10f, 15f, 20f };
+
+        _timer = 0;
         _killCount = 0;
         _waveIndex = 0;
-        _currHP = 5f;
-
-        _ghostBlockGridList = new List<List<GhostBlock>>()
-        {
-            new() { _waveHandler.GhostBlocks[0], 
-                    _waveHandler.GhostBlocks[1], 
-                    _waveHandler.GhostBlocks[2] },
-            
-            new() { _waveHandler.GhostBlocks[3], 
-                    _waveHandler.GhostBlocks[4], 
-                    _waveHandler.GhostBlocks[5] },
-            
-            new() { _waveHandler.GhostBlocks[6], 
-                    _waveHandler.GhostBlocks[7], 
-                    _waveHandler.GhostBlocks[8] }
-        };
-
-        _coroutineRunning = false;
+        _currHP = STARTING_HEALTH;
     }
 
     #endregion
@@ -125,7 +125,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _xrAButton.action.Enable();
         _xrXButton.action.Enable();
 
-        _waveHandler.gameObject.SetActive(true);
+        _waveHandlr.gameObject.SetActive(true);
         _blockLabelsUI.SetActive(true);
 
         EnableButtons(false);
@@ -138,8 +138,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     public void INT_BTN_StartGame() // enters the VR Space (not start the actual game)
     {
         a_gameMgr.EnterVR();
-
-        // StartCoroutine(_gameMgr.CO_Enter(FloorType.GDD));
         a_logger.Log("Game start!", TextColor.Yellow, a_isDevMode);
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
@@ -147,24 +145,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         IEnumerator CO_GameOver()
         {
             a_gameMgr.ExitVR();
-            _sndEmitter.PlaySound(_gameOverSFX);
             a_logger.Log("Game over!", TextColor.Yellow, a_isDevMode);
+            _sndEmtr.PlaySound(_gameOverSFX);
 
-            if (_coroutineRunning)
-            {
-                _coroutineRunning = false;
-                a_logger.Log("CO_Spawning() has stopped!", a_isDevMode);
-
-                StopCoroutine(CO_Spawning());
-            }
-
+            StopAllCoroutines();
             ResetGame();
             ResetWeapons();
             ClearAllEnemies();
 
-            yield return new WaitForSeconds(1f);
+            yield return _gracePeriod;
 
-            _waveHandler.gameObject.SetActive(true);
+            _waveHandlr.gameObject.SetActive(true);
             _blockLabelsUI.SetActive(true);
             a_audMgr.StopMusic();
 
@@ -178,66 +169,41 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         _killCount = 0;
         _waveIndex = 0;
-        _currHP = 5f;
-
-        a_logger.Log("Values have been reset!", a_isDevMode);
+        _currHP = STARTING_HEALTH;
     }
 
     public void BTN_Cancel()
     {
         ResetGame();
-        a_logger.Log("Reseting current grid!", a_isDevMode);
+        a_logger.Log("Nareset ang grid!", a_isDevMode);
     }
     public void BTN_Confirm()
     {
-        StartWave();
-
         if (a_audMgr.OnboardingPlaying)
             a_audMgr.StopOnboarding();
-        
-        a_logger.Log("Confirmed wave starting!", a_isDevMode);
+
+        foreach (CodeBlock cb in _codeBlocks)
+            cb.gameObject.SetActive(false);
+
+        if (!a_isDevMode)
+            a_audMgr.PlayMusic("SND_GDD_BGM");
+
+        DoWavePreparations();
+        StartCoroutine(CO_StartEnemySpawning());
     }
 
-    public void SpawnEnemy()
-    {
-        Vector3 GetRandomPositionInBox()
-        {
-            Vector3 size = _col.size;
-            Vector3 localPosition = new Vector3(Random.Range(-size.x / 2f, size.x / 2f),
-                                                Random.Range(-size.y / 2f, size.y / 2f),
-                                                Random.Range(-size.z / 2f, size.z / 2f));
-
-            return _col.transform.TransformPoint(_col.center + localPosition);
-        }
-        void SetUpEnemy(Enemy e)
-        {
-            e.OnDeath += EVENT_CountEnemies;
-            e.OnKilled += EVENT_AddToKills;
-            e.OnKilled += EVENT_GainLife;
-
-            e.SetGoal(a_gameMgr.Player.transform);
-
-            _enemyList.Add(e.gameObject);
-            a_logger.Log("Spawned new enemy!", a_isDevMode);
-        }
-
-        GameObject newEnemy = Instantiate(_ghostBlockGridList[_waveIndex][(int)BlockType.ENEMY].
-                                          EnemyPrefab, GetRandomPositionInBox(), Quaternion.identity);
-
-        SetUpEnemy(newEnemy.GetComponent<Enemy>());
-    }
-   
     public void RemoveEnemy(GameObject e) => _enemyList.Remove(e);
     public void UnbindEvents(Enemy e)
     {
-        e.OnDeath -= EVENT_CountEnemies;
+        e.OnDeath -= EVENT_CountRemainingEnemies;
         e.OnKilled -= EVENT_AddToKills;
         e.OnKilled -= EVENT_GainLife;
     }
+    
     public void TakeDamage()
     {
-        _currHP--;
-        _sndEmitter.PlaySound(_dmgSFX);
+        // _currHP--;
+        _sndEmtr.PlaySound(_playerDamagedSFX);
         UI_UpdatePlayerLife();
 
         if (_currHP < 1f)
@@ -258,10 +224,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #endregion
     #region Private 
 
-    private void EVENT_CountEnemies()
+    private void EVENT_CountRemainingEnemies() // enemy.OnDeath
     {
-        a_logger.Log($"Enemies left: {_enemyList.Count}", TextColor.Lime, a_isDevMode);
-
         if (_enemyList.Count > 0)
         {
             a_logger.Log($"There are {_enemyList.Count} remaining enemies left!", TextColor.Yellow, a_isDevMode);
@@ -269,131 +233,89 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         ResetWeapons();
-        WaveComplete();
+        
+        if (_enemyList.Count > 0)
+            ClearAllEnemies();
+
+        if (_waveIndex > MAX_WAVE_INDEX)
+        {
+            a_audMgr.StopMusic();
+            _sndEmtr.PlaySound(_allWavesDoneSFX);
+            a_gameMgr.UI_UpdateGDDHiScore(_killCount);
+            a_gameMgr.ExitVR();
+            a_logger.Log("All waves done!", a_isDevMode);
+
+            ResetGame();
+        }
+        else
+        {
+            _waveIndex++;
+            UI_UpdateWaveIndex();
+            DoWavePreparations();
+            StartCoroutine(CO_StartEnemySpawning());
+        }
     }
-    private void EVENT_AddToKills()
+    private void EVENT_AddToKills() // enemy.OnKilled
     {
         _killCount++;
         a_logger.Log($"Kill Count: <color={TextColor.Yellow}>{_killCount}</color>", a_isDevMode);
         
-        UI_UpdateKllCount();
+        UI_UpdateKillCount();
     }
-    private void EVENT_GainLife()
+    private void EVENT_GainLife() // enemy.OnKilled
     {
         if (Random.value < 0.1f)
         {
             _currHP++;
-            _sndEmitter.PlaySound(_healSFX);
+            _sndEmtr.PlaySound(_playerHealSFX);
 
             UI_UpdatePlayerLife();
         }
     }
 
-    private void UI_UpdateWaveIndex() => _waveCountTXT.text = $"Wave {_waveIndex + 1}";
-    private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
-    private void UI_UpdateKllCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
-    private void UI_UpdateModifier() => _modifierTXT.text = $"{_modifier}";
-
-    private void ToggleMainHand(InputAction.CallbackContext context)
+    private void DoWavePreparations()
     {
-        _usingLeftHand = !_usingLeftHand;
-        a_logger.Log("Changed main hand!", a_isDevMode);
-    }
-    private void ResetWeapons()
-    {
-        ReadOnlyArray<GameObject> weapons = _usingLeftHand ? 
-                                            a_gameMgr.Player.LeftHandTools : 
-                                            a_gameMgr.Player.RightHandTools;
-        
-        foreach (GameObject w in weapons)
-        {
-            w.GetComponent<Weapon>().ResetWeapon();
-            w.SetActive(false);
-        }
+        // assigns values based on the current wave
+        WeaponType weaponType = _ghostBlockGridList[_waveIndex][(int)BlockType.Weapon].WeaponType;
+        GameObject weapon = _usingLeftHand ? a_gameMgr.Player.LeftHandTools[(int)weaponType] :
+                                            a_gameMgr.Player.RightHandTools[(int)weaponType];
 
-        a_logger.Log("Weapons have been reset!", a_isDevMode);
-    }
-
-    private void StartWave()
-    {
-        WeaponType preferredWeapon = _ghostBlockGridList[_waveIndex][(int)BlockType.WEAPON].WeaponType;
-        GameObject mainWeapon = _usingLeftHand ?
-                                a_gameMgr.Player.LeftHandTools[(int)preferredWeapon] :
-                                a_gameMgr.Player.RightHandTools[(int)preferredWeapon];
-        
-        foreach (CodeBlock cb in _codeBlocks)
-            cb.gameObject.SetActive(false);
-
-        // setup for the wave
-        mainWeapon.SetActive(true);
-        _unitCount = _enemiesToSpawn[_waveIndex];
-        _modifier = _ghostBlockGridList[_waveIndex][(int)BlockType.MODIFIER].Modifier;
-        _waveHandler.gameObject.SetActive(false);
-
+        // setup before enemy spawning
+        weapon.SetActive(true);
+        _timer = _enemyTimers[_waveIndex]; 
+        _currentModifier = _ghostBlockGridList[_waveIndex][(int)BlockType.Modifier].Modifier;
+        _waveHandlr.gameObject.SetActive(false);
 
         // implement modifier used
-        switch (_modifier)
+        switch (_currentModifier)
         {
-            case Modifier.HEALTH:
+            case Modifier.Health:
                 _currHP++;
                 a_logger.Log("Increased HP!", a_isDevMode);
                 break;
 
-            case Modifier.DAMAGE:
-                mainWeapon.GetComponent<Weapon>().BuffWeapon();
+            case Modifier.Damage:
+                weapon.GetComponent<Weapon>().BuffWeapon();
                 a_logger.Log("Increased damage!", a_isDevMode);
                 break;
 
-            case Modifier.REDUCED_ENEMIES:
-                _unitCount--;
-                a_logger.Log($"Reduced enemy count from {_enemiesToSpawn[_waveIndex]} to {_unitCount}!", a_isDevMode);
-                break;
-
-            case Modifier.DEFAULT: break;
-            default:               break;
+            default: break;
         }
 
         UpdateAllUI();
-
-        a_audMgr.PlayMusic("SND_GDD_BGM");
-        a_logger.Log($"{_prepTimes[_waveIndex]}s before enemy spawning!", TextColor.Yellow, a_isDevMode);
-        a_logger.Log($"{a_gameMgr.Player} can start drawing!", TextColor.Yellow, a_isDevMode);
-
-        StartCoroutine(CO_Spawning());
-    }
-    private void WaveComplete()
-    {
-        IEnumerator CO_FinishingActions()
+    }    
+    private void ResetWeapons()
+    {        
+        for (int i = 0; i < MAX_WEAPON_COUNT; i++)
         {
-            if (_enemyList.Count > 0)
-                ClearAllEnemies();
+            a_gameMgr.Player.LeftHandTools[i].GetComponent<Weapon>().ResetWeapon();       
+            a_gameMgr.Player.LeftHandTools[i].SetActive(false);
 
-            _waveIndex++;
-            _sndEmitter.PlaySound(_waveDoneSFX);
-            a_logger.Log($"Wave {_waveIndex + 1}", a_isDevMode);
-
-
-            yield return new WaitForSeconds(2f);
-
-            if (_waveIndex > MAX_WAVE_INDEX)
-            {
-                _sndEmitter.PlaySound(_allWavesDoneSFX);
-                a_gameMgr.UI_UpdateGDDHiScore(_killCount);
-                a_gameMgr.ExitVR();
-                a_audMgr.StopMusic();
-                a_logger.Log("All waves done!", a_isDevMode);
-
-                ResetGame();
-            }
-            else
-            {
-                UI_UpdateWaveIndex();
-                StartWave();
-                a_logger.Log($"Starting wave: {_waveIndex}", TextColor.Lime, a_isDevMode);
-            }
+            a_gameMgr.Player.RightHandTools[i].GetComponent<Weapon>().ResetWeapon();        
+            a_gameMgr.Player.RightHandTools[i].SetActive(false);
         }
 
-        StartCoroutine(CO_FinishingActions());
+        a_logger.Log("Weapons have been reset!", a_isDevMode);
     }
     private void ResetGame()
     {
@@ -401,7 +323,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         INT_ResetValues();
         UpdateAllUI();
 
-        _waveHandler.gameObject.SetActive(true);
+        _waveHandlr.gameObject.SetActive(true);
         _blockLabelsUI.SetActive(true);
         
         foreach (CodeBlock cb in _codeBlocks)
@@ -410,67 +332,109 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             cb.gameObject.SetActive(true);
         }
 
-        foreach (GhostBlock gb in _waveHandler.GhostBlocks)
+        foreach (GhostBlock gb in _waveHandlr.GhostBlocks)
             gb.ResetBlock();
 
         GhostBlock.FilledBlocks = 0;
         a_logger.Log("Game has been reset!", a_isDevMode);
     }
 
-    #endregion
-    #region Enumerators
-
-    private IEnumerator CO_Spawning()
+    private void SpawnEnemy()
     {
-        if (_coroutineRunning)
+        Vector3 GetRandomPositionInBox()
         {
-            a_logger.Log("Coroutine is already running!", a_isDevMode);
-            a_audMgr.PlaySound("SND_Unsure");
-            yield break;
+            Vector3 size = _spawnpointBounds.size;
+            Vector3 localPosition = new(Random.Range(-size.x / 2f, size.x / 2f),
+                                        Random.Range(-size.y / 2f, size.y / 2f),
+                                        Random.Range(-size.z / 2f, size.z / 2f));
+
+            return _spawnpointBounds.transform.TransformPoint(_spawnpointBounds.center + localPosition);
+        }
+        void BindEvents(Enemy e)
+        {
+            e.OnDeath += EVENT_CountRemainingEnemies;
+            e.OnKilled += EVENT_AddToKills;
+            e.OnKilled += EVENT_GainLife;
+
+            e.Goal = a_gameMgr.Player.transform;
+            _enemyList.Add(e.gameObject);
+
+            // a_logger.Log($"Spawned new enemy at {e.transform.position}!", a_isDevMode);
         }
 
-        _coroutineRunning = true;
-        _sndEmitter.PlaySound(_startWaveSFX);
-        _blockLabelsUI.SetActive(false);
+        int idx = Random.Range(0, _waveIndex + 1);
 
-        yield return new WaitForSeconds(_prepTimes[_waveIndex]);
+        // a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
+        GameObject enemyObj = _enemyPrefabs[Random.Range(0, idx)];
+        Enemy enemy = enemyObj.GetComponent<Enemy>();
 
-        // enemy spawning
-        for (int i = 0; i < _unitCount; i++)
-        {
-            if (!a_gameMgr.Player.InsideVRSpace)
-            {
-                a_logger.Log("Player is now outside the VR Space!", a_isDevMode);
-                break;
-            }
+        // a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
+        enemyObj.transform.SetPositionAndRotation(GetRandomPositionInBox(), Quaternion.identity);
+        enemy.EnemyType = (EnemyType)idx;
+        BindEvents(enemy);
+        enemyObj.SetActive(true);
 
-            SpawnEnemy();
-            yield return new WaitForSeconds(1f / SPAWN_INTERVAL);
-        }
-
-        _coroutineRunning = false;
-        a_logger.Log("Finished spawning!", TextColor.Yellow, a_isDevMode);
-
-        if (!a_gameMgr.Player.InsideVRSpace)
-            ClearAllEnemies();
+        a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
     }
 
-    #endregion
     #region Helpers    
 
+    private void UI_UpdateWaveIndex() => _waveCountTXT.text = $"Wave {_waveIndex + 1}";
+    private void UI_UpdatePlayerLife() => _playerLivesTXT.text = $"Life: {_currHP}";
+    private void UI_UpdateKillCount() => _killCountTXT.text = $"Kill Count: {_killCount}";
+    private void UI_UpdateModifier() => _modifierTXT.text = $"{_currentModifier}";
     private void UpdateAllUI()
     {
-        UI_UpdateKllCount();
+        UI_UpdateKillCount();
         UI_UpdatePlayerLife();
         UI_UpdateWaveIndex();
         UI_UpdateModifier();
     }
     private void ClearAllEnemies()
     {
-        foreach (GameObject e in _enemyList)
-            Destroy(e);
+        foreach (GameObject e in _enemyList)            
+            _enemyList.Remove(e);
 
         _enemyList.Clear();
+    }
+
+    private void ToggleMainHand(InputAction.CallbackContext context)
+    {
+        _usingLeftHand = !_usingLeftHand;
+        a_logger.Log("Changed main hand!", a_isDevMode);
+    }
+
+    #endregion
+    #endregion
+
+    #region Enumerators
+
+    private IEnumerator CO_StartEnemySpawning()
+    {
+        if (!a_gameMgr.Player.InsideVRSpace)
+        {
+            a_logger.Log("Player is outside the VR Space!", TextColor.Red, a_isDevMode);
+            a_audMgr.PlayWrong();
+            yield break;
+        }
+
+        _sndEmtr.PlaySound(_startWaveSFX);
+        _blockLabelsUI.SetActive(false);
+        yield return _gracePeriod;
+
+        // enemy spawning
+        while (_timer != 0f)
+        {
+            if (Random.value > 0.25f) SpawnEnemy();
+            if (Random.value > 0.5f) SpawnEnemy();
+
+            SpawnEnemy();
+
+            _timer--;
+            yield return _second;
+        }
+
+        a_logger.Log("Finished spawning!", TextColor.Yellow, a_isDevMode);
     }
 
     #endregion

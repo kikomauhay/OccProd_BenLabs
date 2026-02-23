@@ -43,23 +43,23 @@ public class GhostBlock : Actor, IInteractable
         {
             switch (cb.CurrentBlockType)
             {
-                case BlockType.WEAPON:
+                case BlockType.Weapon:
                     _weaponType = cb.WeaponType;
                     _rend.material.color = Color.blue;
                     break;
 
-                case BlockType.MODIFIER:
+                case BlockType.Modifier:
                     _modifier = cb.Modifier;
                     _rend.material.color = Color.yellow;
 
                     break;
 
-                case BlockType.ENEMY:
+                case BlockType.Enemy:
                     _enemyPrefab = cb.EnemyPrefab;
                     _rend.material.color = Color.red;
                     break;
 
-                case BlockType.NOTHING: break;
+                case BlockType.Nothing: break;
                 default:                break;
             }
 
@@ -107,7 +107,7 @@ public class GhostBlock : Actor, IInteractable
         _isEmpty = true;
 
         _weaponType = WeaponType.Default;
-        _modifier = Modifier.DEFAULT;
+        _modifier = Modifier.Default;
         _enemyPrefab = null;
 
         a_logger.Log($"{name} has been reset!", a_isDevMode);
@@ -116,19 +116,19 @@ public class GhostBlock : Actor, IInteractable
     {
         switch (_allowedBlockType)
         {
-            case BlockType.WEAPON: 
+            case BlockType.Weapon: 
                 a_logger.Log($"{name} contains", a_isDevMode);
                 break;
 
-            case BlockType.ENEMY: 
+            case BlockType.Enemy: 
                 a_logger.Log($"{name} contains", a_isDevMode);
                 break;
 
-            case BlockType.MODIFIER:
+            case BlockType.Modifier:
                 a_logger.Log($"{name} contains", a_isDevMode);
                 break;
 
-            case BlockType.NOTHING: break;
+            case BlockType.Nothing: break;
             default:                break;
         }
     }
