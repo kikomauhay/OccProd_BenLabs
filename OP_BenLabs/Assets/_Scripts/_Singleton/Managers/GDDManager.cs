@@ -34,7 +34,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private const int CODE_BLOCK_COUNT = 8;
     private const int STARTING_HEALTH = 5;
-    private const int MAX_WAVE_INDEX = 2;
+    private const int TOTAL_WAVE_COUNT = 2;
     private const int MAX_WEAPON_COUNT = 2;
 
     private SoundEmitter _sndEmtr;
@@ -55,6 +55,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     
     protected override void Test()
     {
+        if (Input.GetKeyDown(KeyCode.UpArrow)) 
+        {
+            _waveIndex++;
+            a_logger.Log($"Wave index: {_waveIndex}", TextColor.Yellow, a_isDevMode);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Backslash)) Instantiate(_enemyPrefabs[2]);
         if (Input.GetKeyDown(KeyCode.Return)) SpawnEnemy();
         if (Input.GetKeyDown(KeyCode.Space)) BTN_Confirm();
     }
@@ -70,7 +77,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         a_logger.AssertReference(_confirmButton, this);
         a_logger.AssertReference(_cancelButton, this);
         a_logger.AssertReference(_codeBlocks.Length == CODE_BLOCK_COUNT, this);
-        // a_logger.AssertReference(_enemyPrefabs.Length == System.Enum.GetValues(typeof(EnemyType)).Length, this);
+        a_logger.AssertReference(_enemyPrefabs.Length == System.Enum.GetValues(typeof(EnemyType)).Length, this);
 
         a_logger.AssertReference(_xrAButton, this);
         a_logger.AssertReference(_xrXButton, this);
@@ -202,7 +209,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     
     public void TakeDamage()
     {
-        _currHP--;
+        // _currHP--;
         _sndEmtr.PlaySound(_playerDamagedSFX);
         UI_UpdatePlayerLife();
 
@@ -212,8 +219,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             INT_DoGameOver();
         }
 
-        // _logger.Log($"HP: {_currHP}", _isDevMode);
-        a_logger.Log($"Enemies left: {_enemyList.Count}", a_isDevMode);
+        // a_logger.Log($"HP: {_currHP}", a_isDevMode);
+        // a_logger.Log($"Enemies left: {_enemyList.Count}", a_isDevMode);
     }
     public void EnableButtons(bool isActive)
     {
@@ -228,16 +235,15 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         if (_enemyList.Count > 0)
         {
-            a_logger.Log($"There are {_enemyList.Count} remaining enemies left!", TextColor.Yellow, a_isDevMode);
+            // a_logger.Log($"There are {_enemyList.Count} remaining enemies left!", TextColor.Yellow, a_isDevMode);
             return;
         }
 
+        _waveIndex++;
+        UI_UpdateWaveIndex();
         ResetWeapons();
-        
-        if (_enemyList.Count > 0)
-            ClearAllEnemies();
 
-        if (_waveIndex > MAX_WAVE_INDEX)
+        if (_waveIndex > TOTAL_WAVE_COUNT)
         {
             a_audMgr.StopMusic();
             _sndEmtr.PlaySound(_allWavesDoneSFX);
@@ -246,14 +252,12 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             a_logger.Log("All waves done!", a_isDevMode);
 
             ResetGame();
+            return;
         }
-        else
-        {
-            _waveIndex++;
-            UI_UpdateWaveIndex();
-            DoWavePreparations();
-            StartCoroutine(CO_StartEnemySpawning());
-        }
+
+        ClearAllEnemies();
+        DoWavePreparations();
+        StartCoroutine(CO_StartEnemySpawning());        
     }
     private void EVENT_AddToKills() // enemy.OnKilled
     {
@@ -315,7 +319,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             a_gameMgr.Player.RightHandTools[i].SetActive(false);
         }
 
-        a_logger.Log("Weapons have been reset!", a_isDevMode);
+        // a_logger.Log("Weapons have been reset!", a_isDevMode);
     }
     private void ResetGame()
     {
@@ -362,19 +366,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             // a_logger.Log($"Spawned new enemy at {e.transform.position}!", a_isDevMode);
         }
 
-        int idx = Random.Range(0, _waveIndex + 1);
-
-        // a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
-        GameObject enemyObj = Instantiate(_enemyPrefabs[Random.Range(0, idx)]);
+        int i = Random.Range(0, _waveIndex + 1);
+        
+        GameObject enemyObj = Instantiate(_enemyPrefabs[i]);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
 
-        // a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
         enemyObj.transform.SetPositionAndRotation(GetRandomPositionInBox(), Quaternion.identity);
-        enemy.EnemyType = (EnemyType)idx;
+        enemy.EnemyType = (EnemyType)i;
         BindEvents(enemy);
         enemyObj.SetActive(true);
 
-        a_logger.Log("Spawned an enemy!", TextColor.Yellow, a_isDevMode);
+        a_logger.Log($"Spawned an {(EnemyType)i} enemy!", a_isDevMode);
     }
 
     #region Helpers    
@@ -425,8 +427,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         // enemy spawning
         while (_timer != 0f)
         {
-            if (Random.value > 0.25f) SpawnEnemy();
-            if (Random.value > 0.5f) SpawnEnemy();
+            if (Random.value < 0.1f) SpawnEnemy();
+            if (Random.value < 0.2f) SpawnEnemy();
 
             SpawnEnemy();
 
