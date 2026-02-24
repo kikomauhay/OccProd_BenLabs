@@ -1,6 +1,6 @@
-using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
+using Unity.XR.CoreUtils;
 
 [RequireComponent(typeof(XROrigin))]
 public class Player : StaticInstance<Player>
@@ -22,10 +22,10 @@ public class Player : StaticInstance<Player>
 
     protected override void AssertReferences()
     {
-        Debug.Assert(_leftHandTools.Length == 2, "Missing elements in _leftHandTools!", this);
-        Debug.Assert(_rightHandTools.Length == 2, "Missing elements in _rightHandTools!", this);
+        a_logger.AssertReference(_leftHandTools.Length == 2, this);
+        a_logger.AssertReference(_rightHandTools.Length == 2, this);
         
-        Debug.Assert(GetComponent<XROrigin>(), "Missing XROrigin reference!", this);
+        a_logger.AssertReference(GetComponent<XROrigin>(), this);
 
         base.AssertReferences();
     }
