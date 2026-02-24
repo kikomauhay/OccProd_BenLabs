@@ -163,7 +163,7 @@ public class Enemy : Actor
 
 public enum EnemyType
 {
-    Crashes = 0,
+    Missing_Textures = 0,
     Save_Error = 1,
-    Missing_Textures = 2
+    Crashes = 2
 }

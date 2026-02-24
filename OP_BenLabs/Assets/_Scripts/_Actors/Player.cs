@@ -1,6 +1,6 @@
-using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem.Utilities;
+using Unity.XR.CoreUtils;
 
 [RequireComponent(typeof(XROrigin))]
 public class Player : StaticInstance<Player>
@@ -31,7 +31,7 @@ public class Player : StaticInstance<Player>
     }
     protected override void InitVariables()
     {
-        InsideVRSpace = true;
+        InsideVRSpace = false;
     }
 
     #endregion
