@@ -25,7 +25,7 @@ public class Player : StaticInstance<Player>
         a_logger.AssertReference(_leftHandTools.Length == 2, this);
         a_logger.AssertReference(_rightHandTools.Length == 2, this);
         
-        a_logger.AssertReference(GetComponent<XROrigin>(), this);
+        a_logger.AssertReference(GetComponent<XROrigin>() != null, this);
 
         base.AssertReferences();
     }

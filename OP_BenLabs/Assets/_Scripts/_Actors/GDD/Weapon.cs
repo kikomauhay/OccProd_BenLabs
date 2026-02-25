@@ -13,7 +13,6 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private Sound[] _hitSFXs;
-    [SerializeField] private float _minMagnitude;
     
 
     [Header("XR Controller Settings")]
@@ -21,6 +20,7 @@ public class Weapon : Actor
     [SerializeField] private float _amplitude, _duration;
 
     private SoundEmitter _sndEmitter;
+    private float _maxMagnitude = 12.0f;
     private float _damageModifier;
     private float _dmg;
 
@@ -31,10 +31,10 @@ public class Weapon : Actor
     protected override void AssertReferences()
     {
         a_logger.AssertReference(_weaponType != WeaponType.Default, this);
-        //a_logger.AssertReference(_dmg != 0, this);
+        a_logger.AssertReference(_dmg != 0, this);
         a_logger.AssertReference(_hitSFXs.Length != 0, this);
 
-        a_logger.AssertReference(_controller, this);
+        a_logger.AssertReference(_controller != null, this);
         a_logger.AssertReference(_amplitude != 0, this);
         a_logger.AssertReference(_duration != 0, this);
     }
@@ -52,57 +52,77 @@ public class Weapon : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        void TriggerHaptic()
-        {
-            if (_controller != null)
-                _controller.SendHapticImpulse(_amplitude, _duration);
-        }
-
-        void CalcDamage(float mag)
+        void CalculateDamage(float mag)
         {
             switch (_weaponType)
             {
                 case WeaponType.Sword:
-
-                    float SwrdDmg = mag switch
+                    float swordDmg = mag switch
                     {
-                        >= 12f => 12f,
+                        >= 10f => 12f,
                         _ => 6f
                     };
-                    _dmg = SwrdDmg;
+                    _dmg = swordDmg;
                     break;
+                
                 case WeaponType.Hammer:
-
-                    float HmrDmg = mag switch
+                    float hammerDmg = mag switch
                     {
-                        >= 12f => 20f,
+                        >= 10f => 20f,
                         _ => 10f
                     };
-                    _dmg = HmrDmg;
+                    _dmg = hammerDmg;
                     break;
             }
         }
+        
+        // float CalculateWeaponDamage(float magnitude)
+        // {
+        //     return _weaponType switch
+        //     {
+        //         WeaponType.Sword => magnitude switch
+        //         {
+        //             >= 10f => 12f,
+        //             _ => 6f
+        //         },
+        //         WeaponType.Hammer => magnitude switch
+        //         {
+        //             >= 10f => 20f,
+        //             _ => 10f
+        //         },
+        //         _ => 0f,
+        //     };
+        // }
 
-        if (other.GetComponent<Enemy>())
+        if (other.GetComponent<Enemy>() == null)
         {
-            if (_velocityChecker.CurrentMagnitude < _minMagnitude) return;
-            Enemy e = other.GetComponent<Enemy>();
-
-            TriggerHaptic();
-            CalcDamage(_velocityChecker.CurrentMagnitude);
-            e.TakeDamage(_dmg + _damageModifier);
-
-            _sndEmitter.PlaySound(_hitSFXs[Random.Range(0, _hitSFXs.Length)]);
-            a_logger.Log($"{name} dealt damage!", a_isDevMode);
-            Debug.Log($"Current Velocity: {_velocityChecker.CurrentMagnitude}");
+            a_logger.Log("There's no enemy component!", TextColor.Red, a_isDevMode);
+            a_audMgr.PlayWrong();
+            return;
         }
+        if (_velocityChecker.CurrentMagnitude < _maxMagnitude) return;
+        
+        if (_controller != null)
+            _controller.SendHapticImpulse(_amplitude, _duration);
+        
+        Enemy e = other.GetComponent<Enemy>();
+        CalculateDamage(_velocityChecker.CurrentMagnitude);
+        e.TakeDamage(_dmg * _damageModifier);
+
+        // new dmg checker with the new func (removes lines 108-110 if this works)
+        // other.GetComponent<Enemy>().TakeDamage(CalculateWeaponDamage(_velocityChecker.CurrentMagnitude) * _damageModifier);
+
+        _sndEmitter.PlayRandomSound(_hitSFXs);
+
+        a_logger.Log($"{name} dealt damage!", a_isDevMode);
+        a_logger.Log($"Current Velocity: <color={TextColor.Yellow}>{_velocityChecker.CurrentMagnitude}</color>", a_isDevMode);
     }
 
     #endregion
     #region Public
 
-    public void BuffWeapon() => _damageModifier = 10f;
-    public void ResetWeapon() => _damageModifier = 0f;
+    public void BuffWeapon() => _damageModifier = 1.25f;
+    public void ResetWeapon() => _damageModifier = 1f;
 
     #endregion
 }

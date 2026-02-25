@@ -25,13 +25,13 @@ public class GlassCleaner : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponent<Glass>())
+        if (other.GetComponent<Glass>() != null)
         {
             other.GetComponent<Glass>().Washed();
             _sndEmitter.PlaySound(_waterSplashSFX);
         }
 
-        if (other.GetComponent<Shaker>())
+        if (other.GetComponent<Shaker>() != null)
         {
             other.GetComponent<Shaker>().Washed();
             //_soundEmitter.PlaySound(_waterSplashSFX);

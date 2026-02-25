@@ -1,89 +1,64 @@
 using System.Collections;
-using Unity.XR.CoreUtils;
 using UnityEngine;
 
-[RequireComponent(typeof(SoundEmitter))]
 public class OnboardingHandler : Singleton<OnboardingHandler> 
 {
-    #region Properties
+    #region Members
 
-    #endregion
-    #region SerializeField
-
-    [Header("Voice Lines")]
-    [SerializeField] private Sound[] _vrOnboardingLines;
-    [SerializeField] private Sound[] _barOnboardingLines, _gddOnboardingLines;
-
-
-    [Header("VROnboarding Variables")]
+    [Header("VR Components"), Header("0 = Teleportation, 1 - Grabbing")]
+    [SerializeField] private GameObject[] _vrOnbCanvas;
     [SerializeField] private GameObject _vrLeftHand;
-    [SerializeField] private GameObject _leftQuestController;
+    [SerializeField] private GameObject _leftQuestController; 
     [SerializeField] private GameObject _canvasPickUpID;
-    [SerializeField] private GameObject[] _vrOnbCanvas; //0-TpOnb, 1-GrabOnb
-    
-    #endregion
-    #region Private
-
-    private SoundEmitter _soundEmitter;
 
     #endregion
 
-    #region Unity
+    #region Methods
+
+    protected override void AssertReferences()
+    {
+        a_logger.AssertReference(_vrOnbCanvas.Length != 0, this);
+        a_logger.AssertReference(_vrLeftHand != null, this);
+        a_logger.AssertReference(_leftQuestController != null, this);
+        a_logger.AssertReference(_canvasPickUpID != null, this);
+    }
 
     protected override void Start()
     {
-        // Debug.Assert(_vrOnboardingLines, "Missing elements in _vrOnboardingLines!", gameObject);
-        // Debug.Assert(_barOnboardingLines, "Missing elements in _barOnboardingLines!", gameObject);
-        // Debug.Assert(_gddOnboardingLines, "Missing elements in _gddOnboardingLines!", gameObject);
-        //To turn on VR Onb
-
-        StartCoroutine(StartVROnb(5f));
+        StartCoroutine(CO_StartOnboarding(5f));
         base.Start();
     }
-
     private void OnTriggerEnter(Collider other)
     {
-        //To do when player approaches the ID on the table
-
+        // To do when player approaches the ID on the table
         if (other.gameObject.layer == LayerMask.NameToLayer("Left Hand Physics") ||
            other.gameObject.layer == LayerMask.NameToLayer("Right Hand Physics"))
         {
-            StartCoroutine(ToggleCanvas(_vrOnbCanvas[1], 7f));
-            this.gameObject.GetComponent<BoxCollider>().enabled = false;
+            StartCoroutine(CO_ToggleCanvas(_vrOnbCanvas[1], 7f));
+            gameObject.GetComponent<BoxCollider>().enabled = false;
             _canvasPickUpID.SetActive(false);
         }
     }
 
     #endregion
-    #region Helpers
+    #region Enumerators
 
-    protected override void InitComponents()
+    private IEnumerator CO_StartOnboarding(float timer)
     {
-        _soundEmitter = GetComponent<SoundEmitter>();
-    }
-    protected override void InitVariables()
-    {
-
-    }
-
-    #endregion
-
-    #region IEnumerators
-
-    //To Start the VR Onb for teleporation 
-    private IEnumerator StartVROnb(float timer)
-    {
+        // starts teleporation onboarding 
         yield return new WaitForSeconds(timer);
-        StartCoroutine(ToggleCanvas(_vrOnbCanvas[0], 7f));
+        StartCoroutine(CO_ToggleCanvas(_vrOnbCanvas[0], 7f));
     }
-
-    //To turn off the canvas for the VR Onboarding, but can be used for other stuff
-    private IEnumerator ToggleCanvas(GameObject canvas,float timer)
+    private IEnumerator CO_ToggleCanvas(GameObject canvas, float timer)
     {
+        // To turn off the canvas for the VR Onboarding, but can be used for other stuff
+
         _leftQuestController.SetActive(true);
         canvas.SetActive(true);
         _vrLeftHand.SetActive(false);
+
         yield return new WaitForSeconds(timer);
+
         canvas.SetActive(false);
         _leftQuestController.SetActive(false);
         _vrLeftHand.SetActive(true);

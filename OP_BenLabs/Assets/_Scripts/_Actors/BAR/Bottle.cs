@@ -28,6 +28,15 @@ public class Bottle : Equipment, IPourable
 
     #endregion
 
+    #region Actor
+
+    protected override void InitVariables()
+    {
+        base.InitVariables();
+        name = Ingredient.ToString().Replace("_", " ") + " Bottle";
+    }
+        
+    #endregion
     #region Unity
 
     protected override void OnEnable()
@@ -98,9 +107,9 @@ public class Bottle : Equipment, IPourable
 
 public enum Ingredient
 {
-    ORANGE_JUICE = 0,
-    LIME_JUICE = 1,
-    COCONUT_WATER = 2,
-    TEQUILA = 3,
-    VODKA = 4
+    Orange_Juice = 0,
+    Lime_Juice = 1,
+    Coconut_Water = 2,
+    Teuila = 3,
+    Vodka = 4
 }

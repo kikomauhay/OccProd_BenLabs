@@ -115,7 +115,7 @@ public class Customer : Actor
         IEnumerator CO_LostPatience()
         {
             a_logger.Log("Customer lost patience!", TextColor.Red, a_isDevMode);
-            _actions.WrongReaction();
+            _actions.DoWrongReaction();
             yield return new WaitForSeconds(2f);
 
             Destroy(gameObject);

@@ -36,18 +36,18 @@ public class Shaker : Equipment, IPourable
 
     private readonly Dictionary<Cocktail, Ingredient[]> _recipes = new() // dictionary syntax = <key, value>
     {
-        { Cocktail.Tequila_Sunrise, new[] { Ingredient.TEQUILA,
-                                            Ingredient.ORANGE_JUICE,
-                                            Ingredient.LIME_JUICE } },
+        { Cocktail.Tequila_Sunrise, new[] { Ingredient.Teuila,
+                                            Ingredient.Orange_Juice,
+                                            Ingredient.Lime_Juice } },
 
-        { Cocktail.Vodka_Citrus, new[] { Ingredient.VODKA,
-                                         Ingredient.ORANGE_JUICE,
-                                         Ingredient.LIME_JUICE,
-                                         Ingredient.COCONUT_WATER } },
+        { Cocktail.Vodka_Citrus, new[] { Ingredient.Vodka,
+                                         Ingredient.Orange_Juice,
+                                         Ingredient.Lime_Juice,
+                                         Ingredient.Coconut_Water } },
 
-        { Cocktail.Coconut_Mergarita, new[] { Ingredient.TEQUILA,
-                                              Ingredient.LIME_JUICE,
-                                              Ingredient.COCONUT_WATER } },
+        { Cocktail.Coconut_Mergarita, new[] { Ingredient.Teuila,
+                                              Ingredient.Lime_Juice,
+                                              Ingredient.Coconut_Water } },
     };
     private bool _isPouring, _isLocked, _isShaking, _isGrabbed;
     private XRBaseInteractor _interactor;

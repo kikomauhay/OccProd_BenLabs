@@ -1,9 +1,8 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-[RequireComponent(typeof(Rigidbody), typeof(SoundEmitter))]
+[RequireComponent(typeof(MeshRenderer), typeof(Rigidbody), typeof(SoundEmitter))]
 public class Enemy : Actor
 {
     #region Properties
@@ -17,6 +16,9 @@ public class Enemy : Actor
     #endregion
     #region Inspector
 
+    [Header("Materials")]
+    [SerializeField] private Material[] _materials;
+
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _enemyHPTxt;
     [SerializeField] private Slider _enemyHPslider;
@@ -28,16 +30,17 @@ public class Enemy : Actor
     #endregion
     #region Private
 
-    private GDDManager _gddMgr;
-
-    private Rigidbody _rb;
-    private SoundEmitter _sndEmtr;
-
-    private Vector3 _lookAtGoal, _direction;
-    private float _currHP, _maxHP, _moveSpeed, _rotSpeed;
-
     private const float MINIMUM_DISTANCE = 1f;
     private const int MAX_ENEMY_TYPES = 3;
+    private const int VARIANT_COUNT = 3;
+    
+    private GDDManager _gddMgr;
+    private MeshRenderer _rend;
+    private Rigidbody _rb;
+    private SoundEmitter _sndEmtr;
+    private Vector3 _lookAtGoal, _direction;
+
+    private float _currHP, _maxHP, _moveSpeed, _rotSpeed;
 
     #endregion
 
@@ -45,16 +48,19 @@ public class Enemy : Actor
 
     protected override void Test()
     {
-        // if (Input.GetKeyDown(KeyCode.Alpha1)) _soundEmitter.PlaySound(_etbSFXs[Random.Range(0, _etbSFXs.Length)]);
-        // if (Input.GetKeyDown(KeyCode.Alpha2)) _soundEmitter.PlaySound(_ltbSFX); 
+        if (Input.GetKeyDown(KeyCode.Alpha1)) _sndEmtr.PlayRandomSound(_etbSFXs);
+        if (Input.GetKeyDown(KeyCode.Alpha2)) _sndEmtr.PlaySound(_ltbSFX);
     }
     protected override void AssertReferences()
     {
+        a_logger.AssertReference(_materials.Length == VARIANT_COUNT, this);
+
         a_logger.AssertReference(_etbSFXs.Length == MAX_ENEMY_TYPES, this);
-        a_logger.AssertReference(_ltbSFX, this);
+        a_logger.AssertReference(_ltbSFX != null, this);
     }
     protected override void InitComponents()
     {
+        _rend = GetComponent<MeshRenderer>();
         _rb = GetComponent<Rigidbody>();
         _sndEmtr = GetComponent<SoundEmitter>();
     }
@@ -68,6 +74,9 @@ public class Enemy : Actor
         _rb.angularDrag = 0f;
         _rb.useGravity = false;
         _rb.isKinematic = false;
+        
+        _rend.enabled = true;
+        _rend.material = new Material(_materials[Random.Range(0, _materials.Length)]);
 
         _maxHP = EnemyType switch
         {
@@ -151,7 +160,6 @@ public class Enemy : Actor
             Destroy(gameObject);
         }
     }
-
     private void UI_UpdateHP()
     {
         _enemyHPTxt.text = $"{_currHP}/{_maxHP}";
