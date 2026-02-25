@@ -13,6 +13,7 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private Sound[] _hitSFXs;
+    [SerializeField] private float _minMagnitude;
     
 
     [Header("XR Controller Settings")]
@@ -20,7 +21,6 @@ public class Weapon : Actor
     [SerializeField] private float _amplitude, _duration;
 
     private SoundEmitter _sndEmitter;
-    private float _maxMagnitude = 12.0f;
     private float _damageModifier;
     private float _dmg;
 
@@ -100,7 +100,7 @@ public class Weapon : Actor
             a_audMgr.PlayWrong();
             return;
         }
-        if (_velocityChecker.CurrentMagnitude < _maxMagnitude) return;
+        if (_velocityChecker.CurrentMagnitude < _minMagnitude) return;
         
         if (_controller != null)
             _controller.SendHapticImpulse(_amplitude, _duration);
