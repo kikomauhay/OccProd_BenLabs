@@ -13,6 +13,7 @@ public class Weapon : Actor
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
     [SerializeField] private Sound[] _hitSFXs;
+    [SerializeField] private float _minMagnitude;
     
 
     [Header("XR Controller Settings")]
@@ -20,7 +21,6 @@ public class Weapon : Actor
     [SerializeField] private float _amplitude, _duration;
 
     private SoundEmitter _sndEmitter;
-    private float _maxMagnitude = 12.0f;
     private float _damageModifier;
     private float _dmg;
 
@@ -66,7 +66,7 @@ public class Weapon : Actor
 
                     float SwrdDmg = mag switch
                     {
-                        >= 10f => 12f,
+                        >= 12f => 12f,
                         _ => 6f
                     };
                     _dmg = SwrdDmg;
@@ -75,7 +75,7 @@ public class Weapon : Actor
 
                     float HmrDmg = mag switch
                     {
-                        >= 10f => 20f,
+                        >= 12f => 20f,
                         _ => 10f
                     };
                     _dmg = HmrDmg;
@@ -85,7 +85,7 @@ public class Weapon : Actor
 
         if (other.GetComponent<Enemy>())
         {
-            if (_velocityChecker.CurrentMagnitude < _maxMagnitude) return;
+            if (_velocityChecker.CurrentMagnitude < _minMagnitude) return;
             Enemy e = other.GetComponent<Enemy>();
 
             TriggerHaptic();
