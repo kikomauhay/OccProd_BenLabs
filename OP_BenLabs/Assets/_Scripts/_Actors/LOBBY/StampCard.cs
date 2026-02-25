@@ -18,9 +18,9 @@ public class StampCard : StaticInstance<StampCard>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_sndEmtr, this);
+        a_logger.AssertReference(_sndEmtr != null, this);
         a_logger.AssertReference(_checkMarks.Length == 9, this);
-        a_logger.AssertReference(_stampSFX, this);
+        a_logger.AssertReference(_stampSFX != null, this);
     }
 
     #endregion

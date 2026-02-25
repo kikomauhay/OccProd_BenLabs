@@ -25,7 +25,7 @@ public class Atrium : Actor, IInteractable
     protected override void Start()
     {
         base.Start();
-        _soundEmitter.PlaySound(_meowSFXs[Random.Range(0, _meowSFXs.Length)]);
+        _soundEmitter.PlayRandomSound(_meowSFXs);
     }
     private void OnTriggerEnter(Collider other)
     {

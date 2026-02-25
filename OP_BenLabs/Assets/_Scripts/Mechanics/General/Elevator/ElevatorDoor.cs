@@ -40,9 +40,10 @@ public class ElevatorDoor : Actor
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_soundEmitter, this);
-        a_logger.AssertReference(a_logger, this);
-        a_logger.AssertReference(_leftDoor || _rightDoor, this);
+        a_logger.AssertReference(_soundEmitter != null, this);
+        a_logger.AssertReference(a_logger != null, this);
+        a_logger.AssertReference(_leftDoor != null, this);
+        a_logger.AssertReference(_rightDoor != null, this);
     }
     protected override void InitVariables()
     {
