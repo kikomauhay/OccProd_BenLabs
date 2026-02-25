@@ -9,18 +9,12 @@ public class Logger : MonoBehaviour
     public void Assert(bool condition, string msg, Object context)
     {
         if (!condition)
-        {
             Debug.Assert(condition, $"<color=red>{msg}</color>", context);
-            // Debug.Break();
-        }
     }
     public void AssertReference(bool condition, Object context)
     {
         if (!condition)
-        {
             Debug.Assert(condition, $"<color={TextColor.Red}>Missing {context}!</color>", context);
-            // Debug.Break();            
-        }
     }    
     public void Log(object message, bool isDevMode)
     {

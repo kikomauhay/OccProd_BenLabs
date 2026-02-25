@@ -28,7 +28,7 @@ public class CrowdNoises : Actor
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_softCrowdSFX, this);
+        a_logger.AssertReference(_softCrowdSFX != null, this);
         a_logger.AssertReference(_loudCrowdSFXs.Length == 3, this);
     }
 
@@ -47,8 +47,10 @@ public class CrowdNoises : Actor
 
     private void TriggerCrowdSound()
     {
-        _sndEmtr.PlaySound(Random.value > 0.5f ? _loudCrowdSFXs[Random.Range(0, _loudCrowdSFXs.Length)] : 
-                                                 _softCrowdSFX);
+        if (Random.value < 0.5f) 
+            _sndEmtr.PlayRandomSound(_loudCrowdSFXs); 
+        
+        else _sndEmtr.PlaySound(_softCrowdSFX);
     }
         
     #endregion

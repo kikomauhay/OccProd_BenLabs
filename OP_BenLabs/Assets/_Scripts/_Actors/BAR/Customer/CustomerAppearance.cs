@@ -26,7 +26,7 @@ public class CustomerAppearance : Actor
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_face, this);
+        a_logger.AssertReference(_face != null, this);
         a_logger.AssertReference(_customerRenderer.Length == 4, this);
         a_logger.AssertReference(_customerFaces.Length == 3, this);        
 
@@ -34,7 +34,6 @@ public class CustomerAppearance : Actor
     }
         
     #endregion
-
     #region Unity
 
     protected override void Start()
@@ -62,13 +61,9 @@ public class CustomerAppearance : Actor
     #endregion
 }
 
-#region Enumerations
-
 public enum Emotion
 {
     Neutral = 0,
     Happy = 1,
     Mad = 2
 }
-
-#endregion

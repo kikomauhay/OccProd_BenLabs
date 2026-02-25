@@ -30,16 +30,21 @@ public class GameManager : Singleton<GameManager>
 
     [Header("Atrium Spanwpoints")]
     [SerializeField] private GameObject _atriumPrefab;
-    [SerializeField] private Transform[] _lobbySpawnpoints, _gddSpawnpoints, _barLabSpawnpoints;
+    [SerializeField] private Transform[] _lobbySpawnpoints, _gddSpawnpoints;
+    [SerializeField] private Transform[] _cafeteriaSpawnpoints, _barLabSpawnpoints;
 
     [Header("VFXs")]
     [SerializeField] private GameObject _poofVFXPrefab;
 
     [Header("UI")]
-    [SerializeField] private TextMeshProUGUI _txt_TotalGDDScore;
+    [SerializeField] private TextMeshProUGUI _highScoreGDDTXT;
     [SerializeField] private GameObject _logo;
-    [SerializeField] private FadeScreen _fadeScreen;
-
+    
+    #endregion
+    #region Private
+    
+    private FadeScreen _fadeScreen;
+        
     #endregion
 
     #region Actor
@@ -50,49 +55,62 @@ public class GameManager : Singleton<GameManager>
         {
             for (int i = 0; i < _lobbySpawnpoints.Length; i++)
             {
-                Instantiate(_atriumPrefab, 
-                            _lobbySpawnpoints[i].position,
-                            _lobbySpawnpoints[i].rotation);
+                Instantiate(_atriumPrefab, _lobbySpawnpoints[i].position,
+                                           _lobbySpawnpoints[i].rotation,
+                                           _lobbySpawnpoints[i]);
             }   
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             for (int i = 0; i < _gddSpawnpoints.Length; i++)
             {
-                Instantiate(_atriumPrefab, 
-                            _gddSpawnpoints[i].position,
-                            _gddSpawnpoints[i].rotation);
+                Instantiate(_atriumPrefab, _gddSpawnpoints[i].position,
+                                           _gddSpawnpoints[i].rotation,
+                                           _gddSpawnpoints[i]);
             }   
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            for (int i = 0; i < _cafeteriaSpawnpoints.Length; i++)
+            {
+                Instantiate(_atriumPrefab, _cafeteriaSpawnpoints[i].position,
+                                           _cafeteriaSpawnpoints[i].rotation, 
+                                           _cafeteriaSpawnpoints[i]);
+
+            }
+            a_logger.Log("Atriums have spawned!", a_isDevMode);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
             for (int i = 0; i < _barLabSpawnpoints.Length; i++)
             {
-                Instantiate(_atriumPrefab, 
-                            _barLabSpawnpoints[i].position,
-                            _barLabSpawnpoints[i].rotation);
+                Instantiate(_atriumPrefab, _barLabSpawnpoints[i].position,
+                                           _barLabSpawnpoints[i].rotation, 
+                                           _barLabSpawnpoints[i]);
             }   
         }
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_player, this);
+        a_logger.AssertReference(_player != null, this);
      
-        a_logger.AssertReference(_r803Waypoint, this);
-        a_logger.AssertReference(_gddWaypoint, this);
+        a_logger.AssertReference(_gddWaypoint != null, this);
+        a_logger.AssertReference(_r803Waypoint != null, this);
 
-        a_logger.AssertReference(_fadeScreen, this);
+        a_logger.AssertReference(_whiteboard != null, this); 
+        a_logger.AssertReference(_whiteboardNPC != null, this);
+        a_logger.AssertReference(_busNPC != null, this);
 
-        a_logger.AssertReference(_whiteboard, this);    
-        a_logger.AssertReference(_whiteboardNPC, this);    
-        a_logger.AssertReference(_busNPC, this);    
-
-        a_logger.AssertReference(_poofVFXPrefab, this);    
-
-        a_logger.AssertReference(_atriumPrefab, this);
+        a_logger.AssertReference(_atriumPrefab != null, this);
         a_logger.AssertReference(_lobbySpawnpoints.Length != 0, this);
         a_logger.AssertReference(_gddSpawnpoints.Length != 0, this);
+        a_logger.AssertReference(_cafeteriaSpawnpoints.Length != 0, this);
         a_logger.AssertReference(_barLabSpawnpoints.Length != 0, this);
+
+        a_logger.AssertReference(_poofVFXPrefab != null, this);
+
+        a_logger.AssertReference(_highScoreGDDTXT != null, this);
+        a_logger.AssertReference(_logo != null, this);
     }
     protected override void InitComponents()
     {
@@ -122,7 +140,7 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Public
 
-    public void UI_UpdateGDDHiScore(int score) => _txt_TotalGDDScore.text = score.ToString();
+    public void UI_UpdateGDDHiScore(int score) => _highScoreGDDTXT.text = score.ToString();
     public void EnableFinalNPCs()
     {
         _whiteboard.SetActive(true);

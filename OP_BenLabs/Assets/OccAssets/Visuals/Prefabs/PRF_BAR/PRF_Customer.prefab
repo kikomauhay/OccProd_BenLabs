@@ -235,6 +235,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37eebcdf153509419abe036c3b8a911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  a_loggerType: 0
+  a_isDevMode: 0
   _enableGizmos: 1
   _maxDistance: 2
 --- !u!114 &1427130549188699081
@@ -249,7 +251,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3c26d7ab5ddd34682b8b5564424791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDevMode: 0
+  a_loggerType: 2
+  a_isDevMode: 0
   _face: {fileID: 7550651462091633359}
   _customerRenderer:
   - {fileID: 6431922799042782912}
@@ -276,7 +279,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42927feda248dca43b2d68335569dc65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDevMode: 0
+  a_loggerType: 2
+  a_isDevMode: 0
   _happyMaleSFXs:
   - {fileID: 11400000, guid: 310655b1c3e10d2498d274a349d3afdb, type: 2}
   - {fileID: 11400000, guid: 8826b82bf5a937f4e818b46f29defc79, type: 2}
@@ -311,8 +315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 104495702f22da84fa06f13ce30d34c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _objectType: 0
-  _isDevMode: 0
+  a_loggerType: 0
+  a_isDevMode: 0
   _wantedCocktail: 0
   _decreaseRate: 1.65
   _reactionTimer: 2

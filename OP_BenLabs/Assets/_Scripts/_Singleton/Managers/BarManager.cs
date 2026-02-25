@@ -56,9 +56,9 @@ public class BarManager : Singleton<BarManager>, IGameHandler
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_soundEmitter, this);
-        a_logger.AssertReference(_colliderCheck, this);
-        a_logger.AssertReference(_customerSpawnpoint, this);
+        a_logger.AssertReference(_soundEmitter != null, this);
+        a_logger.AssertReference(_colliderCheck != null, this);
+        a_logger.AssertReference(_customerSpawnpoint != null, this);
     }
     protected override void InitVariables()
     {

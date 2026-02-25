@@ -20,7 +20,7 @@ public class SoundEmitter : Actor
     }
     protected override void AssertReferences()
     {
-        a_logger.Assert(_src.maxDistance > 0f, "Max distance is less then 0!", this);
+        a_logger.AssertReference(_src.maxDistance > 0f, this);
     }
     protected override void InitVariables()
     {
@@ -47,7 +47,8 @@ public class SoundEmitter : Actor
     {
         if (s == null)
         {
-            a_logger.AssertReference(s, gameObject);
+            a_logger.AssertReference(s != null, this);
+            a_audMgr.PlayWrong();
             return;
         }
 
@@ -56,11 +57,10 @@ public class SoundEmitter : Actor
         _src.pitch = s.Pitch;
         _src.volume = s.Volume;
 
-        if (s.Loop)
-            _src.Play();
-
-        else _src.PlayOneShot(_src.clip);
+        if (s.Loop) _src.Play();
+        else        _src.PlayOneShot(_src.clip);
     }
+    public void PlayRandomSound(Sound[] arr) => PlaySound(arr[Random.Range(0, arr.Length)]);
     public void StopSound() => _src.Stop();
 
     #endregion

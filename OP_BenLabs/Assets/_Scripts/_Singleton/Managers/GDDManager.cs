@@ -44,7 +44,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     private List<GhostBlock[]> _ghostBlockGridList;
     private List<GameObject> _enemyList;
-    private float[] _enemyTimers;
+    private float[] _enemyTimers; // also acts as the amount of enemies per wave
     
     private int _killCount, _waveIndex;
     private float _currHP, _timer;
@@ -71,28 +71,28 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_waveHandlr, this);
-        a_logger.AssertReference(_spawnpointBounds, this);
-        a_logger.AssertReference(_blockLabelsUI, this);
-        a_logger.AssertReference(_confirmButton, this);
-        a_logger.AssertReference(_cancelButton, this);
+        a_logger.AssertReference(_waveHandlr != null, this);
+        a_logger.AssertReference(_spawnpointBounds != null, this);
+        a_logger.AssertReference(_blockLabelsUI != null, this);
+        a_logger.AssertReference(_confirmButton != null, this);
+        a_logger.AssertReference(_cancelButton != null, this);
         a_logger.AssertReference(_codeBlocks.Length == CODE_BLOCK_COUNT, this);
         a_logger.AssertReference(_enemyPrefabs.Length == System.Enum.GetValues(typeof(EnemyType)).Length, this);
 
-        a_logger.AssertReference(_xrAButton, this);
-        a_logger.AssertReference(_xrXButton, this);
+        a_logger.AssertReference(_xrAButton != null, this);
+        a_logger.AssertReference(_xrXButton != null, this);
 
-        a_logger.AssertReference(_waveCountTXT, this);
-        a_logger.AssertReference(_playerLivesTXT, this);
-        a_logger.AssertReference(_killCountTXT, this);
-        a_logger.AssertReference(_modifierTXT, this);
+        a_logger.AssertReference(_waveCountTXT != null, this);
+        a_logger.AssertReference(_playerLivesTXT != null, this);
+        a_logger.AssertReference(_killCountTXT != null, this);
+        a_logger.AssertReference(_modifierTXT != null, this);
 
-        a_logger.AssertReference(_startWaveSFX, this);
-        a_logger.AssertReference(_waveDoneSFX, this);
-        a_logger.AssertReference(_allWavesDoneSFX, this);
-        a_logger.AssertReference(_gameOverSFX, this);
-        a_logger.AssertReference(_playerHealSFX, this);
-        a_logger.AssertReference(_playerDamagedSFX, this);
+        a_logger.AssertReference(_startWaveSFX != null, this);
+        a_logger.AssertReference(_waveDoneSFX != null, this);
+        a_logger.AssertReference(_allWavesDoneSFX != null, this);
+        a_logger.AssertReference(_gameOverSFX != null, this);
+        a_logger.AssertReference(_playerHealSFX != null, this);
+        a_logger.AssertReference(_playerDamagedSFX != null, this);
     }
     protected override void InitVariables()
     {
@@ -209,7 +209,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     
     public void TakeDamage()
     {
-        // _currHP--;
+        _currHP--;
         _sndEmtr.PlaySound(_playerDamagedSFX);
         UI_UpdatePlayerLife();
 
@@ -424,14 +424,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _blockLabelsUI.SetActive(false);
         yield return _gracePeriod;
 
-        // enemy spawning
         while (_timer != 0f)
         {
-            if (Random.value < 0.1f) SpawnEnemy();
-            if (Random.value < 0.2f) SpawnEnemy();
-
             SpawnEnemy();
-
             _timer--;
             yield return _second;
         }
