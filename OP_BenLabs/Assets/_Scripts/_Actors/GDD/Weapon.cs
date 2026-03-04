@@ -1,52 +1,68 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-[RequireComponent(typeof(SoundEmitter))]
+[RequireComponent(typeof(Rigidbody), typeof(SoundEmitter), typeof(VelocityChecker))]
 
 public class Weapon : Actor
 {
-    #region Members
-
-    [Header("Necessary Scripts")]
-    [SerializeField] private VelocityChecker _velocityChecker;
+    #region Inspector
 
     [Header("Weapon Stats")]
     [SerializeField] private WeaponType _weaponType;
-    [SerializeField] private Sound[] _hitSFXs;
-    [SerializeField] private float _minMagnitude;
-    
 
     [Header("XR Controller Settings")]
     [SerializeField] private XRBaseController _controller;
-    [SerializeField] private float _amplitude, _duration;
+    
 
+    [Header("SFXs")]
+    [SerializeField] private Sound[] _hitSFXs;
+    
+    #endregion
+    #region Private
+
+    private const float VELOCITY_AMPLITUDE = 0.3f;
+    private const float VELOCITY_DURATION = 0.2f;
+    private const float VELOCITY_THRESHOLD = 20f;
+
+    private Rigidbody _rb;
     private SoundEmitter _sndEmitter;
-    private float _damageModifier;
-    private float _dmg;
+    private VelocityChecker _velocityChecker;
+
+    private float _currDmg;
+    private float _dmgModifier;
 
     #endregion
 
     #region Actor
 
+    protected override void Test()
+    {
+        if (Input.GetKeyDown(KeyCode.Space)) _sndEmitter.PlayRandomSound(_hitSFXs);
+    }
     protected override void AssertReferences()
     {
         a_logger.AssertReference(_weaponType != WeaponType.Default, this);
-        a_logger.AssertReference(_dmg != 0, this);
-        a_logger.AssertReference(_hitSFXs.Length != 0, this);
 
         a_logger.AssertReference(_controller != null, this);
-        a_logger.AssertReference(_amplitude != 0, this);
-        a_logger.AssertReference(_duration != 0, this);
+        // a_logger.AssertReference(_amplitude != 0f, this);
+        // a_logger.AssertReference(_duration != 0f, this);
+
+        a_logger.AssertReference(_hitSFXs.Length != 0, this);
     }
     protected override void InitComponents()
     {
+        _rb = GetComponent<Rigidbody>();
         _sndEmitter = GetComponent<SoundEmitter>();
+        _velocityChecker = GetComponent<VelocityChecker>();
     }
     protected override void InitVariables()
     {
+        _rb.useGravity = false;
+        _rb.isKinematic = false;
+
         ResetWeapon();
     }
-
+ 
     #endregion
     #region Unity
 
@@ -62,7 +78,7 @@ public class Weapon : Actor
                         >= 10f => 12f,
                         _ => 6f
                     };
-                    _dmg = swordDmg;
+                    _currDmg = swordDmg;
                     break;
                 
                 case WeaponType.Hammer:
@@ -71,46 +87,25 @@ public class Weapon : Actor
                         >= 10f => 20f,
                         _ => 10f
                     };
-                    _dmg = hammerDmg;
+                    _currDmg = hammerDmg;
                     break;
             }
         }
         
-        // float CalculateWeaponDamage(float magnitude)
-        // {
-        //     return _weaponType switch
-        //     {
-        //         WeaponType.Sword => magnitude switch
-        //         {
-        //             >= 10f => 12f,
-        //             _ => 6f
-        //         },
-        //         WeaponType.Hammer => magnitude switch
-        //         {
-        //             >= 10f => 20f,
-        //             _ => 10f
-        //         },
-        //         _ => 0f,
-        //     };
-        // }
-
         if (other.GetComponent<Enemy>() == null)
         {
             a_logger.Log("There's no enemy component!", TextColor.Red, a_isDevMode);
             a_audMgr.PlayWrong();
             return;
         }
-        if (_velocityChecker.CurrentMagnitude < _minMagnitude) return;
+        if (_velocityChecker.CurrentMagnitude < VELOCITY_THRESHOLD) return;
         
         if (_controller != null)
-            _controller.SendHapticImpulse(_amplitude, _duration);
+            _controller.SendHapticImpulse(VELOCITY_AMPLITUDE, VELOCITY_DURATION);
         
         Enemy e = other.GetComponent<Enemy>();
         CalculateDamage(_velocityChecker.CurrentMagnitude);
-        e.TakeDamage(_dmg * _damageModifier);
-
-        // new dmg checker with the new func (removes lines 108-110 if this works)
-        // other.GetComponent<Enemy>().TakeDamage(CalculateWeaponDamage(_velocityChecker.CurrentMagnitude) * _damageModifier);
+        e.TakeDamage(_currDmg * _dmgModifier);
 
         _sndEmitter.PlayRandomSound(_hitSFXs);
 
@@ -121,8 +116,8 @@ public class Weapon : Actor
     #endregion
     #region Public
 
-    public void BuffWeapon() => _damageModifier = 1.25f;
-    public void ResetWeapon() => _damageModifier = 1f;
+    public void BuffWeapon() => _dmgModifier = 1.25f;
+    public void ResetWeapon() => _dmgModifier = 1f;
 
     #endregion
 }
