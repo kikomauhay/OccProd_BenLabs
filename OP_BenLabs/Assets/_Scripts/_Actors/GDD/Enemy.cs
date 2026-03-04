@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
+using System.Collections;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody), typeof(SoundEmitter))]
 public class Enemy : Actor
@@ -23,6 +26,10 @@ public class Enemy : Actor
     [SerializeField] private TextMeshProUGUI _enemyHPTxt;
     [SerializeField] private Slider _enemyHPslider;
 
+    [Header("Squishing")]
+    [SerializeField] private float _squishDuration;
+    [SerializeField] private Ease _squishEase, _recoverEase;
+
     [Header("SFX")]
     [SerializeField] private Sound[] _etbSFXs;
     [SerializeField] private Sound _ltbSFX;
@@ -33,12 +40,13 @@ public class Enemy : Actor
     private const float MINIMUM_DISTANCE = 1f;
     private const int MAX_ENEMY_TYPES = 3;
     private const int VARIANT_COUNT = 3;
+    private const float SQUISH_AMOUNT = 0.75f;
     
     private GDDManager _gddMgr;
     private MeshRenderer _rend;
     private Rigidbody _rb;
     private SoundEmitter _sndEmtr;
-    private Vector3 _lookAtGoal, _direction;
+    private Vector3 _lookAtGoal, _direction, _originalScale;
 
     private float _currHP, _maxHP, _moveSpeed, _rotSpeed;
 
@@ -50,6 +58,18 @@ public class Enemy : Actor
     {
         if (Input.GetKeyDown(KeyCode.Alpha1)) _sndEmtr.PlayRandomSound(_etbSFXs);
         if (Input.GetKeyDown(KeyCode.Alpha2)) _sndEmtr.PlaySound(_ltbSFX);
+
+        // randomize enemy color
+        if (Input.GetKeyDown(KeyCode.Space))
+            _rend.material = new Material(_materials[Random.Range(0, _materials.Length)]);
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            StartCoroutine(CO_Squish(new(_originalScale.x,
+                                         _originalScale.y * (1f - SQUISH_AMOUNT),
+                                         _originalScale.z)));
+        }
+
     }
     protected override void AssertReferences()
     {
@@ -74,18 +94,18 @@ public class Enemy : Actor
         _rb.angularDrag = 0f;
         _rb.useGravity = false;
         _rb.isKinematic = false;
+
+        _lookAtGoal = new();
+        _direction = new();
+        _originalScale = transform.localScale;
         
         _rend.enabled = true;
         _rend.material = new Material(_materials[Random.Range(0, _materials.Length)]);
 
-        _maxHP = EnemyType switch
-        {
-            EnemyType.Crashes => 32f,
-            EnemyType.Save_Error => 22f,
-            EnemyType.Missing_Textures => 14f,
-            _ => 0f
-        };
-
+        _maxHP = EnemyType switch { EnemyType.Crashes => 32f,
+                                    EnemyType.Save_Error => 22f,
+                                    EnemyType.Missing_Textures => 14f,
+                                    _ => 0f };
         _currHP = _maxHP;
         _moveSpeed = Random.Range(2f, 2.5f);
         _rotSpeed = Random.Range(2f, 4f);
@@ -112,6 +132,8 @@ public class Enemy : Actor
     }
     private void LateUpdate()
     {
+        if (a_isDevMode) return;
+
         _lookAtGoal = new(Goal.position.x, transform.position.y, Goal.position.z);
         transform.LookAt(_lookAtGoal);
 
@@ -157,6 +179,7 @@ public class Enemy : Actor
             _sndEmtr.PlaySound(_ltbSFX);
 
             UI_UpdateHP();
+
             Destroy(gameObject);
         }
     }
@@ -166,9 +189,24 @@ public class Enemy : Actor
         _enemyHPslider.value = _currHP / _maxHP;
     }
 
+    private IEnumerator CO_Squish(Vector3 scale)
+    {
+        WaitForSeconds second = new(1f);
+
+        transform.DOScale(scale, _squishDuration).SetEase(_squishEase);
+        yield return second;
+        yield return second;
+
+        _rend.enabled =false;
+        yield return second;
+
+        _rend.enabled = true;
+        transform.localScale = _originalScale;
+    }
+
+
     #endregion    
 }
-
 public enum EnemyType
 {
     Missing_Textures = 0,

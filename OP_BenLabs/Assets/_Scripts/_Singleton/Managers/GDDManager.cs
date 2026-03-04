@@ -165,6 +165,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             _waveHandlr.gameObject.SetActive(true);
             _blockLabelsUI.SetActive(true);
             a_audMgr.StopMusic();
+            a_logger.Log("GDD Music Stopped!", TextColor.Yellow, a_isDevMode);
 
             StampCard.Instance.Stamp(3);
             a_gameMgr.EnableFinalNPCs();
@@ -192,8 +193,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         foreach (CodeBlock cb in _codeBlocks)
             cb.gameObject.SetActive(false);
 
-        if (!a_isDevMode)
-            a_audMgr.PlayMusic("SND_GDD_BGM");
+        
+        a_audMgr.PlayMusic("SND_GDD_BGM");
 
         DoWavePreparations();
         StartCoroutine(CO_StartEnemySpawning());
@@ -212,7 +213,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         _currHP--;
         _sndEmtr.PlaySound(_playerDamagedSFX);
         UI_UpdatePlayerLife();
-
+        
         if (_currHP < 1f)
         {
             _currHP = 0f;
