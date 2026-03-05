@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(SoundEmitter), typeof(MeshRenderer))]
 public class Equipment : Actor, IInteractable
 {
-    #region SerializeField
+    #region Inspector
 
-    [Header("SFX")]
+    [Header("SFXs")]
     [SerializeField] protected Sound e_pickUpSFX;
     [SerializeField] protected Sound e_landOnFloorSFX;
 
@@ -14,8 +14,8 @@ public class Equipment : Actor, IInteractable
 
     protected MeshRenderer e_rend;
     protected Rigidbody e_rb;
-    protected SoundEmitter e_sndEmitter;
-
+    protected SoundEmitter e_sndEmtr;
+    
     protected Vector3 e_startPosition;
     protected Quaternion e_startRotation;
 
@@ -32,7 +32,7 @@ public class Equipment : Actor, IInteractable
     {
         e_rend = GetComponent<MeshRenderer>();
         e_rb = GetComponent<Rigidbody>();
-        e_sndEmitter = GetComponent<SoundEmitter>();
+        e_sndEmtr = GetComponent<SoundEmitter>();
     }
     protected override void InitVariables()
     {
@@ -51,7 +51,7 @@ public class Equipment : Actor, IInteractable
     public virtual void INT_Interact()
     {
         if (e_pickUpSFX != null)
-            e_sndEmitter.PlaySound(e_pickUpSFX);
+            e_sndEmtr.PlaySound(e_pickUpSFX);
     }
         
     #endregion
@@ -62,7 +62,7 @@ public class Equipment : Actor, IInteractable
         transform.SetPositionAndRotation(e_startPosition, e_startRotation);
 
         if (e_landOnFloorSFX != null)
-            e_sndEmitter.PlaySound(e_landOnFloorSFX);
+            e_sndEmtr.PlaySound(e_landOnFloorSFX);
 
         a_logger.Log($"{name}'s position has been reset!", TextColor.Yellow, a_isDevMode);
     }

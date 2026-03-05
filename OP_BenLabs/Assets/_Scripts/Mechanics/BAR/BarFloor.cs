@@ -7,7 +7,7 @@ public class BarFloor : Floor
         if (collision.gameObject.GetComponent<Shaker>() != null)
         {
             Shaker s = collision.gameObject.GetComponent<Shaker>();
-            s.Washed();
+            s.WashShaker();
             BarManager.Instance.DecreaseScore();
         }
         else if (collision.gameObject.layer == LayerMask.NameToLayer("ShakerCap"))

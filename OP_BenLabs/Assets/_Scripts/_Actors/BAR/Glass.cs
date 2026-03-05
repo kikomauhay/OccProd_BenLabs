@@ -1,42 +1,40 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary> - COCKTAIL COMBINATIONS -
+/// <summary> - MOCKTAIL COMBINATIONS -
 /// 
-/// TEQUILA SUNRISE
-///     - tequila
+/// TROPICAL SPLASH
+///     - pineapple juice
 ///     - orange juice
-///     - lime juice
+///     - coconut water
 /// 
-/// VODKA CIRTUS
-///     - vodka
+/// CITRUS SUNRISE
 ///     - orange juice
 ///     - lime juice
 ///     - coconut water
 /// 
-/// COCONUT MARGARITA
-///     - tequila
+/// SUNSET COOLER
 ///     - lime juice
+///     - cranberry juice
 ///     - coconut water
 ///     
 /// </summary>  
 
-/// <summary> - COCKTAIL METHOD - 
+/// <summary> - MOCKTAIL METHOD - 
 /// 
 /// METHOD:
-///     1. Add all ingredients into a shaker with ice
+///     1. Add the set ingredients into a shaker
 ///     2. Shake for 10-15 secs
 ///     3. Pour into a glass with ice
 /// 
 /// </summary>  
-
 
 public class Glass : Equipment
 {
     #region Properties
 
     public bool HasDrink => _hasDrink;
-    public Cocktail Cocktail => _cocktail;
+    public Mocktail Mocktail => _mocktail;
 
     #endregion
     #region Inspector
@@ -47,14 +45,15 @@ public class Glass : Equipment
     [Header("Drinks"), Tooltip("0 = Tequila, 1 = Vodka, 2 = Coconut")]
     [SerializeField] private GameObject[] _drinks;
     [SerializeField] private GameObject _checkPanel;
-    [SerializeField] private Sound[] _iceRefillSFXs;
 
     [Header("Drink Stats")]
-    [SerializeField] private Cocktail _cocktail;
+    [SerializeField] private Mocktail _mocktail;
     [SerializeField] private bool _hasDrink;
 
     [Header("SFX")]
     [SerializeField] private Sound _poofSFX;
+    [SerializeField] private Sound[] _iceRefillSFXs;
+
 
     #endregion
 
@@ -71,15 +70,22 @@ public class Glass : Equipment
     protected override void InitComponents()
     {
         base.InitComponents();
-        // a_logger.AssertReference(_iceRefillSFXs.Length == 3, this);
+        
+        a_logger.AssertReference(_drinks.Length != 0, this);
+        a_logger.AssertReference(_checkPanel != null, this);
+
+        a_logger.Assert(_mocktail == Mocktail.Empty, "Variable has been set to the wrong value!", this);
+        a_logger.Assert(!_hasDrink, "Variable has been set to the wrong value!", this);
+
+        a_logger.AssertReference(_poofSFX != null, this);
+        a_logger.AssertReference(_iceRefillSFXs.Length != 0, this);
     }
     protected override void InitVariables()
     {
         base.InitVariables();
 
+        _mocktail = Mocktail.Empty;
         _hasDrink = false;
-        _cocktail = Cocktail.Empty;
-
         _checkPanel.SetActive(false);
     }
         
@@ -99,7 +105,7 @@ public class Glass : Equipment
     protected override void Start()
     {
         base.Start();
-        e_sndEmitter.PlaySound(_iceRefillSFXs[Random.Range(0, _iceRefillSFXs.Length)]);
+        e_sndEmtr.PlayRandomSound(_iceRefillSFXs);
     }
 
     #endregion
@@ -110,66 +116,77 @@ public class Glass : Equipment
         ResetDrink();
         ResetPosition();
 
-        a_logger.Log($"{this} has hit the floor!", TextColor.Lime, a_isDevMode);
+        a_logger.Log($"{name} has hit the floor!", TextColor.Yellow, a_isDevMode);
     }
     public void Served()
     {
         ResetDrink();
-        a_logger.Log($"{this} has been served!", TextColor.Lime, a_isDevMode);
+        a_logger.Log($"{name} has been served!", TextColor.Yellow, a_isDevMode);
     }
     public void Washed()
     {
         ResetDrink();
-        a_logger.Log($"{this} has been washed!", TextColor.Lime, a_isDevMode);
+        a_logger.Log($"{name} has been washed!", TextColor.Yellow, a_isDevMode);
     }
-    public void EnableDrink(Cocktail cocktail)
+    public void EnableDrink(Mocktail cocktail)
     {
+        static IEnumerator CO_FillDrink(Material mat, float duration)
+        {
+            float start = mat.GetFloat("_Fill");
+            float target = 0.56f;
+            float time = 0f;
+
+            while (time < duration)
+            {
+                time += Time.deltaTime;
+                float t = time/ duration;
+
+                float value = Mathf.Lerp(start, target, t);
+                mat.SetFloat("_Fill",value);
+
+                yield return null;
+            }
+
+            mat.SetFloat("_Fill",target);
+        }
+
         if (_hasDrink)
         {
-            a_logger.Log($"{this} alreaady has an active drink!", a_isDevMode);
+            a_logger.Log($"{name} alreaady has an active drink!", a_isDevMode);
+            a_audMgr.PlayWrong();
             return;
         }
 
         _hasDrink = true;
-        _cocktail = cocktail;
+        _mocktail = cocktail;
         _checkPanel.SetActive(true);
-
-        int index = -1;
-
-        switch (_cocktail)
+ 
+        int index = _mocktail switch
         {
-            case Cocktail.Tequila_Sunrise:
-                index = 0;
-                break;
-
-            case Cocktail.Vodka_Citrus:
-                index = 1;
-                break;
-
-            case Cocktail.Coconut_Mergarita:
-                index = 2;
-                break;
-        }
+            Mocktail.Citrus_Sunrise => 0,
+            Mocktail.Tropical_Splash => 1,
+            Mocktail.Sunset_Cooler => 2,
+            _ => -1
+        };
 
         if (index != -1)
         {
             Renderer rend = _drinks[index].GetComponent<Renderer>();
-            StartCoroutine(FillDrink(rend.material, 2f));
+            StartCoroutine(CO_FillDrink(rend.material, 2f));
         }
 
-        e_sndEmitter.PlaySound(_poofSFX);
-        GameManager.Instance.Poof(transform);
-
-        a_logger.Log($"{this} has a {_cocktail} active!", TextColor.Yellow, a_isDevMode);
+        e_sndEmtr.PlaySound(_poofSFX);
+        a_gameMgr.Poof(transform);
+        a_logger.Log($"{name} has a {_mocktail} inside!", TextColor.Yellow, a_isDevMode);
     }
 
     #endregion
-    #region Helpers
+    #region Private
 
     private void ResetDrink()
     {
         _hasDrink = false;
-        _cocktail = Cocktail.Empty;
+        _mocktail = Mocktail.Empty;
         _checkPanel.SetActive(false);
 
         foreach (GameObject drink in _drinks)
@@ -178,34 +195,14 @@ public class Glass : Equipment
         a_logger.Log($"{name} has no more drink!", TextColor.Yellow, a_isDevMode);
     }
 
-    private IEnumerator FillDrink(Material mat, float duration)
-    {
-        float start = mat.GetFloat("_Fill");
-        float target = 0.56f;
-        float time = 0f;
-
-        while (time < duration)
-        {
-            time += Time.deltaTime;
-            float t = time/ duration;
-
-            float value = Mathf.Lerp(start, target, t);
-            mat.SetFloat("_Fill",value);
-
-            yield return null;
-        }
-
-        mat.SetFloat("_Fill",target);
-    }
-
     #endregion
 }
 
-public enum Cocktail
+public enum Mocktail
 {
     Wrong = -1,
     Empty = 0,
-    Tequila_Sunrise = 1,
-    Vodka_Citrus = 2,
-    Coconut_Mergarita = 3
+    Citrus_Sunrise = 1,
+    Tropical_Splash = 2,
+    Sunset_Cooler = 3
 }

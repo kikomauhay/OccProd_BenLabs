@@ -8,14 +8,14 @@ public class Customer : Actor
 {
     #region Properties
     
-    public Cocktail WantedCocktail => _wantedCocktail;
+    public Mocktail WantedCocktail => _wantedCocktail;
     public float CustomerScore => _customerScore;
 
     #endregion
     #region SerializeField
 
     [Header("Customer Stats")]
-    [SerializeField] private Cocktail _wantedCocktail;
+    [SerializeField] private Mocktail _wantedCocktail;
     [SerializeField] private float _decreaseRate, _reactionTimer, _rotOffset;
 
     [Header("Customer UI")]
@@ -68,7 +68,7 @@ public class Customer : Actor
             foreach (GameObject order in _drinkOrdersUI)
                 order.SetActive(false);
             
-            _wantedCocktail = (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+            _wantedCocktail = (Mocktail)Random.Range(1, System.Enum.GetValues(typeof(Mocktail)).Length - 1);
             _drinkOrdersUI[(int)_wantedCocktail - 1].SetActive(true);
             a_logger.Log($"Customer got a {_wantedCocktail}", a_isDevMode);
             
@@ -93,7 +93,7 @@ public class Customer : Actor
     protected override void InitVariables()
     {
         // only gets from the three possible drinks
-        _wantedCocktail = (Cocktail)Random.Range(1, System.Enum.GetValues(typeof(Cocktail)).Length - 1);
+        _wantedCocktail = (Mocktail)Random.Range(1, System.Enum.GetValues(typeof(Mocktail)).Length - 1);
      
         name = $"{_wantedCocktail} customer";
 

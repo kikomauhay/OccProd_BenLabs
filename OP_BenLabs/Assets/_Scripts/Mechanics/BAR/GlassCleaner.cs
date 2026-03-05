@@ -33,7 +33,7 @@ public class GlassCleaner : Actor
 
         if (other.GetComponent<Shaker>() != null)
         {
-            other.GetComponent<Shaker>().Washed();
+            other.GetComponent<Shaker>().WashShaker();
             //_soundEmitter.PlaySound(_waterSplashSFX);
         }
     }
