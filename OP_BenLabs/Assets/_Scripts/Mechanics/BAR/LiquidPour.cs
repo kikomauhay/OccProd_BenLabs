@@ -5,7 +5,7 @@ public class LiquidPour : MonoBehaviour
 {
     #region Properties
 
-    public static event System.Action<Cocktail> OnGlassHit;
+    public static event System.Action<Mocktail> OnGlassHit;
     public static event System.Action<Ingredient> OnShakerHit;
     public static event System.Action ShakerEmptied;
 
@@ -56,7 +56,7 @@ public class LiquidPour : MonoBehaviour
     #endregion
     #region Helpers
 
-    private void BeginPourCocktail(Cocktail cocktail)
+    private void BeginPourCocktail(Mocktail cocktail)
     {
         _layerMask = LayerMask.GetMask("Glass");
         ColorChange(cocktail);
@@ -186,19 +186,19 @@ public class LiquidPour : MonoBehaviour
         return currentPosition == targetPosition;
     }
 
-    private void ColorChange(Cocktail cocktail)
+    private void ColorChange(Mocktail cocktail)
     {
         switch (cocktail)
         {
-            case Cocktail.Tequila_Sunrise:
+            case Mocktail.Citrus_Sunrise:
                 _lineRenderer.startColor = Color.red;
                 _lineRenderer.endColor = Color.red;
                 break;
-            case Cocktail.Coconut_Mergarita:
+            case Mocktail.Sunset_Cooler:
                 _lineRenderer.startColor = Color.green;
                 _lineRenderer.endColor = Color.green;
                 break;
-            case Cocktail.Vodka_Citrus:
+            case Mocktail.Tropical_Splash:
                 _lineRenderer.startColor = Color.blue;
                 _lineRenderer.endColor = Color.blue;
                 break;

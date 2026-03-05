@@ -48,7 +48,7 @@ public class ColliderCheck : Actor
                 return;
             }
 
-            if (glass.Cocktail == CustomerOrder.WantedCocktail)
+            if (glass.Mocktail == CustomerOrder.WantedCocktail)
             {
                 actions.DoCorrectReaction();
                 appearance.SetEmotion(Emotion.Happy);
