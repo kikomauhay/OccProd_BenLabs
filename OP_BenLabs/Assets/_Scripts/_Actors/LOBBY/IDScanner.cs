@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer), typeof(SoundEmitter), typeof(BoxCollider))]
@@ -21,10 +22,11 @@ public class IDScanner : Actor
     #region Private
 
     private Renderer _rend;
-    private SoundEmitter _soundEmitter;
+    private SoundEmitter _sndEmtr;
     private BoxCollider _col;
 
     private Quaternion _leftStartRot, _rightStartRot;
+    private bool _coroutineRunning;
 
     #endregion
     
@@ -47,17 +49,17 @@ public class IDScanner : Actor
     protected override void InitComponents()
     {
         _rend = GetComponent<MeshRenderer>();
-        _soundEmitter = GetComponent<SoundEmitter>();
+        _sndEmtr = GetComponent<SoundEmitter>();
         _col = GetComponent<BoxCollider>();
     }
     protected override void InitVariables()
     {
-        a_audMgr = AudioManager.Instance;
-
         _col.enabled = true;
 
         _leftStartRot = _leftGate.localRotation;
         _rightStartRot = _rightGate.localRotation;
+
+        _coroutineRunning = false;
     }
 
     #endregion
@@ -68,7 +70,7 @@ public class IDScanner : Actor
         if (other.gameObject.GetComponent<ID>())
         {
             _rend.material.color = Color.green;
-            _soundEmitter.PlaySound(_idScanSFX);
+            _sndEmtr.PlaySound(_idScanSFX);
             
             RotateGates();
 
@@ -89,8 +91,26 @@ public class IDScanner : Actor
 
     private void RotateGates()
     {        
+        IEnumerator CO_RotateGate(Transform gate, Quaternion startRot, Quaternion endRot)
+        {
+            float t = 0f;
+
+            while (t < _cycleLength)
+            {
+                t += Time.deltaTime * 2f;
+                gate.localRotation = Quaternion.Slerp(startRot, endRot, t);
+                yield return null;
+            }
+        }
         IEnumerator CO_GateMovement()
         {
+            if (_coroutineRunning)
+            {
+                a_logger.Log("Coroutine is already running!", TextColor.Red, a_isDevMode);
+                yield break;
+            }
+
+            _coroutineRunning = true;
             _invisibleWall.SetActive(false);
             StartCoroutine(CO_RotateGate(_leftGate, _leftStartRot, _leftTargetRot));
             StartCoroutine(CO_RotateGate(_rightGate, _rightStartRot, _rightTargetRot));
@@ -100,6 +120,7 @@ public class IDScanner : Actor
             StartCoroutine(CO_RotateGate(_leftGate, _leftTargetRot, _leftStartRot));
             StartCoroutine(CO_RotateGate(_rightGate, _rightTargetRot, _rightStartRot));
             _invisibleWall.SetActive(true);
+            _coroutineRunning = false;
         }
 
         a_logger.Log("Rotating gates!", a_isDevMode);
@@ -107,21 +128,6 @@ public class IDScanner : Actor
         a_logger.Log("Gates rotated!", a_isDevMode);
     }
 
-    #endregion
-    #region Enumerators
-
-    private IEnumerator CO_RotateGate(Transform gate, Quaternion startRot, Quaternion endRot)
-    {
-        float t = 0f;
-
-        while (t < _cycleLength)
-        {
-            t += Time.deltaTime * 2f;
-            gate.localRotation = Quaternion.Slerp(startRot, endRot, t);
-            yield return null;
-        }
-    }
-        
     #endregion
 
 }
