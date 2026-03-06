@@ -75,7 +75,7 @@ public class Weapon : Actor
                 case WeaponType.Sword:
                     float swordDmg = mag switch
                     {
-                        >= 10f => 12f,
+                        >= 20f => 12f,
                         _ => 6f
                     };
                     _currDmg = swordDmg;
@@ -84,7 +84,7 @@ public class Weapon : Actor
                 case WeaponType.Hammer:
                     float hammerDmg = mag switch
                     {
-                        >= 10f => 20f,
+                        >= 20f => 20f,
                         _ => 10f
                     };
                     _currDmg = hammerDmg;

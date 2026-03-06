@@ -102,9 +102,9 @@ public class Enemy : Actor
         _rend.enabled = true;
         _rend.material = new Material(_materials[Random.Range(0, _materials.Length)]);
 
-        _maxHP = EnemyType switch { EnemyType.Crashes => 32f,
-                                    EnemyType.Save_Error => 22f,
-                                    EnemyType.Missing_Textures => 14f,
+        _maxHP = EnemyType switch { EnemyType.Crashes => 30f,
+                                    EnemyType.Save_Error => 26f,
+                                    EnemyType.Missing_Textures => 20f,
                                     _ => 0f };
         _currHP = _maxHP;
         _moveSpeed = Random.Range(2f, 2.5f);
