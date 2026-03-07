@@ -105,9 +105,9 @@ public class AudioManager : Singleton<AudioManager>
         _sources[2].pitch = 1f;
     }
     
-    public void StopMusic() => _sources[2].Stop();
-    public void StopSound() => _sources[1].Stop();
     public void StopOnboarding() => _sources[0].Stop();
+    public void StopSound() => _sources[1].Stop();
+    public void StopMusic() => _sources[2].Stop();
     public void StopAllSounds()
     {
         foreach (AudioSource src in _sources)

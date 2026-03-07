@@ -39,15 +39,12 @@ public class Bottle : Equipment, IPourable
         a_logger.AssertReference(_shakerTip != null, this);
         a_logger.AssertReference(_pourThreshold != 0f, this);
     }
-    protected override void InitComponents()
-    {
-        base.InitComponents();
-        _barMgr = BarManager.Instance;
-    }
     protected override void InitVariables()
     {
         base.InitVariables();
         name = Ingredient.ToString().Replace("_", " ") + " Bottle";
+
+        _barMgr = BarManager.Instance;
     }
 
     #endregion
@@ -57,7 +54,7 @@ public class Bottle : Equipment, IPourable
     {
         IEnumerator CO_DelayedBinding()
         {
-            yield return null;
+            yield return new WaitUntil(() => _barMgr != null);
             _barMgr.OnCustomerSpawn += ResetPosition;
         }
 

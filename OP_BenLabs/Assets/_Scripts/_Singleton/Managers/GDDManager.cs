@@ -9,6 +9,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 {
     #region Inspector
 
+    [SerializeField] private bool _enableDamage;
+
     [Header("Wave System")]
     [SerializeField] private WaveHandler _waveHandlr;
     [SerializeField] private BoxCollider _spawnpointBounds;
@@ -149,29 +151,23 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
-        IEnumerator CO_GameOver()
-        {
-            a_gameMgr.ExitVR();
-            a_logger.Log("Game over!", TextColor.Yellow, a_isDevMode);
-            _sndEmtr.PlaySound(_gameOverSFX);
+        a_audMgr.StopMusic();
+        a_logger.Log("GDD Music Stopped!", TextColor.Yellow, a_isDevMode);
 
-            StopAllCoroutines();
-            ResetGame();
-            ResetWeapons();
-            ClearAllEnemies();
+        a_gameMgr.ExitVR();
+        a_logger.Log("Game over!", TextColor.Yellow, a_isDevMode);
+        _sndEmtr.PlaySound(_gameOverSFX);
 
-            yield return _gracePeriod;
+        ResetGame();
+        ResetWeapons();
+        StopAllCoroutines();
+        ClearAllEnemies();
 
-            _waveHandlr.gameObject.SetActive(true);
-            _blockLabelsUI.SetActive(true);
-            a_audMgr.StopMusic();
-            a_logger.Log("GDD Music Stopped!", TextColor.Yellow, a_isDevMode);
+        _waveHandlr.gameObject.SetActive(true);
+        _blockLabelsUI.SetActive(true);
 
-            StampCard.Instance.Stamp(3);
-            a_gameMgr.EnableFinalNPCs();
-        }
-
-        StartCoroutine(CO_GameOver());
+        StampCard.Instance.Stamp(3);
+        a_gameMgr.EnableFinalNPCs();
     }
     public void INT_ResetValues()
     {
@@ -193,7 +189,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         foreach (CodeBlock cb in _codeBlocks)
             cb.gameObject.SetActive(false);
 
-        
         a_audMgr.PlayMusic("SND_GDD_BGM");
 
         DoWavePreparations();
@@ -210,10 +205,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     
     public void TakeDamage()
     {
-        _currHP--;
-        _sndEmtr.PlaySound(_playerDamagedSFX);
-        UI_UpdatePlayerLife();
-        
+        if (_enableDamage)
+        {
+            _currHP--;
+            _sndEmtr.PlaySound(_playerDamagedSFX);
+            UI_UpdatePlayerLife();
+        }
+
         if (_currHP < 1f)
         {
             _currHP = 0f;
@@ -319,8 +317,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
             a_gameMgr.Player.RightHandTools[i].GetComponent<Weapon>().ResetWeapon();        
             a_gameMgr.Player.RightHandTools[i].SetActive(false);
         }
-
-        // a_logger.Log("Weapons have been reset!", a_isDevMode);
     }
     private void ResetGame()
     {
@@ -355,7 +351,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
             return _spawnpointBounds.transform.TransformPoint(_spawnpointBounds.center + localPosition);
         }
-        void BindEvents(Enemy e)
+        void BindGDDEvents(Enemy e)
         {
             e.OnDeath += EVENT_CountRemainingEnemies;
             e.OnKilled += EVENT_AddToKills;
@@ -374,7 +370,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         enemyObj.transform.SetPositionAndRotation(GetRandomPositionInBox(), Quaternion.identity);
         enemy.EnemyType = (EnemyType)i;
-        BindEvents(enemy);
+        BindGDDEvents(enemy);
         enemyObj.SetActive(true);
 
         a_logger.Log($"Spawned an {(EnemyType)i} enemy!", a_isDevMode);
@@ -395,10 +391,11 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     private void ClearAllEnemies()
     {
-        foreach (GameObject e in _enemyList)            
-            _enemyList.Remove(e);
+        for (int i = _enemyList.Count - 1; i >= 0 ; i--)
+            Destroy(_enemyList[i]);   
 
         _enemyList.Clear();
+        a_logger.Log("Enemies have been cleared!", a_isDevMode);
     }
 
     private void ToggleMainHand(InputAction.CallbackContext context)
@@ -417,7 +414,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (!a_gameMgr.Player.InsideVRSpace)
         {
             a_logger.Log("Player is outside the VR Space!", TextColor.Red, a_isDevMode);
-            a_audMgr.PlayWrong();
+            // a_audMgr.PlayWrong();
             yield break;
         }
 

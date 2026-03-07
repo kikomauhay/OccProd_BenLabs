@@ -31,7 +31,7 @@ public class Player : StaticInstance<Player>
     }
     protected override void InitVariables()
     {
-        InsideVRSpace = false;
+        InsideVRSpace = a_isDevMode;
     }
 
     #endregion
