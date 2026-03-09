@@ -73,9 +73,9 @@ public class Enemy : Actor
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_materials.Length == VARIANT_COUNT, this);
+        a_logger.AssertCollection(_materials, this);
 
-        a_logger.AssertReference(_etbSFXs.Length == MAX_ENEMY_TYPES, this);
+        a_logger.AssertCollection(_etbSFXs, this);
         a_logger.AssertReference(_ltbSFX != null, this);
     }
     protected override void InitComponents()

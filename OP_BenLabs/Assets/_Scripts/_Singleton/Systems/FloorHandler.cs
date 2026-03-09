@@ -33,11 +33,11 @@ public class FloorHandler : Singleton<FloorHandler>
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_floors.Length == FLOOR_COUNT, this);
+        a_logger.AssertCollection(_floors, this);
 
         a_logger.AssertReference(_elevDoor != null, this);
         a_logger.AssertReference(_soundEmitter != null, this);
-        a_logger.AssertReference(_buttons.Length == BUTTON_COUNT, this);
+        a_logger.AssertCollection(_buttons, this);
     }
     protected override void InitVariables()
     {

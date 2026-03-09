@@ -1,5 +1,6 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
 
 public class Logger : MonoBehaviour
 {
@@ -14,8 +15,19 @@ public class Logger : MonoBehaviour
     public void AssertReference(bool condition, Object context)
     {
         if (!condition)
-            Debug.Assert(condition, $"<color={TextColor.Red}>Missing {context}!</color>", context);
+            Assert(condition, $"<color={TextColor.Red}>Missing {context}!</color>", context);
     }    
+    public void AssertCollection<T>(IEnumerable<T> collection, Object context)
+    {
+        if (collection.Count() == 0)
+        {
+            Assert(collection.Count() != 0, $"Walang laman yung {collection}", context);    
+            return;
+        }
+
+        foreach (T item in collection)
+            AssertReference(item != null, context);
+    }
     public void Log(object message, bool isDevMode)
     {
         if (_showLogs && isDevMode)

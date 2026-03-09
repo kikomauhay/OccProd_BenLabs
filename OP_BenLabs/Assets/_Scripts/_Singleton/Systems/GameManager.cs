@@ -102,10 +102,10 @@ public class GameManager : Singleton<GameManager>
         a_logger.AssertReference(_busNPC != null, this);
 
         a_logger.AssertReference(_atriumPrefab != null, this);
-        a_logger.AssertReference(_lobbySpawnpoints.Length != 0, this);
-        a_logger.AssertReference(_gddSpawnpoints.Length != 0, this);
-        a_logger.AssertReference(_cafeteriaSpawnpoints.Length != 0, this);
-        a_logger.AssertReference(_barLabSpawnpoints.Length != 0, this);
+        a_logger.AssertCollection(_lobbySpawnpoints, this);
+        a_logger.AssertCollection(_gddSpawnpoints, this);
+        a_logger.AssertCollection(_cafeteriaSpawnpoints, this);
+        a_logger.AssertCollection(_barLabSpawnpoints, this);
 
         a_logger.AssertReference(_poofVFXPrefab != null, this);
 

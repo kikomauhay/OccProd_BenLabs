@@ -29,7 +29,7 @@ public class NPC : Actor
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_meshRends.Length == 4, this);
+        a_logger.AssertCollection(_meshRends, this);
         a_logger.AssertReference(_voiceLine != null, this);
     }
     protected override void InitVariables()

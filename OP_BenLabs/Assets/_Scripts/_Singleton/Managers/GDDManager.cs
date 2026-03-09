@@ -78,8 +78,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         a_logger.AssertReference(_blockLabelsUI != null, this);
         a_logger.AssertReference(_confirmButton != null, this);
         a_logger.AssertReference(_cancelButton != null, this);
-        a_logger.AssertReference(_codeBlocks.Length == CODE_BLOCK_COUNT, this);
-        a_logger.AssertReference(_enemyPrefabs.Length == System.Enum.GetValues(typeof(EnemyType)).Length, this);
+        a_logger.AssertCollection(_codeBlocks, this);
+        a_logger.AssertCollection(_enemyPrefabs, this);
 
         a_logger.AssertReference(_xrAButton != null, this);
         a_logger.AssertReference(_xrXButton != null, this);

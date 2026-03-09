@@ -17,7 +17,7 @@ public class OnboardingHandler : Singleton<OnboardingHandler>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_vrOnbCanvas.Length != 0, this);
+        a_logger.AssertCollection(_vrOnbCanvas, this);
         a_logger.AssertReference(_vrLeftHand != null, this);
         a_logger.AssertReference(_leftQuestController != null, this);
         a_logger.AssertReference(_canvasPickUpID != null, this);

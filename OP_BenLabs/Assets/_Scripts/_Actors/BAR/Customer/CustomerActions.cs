@@ -1,6 +1,7 @@
+using System;
 using UnityEngine;
 
-[RequireComponent(typeof(SoundEmitter))]
+[RequireComponent(typeof(SoundEmitter), typeof(CustomerAppearance))]
 public class CustomerActions : Actor
 {
     #region Members
@@ -16,6 +17,7 @@ public class CustomerActions : Actor
     [SerializeField] private Sound[] _angryFemaleSFXs;
 
     private SoundEmitter _sndEmtr;
+    private CustomerAppearance _appearance;
 
     #endregion
 
@@ -29,13 +31,14 @@ public class CustomerActions : Actor
     protected override void InitComponents()
     {
         _sndEmtr = GetComponent<SoundEmitter>();
+        _appearance = GetComponent<CustomerAppearance>();
     }
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_happyMaleSFXs.Length != 0, this);
-        a_logger.AssertReference(_angryMaleSFXs.Length != 0, this);
-        a_logger.AssertReference(_happyFemaleSFXs.Length != 0, this);
-        a_logger.AssertReference(_angryFemaleSFXs.Length != 0, this);
+        a_logger.AssertCollection(_happyMaleSFXs, this);
+        a_logger.AssertCollection(_angryMaleSFXs, this);
+        a_logger.AssertCollection(_happyFemaleSFXs, this);
+        a_logger.AssertCollection(_angryFemaleSFXs, this);
     }
 
     #endregion
@@ -45,6 +48,7 @@ public class CustomerActions : Actor
     {
         base.Start();
         DoCorrectReaction();
+        _appearance.SetupCustomerBody(IsMale);
     }
         
     #endregion

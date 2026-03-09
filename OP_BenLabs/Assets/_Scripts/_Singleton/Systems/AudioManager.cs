@@ -22,11 +22,11 @@ public class AudioManager : Singleton<AudioManager>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_sources.Length == 3, this);
+        a_logger.AssertCollection(_sources, this);
 
-        a_logger.AssertReference(_onb.Length != 0, this);
-        a_logger.AssertReference(_sfx.Length != 0, this);
-        a_logger.AssertReference(_bgm.Length != 0, this);
+        a_logger.AssertCollection(_onb, this);
+        a_logger.AssertCollection(_sfx, this);
+        a_logger.AssertCollection(_bgm, this);
     }
     protected override void InitVariables()
     {

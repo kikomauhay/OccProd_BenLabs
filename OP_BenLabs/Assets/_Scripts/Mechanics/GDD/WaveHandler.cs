@@ -14,7 +14,7 @@ public class WaveHandler : StaticInstance<WaveHandler>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_ghostBlocks.Length == GHOST_BLOCK_COUNT, this);
+        a_logger.AssertCollection(_ghostBlocks, this);
     }
    
     public void CheckRemainingBlocks()
