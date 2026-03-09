@@ -22,8 +22,8 @@ public class Player : StaticInstance<Player>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_leftHandTools.Length == 2, this);
-        a_logger.AssertReference(_rightHandTools.Length == 2, this);
+        a_logger.AssertCollection(_leftHandTools, this);
+        a_logger.AssertCollection(_rightHandTools, this);
         
         a_logger.AssertReference(GetComponent<XROrigin>() != null, this);
 

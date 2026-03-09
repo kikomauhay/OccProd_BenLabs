@@ -1,5 +1,7 @@
+using Unity.Burst.Intrinsics;
 using UnityEngine;
 
+[RequireComponent(typeof(CustomerActions))]
 public class CustomerAppearance : Actor
 {
     #region Members
@@ -18,21 +20,16 @@ public class CustomerAppearance : Actor
 
     protected override void Test()
     {   
-        if (Input.GetKeyDown(KeyCode.Space))
-            SetupCustomerBody();
-
-        if (Input.GetKeyDown(KeyCode.Backspace))
-            SetEmotion((Emotion)Random.Range(0, 3));
+        
     }
     protected override void AssertReferences()
     {
         a_logger.AssertReference(_face != null, this);
-        a_logger.AssertReference(_customerRenderer.Length == 4, this);
-        a_logger.AssertReference(_customerFaces.Length == 3, this);        
+        a_logger.AssertCollection(_customerRenderer, this);
+        a_logger.AssertCollection(_customerFaces, this);
 
-        a_logger.AssertReference(_customerMaterials.Length == 3, this);
+        a_logger.AssertCollection(_customerMaterials, this);
     }
-        
     #endregion
     #region Unity
 
@@ -45,12 +42,12 @@ public class CustomerAppearance : Actor
     #endregion
     #region Public 
 
-    public void SetupCustomerBody()
+    public void SetupCustomerBody(bool isMale)
     {
-        int i = Random.Range(0, _customerMaterials.Length);
+        int i = isMale ? _customerMaterials.Length : Random.Range(0, _customerMaterials.Length - 1);
 
-        foreach (MeshRenderer rend in _customerRenderer) 
-            rend.material = new Material(_customerMaterials[i]);
+        foreach (Renderer rend in _customerRenderer) 
+            rend.material = new(_customerMaterials[i]);
     }
     public void SetEmotion(Emotion type)
     {

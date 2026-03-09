@@ -71,14 +71,14 @@ public class Glass : Equipment
     {
         base.InitComponents();
         
-        a_logger.AssertReference(_drinks.Length != 0, this);
+        a_logger.AssertCollection(_drinks, this);
         a_logger.AssertReference(_checkPanel != null, this);
 
         a_logger.Assert(_mocktail == Mocktail.Empty, "Variable has been set to the wrong value!", this);
         a_logger.Assert(!_hasDrink, "Variable has been set to the wrong value!", this);
 
         a_logger.AssertReference(_poofSFX != null, this);
-        a_logger.AssertReference(_iceRefillSFXs.Length != 0, this);
+        a_logger.AssertCollection(_iceRefillSFXs, this);
     }
     protected override void InitVariables()
     {

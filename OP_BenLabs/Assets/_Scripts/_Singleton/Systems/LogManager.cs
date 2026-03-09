@@ -9,6 +9,6 @@ public class LogManager : Singleton<LogManager>
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_loggers.Length == 3, gameObject);
+        a_logger.AssertCollection(_loggers, this);
     }
 }

@@ -47,7 +47,7 @@ public class Weapon : Actor
         // a_logger.AssertReference(_amplitude != 0f, this);
         // a_logger.AssertReference(_duration != 0f, this);
 
-        a_logger.AssertReference(_hitSFXs.Length != 0, this);
+        a_logger.AssertCollection(_hitSFXs, this);
     }
     protected override void InitComponents()
     {

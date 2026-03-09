@@ -16,7 +16,7 @@ public class ObjectPool : Actor
 
     protected override void AssertReferences()
     {
-        a_logger.AssertReference(_prefabs.Length != 0, this);
+        a_logger.AssertCollection(_prefabs, this);
     }
     protected override void InitVariables()
     {

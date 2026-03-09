@@ -29,7 +29,7 @@ public class CrowdNoises : Actor
     protected override void AssertReferences()
     {
         a_logger.AssertReference(_softCrowdSFX != null, this);
-        a_logger.AssertReference(_loudCrowdSFXs.Length == 3, this);
+        a_logger.AssertCollection(_loudCrowdSFXs, this);
     }
 
     #endregion

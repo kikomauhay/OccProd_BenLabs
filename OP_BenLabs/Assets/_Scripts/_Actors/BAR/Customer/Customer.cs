@@ -78,11 +78,11 @@ public class Customer : Actor
 
     protected override void AssertReferences()
     {
-        Debug.Assert(_actions, "Missing _actions reference!", this);
-        Debug.Assert(_appearance, "Missing _appearance reference!", this);
-        Debug.Assert(_timerSlider, "Missing _timerSlider reference!", this);
+        a_logger.AssertReference(_actions != null, this);
+        a_logger.AssertReference(_appearance != null, this);
+        a_logger.AssertReference(_timerSlider != null, this);
         
-        Debug.Assert(_drinkOrdersUI.Length != 0, "Missing elements in _drinksLength!", this);
+        a_logger.AssertCollection(_drinkOrdersUI, this);
     }
     protected override void InitComponents()
     {
