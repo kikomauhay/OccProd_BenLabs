@@ -1,10 +1,9 @@
-using UnityEngine.XR.Interaction.Toolkit;
 using System.Collections.Generic;
-using PDollarGestureRecognizer;
-using UnityEngine.Events;
 using System.Collections;
-using UnityEngine;
 using System.IO;
+using UnityEngine;
+using UnityEngine.Events;
+using PDollarGestureRecognizer;
 
 public class XRTrickRecognizer : MonoBehaviour
 {
@@ -24,8 +23,8 @@ public class XRTrickRecognizer : MonoBehaviour
     [SerializeField] private bool isCreationMode = true;
     [SerializeField] private string newGestureName;
 
-    [SerializeField] private List<Gesture> trainingSet = new List<Gesture>();
-    private List<Vector3> positionList = new List<Vector3>();
+    [SerializeField] private List<Gesture> trainingSet = new();
+    private List<Vector3> _positionsList = new();
 
     #endregion
 
@@ -62,23 +61,19 @@ public class XRTrickRecognizer : MonoBehaviour
                         string xmlContent = www.downloadHandler.text;
                         trainingSet.Add(GestureIO.ReadGestureFromXML(xmlContent));
                     }
-                    else
-                    {
-                        Debug.LogError("Failed to load gesture: " + fileName + " | " + www.error);
-                    }
+                    else Debug.LogError("Failed to load gesture: " + fileName + " | " + www.error);
                 }
             }
         }
 
         // To load all the made gestures
-        if (Application.platform == RuntimePlatform.WindowsEditor || Application.platform == RuntimePlatform.WindowsPlayer)
+        if (Application.platform == RuntimePlatform.WindowsEditor || 
+            Application.platform == RuntimePlatform.WindowsPlayer)
         {
             string[] gestureFiles = Directory.GetFiles(Application.streamingAssetsPath, "*.xml");
 
             foreach (var item in gestureFiles)
-            {
                 trainingSet.Add(GestureIO.ReadGestureFromFile(item));
-            }
         }
 
         // Extra code for Android/Quest
@@ -87,17 +82,13 @@ public class XRTrickRecognizer : MonoBehaviour
 
     private void FixedUpdate()
     {
-        void UpdateMovement()
+        if (gameObject.GetComponent<Shaker>() && _isShaking)
         {
-            positionList.Add(_trackingPoint.position);
+            _positionsList.Add(_trackingPoint.position);
+            
             if (debugCubePrefab)
-            {
-                Destroy(Instantiate(debugCubePrefab, _trackingPoint.position, Quaternion.identity), 1);
-            }
+                Destroy(Instantiate(debugCubePrefab, _trackingPoint.position, Quaternion.identity), 1f);
         }
-
-        if (this.gameObject.GetComponent<Shaker>() && _isShaking)
-            UpdateMovement();
     }
 
     #endregion
@@ -109,8 +100,8 @@ public class XRTrickRecognizer : MonoBehaviour
         if (_isShaking && !_shakerCapped) return;
 
         _isShaking = true;
-        positionList.Clear();
-        positionList.Add(_trackingPoint.position);
+        _positionsList.Clear();
+        _positionsList.Add(_trackingPoint.position);
 
         if (debugCubePrefab)
         {
@@ -122,22 +113,22 @@ public class XRTrickRecognizer : MonoBehaviour
 
     public void EndTrace()
     {
-        if(!_isShaking) return;
+        if (!_isShaking) return;
 
         _isShaking = false;
 
-        Point[] pointArray = new Point[positionList.Count];
+        Point[] pointArray = new Point[_positionsList.Count];
 
-        for(int i = 0; i<positionList.Count; i++)
+        for (int i = 0; i < _positionsList.Count; i++)
         {
-            Vector2 screenPoint = Camera.main.WorldToScreenPoint(positionList[i]);
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(_positionsList[i]);
 
             pointArray[i] = new Point(screenPoint.x, screenPoint.y, 0);
         }
 
-        Gesture newGesture = new Gesture(pointArray);
+        Gesture newGesture = new(pointArray);
 
-        if(isCreationMode)
+        if (isCreationMode)
         {
             newGesture.Name = newGestureName;
             trainingSet.Add(newGesture);
