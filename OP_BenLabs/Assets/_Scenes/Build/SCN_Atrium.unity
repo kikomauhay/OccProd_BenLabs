@@ -3651,6 +3651,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b858faf969a1a9a418287c66e5997ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &734733158 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4296515016904990507, guid: f9e50382e3fe434418f70e4ac82ed023,
+    type: 3}
+  m_PrefabInstance: {fileID: 5650250552023886224}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c2f652d362d6ad4cb856a0b7925e741, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &752409997 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5650250552631522333, guid: f9e50382e3fe434418f70e4ac82ed023,
@@ -6293,6 +6305,41 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 734733158}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ReleaseMarker
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Marker, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_SelectExited.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1895672293433242359, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -6328,6 +6375,12 @@ PrefabInstance:
       propertyPath: _onbSFX
       value: 
       objectReference: {fileID: 11400000, guid: 6afac8128600ecb42a93cd16fa0fc715,
+        type: 2}
+    - target: {fileID: 2880840823947506107, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: _voiceLine
+      value: 
+      objectReference: {fileID: 11400000, guid: 5717f81aaab98ae47a4b7b0a0ae6d217,
         type: 2}
     - target: {fileID: 2983036865265966266, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}

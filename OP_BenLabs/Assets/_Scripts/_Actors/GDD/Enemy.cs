@@ -180,6 +180,15 @@ public class Enemy : Actor
 
             UI_UpdateHP();
 
+            if (a_gameMgr.Player.HammerEquipped)
+            {
+                Vector3 squishedScale = new(_originalScale.x, 
+                                            _originalScale.y * (1f - SQUISH_AMOUNT),
+                                            _originalScale.z);
+                
+                StartCoroutine(CO_Squish(squishedScale));
+            }
+            
             Destroy(gameObject);
         }
     }
@@ -191,17 +200,16 @@ public class Enemy : Actor
 
     private IEnumerator CO_Squish(Vector3 scale)
     {
-        WaitForSeconds second = new(1f);
+        WaitForSeconds second = new(2f);
 
         transform.DOScale(scale, _squishDuration).SetEase(_squishEase);
         yield return second;
-        yield return second;
+        yield return second; // yes, 2 secs
 
-        _rend.enabled =false;
+        _rend.enabled = false;
         yield return second;
-
-        _rend.enabled = true;
-        transform.localScale = _originalScale;
+        
+        Destroy(gameObject);
     }
 
 

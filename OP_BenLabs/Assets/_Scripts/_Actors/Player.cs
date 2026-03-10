@@ -7,6 +7,7 @@ public class Player : StaticInstance<Player>
 {
     #region Members
 
+    public bool HammerEquipped => RightHandTools[1].activeSelf;
     public ReadOnlyArray<GameObject> LeftHandTools => _leftHandTools;
     public ReadOnlyArray<GameObject> RightHandTools => _rightHandTools;
 

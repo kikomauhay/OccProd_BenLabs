@@ -161,7 +161,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         ResetGame();
         ResetWeapons();
         StopAllCoroutines();
-        ClearAllEnemies();
+        ClearAllEnemies();        
 
         _waveHandlr.gameObject.SetActive(true);
         _blockLabelsUI.SetActive(true);
@@ -321,8 +321,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private void ResetGame()
     {
         EnableButtons(false);
-        INT_ResetValues();
         UpdateAllUI();
+        INT_ResetValues();
 
         _waveHandlr.gameObject.SetActive(true);
         _blockLabelsUI.SetActive(true);

@@ -93,10 +93,10 @@ public class LiquidPour : MonoBehaviour
         {
             while (gameObject.activeSelf)
             {
-                _splashParticle.gameObject.transform.position = _targetPosition;
+                // _splashParticle.gameObject.transform.position = _targetPosition;
 
                 bool isHitting = HasReachedPosition(1, _targetPosition);
-                _splashParticle.gameObject.SetActive(isHitting);
+                // _splashParticle.gameObject.SetActive(isHitting);
 
                 yield return null;
             }
@@ -140,10 +140,10 @@ public class LiquidPour : MonoBehaviour
         {
             while (gameObject.activeSelf)
             {
-                _splashParticle.gameObject.transform.position = _targetPosition;
+                // _splashParticle.gameObject.transform.position = _targetPosition;
 
                 bool isHitting = HasReachedPosition(1, _targetPosition);
-                _splashParticle.gameObject.SetActive(isHitting);
+                // _splashParticle.gameObject.SetActive(isHitting);
 
                 yield return null;
             }
