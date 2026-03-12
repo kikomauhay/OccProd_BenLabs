@@ -70,7 +70,8 @@ public class XRTrickRecognizer : MonoBehaviour
         if (Application.platform == RuntimePlatform.WindowsEditor || 
             Application.platform == RuntimePlatform.WindowsPlayer)
         {
-            string[] gestureFiles = Directory.GetFiles(Application.streamingAssetsPath, "*.xml");
+            string gestureFolder = Path.Combine(Application.streamingAssetsPath, "TrickGestures");
+            string[] gestureFiles = Directory.GetFiles(gestureFolder, "*.xml");
 
             foreach (var item in gestureFiles)
                 trainingSet.Add(GestureIO.ReadGestureFromFile(item));
