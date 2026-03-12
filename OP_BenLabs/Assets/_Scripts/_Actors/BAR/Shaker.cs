@@ -17,10 +17,11 @@ public class Shaker : Equipment, IPourable
 
     #endregion
     #region Inspector
-    
+
     [Header("Ingredient Mixing")]
     [SerializeField] private List<Ingredient> _mixedDrink;
     [SerializeField] private Mocktail _mocktailContent;
+    [SerializeField] private Renderer _liquidRenderer;
     
     [Header("Pouring Logic")]
     [SerializeField] private GameObject _stream;
@@ -154,6 +155,7 @@ public class Shaker : Equipment, IPourable
                     Quaternion.identity, transform);
         OnBeginPourCocktail?.Invoke(_mocktailContent);
         _mixedDrink.Clear();
+        _liquidRenderer.material.SetFloat("Fill", 0.54F);
     }
 
     public void MixMocktail()
@@ -204,14 +206,48 @@ public class Shaker : Equipment, IPourable
         {
             _mixedDrink.Add(ingredient);
             a_logger.Log($"Added {ingredient} to shaker!", TextColor.Cyan, a_isDevMode);
+            
+            switch (_mixedDrink.Count)
+            {
+                case 1:
+                    StartCoroutine(CO_FillDrink(0.56F, 2F));
+                    break;
+                case 2:
+                    StartCoroutine(CO_FillDrink(0.58F, 2F));
+                    break;
+                case 3:
+                    StartCoroutine(CO_FillDrink(0.6F, 2F));
+                    break;
+            }
+
         }
         else a_logger.Log($"{ingredient} is already in the shaker.", TextColor.Yellow, a_isDevMode);
     }
+
     private void ResetShaker() => StartCoroutine(CO_DrainDrink());
         
     #endregion
     
     #region Enumerators
+
+    private IEnumerator CO_FillDrink(float targetFill,float duration)
+    {
+        float start = _liquidRenderer.material.GetFloat("_Fill");
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            float t = time / duration;
+
+            float value = Mathf.Lerp(start, targetFill, t);
+            _liquidRenderer.material.SetFloat("_Fill", value);
+
+            yield return null;
+        }
+
+        _liquidRenderer.material.SetFloat("_Fill", targetFill);
+    }
 
     private IEnumerator CO_DrainDrink()
     {
@@ -224,6 +260,8 @@ public class Shaker : Equipment, IPourable
         _shakerCap.SetActive(false);
 
         _mocktailContent = Mocktail.Empty;
+        _liquidRenderer.material.SetFloat("Fill", 0.54F);
+
     }
     private IEnumerator CO_ShakeDrink() // gets called when the GO is picked up
     {
