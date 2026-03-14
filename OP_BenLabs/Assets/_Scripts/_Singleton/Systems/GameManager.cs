@@ -140,7 +140,7 @@ public class GameManager : Singleton<GameManager>
     #endregion
     #region Public
 
-    public void UI_UpdateGDDHiScore(int score) => _highScoreGDDTXT.text = score.ToString();
+    public void UI_UpdateGDDScore(int score) => _highScoreGDDTXT.text = score.ToString();
     public void EnableFinalNPCs()
     {
         _whiteboard.SetActive(true);

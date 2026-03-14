@@ -1397,6 +1397,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ~PRF_Elevator_NEW (FloorHandler)
       objectReference: {fileID: 0}
+    - target: {fileID: 6657197169624172343, guid: 2b50814cfd352af45bfb0e25e44282ca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6657197169803684416, guid: 2b50814cfd352af45bfb0e25e44282ca,
         type: 3}
       propertyPath: _logger
@@ -3099,25 +3104,6 @@ PrefabInstance:
         type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a293e7ed04118a945860f09e59b07d45, type: 3}
---- !u!1 &297179367 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6310294087425090314, guid: f9e50382e3fe434418f70e4ac82ed023,
-    type: 3}
-  m_PrefabInstance: {fileID: 5650250552023886224}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &297179372
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 297179367}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 141323e212cb1c94d9435005189975de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _floorType: 0
 --- !u!1 &335782401
 GameObject:
   m_ObjectHideFlags: 0
@@ -3930,7 +3916,7 @@ PrefabInstance:
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
@@ -3940,7 +3926,7 @@ PrefabInstance:
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
@@ -3955,7 +3941,7 @@ PrefabInstance:
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 1060294165197853531, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
@@ -5946,7 +5932,7 @@ PrefabInstance:
     - target: {fileID: 2359499602012654025, guid: 6c23a9a06025120468b59bc043a479ab,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2359499602012654026, guid: 6c23a9a06025120468b59bc043a479ab,
         type: 3}
@@ -6632,6 +6618,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 6098086964612893015, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310294087425090314, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_Name
+      value: Lobby Floor
+      objectReference: {fileID: 0}
     - target: {fileID: 6431564205697640421, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_Layer
@@ -6709,8 +6705,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9056132326549697758, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
+      propertyPath: m_Name
+      value: PRF_Visitor ID
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056132326549697758, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
       propertyPath: m_Layer
       value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 9056132326549697758, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9056132326549697758, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
@@ -7345,7 +7351,7 @@ PrefabInstance:
     - target: {fileID: 4545681782423894908, guid: 0eff3c973227cf84282ba188233b0289,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4545681782423894909, guid: 0eff3c973227cf84282ba188233b0289,
         type: 3}

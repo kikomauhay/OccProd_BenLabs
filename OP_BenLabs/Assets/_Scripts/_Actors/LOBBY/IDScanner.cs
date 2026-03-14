@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshRenderer), typeof(SoundEmitter), typeof(BoxCollider))]
@@ -67,7 +66,7 @@ public class IDScanner : Actor
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<ID>())
+        if (other.gameObject.GetComponent<Equipment>() is ID)
         {
             _rend.material.color = Color.green;
             _sndEmtr.PlaySound(_idScanSFX);
