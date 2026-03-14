@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.UI;
 
 public class Shaker : Equipment, IPourable
 {
@@ -31,6 +32,7 @@ public class Shaker : Equipment, IPourable
     [Header("Toggle Objects")]
     [SerializeField] private GameObject _shakerCap;
     [SerializeField] private GameObject _checkPanel;
+    [SerializeField] private GameObject _radialPanel;
 
     #endregion
     #region Private 
@@ -88,6 +90,7 @@ public class Shaker : Equipment, IPourable
         _isGrabbed = false;
 
         _checkPanel.SetActive(false);
+        _radialPanel.SetActive(false);
     }
 
     #endregion
@@ -155,7 +158,7 @@ public class Shaker : Equipment, IPourable
                     Quaternion.identity, transform);
         OnBeginPourCocktail?.Invoke(_mocktailContent);
         _mixedDrink.Clear();
-        _liquidRenderer.material.SetFloat("Fill", 0.54F);
+        _liquidRenderer.material.SetFloat("_Fill", 0.54F);
     }
 
     public void MixMocktail()
@@ -187,6 +190,7 @@ public class Shaker : Equipment, IPourable
         _checkPanel.SetActive(false);
         _shakerCap.gameObject.SetActive(false);
         _barMgr.SpawnCap();
+        _liquidRenderer.material.SetFloat("_Fill", 0.52F);
 
         a_logger.Log($"{name} has been washed!", TextColor.Yellow, a_isDevMode);
     }
@@ -210,13 +214,13 @@ public class Shaker : Equipment, IPourable
             switch (_mixedDrink.Count)
             {
                 case 1:
-                    StartCoroutine(CO_FillDrink(0.56F, 2F));
+                    StartCoroutine(CO_FillDrink(0.56F, 0.33F, 2F));
                     break;
                 case 2:
-                    StartCoroutine(CO_FillDrink(0.58F, 2F));
+                    StartCoroutine(CO_FillDrink(0.58F, 0.66F, 2F));
                     break;
                 case 3:
-                    StartCoroutine(CO_FillDrink(0.6F, 2F));
+                    StartCoroutine(CO_FillDrink(0.6F, 1F, 2F));
                     break;
             }
 
@@ -230,27 +234,36 @@ public class Shaker : Equipment, IPourable
     
     #region Enumerators
 
-    private IEnumerator CO_FillDrink(float targetFill,float duration)
+    private IEnumerator CO_FillDrink(float targetFill, float sliderFill, float duration)
     {
-        float start = _liquidRenderer.material.GetFloat("_Fill");
+        float startLiquid = _liquidRenderer.material.GetFloat("_Fill");
+        float startSlider = _radialPanel.gameObject.GetComponentInChildren<Slider>().value;
         float time = 0f;
+
+        _radialPanel.SetActive(true);
 
         while (time < duration)
         {
             time += Time.deltaTime;
             float t = time / duration;
 
-            float value = Mathf.Lerp(start, targetFill, t);
+            float value = Mathf.Lerp(startLiquid, targetFill, t);
+            float sliderValue = Mathf.Lerp(startSlider, sliderFill, t);
             _liquidRenderer.material.SetFloat("_Fill", value);
+            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = sliderValue;
 
             yield return null;
         }
 
+        _radialPanel.gameObject.GetComponentInChildren<Slider>().value = sliderFill;
         _liquidRenderer.material.SetFloat("_Fill", targetFill);
+        _radialPanel.SetActive(false);
     }
 
     private IEnumerator CO_DrainDrink()
     {
+
+        _liquidRenderer.material.SetFloat("_Fill", 0.52F);
         yield return _drainTime;
 
         ShakerUnlocked?.Invoke();
@@ -260,11 +273,28 @@ public class Shaker : Equipment, IPourable
         _shakerCap.SetActive(false);
 
         _mocktailContent = Mocktail.Empty;
-        _liquidRenderer.material.SetFloat("Fill", 0.54F);
 
     }
     private IEnumerator CO_ShakeDrink() // gets called when the GO is picked up
     {
+        float randomValue = Random.Range(10f, 15f);
+
+        void StartShaking()
+        {
+            float time = 0f;
+            _radialPanel.SetActive(true);
+
+            while (time < randomValue)
+            {
+                time += Time.deltaTime;
+                float t = time/randomValue;
+
+                float sliderValue = Mathf.Lerp(0f,1f, t);
+                _radialPanel.gameObject.GetComponentInChildren<Slider>().value = sliderValue;
+            }
+            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 1F;
+        }
+
         void SendHaptics(float amp, float dur)
         {
             if (_interactor is XRBaseControllerInteractor controllerInteractor)
@@ -293,8 +323,10 @@ public class Shaker : Equipment, IPourable
             a_logger.Log("Created dubious drink!", TextColor.Red, a_isDevMode);
         }
 
+        StartShaking();
+
         // random countdown for the player to earn bonus points
-        yield return new WaitForSeconds(Random.Range(10f, 15f));
+        yield return new WaitForSeconds(randomValue);
         
         CompareIngredients();
         _checkPanel.SetActive(true);
