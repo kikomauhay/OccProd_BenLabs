@@ -47,17 +47,17 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     private List<GhostBlock[]> _ghostBlockGridList;
     private List<GameObject> _enemyList;
     private float[] _enemyTimers; // also acts as the amount of enemies per wave
-    
+
     private int _killCount, _waveIndex;
     private float _currHP, _timer;
 
     #endregion
 
     #region Actor
-    
+
     protected override void Test()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow)) 
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             _waveIndex++;
             a_logger.Log($"Wave index: {_waveIndex}", TextColor.Yellow, a_isDevMode);
@@ -68,7 +68,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         if (Input.GetKeyDown(KeyCode.Space)) BTN_Confirm();
     }
     protected override void InitComponents()
-    {        
+    {
         _sndEmtr = GetComponent<SoundEmitter>();
     }
     protected override void AssertReferences()
@@ -155,16 +155,14 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         a_logger.Log("GDD Music Stopped!", TextColor.Yellow, a_isDevMode);
 
         a_gameMgr.ExitVR();
+        a_gameMgr.UI_UpdateGDDScore(_killCount);
         a_logger.Log("Game over!", TextColor.Yellow, a_isDevMode);
         _sndEmtr.PlaySound(_gameOverSFX);
 
-        ResetGame();
+        ResetGame(isGameOver: true);
         ResetWeapons();
-        StopAllCoroutines();
-        ClearAllEnemies();        
-
-        _waveHandlr.gameObject.SetActive(true);
-        _blockLabelsUI.SetActive(true);
+        StopCoroutine(CO_StartEnemySpawning());
+        ClearAllEnemies();
 
         StampCard.Instance.Stamp(3);
         a_gameMgr.EnableFinalNPCs();
@@ -178,7 +176,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     public void BTN_Cancel()
     {
-        ResetGame();
+        ResetGame(isGameOver: false);
         a_logger.Log("Nareset ang grid!", a_isDevMode);
     }
     public void BTN_Confirm()
@@ -202,7 +200,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         e.OnKilled -= EVENT_AddToKills;
         e.OnKilled -= EVENT_GainLife;
     }
-    
+
     public void TakeDamage()
     {
         if (_enableDamage)
@@ -246,23 +244,23 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         {
             a_audMgr.StopMusic();
             _sndEmtr.PlaySound(_allWavesDoneSFX);
-            a_gameMgr.UI_UpdateGDDHiScore(_killCount);
+            a_gameMgr.UI_UpdateGDDScore(_killCount);
             a_gameMgr.ExitVR();
             a_logger.Log("All waves done!", a_isDevMode);
 
-            ResetGame();
+            ResetGame(isGameOver: true);
             return;
         }
 
         ClearAllEnemies();
         DoWavePreparations();
-        StartCoroutine(CO_StartEnemySpawning());        
+        StartCoroutine(CO_StartEnemySpawning());
     }
     private void EVENT_AddToKills() // enemy.OnKilled
     {
         _killCount++;
         a_logger.Log($"Kill Count: <color={TextColor.Yellow}>{_killCount}</color>", a_isDevMode);
-        
+
         UI_UpdateKillCount();
     }
     private void EVENT_GainLife() // enemy.OnKilled
@@ -285,7 +283,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         // setup before enemy spawning
         weapon.SetActive(true);
-        _timer = _enemyTimers[_waveIndex]; 
+        _timer = _enemyTimers[_waveIndex];
         _currentModifier = _ghostBlockGridList[_waveIndex][(int)BlockType.Modifier].Modifier;
         _waveHandlr.gameObject.SetActive(false);
 
@@ -306,36 +304,43 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         UpdateAllUI();
-    }    
+    }
     private void ResetWeapons()
-    {        
+    {
         for (int i = 0; i < MAX_WEAPON_COUNT; i++)
         {
-            a_gameMgr.Player.LeftHandTools[i].GetComponent<Weapon>().ResetWeapon();       
+            a_gameMgr.Player.LeftHandTools[i].GetComponent<Weapon>().ResetWeapon();
             a_gameMgr.Player.LeftHandTools[i].SetActive(false);
 
-            a_gameMgr.Player.RightHandTools[i].GetComponent<Weapon>().ResetWeapon();        
+            a_gameMgr.Player.RightHandTools[i].GetComponent<Weapon>().ResetWeapon();
             a_gameMgr.Player.RightHandTools[i].SetActive(false);
         }
     }
-    private void ResetGame()
+    private void ResetGame(bool isGameOver)
     {
+        IEnumerator CO_DelayedEnable(bool isGameOver)
+        {
+            yield return new WaitForSeconds(isGameOver ? 3f : 0f);
+
+            foreach (CodeBlock cb in _codeBlocks)
+            {
+                cb.ResetPosition();
+                cb.gameObject.SetActive(true);
+            }
+
+            foreach (GhostBlock gb in _waveHandlr.GhostBlocks)
+                gb.ResetBlock();
+
+            _waveHandlr.gameObject.SetActive(true);
+            _blockLabelsUI.SetActive(true);
+            a_logger.Log("Blocks have been reenabled!", a_isDevMode);
+        }
+
         EnableButtons(false);
         UpdateAllUI();
         INT_ResetValues();
 
-        _waveHandlr.gameObject.SetActive(true);
-        _blockLabelsUI.SetActive(true);
-        
-        foreach (CodeBlock cb in _codeBlocks)
-        {
-            cb.ResetPosition();
-            cb.gameObject.SetActive(true);
-        }
-
-        foreach (GhostBlock gb in _waveHandlr.GhostBlocks)
-            gb.ResetBlock();
-
+        StartCoroutine(CO_DelayedEnable(isGameOver));
         GhostBlock.FilledBlocks = 0;
         a_logger.Log("Game has been reset!", a_isDevMode);
     }
@@ -364,7 +369,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         }
 
         int i = Random.Range(0, _waveIndex + 1);
-        
+
         GameObject enemyObj = Instantiate(_enemyPrefabs[i]);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
 
@@ -391,8 +396,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     private void ClearAllEnemies()
     {
-        for (int i = _enemyList.Count - 1; i >= 0 ; i--)
-            Destroy(_enemyList[i]);   
+        for (int i = _enemyList.Count - 1; i >= 0; i--)
+            Destroy(_enemyList[i]);
 
         _enemyList.Clear();
         a_logger.Log("Enemies have been cleared!", a_isDevMode);

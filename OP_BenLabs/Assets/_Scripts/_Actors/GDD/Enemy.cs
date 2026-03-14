@@ -59,17 +59,11 @@ public class Enemy : Actor
         if (Input.GetKeyDown(KeyCode.Alpha1)) _sndEmtr.PlayRandomSound(_etbSFXs);
         if (Input.GetKeyDown(KeyCode.Alpha2)) _sndEmtr.PlaySound(_ltbSFX);
 
-        // randomize enemy color
-        if (Input.GetKeyDown(KeyCode.Space))
-            _rend.material = new Material(_materials[Random.Range(0, _materials.Length)]);
-
-        if (Input.GetKeyDown(KeyCode.Tab))
+        if (Input.GetKeyDown(KeyCode.Delete))
         {
-            StartCoroutine(CO_Squish(new(_originalScale.x,
-                                         _originalScale.y * (1f - SQUISH_AMOUNT),
-                                         _originalScale.z)));
+            if (Random.value < 0.5f)
+                TakeDamage(_maxHP);
         }
-
     }
     protected override void AssertReferences()
     {
@@ -100,12 +94,15 @@ public class Enemy : Actor
         _originalScale = transform.localScale;
         
         _rend.enabled = true;
-        _rend.material = new Material(_materials[Random.Range(0, _materials.Length)]);
+        _rend.material = new(_materials[Random.Range(0, _materials.Length)]);
 
-        _maxHP = EnemyType switch { EnemyType.Crashes => 30f,
-                                    EnemyType.Save_Error => 26f,
-                                    EnemyType.Missing_Textures => 20f,
-                                    _ => 0f };
+        _maxHP = EnemyType switch 
+        { 
+            EnemyType.Crashes => 30f,
+            EnemyType.Save_Error => 26f,
+            EnemyType.Missing_Textures => 20f,
+            _ => 0f 
+        };
         _currHP = _maxHP;
         _moveSpeed = Random.Range(2f, 2.5f);
         _rotSpeed = Random.Range(2f, 4f);
@@ -132,8 +129,6 @@ public class Enemy : Actor
     }
     private void LateUpdate()
     {
-        if (a_isDevMode) return;
-
         _lookAtGoal = new(Goal.position.x, transform.position.y, Goal.position.z);
         transform.LookAt(_lookAtGoal);
 
@@ -178,17 +173,7 @@ public class Enemy : Actor
             _gddMgr.RemoveEnemy(gameObject);
             _sndEmtr.PlaySound(_ltbSFX);
 
-            UI_UpdateHP();
-
-            if (a_gameMgr.Player.HammerEquipped)
-            {
-                Vector3 squishedScale = new(_originalScale.x, 
-                                            _originalScale.y * (1f - SQUISH_AMOUNT),
-                                            _originalScale.z);
-                
-                StartCoroutine(CO_Squish(squishedScale));
-            }
-            
+            UI_UpdateHP();            
             Destroy(gameObject);
         }
     }
@@ -196,20 +181,6 @@ public class Enemy : Actor
     {
         _enemyHPTxt.text = $"{_currHP}/{_maxHP}";
         _enemyHPslider.value = _currHP / _maxHP;
-    }
-
-    private IEnumerator CO_Squish(Vector3 scale)
-    {
-        WaitForSeconds second = new(2f);
-
-        transform.DOScale(scale, _squishDuration).SetEase(_squishEase);
-        yield return second;
-        yield return second; // yes, 2 secs
-
-        _rend.enabled = false;
-        yield return second;
-        
-        Destroy(gameObject);
     }
 
 
