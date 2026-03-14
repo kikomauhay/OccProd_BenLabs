@@ -5659,6 +5659,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 315802823960049750, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1366691754295683648, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_Layer
@@ -5764,6 +5769,46 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: _threshold
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 3292202372452222053}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddTrickScore
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BarManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4596077748348422008, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+        type: 3}
+      propertyPath: OnRecognized.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 6094633329083957448, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
         type: 3}
       propertyPath: m_Layer
@@ -5776,6 +5821,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8, type: 3}
+--- !u!114 &3292202372452222053 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2026419893099881148, guid: e3f9b5d2cbb9a7341a17eb1fefaaf5d8,
+    type: 3}
+  m_PrefabInstance: {fileID: 3292202372452222052}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ce2703ae8bb6804090029ea7c65d346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4545681781529032888 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4545681782423894909, guid: 0eff3c973227cf84282ba188233b0289,
@@ -5889,7 +5946,7 @@ PrefabInstance:
     - target: {fileID: 2359499602012654025, guid: 6c23a9a06025120468b59bc043a479ab,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2359499602012654026, guid: 6c23a9a06025120468b59bc043a479ab,
         type: 3}
@@ -6303,7 +6360,7 @@ PrefabInstance:
     - target: {fileID: 1082000365550686971, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1774890712135935331, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
