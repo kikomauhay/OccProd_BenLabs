@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class LiquidPour : MonoBehaviour
+public class LiquidPour : Actor
 {
     #region Properties
 
@@ -26,7 +26,7 @@ public class LiquidPour : MonoBehaviour
 
     #region Unity
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         _bottle = this.GetComponentInParent<Bottle>();
 
@@ -36,7 +36,7 @@ public class LiquidPour : MonoBehaviour
         _bottle.OnBeginPourIngredient += BeginPourIngredient;
         _bottle.OnStopPour += EndPour;
     }
-    private void OnDisable()
+    protected override void OnDisable()
     {
         Shaker.OnBeginPourCocktail -= BeginPourCocktail;
         Shaker.OnStopPour -= EndPour;
@@ -44,8 +44,8 @@ public class LiquidPour : MonoBehaviour
         _bottle.OnBeginPourIngredient -= BeginPourIngredient;
         _bottle.OnStopPour -= EndPour;
     }
-    private void Awake() => _lineRenderer = GetComponent<LineRenderer>();
-    private void Start()
+    protected override void Awake() => _lineRenderer = GetComponent<LineRenderer>();
+    protected override void Start()
     {
         _targetPosition = Vector3.zero;
 

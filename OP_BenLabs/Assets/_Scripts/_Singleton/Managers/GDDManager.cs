@@ -151,6 +151,9 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     }
     public void INT_DoGameOver() // only gets called once player gets 0 HP
     {
+        StopCoroutine(CO_StartEnemySpawning());
+        ClearAllEnemies();
+        
         a_audMgr.StopMusic();
         a_logger.Log("GDD Music Stopped!", TextColor.Yellow, a_isDevMode);
 
@@ -161,8 +164,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
         ResetGame(isGameOver: true);
         ResetWeapons();
-        StopCoroutine(CO_StartEnemySpawning());
-        ClearAllEnemies();
 
         StampCard.Instance.Stamp(3);
         a_gameMgr.EnableFinalNPCs();
