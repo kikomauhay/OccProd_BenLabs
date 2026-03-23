@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(SoundEmitter))]
@@ -10,6 +11,12 @@ public class NPC : Actor
 
     [SerializeField] private MeshRenderer[] _meshRends;
     [SerializeField] private Sound _voiceLine;
+
+    [Header("Subtitles Section")]
+    [SerializeField] private string[] _dialogues;
+    [SerializeField] private GameObject _subtitleBox;
+    [SerializeField] private TextMeshProUGUI _txtBox;
+    [SerializeField] private float _gapTimer = 0.2f;
 
     private SoundEmitter _sndEmtr;
     private bool _voicePlaying;
@@ -58,9 +65,21 @@ public class NPC : Actor
             _voicePlaying = false;
             OnVoicePlayed?.Invoke(_voicePlaying);
         }
-        
+
         StartCoroutine(CO_Play());
+        StartCoroutine(CreateSubtitles());
     }
-        
+
+    private IEnumerator CreateSubtitles()
+    {
+        _subtitleBox.SetActive(true);               //Turns on canvas
+
+        _txtBox.text = _dialogues[0];
+        yield return new WaitForSeconds(11f);
+        _txtBox.text = _dialogues[1];
+        yield return new WaitForSeconds(9f);
+        _subtitleBox.SetActive(false);              //Turns off canvas
+    }
+
     #endregion
 }

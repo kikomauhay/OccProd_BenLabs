@@ -3257,6 +3257,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &421805557 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3901077020552913366, guid: 56d8cc241502f404aa8bc693a3954571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1067317074}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &421805558 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4069926824896301754, guid: 56d8cc241502f404aa8bc693a3954571,
+    type: 3}
+  m_PrefabInstance: {fileID: 1067317074}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &557263169 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6742181315484673270, guid: 2b50814cfd352af45bfb0e25e44282ca,
@@ -3983,6 +3995,11 @@ PrefabInstance:
       propertyPath: _isDevMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4069926824896301754, guid: 56d8cc241502f404aa8bc693a3954571,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5696495918388294078, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_Enabled
@@ -4038,6 +4055,16 @@ PrefabInstance:
       propertyPath: a_isDevMode
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8515223491386886593, guid: 56d8cc241502f404aa8bc693a3954571,
+        type: 3}
+      propertyPath: _leftHandTools.Array.data[0]
+      value: 
+      objectReference: {fileID: 421805558}
+    - target: {fileID: 8515223491386886593, guid: 56d8cc241502f404aa8bc693a3954571,
+        type: 3}
+      propertyPath: _leftHandTools.Array.data[1]
+      value: 
+      objectReference: {fileID: 421805557}
     - target: {fileID: 8515223491386886593, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: _rightHandTools.Array.data[0]
@@ -6517,6 +6544,25 @@ PrefabInstance:
         type: 3}
       propertyPath: a_isDevMode
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983036865265966266, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: _dialogues.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983036865265966266, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: _dialogues.Array.data[0]
+      value: 'Hey there, senior high school student! Welcome to the Atrium Campus,
+        first opened in late 2021, and houses students from the School of Management
+        and Information Technology, '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2983036865265966266, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: _dialogues.Array.data[1]
+      value: School of Diplomacy and Governance, and some laboratories from the School
+        of Hotel, Restaurant and Institution Management. Come on let's explore this
+        place out
       objectReference: {fileID: 0}
     - target: {fileID: 3059201463669618407, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
