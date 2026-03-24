@@ -297,7 +297,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 break;
 
             case Modifier.Damage:
-                weapon.GetComponent<Weapon>().BuffWeapon();
+                weapon.GetComponentInChildren<Weapon>().BuffWeapon();
                 a_logger.Log("Increased damage!", a_isDevMode);
                 break;
 
