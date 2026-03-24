@@ -297,7 +297,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
                 break;
 
             case Modifier.Damage:
-                weapon.GetComponent<Weapon>().BuffWeapon();
+                weapon.GetComponentInChildren<Weapon>().BuffWeapon();
                 a_logger.Log("Increased damage!", a_isDevMode);
                 break;
 
@@ -310,10 +310,10 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         for (int i = 0; i < MAX_WEAPON_COUNT; i++)
         {
-            a_gameMgr.Player.LeftHandTools[i].GetComponent<Weapon>().ResetWeapon();
+            a_gameMgr.Player.LeftHandTools[i].GetComponentInChildren<Weapon>().ResetWeapon();
             a_gameMgr.Player.LeftHandTools[i].SetActive(false);
 
-            a_gameMgr.Player.RightHandTools[i].GetComponent<Weapon>().ResetWeapon();
+            a_gameMgr.Player.RightHandTools[i].GetComponentInChildren<Weapon>().ResetWeapon();
             a_gameMgr.Player.RightHandTools[i].SetActive(false);
         }
     }
