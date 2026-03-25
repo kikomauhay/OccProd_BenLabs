@@ -1,19 +1,22 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(SoundEmitter))]
 public class NPC : Actor
 {
     #region Members
-        
-    public static System.Action<bool> OnVoicePlayed { get; set; } // not yet used
 
+    [Header("Components")]
     [SerializeField] private MeshRenderer[] _meshRends;
     [SerializeField] private Sound _voiceLine;
 
-    [Header("Subtitles Section")]
+    [Header("Subtitle Settings")]
     [SerializeField] private string[] _dialogues;
+    [SerializeField] private float[] _dialogueTimings; // this will replace _gapTimer
+    [SerializeField] private Sound[] _voiceLines;
+    
+    [Header("Subtitle UI")]
     [SerializeField] private GameObject _subtitleBox;
     [SerializeField] private TextMeshProUGUI _txtBox;
     [SerializeField] private float _gapTimer = 0.2f;
@@ -27,8 +30,8 @@ public class NPC : Actor
 
     protected override void Test()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
-            TriggerVoiceLine();
+        if (Input.GetKeyDown(KeyCode.Space))
+            OnboardPlayer();
     }
     protected override void InitComponents()
     {
@@ -36,6 +39,8 @@ public class NPC : Actor
     }
     protected override void AssertReferences()
     {
+        a_logger.AssertCollection(_dialogues, this);
+        // a_logger.AssertCollection(_dialogueTimings, this);
         a_logger.AssertCollection(_meshRends, this);
         a_logger.AssertReference(_voiceLine != null, this);
     }
@@ -59,16 +64,46 @@ public class NPC : Actor
         {
             _sndEmtr.PlaySound(_voiceLine);
             _voicePlaying = true;
-            OnVoicePlayed?.Invoke(_voicePlaying);
             yield return new WaitForSeconds(_voiceLine.Clip.length);
 
             _voicePlaying = false;
-            OnVoicePlayed?.Invoke(_voicePlaying);
         }
 
         StartCoroutine(CO_Play());
         StartCoroutine(CreateSubtitles());
     }
+    public void OnboardPlayer()
+    {
+        IEnumerator CO_PlayVoiceWithSubtitles()
+        {
+            if (_voicePlaying)
+            {
+                a_logger.Log("Voice line is currently playing!", TextColor.Red, a_isDevMode);
+                yield break;
+            }
+
+            _voicePlaying = true;
+            _subtitleBox.SetActive(true);
+
+            for (int i = 0; i < _dialogues.Length; i++)
+            {
+                _sndEmtr.StopSound();
+                _sndEmtr.PlaySound(_voiceLines[i]);
+                _txtBox.text = _dialogues[i];
+
+                yield return new WaitForSeconds(_dialogueTimings[i]);
+            }
+
+            _voicePlaying = false;
+            _subtitleBox.SetActive(false);
+        }
+
+        StartCoroutine(CO_PlayVoiceWithSubtitles());
+    }
+
+
+    #endregion
+    #region Enumerators        
 
     private IEnumerator CreateSubtitles()
     {
