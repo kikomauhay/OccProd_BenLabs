@@ -119,20 +119,20 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
 
     protected override void OnEnable()
     {
-        _xrAButton.action.performed += ToggleMainHand;
-        _xrXButton.action.performed += ToggleMainHand;
+        //_xrAButton.action.performed += ToggleMainHand;
+        //_xrXButton.action.performed += ToggleMainHand;
     }
     protected override void OnDisable()
     {
-        _xrXButton.action.performed -= ToggleMainHand;
-        _xrXButton.action.performed -= ToggleMainHand;
+        //_xrXButton.action.performed -= ToggleMainHand;
+        //_xrXButton.action.performed -= ToggleMainHand;
     }
     protected override void Start()
     {
         base.Start();
 
-        _xrAButton.action.Enable();
-        _xrXButton.action.Enable();
+        //_xrAButton.action.Enable();
+        //_xrXButton.action.Enable();
 
         _waveHandlr.gameObject.SetActive(true);
         _blockLabelsUI.SetActive(true);
@@ -404,11 +404,13 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         a_logger.Log("Enemies have been cleared!", a_isDevMode);
     }
 
+    /*
     private void ToggleMainHand(InputAction.CallbackContext context)
     {
         _usingLeftHand = !_usingLeftHand;
         a_logger.Log("Changed main hand!", a_isDevMode);
     }
+    */
 
     #endregion
     #endregion
