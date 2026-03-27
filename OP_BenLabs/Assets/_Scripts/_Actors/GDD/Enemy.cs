@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using DG.Tweening;
 
 [RequireComponent(typeof(MeshRenderer), typeof(Rigidbody), typeof(SoundEmitter))]
 public class Enemy : Actor
@@ -24,9 +23,8 @@ public class Enemy : Actor
     [SerializeField] private TextMeshProUGUI _enemyHPTxt;
     [SerializeField] private Slider _enemyHPslider;
 
-    [Header("Squishing")]
-    [SerializeField] private float _squishDuration;
-    [SerializeField] private Ease _squishEase, _recoverEase;
+    [Header("VFX")]
+    [SerializeField] private GameObject _confettiVFX;
 
     [Header("SFX")]
     [SerializeField] private Sound[] _etbSFXs;
@@ -36,17 +34,15 @@ public class Enemy : Actor
     #region Private
 
     private const float MINIMUM_DISTANCE = 1f;
-    private const int MAX_ENEMY_TYPES = 3;
-    private const int VARIANT_COUNT = 3;
-    private const float SQUISH_AMOUNT = 0.75f;
-    
+
     private GDDManager _gddMgr;
     private MeshRenderer _rend;
     private Rigidbody _rb;
     private SoundEmitter _sndEmtr;
-    private Vector3 _lookAtGoal, _direction, _originalScale;
+    private Vector3 _lookAtGoal, _direction;
 
-    private float _currHP, _maxHP, _moveSpeed, _rotSpeed;
+    private float _currHP, _maxHP;
+    private float _moveSpeed, _rotSpeed;
 
     #endregion
 
@@ -59,13 +55,15 @@ public class Enemy : Actor
 
         if (Input.GetKeyDown(KeyCode.Delete))
         {
-            if (Random.value < 0.5f)
+            // if (Random.value < 0.5f)
                 TakeDamage(_maxHP);
         }
     }
     protected override void AssertReferences()
     {
         a_logger.AssertCollection(_materials, this);
+
+        a_logger.AssertReference(_confettiVFX != null, this);
 
         a_logger.AssertCollection(_etbSFXs, this);
         a_logger.AssertReference(_ltbSFX != null, this);
@@ -89,7 +87,6 @@ public class Enemy : Actor
 
         _lookAtGoal = new();
         _direction = new();
-        _originalScale = transform.localScale;
         
         _rend.enabled = true;
         _rend.material = new(_materials[Random.Range(0, _materials.Length)]);
@@ -168,10 +165,11 @@ public class Enemy : Actor
         if (_currHP < 1f)
         {
             _currHP = 0f;
-            _gddMgr.RemoveEnemy(gameObject);
+            // _gddMgr.RemoveEnemy(gameObject);
             _sndEmtr.PlaySound(_ltbSFX);
 
             UI_UpdateHP();            
+            Destroy(Instantiate(_confettiVFX, transform.position, transform.rotation), 1f);
             Destroy(gameObject);
         }
     }

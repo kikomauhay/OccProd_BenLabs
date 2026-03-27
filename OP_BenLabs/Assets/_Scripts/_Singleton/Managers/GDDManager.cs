@@ -15,12 +15,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     [SerializeField] private WaveHandler _waveHandlr;
     [SerializeField] private BoxCollider _spawnpointBounds;
     [SerializeField] private GameObject _blockLabelsUI, _confirmButton, _cancelButton;
-    [SerializeField] private CodeBlock[] _codeBlocks;
-    [SerializeField] private GameObject[] _enemyPrefabs;
-
-    [Header("VR Variables")]
-    [SerializeField] private bool _usingLeftHand;
-    [SerializeField] private InputActionReference _xrAButton, _xrXButton;
+    [SerializeField, Space(10f)] private CodeBlock[] _codeBlocks;
+    [SerializeField, Space(10f)] private GameObject[] _enemyPrefabs;
 
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI _waveCountTXT;
@@ -34,7 +30,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     #endregion   
     #region Private
 
-    private const int CODE_BLOCK_COUNT = 8;
     private const int STARTING_HEALTH = 5;
     private const int TOTAL_WAVE_COUNT = 2;
     private const int MAX_WEAPON_COUNT = 2;
@@ -80,9 +75,6 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
         a_logger.AssertReference(_cancelButton != null, this);
         a_logger.AssertCollection(_codeBlocks, this);
         a_logger.AssertCollection(_enemyPrefabs, this);
-
-        a_logger.AssertReference(_xrAButton != null, this);
-        a_logger.AssertReference(_xrXButton != null, this);
 
         a_logger.AssertReference(_waveCountTXT != null, this);
         a_logger.AssertReference(_playerLivesTXT != null, this);
@@ -279,8 +271,7 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         // assigns values based on the current wave
         WeaponType weaponType = _ghostBlockGridList[_waveIndex][(int)BlockType.Weapon].WeaponType;
-        GameObject weapon = _usingLeftHand ? a_gameMgr.Player.LeftHandTools[(int)weaponType] :
-                                            a_gameMgr.Player.RightHandTools[(int)weaponType];
+        GameObject weapon = a_gameMgr.Player.Weapons[(int)weaponType];
 
         // setup before enemy spawning
         weapon.SetActive(true);
@@ -310,11 +301,8 @@ public class GDDManager : Singleton<GDDManager>, IGameHandler
     {
         for (int i = 0; i < MAX_WEAPON_COUNT; i++)
         {
-            a_gameMgr.Player.LeftHandTools[i].GetComponentInChildren<Weapon>().ResetWeapon();
-            a_gameMgr.Player.LeftHandTools[i].SetActive(false);
-
-            a_gameMgr.Player.RightHandTools[i].GetComponentInChildren<Weapon>().ResetWeapon();
-            a_gameMgr.Player.RightHandTools[i].SetActive(false);
+            a_gameMgr.Player.Weapons[i].GetComponentInChildren<Weapon>().ResetWeapon();
+            a_gameMgr.Player.Weapons[i].SetActive(false);
         }
     }
     private void ResetGame(bool isGameOver)
