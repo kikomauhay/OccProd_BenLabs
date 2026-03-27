@@ -258,6 +258,9 @@ public class Shaker : Equipment, IPourable
         _radialPanel.gameObject.GetComponentInChildren<Slider>().value = sliderFill;
         _liquidRenderer.material.SetFloat("_Fill", targetFill);
         _radialPanel.SetActive(false);
+
+        if (targetFill >= 0.6F)
+            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0.52F;
     }
 
     private IEnumerator CO_DrainDrink()
@@ -329,7 +332,7 @@ public class Shaker : Equipment, IPourable
         yield return new WaitForSeconds(randomValue);
         
         CompareIngredients();
-        _checkPanel.SetActive(true);
+        _checkPanel.SetActive(false);
     }
 
     #endregion
