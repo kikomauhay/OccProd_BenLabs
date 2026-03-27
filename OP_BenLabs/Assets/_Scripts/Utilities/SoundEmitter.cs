@@ -1,27 +1,37 @@
 ﻿using UnityEngine;
-using System;
 
 [RequireComponent(typeof(AudioSource))]
-public class SoundEmitter : MonoBehaviour
+public class SoundEmitter : Actor
 {
     #region Members
 
     [Header("Debugging")]
     [SerializeField] private bool _enableGizmos;
     [SerializeField] private float _maxDistance;
-    private AudioSource _source;
+    
+    private AudioSource _src;
 
     #endregion
-    #region Methods
-    
-    private void Awake() => _source = GetComponent<AudioSource>();
-    private void Start()
+    #region Actor
+
+    protected override void InitComponents()
     {
-        Debug.Assert(_source.maxDistance > 0f, "Max distance is less then 0!", gameObject);
-        
-        _source.spatialBlend = 1f;
-        _source.maxDistance = _maxDistance;
+        _src = GetComponent<AudioSource>();
     }
+    protected override void AssertReferences()
+    {
+        a_logger.AssertReference(_src.maxDistance > 0f, this);
+    }
+    protected override void InitVariables()
+    {
+        _src.spatialBlend = 1f;
+        _src.minDistance = 0.3f;
+        _src.maxDistance = _maxDistance;
+    }
+
+    #endregion
+    #region Unity
+
     private void OnDrawGizmosSelected()
     {
         if (!_enableGizmos) return;
@@ -30,22 +40,28 @@ public class SoundEmitter : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, _maxDistance);
     }
 
+    #endregion
+    #region Public
+
     public void PlaySound(Sound s) // can play the default sound
     {
-        if (s != null)
+        if (s == null)
         {
-            _source.clip = s.Clip;
-            _source.loop = s.Loop;
-            _source.pitch = s.Pitch;
-            _source.volume = s.Volume;
+            a_logger.AssertReference(s != null, this);
+            a_audMgr.PlayWrong();
+            return;
         }
-        else throw new NullReferenceException("Missing Sound component!");
 
-        if (s.Loop)
-            _source.Play();
+        _src.clip = s.Clip;
+        _src.loop = s.Loop;
+        _src.pitch = s.Pitch;
+        _src.volume = s.Volume;
 
-        else _source.PlayOneShot(_source.clip);
+        if (s.Loop) _src.Play();
+        else        _src.PlayOneShot(_src.clip);
     }
+    public void PlayRandomSound(Sound[] arr) => PlaySound(arr[Random.Range(0, arr.Length)]);
+    public void StopSound() => _src.Stop();
 
     #endregion
 }
