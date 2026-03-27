@@ -19,7 +19,6 @@ public class NPC : Actor
     [Header("Subtitle UI")]
     [SerializeField] private GameObject _subtitleBox;
     [SerializeField] private TextMeshProUGUI _txtBox;
-    [SerializeField] private float _gapTimer = 0.2f;
 
     private SoundEmitter _sndEmtr;
     private bool _voicePlaying;
@@ -70,7 +69,7 @@ public class NPC : Actor
         }
 
         StartCoroutine(CO_Play());
-        StartCoroutine(CreateSubtitles());
+        StartCoroutine(CreateSubtitles(_dialogueTimings[0], _dialogueTimings[1]));
     }
     public void OnboardPlayer()
     {
@@ -105,14 +104,14 @@ public class NPC : Actor
     #endregion
     #region Enumerators        
 
-    private IEnumerator CreateSubtitles()
+    private IEnumerator CreateSubtitles(float timer1, float timer2)
     {
         _subtitleBox.SetActive(true);               //Turns on canvas
 
         _txtBox.text = _dialogues[0];
-        yield return new WaitForSeconds(11f);
+        yield return new WaitForSeconds(timer1);
         _txtBox.text = _dialogues[1];
-        yield return new WaitForSeconds(9f);
+        yield return new WaitForSeconds(timer2);
         _subtitleBox.SetActive(false);              //Turns off canvas
     }
 
