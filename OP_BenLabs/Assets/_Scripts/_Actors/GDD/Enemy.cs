@@ -165,7 +165,7 @@ public class Enemy : Actor
         if (_currHP < 1f)
         {
             _currHP = 0f;
-            // _gddMgr.RemoveEnemy(gameObject);
+            _gddMgr.RemoveEnemy(gameObject);
             _sndEmtr.PlaySound(_ltbSFX);
 
             UI_UpdateHP();            
