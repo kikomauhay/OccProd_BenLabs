@@ -23,7 +23,9 @@ public class Shaker : Equipment, IPourable
     [SerializeField] private List<Ingredient> _mixedDrink;
     [SerializeField] private Mocktail _mocktailContent;
     [SerializeField] private Renderer _liquidRenderer;
-    
+    [SerializeField] private VelocityChecker _velocityChecker;
+
+
     [Header("Pouring Logic")]
     [SerializeField] private GameObject _stream;
     [SerializeField] private Transform _shakerTip;
@@ -33,6 +35,9 @@ public class Shaker : Equipment, IPourable
     [SerializeField] private GameObject _shakerCap;
     [SerializeField] private GameObject _checkPanel;
     [SerializeField] private GameObject _radialPanel;
+
+    [Header("VFX")]
+    [SerializeField] private GameObject _velocityVFX;
 
     #endregion
     #region Private 
@@ -57,6 +62,7 @@ public class Shaker : Equipment, IPourable
     private WaitForSeconds _drainTime;
     private bool _isPouring, _isLocked;
     private bool _isShaking, _isGrabbed;
+    private Coroutine _vfxRoutine;
 
     #endregion
 
@@ -110,8 +116,24 @@ public class Shaker : Equipment, IPourable
     {
         if (!_isLocked) return;
 
-        if (e_rb.velocity.magnitude > 0.5f)
+        if (e_rb.velocity.magnitude > _velocityChecker.CurrentMagnitude)
+        {
+            if(!_velocityVFX.activeSelf)
+                _velocityVFX.SetActive(true);
+
+            if (_vfxRoutine != null)
+            {
+                StopCoroutine(_vfxRoutine);
+                _vfxRoutine = null;
+            }
+
             MixMocktail();
+        }
+        else
+        {
+            if (_vfxRoutine == null)
+                _vfxRoutine = StartCoroutine(CO_DelayVFX());
+        }
 
         INT_CheckPourAngle();
     }
@@ -260,7 +282,7 @@ public class Shaker : Equipment, IPourable
         _radialPanel.SetActive(false);
 
         if (targetFill >= 0.6F)
-            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0.52F;
+            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0F;
     }
 
     private IEnumerator CO_DrainDrink()
@@ -272,6 +294,7 @@ public class Shaker : Equipment, IPourable
         ShakerUnlocked?.Invoke();
         OnStopPour?.Invoke();
 
+        _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0F;
         _checkPanel.SetActive(false);
         _shakerCap.SetActive(false);
 
@@ -280,23 +303,6 @@ public class Shaker : Equipment, IPourable
     }
     private IEnumerator CO_ShakeDrink() // gets called when the GO is picked up
     {
-        float randomValue = Random.Range(10f, 15f);
-
-        void StartShaking()
-        {
-            float time = 0f;
-            _radialPanel.SetActive(true);
-
-            while (time < randomValue)
-            {
-                time += Time.deltaTime;
-                float t = time/randomValue;
-
-                float sliderValue = Mathf.Lerp(0f,1f, t);
-                _radialPanel.gameObject.GetComponentInChildren<Slider>().value = sliderValue;
-            }
-            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 1F;
-        }
 
         void SendHaptics(float amp, float dur)
         {
@@ -326,14 +332,38 @@ public class Shaker : Equipment, IPourable
             a_logger.Log("Created dubious drink!", TextColor.Red, a_isDevMode);
         }
 
-        StartShaking();
+
+        float randomValue = Random.Range(10f, 15f);
+
+        float time = 0f;
+        _radialPanel.SetActive(true);
+
+        while (time < randomValue)
+        {
+            time += Time.deltaTime;
+            float t = time/randomValue;
+
+            float sliderValue = Mathf.Lerp(0f,1f, t);
+            _radialPanel.gameObject.GetComponentInChildren<Slider>().value = sliderValue;
+
+            yield return null;
+        }
+        _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 1F;
 
         // random countdown for the player to earn bonus points
-        yield return new WaitForSeconds(randomValue);
+        yield return new WaitForSeconds(0.5F);
         
         CompareIngredients();
+        _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0F;
+        _radialPanel.SetActive(false);
         _checkPanel.SetActive(false);
     }
+    private IEnumerator CO_DelayVFX()
+    {
+        yield return new WaitForSeconds(4f);
 
+        _velocityVFX.SetActive(false);
+        _vfxRoutine = null;
+    }
     #endregion
 }
