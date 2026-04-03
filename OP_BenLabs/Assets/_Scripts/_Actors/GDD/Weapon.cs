@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
@@ -16,6 +17,9 @@ public class Weapon : Actor
 
     [Header("SFXs")]
     [SerializeField] private Sound[] _hitSFXs;
+
+    [Header("VFXs")]
+    [SerializeField] private GameObject _velocityVFX;
     
     #endregion
     #region Private
@@ -30,6 +34,8 @@ public class Weapon : Actor
 
     private float _currDmg;
     private float _dmgModifier;
+
+    private Coroutine _vfxRoutine;
 
     #endregion
 
@@ -62,9 +68,29 @@ public class Weapon : Actor
 
         ResetWeapon();
     }
- 
+
     #endregion
     #region Unity
+
+    private void FixedUpdate()
+    {
+        if (_velocityChecker.CurrentMagnitude > VELOCITY_THRESHOLD)
+        {
+            if (!_velocityVFX.activeSelf)
+                _velocityVFX.SetActive(true);
+
+            if (_vfxRoutine != null)
+            {
+                StopCoroutine(_vfxRoutine);
+                _vfxRoutine = null;
+            }
+        }
+        else
+        {
+            if (_vfxRoutine == null)
+                _vfxRoutine = StartCoroutine(CO_DelayVFX());
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -120,6 +146,14 @@ public class Weapon : Actor
     public void ResetWeapon() => _dmgModifier = 1f;
 
     #endregion
+
+    private IEnumerator CO_DelayVFX()
+    {
+        yield return new WaitForSeconds(4f);
+
+        _velocityVFX.SetActive(false);
+        _vfxRoutine = null;
+    }
 }
 
 public enum WeaponType
