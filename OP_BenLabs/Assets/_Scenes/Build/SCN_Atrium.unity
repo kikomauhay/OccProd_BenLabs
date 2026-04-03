@@ -4038,10 +4038,20 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4764370873384575600, guid: 56d8cc241502f404aa8bc693a3954571,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.099
+      objectReference: {fileID: 0}
+    - target: {fileID: 4764370873384575600, guid: 56d8cc241502f404aa8bc693a3954571,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 5696495918388294078, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5790905697889943745, guid: 56d8cc241502f404aa8bc693a3954571,
         type: 3}
@@ -6665,6 +6675,21 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 2448885201364803937, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_text
+      value: Grab up your visitor ID and put it into the ID case hanging below you
+      objectReference: {fileID: 0}
+    - target: {fileID: 2448885201364803937, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 20.14
+      objectReference: {fileID: 0}
+    - target: {fileID: 2448885201364803937, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20.14
+      objectReference: {fileID: 0}
     - target: {fileID: 2633860720990959575, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_Layer
@@ -6777,6 +6802,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Convex
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3785977963321508775, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -8.1
       objectReference: {fileID: 0}
     - target: {fileID: 3877554792868026862, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
@@ -7951,6 +7981,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 335782402}
     m_Modifications:
+    - target: {fileID: 954401968188496124, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 5b393af6c024b3c468346781d62b0db7, type: 2}
     - target: {fileID: 3350122296476153058, guid: a8a2fe0535ced9b438f25626b6a0defd,
         type: 3}
       propertyPath: m_RootOrder
@@ -8011,6 +8046,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: ~PRF_GDDManager (Virtual Space)
       objectReference: {fileID: 0}
+    - target: {fileID: 3886654323796121586, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6db29e262cae70247b0b80d0f548514a, type: 2}
+    - target: {fileID: 4915394723574506732, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6db29e262cae70247b0b80d0f548514a, type: 2}
+    - target: {fileID: 8540568197540045392, guid: a8a2fe0535ced9b438f25626b6a0defd,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6db29e262cae70247b0b80d0f548514a, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8a2fe0535ced9b438f25626b6a0defd, type: 3}
 --- !u!4 &8350934935233939328 stripped
