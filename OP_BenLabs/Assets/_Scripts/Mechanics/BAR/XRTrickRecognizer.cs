@@ -44,15 +44,18 @@ public class XRTrickRecognizer : MonoBehaviour
 
     private void Start()
     {
+        StartCoroutine(CO_LoadStreamingAssets());
+
         IEnumerator CO_LoadStreamingAssets()
         {
             string[] trickGestures = { "Pass.xml", "Toss.xml", "Spin.xml" };
 
             foreach (var fileName in trickGestures)
             {
-                string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+                string filePath = Path.Combine(Application.streamingAssetsPath, "TrickGestures", fileName);
 
-                using (UnityEngine.Networking.UnityWebRequest www = UnityEngine.Networking.UnityWebRequest.Get(filePath))
+                using (UnityEngine.Networking.UnityWebRequest www =
+                       UnityEngine.Networking.UnityWebRequest.Get(filePath))
                 {
                     yield return www.SendWebRequest();
 
@@ -61,24 +64,13 @@ public class XRTrickRecognizer : MonoBehaviour
                         string xmlContent = www.downloadHandler.text;
                         trainingSet.Add(GestureIO.ReadGestureFromXML(xmlContent));
                     }
-                    else Debug.LogError("Failed to load gesture: " + fileName + " | " + www.error);
+                    else
+                    {
+                        Debug.LogError("Failed to load gesture: " + fileName + " | " + www.error);
+                    }
                 }
             }
         }
-
-        // To load all the made gestures
-        if (Application.platform == RuntimePlatform.WindowsEditor || 
-            Application.platform == RuntimePlatform.WindowsPlayer)
-        {
-            string gestureFolder = Path.Combine(Application.streamingAssetsPath, "TrickGestures");
-            string[] gestureFiles = Directory.GetFiles(gestureFolder, "*.xml");
-
-            foreach (var item in gestureFiles)
-                trainingSet.Add(GestureIO.ReadGestureFromFile(item));
-        }
-
-        // Extra code for Android/Quest
-        else StartCoroutine(CO_LoadStreamingAssets());
     }
 
     private void FixedUpdate()
