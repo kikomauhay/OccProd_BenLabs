@@ -209,6 +209,8 @@ public class Shaker : Equipment, IPourable
         _mocktailContent = Mocktail.Empty;
         e_rb.velocity = Vector3.zero;
 
+        _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0F;
+        _radialPanel.SetActive(false);
         _checkPanel.SetActive(false);
         _shakerCap.gameObject.SetActive(false);
         _barMgr.SpawnCap();
@@ -295,6 +297,7 @@ public class Shaker : Equipment, IPourable
         OnStopPour?.Invoke();
 
         _radialPanel.gameObject.GetComponentInChildren<Slider>().value = 0F;
+        _radialPanel.SetActive(false);
         _checkPanel.SetActive(false);
         _shakerCap.SetActive(false);
 
