@@ -4663,7 +4663,7 @@ PrefabInstance:
     - target: {fileID: 1767098807535827312, guid: a293e7ed04118a945860f09e59b07d45,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.32099867
+      value: 0.033
       objectReference: {fileID: 0}
     - target: {fileID: 1767098807535827312, guid: a293e7ed04118a945860f09e59b07d45,
         type: 3}
@@ -4673,7 +4673,7 @@ PrefabInstance:
     - target: {fileID: 1767098807535827312, guid: a293e7ed04118a945860f09e59b07d45,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 9.53
+      value: 10.052
       objectReference: {fileID: 0}
     - target: {fileID: 1767098807535827312, guid: a293e7ed04118a945860f09e59b07d45,
         type: 3}
@@ -4708,6 +4708,11 @@ PrefabInstance:
     - target: {fileID: 1767098807535827312, guid: a293e7ed04118a945860f09e59b07d45,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6892239556877123757, guid: a293e7ed04118a945860f09e59b07d45,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8986483563100894285, guid: a293e7ed04118a945860f09e59b07d45,
@@ -6959,6 +6964,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 15
       objectReference: {fileID: 0}
+    - target: {fileID: 5983905248730469185, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_Name
+      value: PRF_StudentVolunteer (StampRally)
+      objectReference: {fileID: 0}
     - target: {fileID: 6055909157424812950, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: m_Layer
@@ -7044,6 +7054,11 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8502244745815402819, guid: f9e50382e3fe434418f70e4ac82ed023,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8848709866816042245, guid: f9e50382e3fe434418f70e4ac82ed023,
         type: 3}
       propertyPath: _gateDelay
@@ -7086,6 +7101,12 @@ GameObject:
 --- !u!1 &5650250552023886227 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5931235003000441787, guid: f9e50382e3fe434418f70e4ac82ed023,
+    type: 3}
+  m_PrefabInstance: {fileID: 5650250552023886224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5650250552023886228 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5983905248730469185, guid: f9e50382e3fe434418f70e4ac82ed023,
     type: 3}
   m_PrefabInstance: {fileID: 5650250552023886224}
   m_PrefabAsset: {fileID: 0}
@@ -7251,6 +7272,11 @@ PrefabInstance:
       propertyPath: _whiteboard
       value: 
       objectReference: {fileID: 5650250552023886227}
+    - target: {fileID: 7119545189002328645, guid: 0867e5a62a155c34ab74974ed35612cc,
+        type: 3}
+      propertyPath: _stampRallyNPC
+      value: 
+      objectReference: {fileID: 5650250552023886228}
     - target: {fileID: 7119545189002328645, guid: 0867e5a62a155c34ab74974ed35612cc,
         type: 3}
       propertyPath: _whiteboardNPC

@@ -2629,6 +2629,7 @@ GameObject:
   - component: {fileID: 4190999501180716642}
   - component: {fileID: 974660167687227847}
   - component: {fileID: 3054081613196999949}
+  - component: {fileID: 7571964574337070994}
   m_Layer: 9
   m_Name: Drink Recipies
   m_TagString: Untagged
@@ -2701,6 +2702,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7571964574337070994
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3558612796608814296}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -3905801101871601224, guid: 37db043ca321154429b5cfa5850c7daf, type: 3}
 --- !u!1 &3580092002730319364
 GameObject:
   m_ObjectHideFlags: 0
