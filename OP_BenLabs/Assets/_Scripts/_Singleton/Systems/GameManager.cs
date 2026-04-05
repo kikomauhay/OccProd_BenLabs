@@ -27,6 +27,7 @@ public class GameManager : Singleton<GameManager>
     [Header("Onboarding")]
     [SerializeField] private GameObject _whiteboard;
     [SerializeField] private GameObject _whiteboardNPC, _busNPC;
+    [SerializeField] private GameObject _stampRallyNPC;
 
     [Header("Atrium Spanwpoints")]
     [SerializeField] private GameObject _atriumPrefab;
@@ -146,7 +147,9 @@ public class GameManager : Singleton<GameManager>
         _whiteboard.SetActive(true);
         _whiteboardNPC.SetActive(true);
         _busNPC.SetActive(true);
+        _stampRallyNPC.SetActive(false);
     }
+
     public void DisableLogo() => _logo.SetActive(false);    
     public void SpawnAtrium(FloorType floorType)
     {

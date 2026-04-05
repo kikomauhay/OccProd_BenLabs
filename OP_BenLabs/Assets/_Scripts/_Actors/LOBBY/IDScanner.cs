@@ -118,7 +118,7 @@ public class IDScanner : Actor
 
             StartCoroutine(CO_RotateGate(_leftGate, _leftTargetRot, _leftStartRot));
             StartCoroutine(CO_RotateGate(_rightGate, _rightTargetRot, _rightStartRot));
-            _invisibleWall.SetActive(true);
+            //_invisibleWall.SetActive(true);
             _coroutineRunning = false;
         }
 
